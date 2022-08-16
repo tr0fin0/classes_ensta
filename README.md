@@ -1,5 +1,12 @@
 # classes_ensta
-mes cahiers LaTeX et les solutions d'exercices de mes cours d'ingénierie de contrôle et d'automatisation à UNICAMP. pour l'instant il ne contient que les fichiers .tex, pour les cahiers, et quelques fichiers .m, pour les activités.
+mes cahiers LaTeX et les solutions d'exercices de mes cours à l'ENSTA en:
+
+- Major:
+  - Sciences et Technologies de l'Information et de la Communication, STIC;
+- Minor:
+  - ;
+
+pour l'instant il ne contient que les fichiers .tex, pour les cahiers, et quelques fichiers .m, .c et .py pour les activités.
 
 ## sujets
 ### preformation
