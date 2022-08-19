@@ -27,3 +27,5 @@
 *.slxc
 *.ai
 tblank.*
+*.tar.gz
+*.tar
