@@ -18,6 +18,66 @@
 \begin{definition}
     Une \textbf{expérience aléatoire} est une expérience renouvelable, en principe sinon en pratique, et qui, renouvelée dans des conditions identiques, ne donne pas à chaque essai le même résultat.
 \end{definition}
+\subsection{Langage des Évènements}
+\begin{definition}
+    Un \textbf{évènement} est un fait lié à une expérience aléatoire: il peut se réaliser ou non et sa réalisation ou sa non-réalisation dépend exclusivement du résultat de $\omega$ de cette expérience aléatoire.
+\end{definition}
+\noindent Mathématiquement, un évènement se représente par la donnée de l'ensemble des points $\omega$ pour lequel cet évènement est réalisé.
+
+\begin{example}
+    Effectuons l'expérience aléatoire de jetter un cubique dont les faces sont numérotées de 1 à 6 et on lit le numéro apparu sur la face supérieure.\\
+
+    Dans ce cas là on emploie $\omega$ pour représenter les points de cet ensemble, c'est-à-dire les résultats possibles de l'expérience en question.\\
+
+    L'évènement $A_1$ le nombre obtenu est pair est réalisé si et seulement si $\omega \in A_1 = \{ 2, 4, 6 \}$.
+\end{example}
+\noindent La langage d'appartenance provient de la théorie des ensembles, celui de la réalisation d'évènements du langage des probabilités. L'équivalence qui vient d'être décrite permet de passer constamment d'un langage à l'autre.
+
+\begin{definition}
+    A chaque évènement A correspond son \textbf{évènement contraire} non A si et seulement si A n'est pas réalisé:
+    \begin{equation}
+        \boxed{
+            \omega \notin A \iff \omega \in A^c
+        }
+    \end{equation}
+\end{definition}
+% \noinde Il y a plusieurs d'autres formes de represeter l'évènement contraire. Parfois, dans l'électronique, on denote l'évènement complementaire où la négation de l'évènement comme: $A^c = \bar{A}$.
+
+\begin{definition}
+    Considérons deux évènements A et B. L'évènement \textbf{A et B} est réalisé si et seulement si A et B sont réalisés au cours de la même expérience aléatoire:
+    \begin{equation}
+        \boxed{
+            \omega\in A\text{ et } \omega\in B \iff \omega\in A\cap B
+        }
+    \end{equation}
+    Notamment A et B sont dits \textbf{incompatibles} ou \textbf{disjoints} s'ils ne peuvent être réalisés simultanément au cours de la même expérience aléatoire:
+    \begin{equation}
+        \boxed{
+            A \cap B = \emptyset
+        }
+    \end{equation}
+\end{definition}
+
+\begin{definition}
+    Considérons deux évènements A et B. L'évènement \textbf{A ou B} est réalisé si et seulement si l'un au moins des deux évènements A ou B est réalisé au cours de la même expérience aléatoire:
+    \begin{equation}
+        \boxed{
+            \omega\in A\text{ ou } \omega\in B \iff \omega\in A\cup B
+        }
+    \end{equation}
+    On dit que l'évènement A \textbf{implique} l'évènement B si la réalisation de A entraîne la réalisation de B: 
+    \begin{equation}
+        \boxed{
+            \omega\in A \implies A \text{ est réalisé} \implies 
+            B \text{ est réalisé} \implies \omega\in B \implies 
+            A \subset B
+        }
+    \end{equation}
+\end{definition}
+
+\begin{definition}
+    On note $\mathcal{F}$ l'ensemble de tous les évènements associés à l'expérience aléatoire considérée que doit être "stable"par les opérations logiques décrites ci-dessus: si $A, B \in \mathcal{F}$, alors on doit avoir $A^c \in \mathcal{F}$, $A \cap B \in \mathcal{F}$, $A \cup B \in \mathcal{F}$ et $\Omega, \emptyset \in \mathcal{F}$:
+\end{definition}
 $ (\Omega, \mathbb{F}, \mathbb{P})$
 Omega l'espace d'états pour être de différent natures
 F l'ensemble des événements dans l'espace
