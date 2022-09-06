@@ -24,7 +24,12 @@ pour l'instant il ne contient que les fichiers .tex, pour les cahiers, et quelqu
 - STA101: Statistique
 
 ### 2A
-- 
+- EA206: Économie Industrielle 
+- IC202: Information et Réseaux
+- IN204: Programmation Orienté Objet
+- IN206: Base de Donnés
+- MA201: Estimation Identification Statistique
+- PIE: Projet d’Ingénieur en Équipe 
 
 ### 3A
 - 
