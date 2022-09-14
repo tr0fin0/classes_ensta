@@ -16,7 +16,7 @@ void run_print(const counter &count)
 
 
 int main() {
-    std::cout << "main.cpp\n";
+    std::cout << "struct definition\n";
 
     counter count(8);
 
