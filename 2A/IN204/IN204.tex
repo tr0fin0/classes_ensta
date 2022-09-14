@@ -39,12 +39,35 @@ Avec ces commandes le code sera d'abbord compilé et après executé.
 \subsubsection{linker}
 \paragraph{Définition}Après la création d'une archive de byte code le linker va faire reference à d'autres archives necessaires pour le code principale.
 
+\subsection{\texttt{main}}
+\paragraph{Définition}Inicialization du code se fera toujours avec la function \texttt{main} comme démontre:
 \begin{scriptsize}
     \myStyleCPP
-    \lstinputlisting[]{main.cpp}
+    \lstinputlisting[]{class_0/main.cpp}
 \end{scriptsize}
+La function retournerai 0 si le programme est éxecute sans aucune problème.
 
 \subsubsection{\texttt{include}}
+\paragraph{Définition}Quand une programme utilise des functions ou classes externes à le code il faut les incluire dans le code principale comme démontré:
+\begin{scriptsize}
+    \myStyleCPP
+    \lstinputlisting[]{class_0/include.cpp}
+\end{scriptsize}
+C'est important de diviser et séparer les archives du code pour qu'il soit plus facile à comprendre et à l'éditer pendant le dévélopment.
+
+\subsection{Mémoire}
+\paragraph{Définition}Langages compilés sont, d'habitude, plus efficaces avec l'usage de mémoire car, la plus part du temps, l'utilisateur doit préciser la quantité de mémoire necessaire.
+\subsubsection{\texttt{pointers}}
+\paragraph{Définition}Variable particulière servant à stocker l'adresse en mémoire centrale d'une variable comme démontré:
+\begin{scriptsize}
+    \myStyleCPP
+    \lstinputlisting[]{class_0/pointer.cpp}
+\end{scriptsize}
+
+\subsubsection{Allocation Statique}
+\paragraph{Définition}
+
+\subsubsection{Allocation Dynamique}
 \paragraph{Définition}
 
 
