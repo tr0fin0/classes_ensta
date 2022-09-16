@@ -30,7 +30,7 @@
 \subsubsection{compilator}
 \paragraph{Définition}Converte l'archive source dans une archive de byte code, parfois appeler code objet. Pour compiler un code il faut exécuter le commande suivante:
 \begin{scriptsize}
-    \myStyleCPP
+    \mycode
     \begin{lstlisting}
     g++ file.cpp -o executable.exe && ./executable.exe
     \end{lstlisting}
@@ -43,16 +43,14 @@ Avec ces commandes le code sera d'abbord compilé et après executé.
 \subsection{\texttt{main}}
 \paragraph{Définition}Inicialization du code se fera toujours avec la function \texttt{main} comme démontre:
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[]{class_0/main.cpp}
+    \mycode\lstinputlisting[language=C++]{class_0/main.cpp}
 \end{scriptsize}
 La function retournerai 0 si le programme est éxecute sans aucune problème.
 
 \subsubsection{\texttt{include}}
 \paragraph{Définition}Quand une programme utilise des functions ou classes externes à le code il faut les incluire dans le code principale comme démontré:
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[]{class_0/include.cpp}
+    \mycode\lstinputlisting[language=C++]{class_0/include.cpp}
 \end{scriptsize}
 C'est important de diviser et séparer les archives du code pour qu'il soit plus facile à comprendre et à l'éditer pendant le dévélopment.
 
@@ -61,8 +59,7 @@ C'est important de diviser et séparer les archives du code pour qu'il soit plus
 \subsubsection{\texttt{pointers}}
 \paragraph{Définition}Variable particulière servant à stocker l'adresse en mémoire centrale d'une variable comme démontré:
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[]{class_0/pointer.cpp}
+    \mycode\lstinputlisting[language=C++]{class_0/pointer.cpp}
 \end{scriptsize}
 
 \subsubsection{Allocation Statique}
@@ -79,22 +76,20 @@ C'est important de diviser et séparer les archives du code pour qu'il soit plus
 \subsubsection{\texttt{enumerate}}
 \paragraph{Défition}Une énumération set un nouveau type listant des éléments ne correspondant pas un type particulier. La déclaration la plus simple est:
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[]{class_0/enum.cpp}
+    \mycode\lstinputlisting[language=C++]{class_0/enum.cpp}
 \end{scriptsize}
 
 \subsubsection{\texttt{struct}}
 \paragraph{Définition}Une structure permet de définir un nouveau type de variables regroupant plusieurs variables de types différents. La déclaration la plus simple est:
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[]{class_0/struct.cpp}
+    \mycode\lstinputlisting[language=C++]{class_0/struct.cpp}
 \end{scriptsize}
+Struct c'est un type de \texttt{class} où tous les méthodes sont publiques par défaut.
 
 \subsubsection{\texttt{typedef}}
 \paragraph{Définition}Attribuer un alias à un type. La déclaration la plus simple est:
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[]{class_0/typedef.cpp}
+    \mycode\lstinputlisting[language=C++]{class_0/typedef.cpp}
 \end{scriptsize}
 
 \subsection{\texttt{class}}
@@ -123,27 +118,27 @@ C'est important de diviser et séparer les archives du code pour qu'il soit plus
 \subsection{07/09/2022}
 \paragraph{Présentation}Dans ce TD on avait besoin d'implementer une \texttt{struct}, qui ressemble plutôt à une \texttt{class}, pour voir l'influence du marquer \texttt{const} dans le code.
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[linerange={1-5}]{class_1/counter.hh}
+    \mycode
+    \lstinputlisting[language=C++, linerange={1-5}]{class_1/counter.hh}
 \end{scriptsize}
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[linerange={1-5}]{class_1/main.cpp}
+    \mycode
+    \lstinputlisting[language=C++, linerange={1-5}]{class_1/main.cpp}
 \end{scriptsize}
 
 \newpage\subsection{14/09/2022}
 \paragraph{Présentation}Dans ce TD on avait besoin d'implementer deux \texttt{class} pour étudier comme les classes sont implementés et comme marché l'heritage entre deux classes.
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[linerange={1-5}]{class_2/Counter.h}
+    \mycode
+    \lstinputlisting[language=C++, linerange={1-5}]{class_2/Counter.h}
 \end{scriptsize}
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[linerange={1-5}]{class_2/Double.h}
+    \mycode
+    \lstinputlisting[language=C++, linerange={1-5}]{class_2/Double.h}
 \end{scriptsize}
 \begin{scriptsize}
-    \myStyleCPP
-    \lstinputlisting[linerange={1-5}]{class_2/main.cpp}
+    \mycode
+    \lstinputlisting[language=C++, linerange={1-5}]{class_2/main.cpp}
 \end{scriptsize}
 
 
