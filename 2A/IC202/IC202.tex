@@ -30,8 +30,31 @@
 
 \subsection{Introduction à la Théorie de L'Information}
 \subsubsection{Exercice 1}
+\paragraph{Déclaration}Calculer l'entropie différentielle d'une variable aléatoire Gaussienne
 \begin{resolution}
-        
+Tout d'abbord on considere l'Entropie Différentielle $H(X)$, l'equation \ref{eq:entropie_differentielle}, et la Distribuition d'une Variable Aléatoire Gaussienne, l'equation:
+\begin{align*}
+    H(X) &= \int_{D_x} p(x) \log_{2} \left( \frac{1}{p(x)} \right) dx
+    \quad\text{où}\quad
+    p(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp{\frac{-(x - \mu)^2}{2\sigma^2}}
+\end{align*}
+Il faut déveloper les comptes et il faut savoir que:
+\begin{enumerate}
+    \item Définition de Distribuition:
+    \begin{equation}
+        \int_{\mathbb{R}} \frac{1}{\sigma\sqrt{2\pi}} \exp{\frac{-(x - \mu)^2}{2\sigma^2}}\,dx = 1
+    \end{equation}
+    \item Définition de Variance:
+    \begin{equation}
+        \int_{\mathbb{R}} \frac{-(x - \mu)^2}{\sigma\sqrt{2\pi}} \exp{\frac{-(x - \mu)^2}{2\sigma^2}}\,dx = \sigma^2
+    \end{equation}
+\end{enumerate}
+Après des manipulations on retrouver que:
+\begin{equation}
+    \boxed{
+        H(x) = \log_{2} (\sqrt{2\pi e \sigma^2})
+    }
+\end{equation}
 \end{resolution}
 
 \subsubsection{Exercice 2}
