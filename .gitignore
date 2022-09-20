@@ -30,3 +30,5 @@ tblank.*
 *.tar.gz
 *.tar
 *.exe
+*.ppt
+*.xlsx
