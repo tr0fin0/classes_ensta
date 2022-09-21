@@ -48,23 +48,25 @@ Avec ces commandes le code sera d'abbord compilé et après executé.
 \subsection{\texttt{main}}
 \paragraph{Définition}Inicialization du code se fera toujours avec la function \texttt{main} comme démontre:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/main.cpp}
+    \mycode\lstinputlisting[language=C++]{example/main.cpp}
 \end{scriptsize}
 La function retournerai 0 si le programme est éxecute sans aucune problème.
 
 \subsubsection{\texttt{include}}
 \paragraph{Définition}Quand une programme utilise des functions ou classes externes à le code il faut les incluire dans le code principale comme démontré:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/include.cpp}
+    \mycode\lstinputlisting[language=C++]{example/include.cpp}
 \end{scriptsize}
 C'est important de diviser et séparer les archives du code pour qu'il soit plus facile à comprendre et à l'éditer pendant le dévélopment.
 
+\subsubsection{\texttt{functions}}
+\paragraph{Définition}Quand un programme a besoin d'estoquer seulement des functions necessaires pour la \texttt{main} c'est recomende de créer un archive \texttt{functions.h} et estoquer les informations là dedans pour mieux diviser les archives.
 \subsection{Mémoire}
 \paragraph{Définition}Langages compilés sont, d'habitude, plus efficaces avec l'usage de mémoire car, la plus part du temps, l'utilisateur doit préciser la quantité de mémoire necessaire.
 \subsubsection{\texttt{pointers}}
 \paragraph{Définition}Variable particulière servant à stocker l'adresse en mémoire centrale d'une variable comme démontré:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/pointer.cpp}
+    \mycode\lstinputlisting[language=C++]{example/pointer.cpp}
 \end{scriptsize}
 
 \subsubsection{Allocation Statique}
@@ -81,26 +83,26 @@ C'est important de diviser et séparer les archives du code pour qu'il soit plus
 \subsubsection{\texttt{enumerate}}
 \paragraph{Défition}Une énumération set un nouveau type listant des éléments ne correspondant pas un type particulier. La déclaration la plus simple est:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/enum.cpp}
+    \mycode\lstinputlisting[language=C++]{example/enum.cpp}
 \end{scriptsize}
 
 \subsubsection{\texttt{struct}}
 \paragraph{Définition}Une structure permet de définir un nouveau type de variables regroupant plusieurs variables de types différents. La déclaration la plus simple est:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/struct.cpp}
+    \mycode\lstinputlisting[language=C++]{example/struct.cpp}
 \end{scriptsize}
 Struct c'est un type de \texttt{class} où tous les méthodes sont publiques par défaut.
 
 \subsubsection{\texttt{typedef}}
 \paragraph{Définition}Attribuer un alias à un type. La déclaration la plus simple est:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/typedef.cpp}
+    \mycode\lstinputlisting[language=C++]{example/typedef.cpp}
 \end{scriptsize}
 
 \subsubsection{\texttt{template}}
 \paragraph{Définition}Création de functions avec des différents types mais avec la même implementation. La déclaration la plus simple est:
 \begin{scriptsize}
-    \mycode\lstinputlisting[language=C++]{class_0/template.cpp}
+    \mycode\lstinputlisting[language=C++]{example/template.cpp}
 \end{scriptsize}
 Après avoir déclarer la function generic il faut déclarer les functions avec les différents types pour que le compilateur peut savoir comment le faire quand necessaire.
 
@@ -128,40 +130,40 @@ Après avoir déclarer la function generic il faut déclarer les functions avec 
 
 \section{Travail Dirigé}
 \subsection{07/09/2022}
-\paragraph{Présentation}Dans ce TD on avait besoin d'implementer une \texttt{struct}, qui ressemble plutôt à une \texttt{class}, pour voir l'influence du marquer \texttt{const} dans le code.
+\paragraph{Présentation}Dans ce \href{https://perso.ensta-paris.fr/~bmonsuez/Cours/doku.php?id=in204:seances:seance1}{TD} on avait besoin d'implementer une \texttt{struct}, qui ressemble plutôt à une \texttt{class}, pour voir l'influence du marquer \texttt{const} dans le code.
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_1/counter.hh}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/07_09_2022/counter.hpp}
 \end{scriptsize}
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_1/main.cpp}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/07_09_2022/main.cpp}
 \end{scriptsize}
 
 \newpage\subsection{14/09/2022}
-\paragraph{Présentation}Dans ce TD on avait besoin d'implementer deux \texttt{class} pour étudier comme les classes sont implementés et comme marché l'heritage entre deux classes.
+\paragraph{Présentation}Dans ce \href{https://perso.ensta-paris.fr/~bmonsuez/Cours/doku.php?id=in204:seances:seance2}{TD} on avait besoin d'implementer deux \texttt{class} pour étudier comme les classes sont implementés et comme marché l'heritage entre deux classes.
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_2/Counter.h}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/14_09_2022/Counter.hpp}
 \end{scriptsize}
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_2/Double.h}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/14_09_2022/Double.hpp}
 \end{scriptsize}
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_2/main.cpp}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/14_09_2022/main.cpp}
 \end{scriptsize}
 
 \newpage\subsection{21/09/2022}
-\paragraph{Présentation}Dans ce TD on avait besoin d'implementer des \texttt{templates} pour étudier comme réduire et améliore le code avec la même implementation mais des types différents.
+\paragraph{Présentation}Dans ce \href{https://perso.ensta-paris.fr/~bmonsuez/Cours/doku.php?id=in204:seances:seance3}{TD} on avait besoin d'implementer des \texttt{templates} pour étudier comme réduire et améliore le code avec la même implementation mais des types différents.
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_3/join.h}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/21_09_2022/join.hpp}
 \end{scriptsize}
 \begin{scriptsize}
     \mycode
-    \lstinputlisting[language=C++, linerange={1-5}]{class_3/main.cpp}
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/21_09_2022/main.cpp}
 \end{scriptsize}
 
 \end{document}
