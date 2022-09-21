@@ -1,5 +1,5 @@
 #include <iostream>
-#include "join.h"
+#include "join.hpp"
 using namespace std;
 
 
@@ -11,11 +11,10 @@ void validation()
     printf("%f\n", joinDigitsGeneric(12.34, 5.0));
     printf("%f\n", joinDigitsGeneric(123.0, 4.0));
     printf("%f\n", joinDigitsGeneric(123.0, 0.4));
-
 };
 
 int main() {
-    cout << "concatenate" << endl << endl;
+    cout << "TD 21/09/2022" << endl << endl;
 
 
     validation();

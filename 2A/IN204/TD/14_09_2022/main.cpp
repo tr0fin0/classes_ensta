@@ -1,11 +1,11 @@
 #include <iostream>
-#include "Counter.h"
-#include "Double.h"
+#include "Counter.hpp"
+#include "Double.hpp"
 using namespace std;
 
 
 int main() {
-    cout << "class definition" << endl;
+    cout << "TD 14/09/2022" << endl;
 
     Counter count(0);
     count.print();

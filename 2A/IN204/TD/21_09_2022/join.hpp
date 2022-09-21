@@ -13,7 +13,7 @@ int joinDigits(int base, int newDigit)
 
 template <typename T> T joinDigitsGeneric(T base, T newDigit)
 {
-    if ( !(0 <= newDigit && newDigit <= 9) )
+    if ( not(0 <= newDigit && newDigit <= 9) )
         throw overflow_error("not a digit");
 
     return base*10 + newDigit;

@@ -1,27 +1,22 @@
 #include <iostream>
-#include "counter.hh"
+#include "counter.hpp"
 
-void run_inc(counter &count)
+void validation(counter &count)
 {
     std::cout << "x = " << count.i << "\n";
 
     count.inc();
     std::cout << "x = " << count.i << "\n";
-};
 
-void run_print(const counter &count)
-{
     count.print();
 };
 
 
 int main() {
-    std::cout << "struct definition\n";
+    std::cout << "TD 07/09/2022\n";
 
     counter count(8);
-
-    run_inc(count);
-    run_print(count);
+    validation(count);
 
 
     return 0;
