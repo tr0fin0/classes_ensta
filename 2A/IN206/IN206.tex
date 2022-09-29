@@ -85,6 +85,36 @@ Approche:
 \subsubsection{Pas de Dépendance Transitive}
 
 \section{Travail Dirigé}
-\subsection{15/09/2022}
+\subsection{Séance 15/09/2022}
 \paragraph{Définition}
+
+\subsection{Séance 29/09/2022}
+\paragraph{Définition}Dans ce \href{http://www-smis.inria.fr/~anciaux/ENSTA/IN206/6-VM/}{TD} on avait besoin de télécharger et essayer d'utiliser le serveur SQL.
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[language=SQL]
+    sqlplus sys/oracle as syodba;
+    ALTER SESSION SET CONTAINER = XEPOB1;   -- maybe XEP0B1
+    CREATE USER TP IDINTIFIED BY oracle;
+    -- CREATE USER TP IDENTIFIED BY oracle; -- typo correction
+    GRANT ALL PRIVILEGES TO TP;
+    escit;
+    \end{lstlisting}
+\end{scriptsize}
+\subsubsection{SQL Developer}
+\paragraph{Définition}Tout d'abbord il faut suivre les commandes suivantes:
+\begin{enumerate}
+    \item créer une nouvelle connexion NON: TP;
+    \begin{enumerate}[noitemsep]
+        \item login: TP;
+        \item mdp: oracle;
+    \end{enumerate}
+    \item NON de Service: XEPOB1;
+    \begin{enumerate}
+        \item teste;
+        \item connexion;
+    \end{enumerate}
+\end{enumerate}
+pas oblige de nomene la constraint mais c'est plus facile de le trouveer car le sql va donner une valeur alphanumerique pas facile de travailer avec
+https://www.w3schools.com/sql/sql_constraints.asp
+
 \end{document}
