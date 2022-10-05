@@ -11,9 +11,12 @@ class Number
     public:
         typedef T value_type;
 
-        Number() : C(0) {C = 0;}    // default constructor
-        Number(Number const & other) : C(other.get()) {}  //
-        Number(T const & val) : C(val) {}
+        Number() : C(0) {}    // default constructor
+        Number(T const &C) : C(C) {}
+        Number(const Number &number)
+        {
+            this->C = number.C;
+        }
 
         void print()
         {
