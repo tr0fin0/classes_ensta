@@ -89,15 +89,27 @@ Approche:
 \paragraph{Définition}
 
 \subsection{Séance 29/09/2022}
-\paragraph{Définition}Dans ce \href{http://www-smis.inria.fr/~anciaux/ENSTA/IN206/6-VM/}{TD} on avait besoin de télécharger et essayer d'utiliser le serveur SQL.
+\paragraph{Définition}Dans ce \href{http://www-smis.inria.fr/~anciaux/ENSTA/IN206/6-VM/}{TD} on avait besoin de télécharger et essayer d'utiliser le serveur SQL dans une VM et pour se connecter il fallait utiliser:
+\begin{enumerate}[noitemsep]
+    \item login: TP;
+    \item mdp: oracle;
+\end{enumerate}
+C'est possible qu'il y avait une problème avec l'enconding de l'ordinateur. Pour être sûr change les configurations de clavier et choisi le clavier Américain International.\\
+
+\noindent Après c'est necessaire d'ouvrir une terminale et tapper les commandes suivantes:
 \begin{scriptsize}\mycode
-    \begin{lstlisting}[language=SQL]
-    sqlplus sys/oracle as syodba;
-    ALTER SESSION SET CONTAINER = XEPOB1;   -- maybe XEP0B1
-    CREATE USER TP IDINTIFIED BY oracle;
-    -- CREATE USER TP IDENTIFIED BY oracle; -- typo correction
+    \begin{lstlisting}[language=Bash]
+    sqlplus sys/oracle as sysdba;
+    ALTER SESSION SET CONTAINER = XEPDB1;
+    CREATE USER TP IDENTIFIED BY oracle;
     GRANT ALL PRIVILEGES TO TP;
-    escit;
+    exit;
+    \end{lstlisting}
+\end{scriptsize}
+\noindent Après il fallait tapper:
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[language=Bash]
+    sqldeveloper
     \end{lstlisting}
 \end{scriptsize}
 \subsubsection{SQL Developer}
@@ -108,13 +120,9 @@ Approche:
         \item login: TP;
         \item mdp: oracle;
     \end{enumerate}
-    \item NON de Service: XEPOB1;
-    \begin{enumerate}
-        \item teste;
-        \item connexion;
-    \end{enumerate}
+    \item NON de service: XEPDB1;
 \end{enumerate}
 pas oblige de nomene la constraint mais c'est plus facile de le trouveer car le sql va donner une valeur alphanumerique pas facile de travailer avec
-https://www.w3schools.com/sql/sql_constraints.asp
+% https://www.w3schools.com/sql/sql_constraints.asp
 
 \end{document}
