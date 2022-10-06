@@ -6,7 +6,7 @@ sqlplus sys/oracle as syoba;
 ALTER SESSION SET CONTAINER = XEPOB1;
 CREATE USER TP IDINTIFIED BY oracle;
 GRANT ALL PRIVILLEGES TO TP;
-escit;
+exit;
 
 
 -- =====================
