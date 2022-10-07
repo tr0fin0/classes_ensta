@@ -10,8 +10,9 @@ feature('DefaultCharacterSet','UTF-8')
 
 %   Parameters Estimation by Noisly Sinus
 %   Import data from PC4 moodle files
-filter      = load('filter.mat')
-sinusoide   = load('sinusoide.mat')
+filter      = load('filter.mat');
+sinusoide   = load('sinusoide.mat');
 
 
-theta = gaussMarkov(sinusoide)
+exercice1(sinusoide)
+exercice2(filter)
