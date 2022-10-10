@@ -1,7 +1,7 @@
 function savePlot(titleText, legendText, saveName, xLabel, yLabel)
     fileType = 'png';
     legendLocation = "southeast";
-    pPath = 'C:\Users\Admin-PC\Documents\git_repository\classes_ensta\2A\MA201\TD\03_10_2022';
+    pPath = 'C:\Users\Admin-PC\Documents\git_repository\classes_ensta\2A\MA201\TD\03_10_2022\images';
     pSize = [0 0 18 18];
 
 
