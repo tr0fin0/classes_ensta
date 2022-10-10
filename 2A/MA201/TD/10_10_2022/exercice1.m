@@ -1,0 +1,83 @@
+function exercice1(filtreKalman)
+    % ========================================
+    % Exercice 1
+    % ========================================
+
+
+    % considering a system model given by the following equation:
+    %   | x_{k+1} = F x_{k} + w_{k}
+    %   | z_{k}   = H x_{k} + v_{k}
+    % 
+    % where:
+    %   x_{k} : vector of states of system:
+    %       x: space    of x coordenate
+    %      dx: velocity of x coordenate
+    %       y: space    of y coordenate
+    %      dy: velocity of y coordenate
+    %   z_{k} : vector of mesures
+    %   w_{k} : noise of model  given by: N(0, W)
+    %   v_{k} : noise of mesure given by: N(0, V)
+    %       N(x,y) : Normal Distribution
+
+
+
+    N = filtreKalman.N; % 
+    X = filtreKalman.X; % 
+    T = filtreKalman.T; % 
+
+    % getting real values for comparison
+    [x, y, dx, dy] = extractData(X, N);
+
+
+    Xk = kalmanCalculation(filtreKalman);
+    [xk, yk, dxk, dyk] = extractData(Xk, N);
+
+    t = 1 : 1 : N;
+    figure;
+    subplot(2,2,1); formatPlot(t,  x,  xk,  'x', {'data', 'kalman'}, 't',  'x(t)')
+    subplot(2,2,2); formatPlot(t, dx, dxk, 'dx', {'data', 'kalman'}, 't', 'dx(t)')
+    subplot(2,2,3); formatPlot(t,  y,  yk,  'y', {'data', 'kalman'}, 't',  'y(t)')
+    subplot(2,2,4); formatPlot(t, dy, dyk, 'dy', {'data', 'kalman'}, 't', 'dy(t)')
+
+
+
+
+    function [x, y, dx, dy] = extractData(X, N)
+        x = []; dx = [];
+        y = []; dy = [];
+
+        for i = 1 : N
+            V = X(:,i);
+            x = [x, V(1)]; dx = [dx, V(2)];
+            y = [y, V(3)]; dy = [dy, V(4)];
+        end
+    end
+
+    function formatPlot(t, X, Y, titleText, legendText, xLabel, yLabel)
+        pSize = [0 0 18 18];
+        legendLocation = "southeast";
+
+
+        plot(t, X, t, Y);
+
+        if not(isempty(titleText))
+            title(titleText, 'Interpreter','tex')
+        end
+
+        if not(isempty(legendText))
+            legend(legendText, "location", legendLocation, 'Interpreter', 'tex')
+        end
+
+        if not(isempty(xLabel))
+            xlabel(xLabel);
+        end
+    
+        if not(isempty(yLabel))
+            ylabel(yLabel);
+        end
+
+        grid on;
+        set(gcf, 'PaperPosition', pSize);
+    end
+
+end
