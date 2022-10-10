@@ -1,4 +1,4 @@
-function x = kalmanCalculation(input)
+function [x, t] = kalmanCalculation(input)
     % ========================================
     % Kalman Filter Calculation
     % ========================================

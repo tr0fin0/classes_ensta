@@ -29,7 +29,7 @@ function exercice1(filtreKalman)
     [x, y, dx, dy] = extractData(X, N);
 
 
-    Xk = kalmanCalculation(filtreKalman);
+    [Xk, tk] = kalmanCalculation(filtreKalman);
     [xk, yk, dxk, dyk] = extractData(Xk, N);
 
     t = 1 : 1 : N;
