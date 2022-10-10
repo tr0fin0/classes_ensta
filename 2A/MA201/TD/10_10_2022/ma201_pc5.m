@@ -15,4 +15,4 @@ algoEM       = load('algoEM.mat');
 
 
 exercice1(filtreKalman)
-% exercice2(algoEM)
+exercice2(algoEM)
