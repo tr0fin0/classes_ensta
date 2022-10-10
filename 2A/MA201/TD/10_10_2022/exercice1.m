@@ -34,10 +34,10 @@ function exercice1(filtreKalman)
 
     t = 1 : 1 : N;
     figure;
-    subplot(2,2,1); formatPlot(t,  x,  xk,  'x', {'data', 'kalman'}, 't',  'x(t)')
-    subplot(2,2,2); formatPlot(t, dx, dxk, 'dx', {'data', 'kalman'}, 't', 'dx(t)')
-    subplot(2,2,3); formatPlot(t,  y,  yk,  'y', {'data', 'kalman'}, 't',  'y(t)')
-    subplot(2,2,4); formatPlot(t, dy, dyk, 'dy', {'data', 'kalman'}, 't', 'dy(t)')
+    subplot(2,2,1); plot(t,  x, t,  xk); formatPlot( 'x', {'data', 'kalman'}, 't',  'x(t)')
+    subplot(2,2,2); plot(t, dx, t, dxk); formatPlot('dx', {'data', 'kalman'}, 't', 'dx(t)')
+    subplot(2,2,3); plot(t,  y, t,  yk); formatPlot( 'y', {'data', 'kalman'}, 't',  'y(t)')
+    subplot(2,2,4); plot(t, dy, t, dyk); formatPlot('dy', {'data', 'kalman'}, 't', 'dy(t)')
 
 
 
@@ -51,33 +51,6 @@ function exercice1(filtreKalman)
             x = [x, V(1)]; dx = [dx, V(2)];
             y = [y, V(3)]; dy = [dy, V(4)];
         end
-    end
-
-    function formatPlot(t, X, Y, titleText, legendText, xLabel, yLabel)
-        pSize = [0 0 18 18];
-        legendLocation = "southeast";
-
-
-        plot(t, X, t, Y);
-
-        if not(isempty(titleText))
-            title(titleText, 'Interpreter','tex')
-        end
-
-        if not(isempty(legendText))
-            legend(legendText, "location", legendLocation, 'Interpreter', 'tex')
-        end
-
-        if not(isempty(xLabel))
-            xlabel(xLabel);
-        end
-    
-        if not(isempty(yLabel))
-            ylabel(yLabel);
-        end
-
-        grid on;
-        set(gcf, 'PaperPosition', pSize);
     end
 
 end
