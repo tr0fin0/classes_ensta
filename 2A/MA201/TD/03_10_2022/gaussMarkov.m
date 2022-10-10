@@ -24,8 +24,6 @@ function theta = gaussMarkov(input)
     % theta = inv(inv(R_T) + H_1N' * inv(R_1N) * H_1N) * (inv(R_T) + Z_1N - m_1N));
 
     % optimized algorithm
-    % here the R_T matrix was consider as zero because... TODO search answer
-    % theta = (H_1N' / R_1N * H_1N) \ (H_1N' * (Z_1N - m_1N));        % slide algorithm
-    theta = (H_1N' / R_1N * H_1N) \ (H_1N' / R_1N) * (Z_1N - m_1N); % teacher algoritm
+    theta = (H_1N' / R_1N * H_1N) \ (H_1N' / R_1N) * (Z_1N - m_1N); % teacher algoritm, page 11/18 equation 14
 
 end
