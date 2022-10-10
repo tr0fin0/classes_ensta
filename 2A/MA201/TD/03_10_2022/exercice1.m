@@ -27,7 +27,7 @@ function exercice1(sinusoide)
     hold on
     plot((1:N), Z)
     plot(N_GM, Z_GM, '-')
-    % plot(N_RLS, Z_RLS, 'o')
+    plot(N_RLS, Z_RLS, 'o')
     hold off
 
     % savePlot(...
