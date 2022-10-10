@@ -17,11 +17,11 @@ function exercice1(sinusoide)
     Z = sinusoide.Z;      % value  of samples
 
 
-    GM = @gaussMarkov;
-    [N_GM, Z_GM] = estimation(GM, sinusoide);
-
-    % RLS = @recursiveLeastSquares;
-    % [N_RLS, Z_RLS] = estimation(RLS, sinusoide);
+    gmkv = @gaussMarkov;
+    [N_GM,  Z_GM]  = estimation(gmkv, sinusoide);
+    
+    rlsq = @recursiveLeastSquares;
+    [N_RLS, Z_RLS] = estimation(rlsq, sinusoide);
 
     figure;
     hold on
