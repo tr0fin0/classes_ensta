@@ -40,6 +40,9 @@ function exercice1(filtreKalman)
     subplot(2,2,4); plot(t, dy, t, dyk); formatPlot('dy', {'data', 'kalman'}, 't', 'dy(t)')
     savePlot('ma201_pc6_ex2')
 
+    figure;
+    plot(t, tk); formatPlot('trace(P_k)', 'Kalman Filter', 't', 'tr(P_k)')
+    savePlot('ma201_pc6_ex3')
 
 
 
