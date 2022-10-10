@@ -11,11 +11,11 @@ function [N, Z] = estimation(func, input)
 
     inputName = inputname(1);
 
-    if inputName == 'GM'
-        titleName = 'Gauss Markov';
+    if inputName == 'gmkv'
+        titleName = 'Gauss Markov'
 
-    elseif inputName == 'RLS'
-        titleName = 'Recursive Least Squares';
+    elseif inputName == 'rlsq'
+        titleName = 'Recursive Least Squares'
 
     else
         error('undefined function name')
