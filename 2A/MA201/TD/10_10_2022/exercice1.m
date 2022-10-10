@@ -38,6 +38,7 @@ function exercice1(filtreKalman)
     subplot(2,2,2); plot(t, dx, t, dxk); formatPlot('dx', {'data', 'kalman'}, 't', 'dx(t)')
     subplot(2,2,3); plot(t,  y, t,  yk); formatPlot( 'y', {'data', 'kalman'}, 't',  'y(t)')
     subplot(2,2,4); plot(t, dy, t, dyk); formatPlot('dy', {'data', 'kalman'}, 't', 'dy(t)')
+    savePlot('ma201_pc6_ex2')
 
 
 
