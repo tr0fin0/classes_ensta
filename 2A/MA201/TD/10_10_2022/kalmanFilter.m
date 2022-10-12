@@ -9,6 +9,7 @@ function [x, t] = kalmanFilter(N, Z, F, H, W, V)
     t  = [];
     xk = [0; 0; 0; 0];
     Pk = 1000 * eye(4);
+    % TODO automatic sizing
 
 
     for i = 1 : N
