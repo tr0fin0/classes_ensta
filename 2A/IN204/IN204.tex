@@ -98,6 +98,29 @@ Après avoir déclarer la function generic il faut déclarer les functions avec 
 \subsubsection{Allocation Dynamique}
 \paragraph{Définition}
 
+\subsection{C++ 20}
+\paragraph{Définition}C'est necessaire de préciser la bonne version du compilateur parmi le commande suivante:
+\begin{scriptsize}
+    \mycode
+    \begin{lstlisting}
+    g++ -std=c++20 file.cpp -o executable.exe && ./executable.exe
+    g++ -std=c++2a file.cpp -o executable.exe && ./executable.exe
+    \end{lstlisting}
+\end{scriptsize}
+Il y a deux options et il faut essayer lequel marché sur sa machine.
+
+% \subsubsection{\texttt{constraint}}
+% \paragraph{Définition}
+% \begin{scriptsize}
+%     \mycode\lstinputlisting[language=C++]{example/constraint.cpp}
+% \end{scriptsize}
+
+\subsubsection{\texttt{concept}}
+\paragraph{Définition}Il y a plusieurs manières d'utiliser le concept parmi lequel les deux les plus commans sont:
+\begin{scriptsize}
+    \mycode\lstinputlisting[language=C++]{example/concept.cpp}
+\end{scriptsize}
+
 
 \section{Programation Orientaté à Objets}
 \paragraph{Définition}
