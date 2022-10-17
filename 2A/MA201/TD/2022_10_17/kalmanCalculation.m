@@ -2,6 +2,8 @@ function [x, t] = kalmanCalculation(input)
     % ========================================
     % Kalman Filter Calculation
     % ========================================
+    % x : vector of values
+    % t : vector of trace
 
 
     % input variables
