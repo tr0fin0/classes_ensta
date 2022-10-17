@@ -1,49 +1,37 @@
-function particuleFilter(input)
+function [x, t] = particleFilter(N, Z, F, H, W, V)
+
     % ========================================
     % Particules Filter
     % ========================================
-
-
-    % input variables
-    N       = input.N; % 
-    T       = input.T; % dicreatization time
-    X       = input.X; % real values
-    Z       = input.Z; % 
-    sigma_p = input.sigma_p; % 
-    sigma_v = input.sigma_v; % 
-    sigma_z = input.sigma_z; % 
-
-    % initial variables
-    sp2 = sigma_p ^ 2;
-    sv2 = sigma_v ^ 2;
-    sz2 = sigma_z ^ 2;
-
-
-    F = [
-        1 T 0 0;
-        0 1 0 0;
-        0 0 1 T;
-        0 0 0 1;
-    ];
-
-    H = [
-        1 0 0 0;
-        0 0 1 0;
-    ];
-
-    W = T * [
-        sp2 0   0   0;
-        0   sv2 0   0;
-        0   0   sp2 0;
-        0   0   0   sv2;
-    ];
-
-    % TODO check matrix dimensions and kalman algorithm needs
-    V = sz2 * eye(2);
-    % F, H, W and V are constant during interations, particular case
+    % x : vector of values
+    % t : vector of trace
 
 
     % inicialization
-    [x, t]  = particuleFilter(N, Z, F, H, W, V);
+    x  = [];
+    t  = [];
 
+    xk = [0; 0; 0; 0];
+    Pk = 1000 * eye(4);
+    % TODO automatic sizing
+
+
+    for i = 1 : N
+        % prediction
+        xk = F * xk;
+        Pk = F * Pk * F' + W;
+
+        % correction
+        K  = Pk * H' * inv(H * Pk * H' + V);
+
+        % update
+        xk = xk + K * (Z(:,i) - H * xk);
+        Pk = (eye(size(K*H)) - K * H) * Pk;
+
+        % saving
+        x = [x, xk];
+        t = [t, trace(Pk)];
+    end
+    % x     % debuging
+    % t     % debuging
 end
