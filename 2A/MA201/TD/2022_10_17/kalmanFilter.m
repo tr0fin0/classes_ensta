@@ -2,11 +2,15 @@ function [x, t] = kalmanFilter(N, Z, F, H, W, V)
     % ========================================
     % Kalman Filter
     % ========================================
+    % x : vector of values
+    % t : vector of trace
+
 
 
     % inicialization
     x  = [];
     t  = [];
+
     xk = [0; 0; 0; 0];
     Pk = 1000 * eye(4);
     % TODO automatic sizing
