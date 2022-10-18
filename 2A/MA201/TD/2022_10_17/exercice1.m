@@ -26,28 +26,32 @@ function exercice1(filtrePart)
     T = filtrePart.T; % 
 
     % getting real values for comparison
-    [x, y, dx, dy] = extractData(X, N);
+    % [x, y, dx, dy] = extractData(X, N);
 
 
 
-    [Xk, tk] = kalmanCalculation(filtrePart);
-    [xk, yk, dxk, dyk] = extractData(Xk, N);
+    % [Xk, tk] = kalmanCalculation(filtrePart);
+    % [xk, yk, dxk, dyk] = extractData(Xk, N);
 
-    t = 1 : 1 : N;
-    figure;
-    subplot(2,2,1); plot(t,  x, t,  xk); formatPlot( 'x', {'data', 'kalman'}, 't',  'x(t)')
-    subplot(2,2,2); plot(t, dx, t, dxk); formatPlot('dx', {'data', 'kalman'}, 't', 'dx(t)')
-    subplot(2,2,3); plot(t,  y, t,  yk); formatPlot( 'y', {'data', 'kalman'}, 't',  'y(t)')
-    subplot(2,2,4); plot(t, dy, t, dyk); formatPlot('dy', {'data', 'kalman'}, 't', 'dy(t)')
-    savePlot('ma201_pc6_ex1')
+    % t = 1 : 1 : N;
+    % figure;
+    % subplot(2,2,1); plot(t,  x, t,  xk); formatPlot( 'x', {'data', 'kalman'}, 't',  'x(t)')
+    % subplot(2,2,2); plot(t, dx, t, dxk); formatPlot('dx', {'data', 'kalman'}, 't', 'dx(t)')
+    % subplot(2,2,3); plot(t,  y, t,  yk); formatPlot( 'y', {'data', 'kalman'}, 't',  'y(t)')
+    % subplot(2,2,4); plot(t, dy, t, dyk); formatPlot('dy', {'data', 'kalman'}, 't', 'dy(t)')
+    % savePlot('ma201_pc6_ex1')
 
-    figure;
-    plot(t, tk); formatPlot('trace(P_k)', 'Kalman Filter', 't', 'tr(P_k)')
-    savePlot('ma201_pc6_ex2_trace')
+    % figure;
+    % plot(t, tk); formatPlot('trace(P_k)', 'Kalman Filter', 't', 'tr(P_k)')
+    % savePlot('ma201_pc6_ex2_trace')
 
-    figure;
-    plot(t, tk); formatPlot('trace(P_k)', 'Kalman Filter', 't', 'tr(P_k)')
-    savePlot('ma201_pc6_ex2_erreur')
+    % figure;
+    % plot(t, abs(xk - x)); formatPlot('erreur quadratique', 'Kalman Filter', 't', 'erreur')
+    % savePlot('ma201_pc6_ex2_erreur')
+
+
+
+    particlesCalculation(filtrePart)
 
 
 
