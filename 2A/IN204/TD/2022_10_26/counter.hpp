@@ -3,7 +3,7 @@
  
 class counter
 {
-protected:
+public:
     unsigned i;
  
 public:
