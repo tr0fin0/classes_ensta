@@ -1,9 +1,9 @@
 #ifndef COUNTER_HPP
 #define COUNTER_HPP
- 
+
 class counter
 {
-public:
+protected:
     unsigned i;
  
 public:
