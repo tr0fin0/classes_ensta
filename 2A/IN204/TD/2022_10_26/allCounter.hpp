@@ -3,7 +3,7 @@
 #include "incCounter.hpp"
 #include "decCounter.hpp"
  
-class allCounter : public decCounter, incCounter
+class allCounter : virtual public decCounter, incCounter
 {
 
 public:

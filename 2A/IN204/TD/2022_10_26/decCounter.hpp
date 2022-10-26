@@ -2,7 +2,7 @@
 #define DECCOUNTER_HPP
 #include "counter.hpp"
  
-class decCounter : public counter
+class decCounter : virtual public counter
 {
 
 public:
