@@ -1,0 +1,179 @@
+\documentclass{article}
+\usepackage{C:/Users/Admin-PC/Documents/git_repository/tpack/tpack}
+% \usepackage{tpack}
+\title{MA201 - Statistique}
+\project{Projet Filtre Kalman [COMPLETER]}
+\author{Guilherme Nunes Trofino\\Vanessa López Lorena [COMPLETER]}
+\authorRA{2022-2024}
+
+
+\makeatletter
+\begin{document}\selectlanguage{french}
+\maketitle
+
+\newpage\tableofcontents
+
+\section*{Introduction}
+\subsection*{Problème}
+\paragraph{Présentation}Un dispositif de poursuite, dont la position est fixe et connue, mesure à des instants discrets $t = kT$ où $T$ est le période de mesure connue également.\\
+
+\noindent On considère qu'on aura les mesures suivants:
+\begin{enumerate}
+    \item $D_{k}$, \textbf{Distance} jusqu'à la cible;
+    \item $\alpha_{k}$, \textbf{Angle} entre l'horizontale et la cible;
+\end{enumerate}
+On considère que ces mesures sont entachées d'erreurs additives modélisées par des bruits blancs centrés suivants:
+\begin{enumerate}
+    \item $n_{D}(k)$, Bruit de la Distance:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{Espérance}: $\mathbf{E}[n_{D}(k)] = 0$;
+        \item \texttt{Variance}: $\text{Var}(n_{D}(k)) = \sigma_{D}^{2}(k)$;
+    \end{enumerate}
+    \item $n_{\alpha}(k)$, Bruit de l'Angle:
+        \begin{enumerate}[noitemsep]
+        \item \texttt{Espérance}: $\mathbf{E}[n_{\alpha}(k)] = 0$;
+        \item \texttt{Variance}: $\text{Var}(n_{\alpha}(k)) = \sigma_{\alpha}^{2}(k)$;
+    \end{enumerate}
+\end{enumerate}
+\paragraph{Supposition}Bruits sont indépendants.
+
+\subsection*{Espace Physique}
+\paragraph{Définition}On considère que à chaque instant la position de la cible sera donne pour $(x(t);y(t))$.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+      \begin{axis}[
+    		xtick distance=1, ytick distance=1,
+    		xmin=-8, xmax=8,
+    		ymin=-8, ymax=8,
+    		axis lines = center,
+    		ticks=none]
+
+        \draw [red!60, -{Latex[round]}] (1.5,0) arc [
+            start angle = 0,
+            end angle   = 45,
+            radius      = 1.5
+        ] 
+        % node [near start, bottom] {$\alpha_{k}^{\circ}$}
+        node [near start] {$\alpha_{k}^{\circ}$}
+        ;
+        \draw (1.25, 2.75) node []  {$D_{k}$};
+
+        \draw[-] (axis cs:{0,0}) -- (axis cs:{6,6}) node [above] {$(x(t);y(t))$};
+
+        \draw[gray, dashed] (axis cs:{6,0}) -- (axis cs:{6,6});
+        \draw[gray, dashed] (axis cs:{0,6}) -- (axis cs:{6,6});
+      \end{axis}
+    \end{tikzpicture}
+    \caption{Représentation Système}
+\end{figure}
+\noindent On considère que le radar c'est positionne à l'origine du système noté comme: $(x_{0}, y_{0}) = (0, 0)$.
+
+
+
+\section{Exercice 1}
+\paragraph{Définition}On suppose que que la fréquence d'échantillonnage du radar est suffisamment faible pour qu'entre deux instants de mesures, $kT$ et $(k+1)T$, l'accélération de la cible soit constante et donner pour le suivant: $a(k) = (a_{x}(k), a_{y}(k))$. Pour l'accélération $a_{y}(k)$ il faut considère la gravité, égal à $g = 9.81$ orientée suivant $y$ négativement.
+\subsection{Part 1}
+\paragraph{Résolution}On considère de l'énonce:
+\begin{equation}
+    r_{x}(l) = \mathbf{E}[a_{x}(k) \cdot a_{x}(k+l)] = \sigma_{a}^{2} \cdot \exp{(-\mu l)} \implies
+    r_{x}(0) = \boxed{\mathbf{E}[a_{x}(k)^{2}] = \sigma_{a}^{2}}
+\end{equation}
+\noindent De cette façon-là on aura l'équation suivante:
+\begin{align*}
+    (a_{x}(k+1))^2 &= (\beta \cdot a_{x}(k) + w_{x}(k))^2\\
+    \mathbf{E}[(a_{x}(k+1))^2] &= \mathbf{E}[(\beta \cdot a_{x}(k) + w_{x}(k))^2]\\\\
+    \sigma_{a}^{2} &= \mathbf{E}[\beta^2 a_{x}(k)^{2} + 2 \beta a_{x}(k) \cdot w_{x}(k) + w_{x}(k)^2]\\
+    &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + 2 \beta \mathbf{E}[a_{x}(k) \cdot w_{x}(k)] + \mathbf{E}[w_{x}(k)^2]\\
+    &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + 2 \beta \mathbf{E}[a_{x}(k)] \cdot \mathbf{E}[w_{x}(k)] + \mathbf{E}[w_{x}(k)^2]
+\end{align*}
+\noindent On considère que: $\mathbf{E}[a_{x}(k) \cdot w_{x}(k)] = \mathbf{E}[a_{x}(k)] \cdot \mathbf{E}[w_{x}(k)]$ parce que $a_{x}(k)$ est indépendant de $w_{x}(k)$
+\begin{align*}
+    \sigma_{a}^{2} &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + 2 \beta \mathbf{E}[a_{x}(k)] \cdot \cancelto{0}{\mathbf{E}[w_{x}(k)]} + \mathbf{E}[w_{x}(k)^2]\\
+     &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + \mathbf{E}[w_{x}(k)^2]
+\end{align*}
+\noindent On note que $w_{x}(k)$ est considère comme un bruit centrée sa Espérance sera nulle et donc: $\mathbf{E}[w_{x}(k)] = 0$. On sait aussi que:
+\begin{align*}
+     Var(w_{x}(k)) &= \mathbf{E}[w_{x}(k)^2] - (\mathbf{E}[w_{x}(k)])^2\\
+     &= \mathbf{E}[w_{x}(k)^2] - \cancelto{0}{(\mathbf{E}[w_{x}(k)])^2}\\
+     \Aboxed{\sigma_{w}(k)^2 &= \mathbf{E}[w_{x}(k)^2]}
+\end{align*}
+\noindent Ainsi, on a:
+\begin{equation*}
+    \boxed{\sigma_{w}(k)^2 = \sigma_{a}(k)^2 \cdot ( 1 - \beta^2 )}
+\end{equation*}
+Après:
+\begin{align*}
+    r_{x}(1) &= \mathbf{E}[a_{x}(k) \cdot a_{x}(k+1)]\\
+    &= \mathbf{E}[a_{x}(k) \cdot (\beta \cdot a_{x}(k) + w_{x}(k))]\\
+    &= \mathbf{E}[\beta a_{x}(k)^{2} + a_{x}(k) \cdot w_{x}(k)]\\
+    \sigma_{a}^{2} \cdot \exp{(-\mu)} &= \mathbf{E}[\beta a_{x}(k)^{2}] + \cancelto{0}{\mathbf{E}[a_{x}(k) \cdot w_{x}(k)]}\\
+    &= \beta\mathbf{E}[a_{x}(k)^{2}]\\
+    &= \beta\sigma_{a}(k)^2\\
+    \Aboxed{\exp{(-\mu)} &= \beta}
+\end{align*}
+Finalement on a le même résolution pour $x$ et pour $y$ donc ça démontrer que:
+\begin{align}
+    \Aboxed{\beta &= \exp{(-\mu)}}\\
+    \Aboxed{\sigma_{w}(k)^2 &= \sigma_{a}(k)^2 \cdot ( 1 - \beta^2 )}
+\end{align}
+
+\subsection{Part 2}
+La dynamique de l'état est obtenue avec les équations du mouvement:
+
+\begin{align*}
+    &x(k+1) = x(k) + \dot{x}(k) + \frac{1}{2} \ddot{x}(k)\cdot T^2 \\
+    &y(k+1) = y(k) + \dot{y}(k) + \frac{1}{2}  \ddot{y}(k)\cdot T^2\\
+    \\
+    &\dot{x}(k+1) = \dot{x}(k) + \ddot{x}\cdot T\\
+    &\dot{y}(k+1) = \dot{y}(k) + \ddot{y}\cdot T\\
+    \\
+    % &L'exercice \; précédant \; propose:
+    \\
+    &\ddot{x}(k+1) = \beta \cdot \ddot{x}(k) + W_x(k)\\
+    &\ddot{y}(k+1) = \beta \cdot \ddot{y}(k) + W_y(k)\\
+\end{align*}
+
+Avec ces équations, nous pouvons expliciter les matrices:
+
+
+\subsection{Part 3}
+\subsection{Part 4}
+
+
+\section{Exercice 2}
+\subsection{Part 1}
+\subsection{Part 2}
+\subsection{Part 3}
+
+
+\section{Exercice 3}
+\subsection{Part 1}
+
+
+\section{Exercice 4}
+\subsection{Part 1}
+
+
+\section{Exercice 5}
+\subsection{Part 1}
+
+
+\section{Exercice 6}
+\subsection{Part 1}
+
+
+\section{Exercice 7}
+
+
+
+\section{Algorithmes}
+\paragraph{Présentation}
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[language=Bash]
+    cd
+    \end{lstlisting}
+\end{scriptsize}
+\end{document}
