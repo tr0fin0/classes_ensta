@@ -219,6 +219,7 @@ On note que le système d'équations peut être represente par l'équation matri
 \begin{equation}
     \boxed{\mathbf{X}(k+1) = \mathbf{F}_{k} \times \mathbf{X}(k) + \mathbf{G}_{k} \times \mathbf{u}(k)}
 \end{equation}
+Pour considérer la gravité on va la ajouter sur les conditions initialles du problême.
 
 
 \subsection{Part 3}
@@ -230,6 +231,8 @@ On note que le système d'équations peut être represente par l'équation matri
     \qquad
     \boxed{\alpha_{k} = \arctan\left( \frac{(y(t) - y_{0})}{(x(t) - x_{0})} \right)}
 \end{equation}
+On note que ces équations ne considerent pas les bruits et incertitudes des mesures mas fournir une information cartesienne pour comprendre le movement de la cible.
+
 \subsection{Part 4}
 \paragraph{Proposition}On considère ici une transformation des mesures permettant de les transformer sous une forme plus de l'état que l'on cherche à estimer. De cette façon on considère les pseudo mesures suivantes:
 \begin{align*}
@@ -267,7 +270,7 @@ Représentent les mesures sans bruits associes à $x$ et $y$. On note que après
 \subsection{Part 1}
 \paragraph{Proposition}Écrire les équations du filtre de Kalman simple correspondant aux équations dynamiques de l'équation d'observation correspondant aux pseudomesures.
 
-\paragraph{Résolution}On considère qu'un filtre de Kalman simple aura besoin que le bruit soit additif gaussien. Après les équations générales seront:
+\paragraph{Résolution}Un filtre de Kalman Simple considère que le bruit soit additif gaussien. Après les équations générales seront:
 \begin{equation*}
     \begin{cases}
         \mathbf{X}_{k} &= \mathbf{F}_{k} \times \mathbf{X}_{k-1} + \mathbf{G}_{k} \times \mathbf{u}_{k} + \mathbf{w}_{k}\\
@@ -276,61 +279,189 @@ Représentent les mesures sans bruits associes à $x$ et $y$. On note que après
 \end{equation*}
 Où:
 \begin{enumerate}
-    \item \textbf{Équation Système}:
+    \item \textbf{Équation d'Évolution du Système}:
     \begin{enumerate}[noitemsep]
         \item $\mathbf{X}_{k}$, \texttt{Vecteur de Mesures} à l'instant $k$;
         \item $\mathbf{F}_{k}$, \texttt{Matrice d'Évolution} ou Matrice de Transition;
         \item $\mathbf{G}_{k}$, \texttt{Matrice de Controle};
         \item $\mathbf{u}_{k}$, \texttt{Vecteur de Entrée};
-        \item $\mathbf{w}_{k}$, \texttt{Vecteur de Bruit d'Évolution};
+        \item $\mathbf{w}_{k}$, \texttt{Vecteur de Bruit d'Évolution}: supposé gaussien, centré et de matrice de covariance $\mathbf{Q}_{k}$;
     \end{enumerate}
-    \item \textbf{Équation Sortie}:
+    \item \textbf{Équation d'Observation du Système}:
     \begin{enumerate}[noitemsep]
         \item $\mathbf{Z}_{k}$, \texttt{Vecteur de Messures};
         \item $\mathbf{H}_{k}$, \texttt{Matrice d'Observations};
-        \item $\mathbf{v}_{k}$, \texttt{Vecteur de Bruit de Mesures};
+        \item $\mathbf{v}_{k}$, \texttt{Vecteur de Bruit de Mesures}: supposé gaussien, centré et de matrice de covariance $\mathbf{R}_{k}$;
     \end{enumerate}
 \end{enumerate}
+Où chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour chaque $k$. Dans le cas de ce exercice on ira considérer les matrices suivantes pour décrire le système:
+\begin{equation}
+    \mathbf{X}_{k} = 
+    \begin{bmatrix}
+        x(k)\\
+        y(k)\\
+        \dot{x}(k)\\
+        \dot{y}(k)\\
+        \ddot{x}(k)\\
+        \ddot{y}(k)\\
+    \end{bmatrix}
+    \quad
+    \mathbf{u}_{k}
+    \begin{bmatrix}
+        w_{x}(k)\\
+        w_{y}(k)\\
+    \end{bmatrix}
+    \quad
+    \mathbf{F}_{k} = 
+    \begin{bmatrix}
+        1 & 0 & T & 0 & \frac{T^2}{2}& 0\\
+        0 & 1 & 0 & T & 0 & \frac{T^2}{2}\\
+        0 & 0 & 1 & 0 & T & 0\\
+        0 & 0 & 0 & 1 & 0 & T\\
+        0 & 0 & 0 & 0 & \beta & 0\\
+        0 & 0 & 0 & 0 & 0 & \beta\\
+    \end{bmatrix}
+    \quad
+    \mathbf{G}_{k} = 
+    \begin{bmatrix}
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        1 & 0\\
+        0 & 1\\
+    \end{bmatrix}
+    \quad
+    \mathbf{H}_{k}^{t} = 
+    \begin{bmatrix}
+        1 & 0\\
+        0 & 1\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+        0 & 0\\
+    \end{bmatrix}
+\end{equation}
+\begin{equation}
+    \mathbf{w}_{k} = T \times 
+    \begin{bmatrix}
+        \sigma_{D_{k}}^2 & 0 & 0 & 0 & 0 & 0\\
+        0 & \sigma_{D_{k}}^2 & 0 & 0 & 0 & 0\\
+        0 & 0 & \sigma_{\alpha_{k}}^2 & 0 & 0 & 0\\
+        0 & 0 & 0 & \sigma_{\alpha_{k}}^2 & 0 & 0\\
+        0 & 0 & 0 & 0 & \sigma_{Z_{k}}^2 & 0\\
+        0 & 0 & 0 & 0 & 0 & \sigma_{Z_{k}}^2\\
+    \end{bmatrix}
+    \quad
+    \mathbf{v}_{k} = 
+    \begin{bmatrix}
+        \sigma_{Z}^2 & 0\\
+        0 & \sigma_{Z}^2\\
+    \end{bmatrix}
+\end{equation}
 
 \subsection{Part 2}
 \paragraph{Proposition}Suggérer un moyen de déterminer les matrices de covariances associées aux pseudomesures.
 
 \paragraph{Résolution}
+% On note que le problème pour l'implementation sera la construction des équations qui modelisent le bruit parce qu'il n'y a pas des explications de comment le faire.\\
+
+% \noindent Une façon de le faire c'est de modéliser le bruit pour la linéarisation.
+
 
 \subsection{Part 3}
 \paragraph{Proposition}Implémenter l'algorithme résultant sous MATLAB.
+
+\paragraph{Résolution}Codes en MATLAB:
+\begin{scriptsize}\mycode
+    % \lstinputlisting[language=MATLAB, linerange={1-5}]{TD/2022_09_14/Counter.hpp}
+    \lstinputlisting[language=MATLAB]{exercice1.m}
+\end{scriptsize}
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[language=MATLAB]{kalmanCalculation.m}
+\end{scriptsize}
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[language=MATLAB]{kalmanFilter.m}
+\end{scriptsize}
+
+
+\section{Exercice 3}
+\subsection{Part 1}
+\paragraph{Proposition}Écrire l'équation d'observation linéarisée autour de $\hat{\mathbf{X}}(k | k-1)$ sous la forme $\hat{\mathbf{X}}(k) = \mathbf{H}_{k} \times \mathbf{X}(k) + \mathbf{b}_{k}$ en exprimant 
+
+\paragraph{Résolution}
+
+
+\subsection{Part 2}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 3}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 4}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 5}
+\paragraph{Proposition}
 
 \paragraph{Résolution}
 
 
 
-
-\section{Exercice 3}
-\subsection{Part 1}
-
-
 \section{Exercice 4}
 \subsection{Part 1}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 2}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 3}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
 
 
 \section{Exercice 5}
 \subsection{Part 1}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 2}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
+
+\subsection{Part 3}
+\paragraph{Proposition}
+
+\paragraph{Résolution}
+
 
 
 \section{Exercice 6}
-\subsection{Part 1}
+\paragraph{Proposition}
 
+\paragraph{Résolution}Avec les codes implementes
 
-\section{Exercice 7}
-
-
-
-\section{Algorithmes}
-\paragraph{Présentation}
-
-\begin{scriptsize}\mycode
-    \begin{lstlisting}[language=Bash]
-    cd
-    \end{lstlisting}
-\end{scriptsize}
 \end{document}
