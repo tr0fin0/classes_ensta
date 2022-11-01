@@ -14,6 +14,7 @@ function X = kalmanSetup(input)
     T   = 0.1;
     U   = 1/2*T^2;
     b   = 1;
+    g   = 9.81;
     
     F   = [
         1 0 T 0 U 0;
@@ -21,7 +22,7 @@ function X = kalmanSetup(input)
         0 0 1 0 T 0;
         0 0 0 1 0 T;
         0 0 0 0 b 0;
-        0 0 0 0 0 b;
+        0 0 0 0 0 b-g;
     ];
 
     % Matrix of Control         (6 x 2) ?????
