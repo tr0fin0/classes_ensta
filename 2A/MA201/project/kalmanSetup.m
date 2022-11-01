@@ -47,6 +47,7 @@ function X = kalmanSetup(input)
     Q   = (0 + 1 * randn(n));   % Matrix of Covariance Noise of wk
     R   = (0 + 1 * randn(m));   % Matrix of Covariance Noise of vk
 
-    X = kalmanFilterSimple(input, x, F, B, H, Q, R, u)
+
+    X = kalmanFilterSimple(input, x, F, B, H, Q, R, u);
 
 end
