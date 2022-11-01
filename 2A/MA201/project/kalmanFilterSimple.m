@@ -42,11 +42,12 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
 
     % support matrixes
     P  = 1000 * I;          % initial estimation
+    z  = data;
 
 
     for i = 1 : N
         % setup
-        z = data(:,i);
+        zk = z(:,i);
 
         % Prediction
         x = F * x + B * u;      % (n x 1)
@@ -54,7 +55,7 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
 
 
         % Correction
-        y = z - H * x;          % (m x 1)
+        y = zk - H * x;         % (m x 1)
         S = H * P * H' + R;     % (m x m)
         K = P * H' * inv(S);    % (n x m)
 
