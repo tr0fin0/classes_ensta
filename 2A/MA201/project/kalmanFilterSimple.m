@@ -29,6 +29,9 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
     % 
     %           N(x,y) : Normal Distribution
 
+    % theoretically F, B, H could vary over k interactions but
+    % in this algorithm we consider as constant
+
 
     N   = length(data);     % size of observation
     X   = [];               % matrix to return values
@@ -38,7 +41,7 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
     I  = eye(length(F));
 
     % support matrixes
-    P  = 1000 * I;
+    P  = 1000 * I;          % initial estimation
 
 
     for i = 1 : N
