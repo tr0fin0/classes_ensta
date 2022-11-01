@@ -25,7 +25,7 @@ function X = kalmanSetup(input)
         0 0 0 0 0 b-g;
     ];
 
-    % Matrix of Control         (6 x 2) ?????
+    % Matrix of Control         (6 x 2)
     B   = [
         0 0;
         0 0;
