@@ -48,12 +48,23 @@ function exercice1(filtreKalman)
 
     X = kalmanSetup(Z);
 
+    XDk = [];
+    Xak = [];
+    % cartesian coordinates to polar coordinates
+    for i = 1 : length(X)
+        Dk = sqrt(X(1, i)^2 + X(2, i)^2);
+        ak = atan(X(2, i)/X(1, i));
+
+        XDk = [XDk, Dk];
+        Xak = [Xak, ak];
+    end
+
 
     figure;
-    subplot(2,2,1); plot(T, Dk); formatPlot('Distance D_k', {'data', 'kalman'}, 't', 'm')
-    subplot(2,2,2); plot(T, Z(1,:), T, X(1,:)); formatPlot('Distance D_x', {'data'; 'kalman'}, 't', 'm')
-    subplot(2,2,3); plot(T, Z(2,:), T, X(2,:)); formatPlot('Distance D_y', {'data'; 'kalman'}, 't', 'm')
-    subplot(2,2,4); plot(T, ak); formatPlot('Angle \alpha_k', {'data', 'kalman'}, 't', 'degree')
+    subplot(2,2,1); plot(T, Dk, T, XDk); formatPlot('Distance D_k', {'data', 'kalman'}, 't', 'm')
+    subplot(2,2,2); plot(T, Z(1,:), T, X(1,:)); formatPlot('Component D_x', {'data'; 'kalman'}, 't', 'm')
+    subplot(2,2,3); plot(T, Z(2,:), T, X(2,:)); formatPlot('Component D_y', {'data'; 'kalman'}, 't', 'm')
+    subplot(2,2,4); plot(T, ak, T, Xak); formatPlot('Angle \alpha_k', {'data', 'kalman'}, 't', 'degree')
     % savePlot('ma201_project_Dk_filter')
 
 
