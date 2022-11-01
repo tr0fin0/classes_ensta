@@ -37,13 +37,13 @@ function exercice1(filtreKalman)
 
 
     % polar coordinates to cartesian coordinates
-    Z = [];
+    Z   = [];
     for i = 1 : length(Dk)
         Dx = Dk(i) * cos(ak(i));
         Dy = Dk(i) * sin(ak(i));
-        Zk = [Dx; Dy];
 
-        Z = [Z, Zk];
+        Zk = [Dx; Dy];
+        Z  = [Z, Zk];
     end
 
     X = kalmanSetup(Z);
