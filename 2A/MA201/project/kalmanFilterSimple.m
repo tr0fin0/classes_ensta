@@ -57,8 +57,8 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
 
         % Correction
         y = zk - H * x;         % (m x 1)
-        S = H * P * H' + R;     % (m x m)
-        K = P * H' * inv(S);    % (n x m)
+        S = H  * P * H' + R;    % (m x m)
+        K = P  * H' * inv(S);   % (n x m)
 
 
         % Update
