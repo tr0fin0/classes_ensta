@@ -26,26 +26,13 @@ function exercice1(filtreKalman)
     % ak: vector of angles
     [Dk, ak] = extractData(mesures);
 
-    % figure;
-    % plot(T, Dk); formatPlot('Distance', 'Data', 't', 'D_k')
-    % savePlot('ma201_project_Dk')
+    figure; % plot the data for reference
+    plot(T, Dk); formatPlot('Distance', 'Data', 't', 'D_k')
+    savePlot('ma201_project_Dk')
 
-    % figure;
-    % plot(T, ak); formatPlot('Angle', 'Data', 't', '\alpha_k')
-    % savePlot('ma201_project_ak_ang')
-
-
-
-    % [Xk, tk] = kalmanCalculation(filtreKalman);
-
-    % Dkk = [];
-    % for i = 1 : length(Xk)
-    %     Dkk = [Dkk, sqrt(Xk(1,i)^2 + Xk(2,i)^2)];
-    % end
-
-    % figure;
-    % plot(T, Dk, T, Dkk); formatPlot('Distance', {'Data'; 'Kalman'}, 't', 'D_k')
-    % savePlot('ma201_project_Dk_filter')
+    figure; % plot the data for reference
+    plot(T, ak); formatPlot('Angle', 'Data', 't', '\alpha_k')
+    savePlot('ma201_project_ak')
 
 
 
