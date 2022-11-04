@@ -22,7 +22,7 @@
     \item $D_{k}$, \textbf{Distance} jusqu'à la cible;
     \item $\alpha_{k}$, \textbf{Angle} entre l'horizontale et la cible;
 \end{enumerate}
-On considère que ces mesures sont entachées d'erreurs additives modélisées par des bruits blancs centrés suivants:
+On considère que ces mesures sont entachées d'erreurs additives modélisées par des bruits blancs centrés \cite{bruitBlanc} suivants:
 \begin{enumerate}
     \item $n_{D}(k)$, Bruit de la Distance:
     \begin{enumerate}[noitemsep]
@@ -80,7 +80,7 @@ On note que les bruits sont considères centrés et donc l'Esperance d'eux sera 
 \section{Exercice 1}
 \paragraph{Définition}On suppose que que la fréquence d'échantillonnage du radar est suffisamment faible pour qu'entre deux instants de mesures, $kT$ et $(k+1)T$, l'accélération de la cible soit constante et donner pour le suivant: $a(k) = (a_{x}(k), a_{y}(k))$. Pour l'accélération $a_{y}(k)$ il faut considère la gravité, égal à $g = 9.81$ orientée suivant $y$ négativement.
 \subsection{Part 1}
-\paragraph{Proposition}Pour la modélisation on considère qu'une cible qui accélère à l'instant $kT$ ira, probablement, accélère à l'instant $(k+1)T$. Ainsi on introduit la matrice de corrélation suivante entre les composantes succesives des accélérations:
+\paragraph{Proposition}Pour la modélisation on considère qu'une cible qui accélère à l'instant $kT$ ira, probablement, accélère à l'instant $(k+1)T$. Ainsi on introduit la matrice de corrélation \cite{jacobianCovariance} suivante entre les composantes succesives des accélérations:
 \begin{equation}
     r_{x} (l) = \mathbf{E}[a_{x}(k) \cdot a_{x}(k+l)] = \sigma_{a}^{2} \exp{(-\mu l)}
     \qquad
@@ -270,7 +270,7 @@ Représentent les mesures sans bruits associes à $x$ et $y$. On note que après
 \subsection{Part 1}
 \paragraph{Proposition}Écrire les équations du filtre de Kalman simple correspondant aux équations dynamiques de l'équation d'observation correspondant aux pseudomesures.
 
-\paragraph{Résolution}Un filtre de Kalman Simple considère que le bruit soit additif gaussien. Après les équations générales seront:
+\paragraph{Résolution}Un filtre de Kalman Simple, \cite{kalmanFilterWiki}, \cite{kalmanFilterMATLAB} et \cite{kalmanFilterMonashUniversity}, est mis en œuvre avec les équations:
 \begin{equation*}
     \begin{cases}
         \mathbf{X}_{k} &= \mathbf{F}_{k} \times \mathbf{X}_{k-1} + \mathbf{G}_{k} \times \mathbf{u}_{k} + \mathbf{w}_{k}\\
@@ -363,11 +363,7 @@ Où chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour 
 \subsection{Part 2}
 \paragraph{Proposition}Suggérer un moyen de déterminer les matrices de covariances associées aux pseudomesures.
 
-\paragraph{Résolution}
-% On note que le problème pour l'implementation sera la construction des équations qui modelisent le bruit parce qu'il n'y a pas des explications de comment le faire.\\
-
-% \noindent Une façon de le faire c'est de modéliser le bruit pour la linéarisation.
-
+\paragraph{Résolution}La Matrice de Covariance \cite{jacobianMatrix} \cite{jacobianMatrixComputation} du vecteur $\mathbf{Z}_{k}$ peut être estimer avec l'utilisation du Jacobian de la façon suivante:
 
 \subsection{Part 3}
 \paragraph{Proposition}Implémenter l'algorithme résultant sous MATLAB.
@@ -459,9 +455,10 @@ Où chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour 
 
 
 
-\section{Exercice 6}
-\paragraph{Proposition}
+Ces sont les matrices définis dans l'Exercice 2. \cite{cellMATLAB} À la suite on a:
+Pour définir les bruits on utilise les fonctions du MATLAB \cite{awgnMATLAB} \cite{wgnMATLAB} \cite{randnMATLAB} qui donnent des bruits gaussiens centrées et bruits qui suivent une Loi Normale. \cite{bruitBlancMATLAB} \cite{bruitBlancMATLABrand} \cite{bruitBlancMATLABwgn}\\
 
-\paragraph{Résolution}Avec les codes implementes
+\bibliography{ref.bib}
+\bibliographystyle{ieeetr}
 
 \end{document}
