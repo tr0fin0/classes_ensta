@@ -4,18 +4,19 @@ function X = kalmanSetup(Z, Dk, Ak)
     % ========================================
 
 
-    n = 6;
-    m = 2;
+    n = 6;  % number of states
+    m = 2;  % number of outputs
 
     % Vector Initial conditions (6 x 1)
     x   = [ 0; 0; 0; 0; 0; 0 ];
 
+    % Constants
+    T   = 0.1;      % sample time
+    U   = 1/2*T^2;  % constant
+    b   = 1;        % beta
+    g   = 9.81;     % gravity
+
     % Matrix of Transition      (6 x 6)
-    T   = 0.1;
-    U   = 1/2*T^2;
-    b   = 1;
-    g   = 9.81;
-    
     F   = [
         1 0 T 0 U 0;
         0 1 0 T 0 U;
