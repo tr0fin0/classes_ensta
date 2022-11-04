@@ -42,13 +42,13 @@ function X = kalmanSetup(Z, Dk, Ak)
         0 1 0 0 0 0;
     ];
 
-    u   = wgn(m, length(input), 0);  % Generate white Gaussian noise samples
+    u   = wgn(m, length(Z), 0;  % Generate white Gaussian noise samples
 
     %   = (mean + variance * normal distribution values)
     Q   = (0 + 1 * randn(n));   % Matrix of Covariance Noise of wk
     R   = (0 + 1 * randn(m));   % Matrix of Covariance Noise of vk
 
 
-    X = kalmanFilterSimple(input, x, F, B, H, Q, R, u);
+    X = kalmanFilterSimple(Z, x, F, B, H, Q, R, u);
 
 end
