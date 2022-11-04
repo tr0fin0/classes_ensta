@@ -15,9 +15,7 @@
 
 \section*{Introduction}
 \subsection*{Problème}
-\paragraph{Présentation}Un dispositif de poursuite, dont la position est fixe et connue, $(x_{0}, \; y_{0})$ l'origine du système, mesure à des instants discrets $t = kT$ où $T$ est le période de mesure connue également.\\
-
-\noindent On considère qu'on aura les mesures suivants:
+\paragraph{Présentation}Un dispositif de poursuite dont la position est fixe, connue et considère comme l'origine du système $(x_{0}, \; y_{0})$; mesure à des instants discrets $t = kT$, où $T$ est le période de mesure connue également, les variables suivants:
 \begin{enumerate}[noitemsep]
     \item $D_{k}$, \textbf{Distance} jusqu'à la cible;
     \item $\alpha_{k}$, \textbf{Angle} entre l'horizontale et la cible;
@@ -27,16 +25,17 @@ On considère que ces mesures sont entachées d'erreurs additives modélisées p
     \item $n_{D}(k)$, Bruit de la Distance:
     \begin{enumerate}[noitemsep]
         \item \texttt{Espérance}: $\mathbf{E}[n_{D}(k)] = 0$;
-        \item \texttt{Variance}: $\text{Var}(n_{D}(k)) = \sigma_{D}^{2}(k)$;
+        \item \texttt{Variance}: $\text{Var}(n_{D}(k)) = \sigma_{D}^{2}(k)$, connu;
     \end{enumerate}
     \item $n_{\alpha}(k)$, Bruit de l'Angle:
         \begin{enumerate}[noitemsep]
         \item \texttt{Espérance}: $\mathbf{E}[n_{\alpha}(k)] = 0$;
-        \item \texttt{Variance}: $\text{Var}(n_{\alpha}(k)) = \sigma_{\alpha}^{2}(k)$;
+        \item \texttt{Variance}: $\text{Var}(n_{\alpha}(k)) = \sigma_{\alpha}^{2}(k)$, connu;
     \end{enumerate}
 \end{enumerate}
 On note que les bruits sont considères centrés et donc l'Esperance d'eux sera nulle.
-\paragraph{Supposition}Bruits sont indépendants, ça-t-a dit qu'il n'y a pas d'interférence entre les bruits.
+
+\paragraph{Supposition}Bruits sont indépendants, ça-t-a dit qu'il n'y a pas d'interférence ou interelation entre les bruits.
 
 \subsection*{Espace Physique}
 \paragraph{Définition}On considère que à chaque instant la position de la cible sera donne pour $(x(t), \; y(t))$, represente en bleu.
@@ -77,9 +76,9 @@ On note que les bruits sont considères centrés et donc l'Esperance d'eux sera 
 
 
 
-\section{Exercice 1}
-\paragraph{Définition}On suppose que que la fréquence d'échantillonnage du radar est suffisamment faible pour qu'entre deux instants de mesures, $kT$ et $(k+1)T$, l'accélération de la cible soit constante et donner pour le suivant: $a(k) = (a_{x}(k), a_{y}(k))$. Pour l'accélération $a_{y}(k)$ il faut considère la gravité, égal à $g = 9.81$ orientée suivant $y$ négativement.
-\subsection{Part 1}
+\section{Exercice 1, Équation de la Dynamique}
+\paragraph{Définition}On suppose que que la fréquence d'échantillonnage du radar est suffisamment faible pour qu'entre deux instants de mesures, $kT$ et $(k+1)T$, l'accélération de la cible soit constante et donner pour le suivant: $$a(k) = (a_{x}(k), a_{y}(k))$$Pour l'accélération $a_{y}(k)$ il faut considère la gravité, égal à $g = 9.81$ orientée suivant $y$ négativement.
+
 \paragraph{Proposition}Pour la modélisation on considère qu'une cible qui accélère à l'instant $kT$ ira, probablement, accélère à l'instant $(k+1)T$. Ainsi on introduit la matrice de corrélation \cite{jacobianCovariance} suivante entre les composantes succesives des accélérations:
 \begin{equation}
     r_{x} (l) = \mathbf{E}[a_{x}(k) \cdot a_{x}(k+l)] = \sigma_{a}^{2} \exp{(-\mu l)}
@@ -88,9 +87,28 @@ On note que les bruits sont considères centrés et donc l'Esperance d'eux sera 
 \end{equation}
 \noindent Où:
 \begin{enumerate}[noitemsep]
-    \item $\sigma_{a}^{2}$, \textbf{Intensité de l'Accélération};
-    \item $\mu$, \textbf{Rapidité de la Manoeuvre};
+    \item $\sigma_{a}^{2}$, \textbf{Intensité de l'Accélération}: Indetermine pour le moment;
+    \item $\mu$, \textbf{Rapidité de la Manoeuvre}: Indetermine pour le moment;
 \end{enumerate}
+On note que les deux composants seront modelises pour la même équation.
+
+
+\subsection{Part 1}
+\paragraph{Proposition}Montrer qu'un tel processus $a(k)$ peut être mis sous la forme:
+\begin{equation*}
+    \begin{cases}
+        a_{x}(k+1) = \beta \cdot a_{x}(k) + w_{x}(k)\\
+        a_{y}(k+1) = \beta \cdot a_{y}(k) + w_{y}(k)
+    \end{cases}
+\end{equation*}
+Où $w_{x}(k)$ et $w_{y}(k)$ \cite{secondOrderProcess} sont les composantes d'un vecteur de bruit:
+\begin{enumerate}[noitemsep]
+    \item \textbf{Blanc Stationnaire d'Ordre 2}: Commun à des mesures d'information \cite{secondOrderProcessEquation};
+    \item \textbf{Centré}: $\mathbf{E}[w_{x}(k)] = \mathbf{E}[w_{y}(k)] = 0$;
+    \item \textbf{Variance}: $\sigma_{w}^2$, connu;
+\end{enumerate}
+Exprimer $\beta$ et $\sigma_{w}^2$ en fonction de $\mu$ et $\sigma_{a}^2$.
+
 \paragraph{Résolution}On considère de l'énonce:
 \begin{equation}
     r_{x}(0) \implies \boxed{\mathbf{E}[a_{x}(k)^{2}] = \sigma_{a}^{2}}
@@ -98,7 +116,10 @@ On note que les bruits sont considères centrés et donc l'Esperance d'eux sera 
 \noindent De cette façon-là, en considerant l'équation propose par l'exercice $a_{x}(k+1) = \beta \cdot a_{x}(k) + w_{x}(k)$, on aura l'équation suivante:
 \begin{align*}
     (a_{x}(k+1))^2 &= (\beta \cdot a_{x}(k) + w_{x}(k))^2\\
-    \mathbf{E}[(a_{x}(k+1))^2] &= \mathbf{E}[(\beta \cdot a_{x}(k) + w_{x}(k))^2]\\\\
+    \mathbf{E}[(a_{x}(k+1))^2] &= \mathbf{E}[(\beta \cdot a_{x}(k) + w_{x}(k))^2]
+\end{align*}
+On note note que grâce à la définition de l'énonce on a que $\mathbf{E}[(a_{x}(k+1))^2] = \mathbf{E}[(a_{x}(k))^2] = \sigma_{a}^2$ quand on fait: $l = 0$. On continue avec:
+\begin{align*}
     \sigma_{a}^{2} &= \mathbf{E}[\beta^2 a_{x}(k)^{2} + 2 \beta a_{x}(k) \cdot w_{x}(k) + w_{x}(k)^2]\\
     &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + 2 \beta \mathbf{E}[a_{x}(k) \cdot w_{x}(k)] + \mathbf{E}[w_{x}(k)^2]\\
     &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + 2 \beta \mathbf{E}[a_{x}(k)] \cdot \mathbf{E}[w_{x}(k)] + \mathbf{E}[w_{x}(k)^2]
@@ -115,8 +136,12 @@ On note que les bruits sont considères centrés et donc l'Esperance d'eux sera 
      \Aboxed{\sigma_{w}^2(k) &= \mathbf{E}[w_{x}(k)^2]}
 \end{align*}
 \noindent Ainsi, on a:
+\begin{align*}
+    \sigma_{a}^2 &= \beta^2 \mathbf{E}[a_{x}(k)^{2}] + \mathbf{E}[w_{x}(k)^2]\\
+    \sigma_{a}^2 &= \beta^2 \sigma_{a}^2 + \sigma_{2}^2\\
+    \Aboxed{\sigma_{w}^2(k) &= \sigma_{a}^2(k) \cdot ( 1 - \beta^2 )}
+\end{align*}
 \begin{equation*}
-    \boxed{\sigma_{w}(k)^2 = \sigma_{a}(k)^2 \cdot ( 1 - \beta^2 )}
 \end{equation*}
 Après:
 \begin{align*}
@@ -125,13 +150,13 @@ Après:
     &= \mathbf{E}[\beta \cdot a_{x}(k)^{2} + a_{x}(k) \cdot w_{x}(k)]\\
     \sigma_{a}^{2}(k) \cdot \exp{(-\mu)} &= \mathbf{E}[\beta a_{x}(k)^{2}] + \cancelto{0}{\mathbf{E}[a_{x}(k) \cdot w_{x}(k)]}\\
     &= \beta \cdot \mathbf{E}[a_{x}(k)^{2}]\\
-    &= \beta \cdot \sigma_{a}(k)^2\\
+    &= \beta \cdot \sigma_{a}^2(k)\\
     \Aboxed{\exp{(-\mu)} &= \beta}
 \end{align*}
 Comment les équations sont les mêmes pour $x$ et pour $y$ sont les mêmes on peut appliquer les résultats suivantes aux deux coordonnées:
 \begin{align}
     \Aboxed{\beta &= \exp{(-\mu)}}\\
-    \Aboxed{\sigma_{w}(k)^2 &= \sigma_{a}(k)^2 \cdot ( 1 - \beta^2 )}
+    \Aboxed{\sigma_{w}^2(k) &= \sigma_{a}^2(k) \cdot ( 1 - \beta^2 )}
 \end{align}
 De cette façon là on peut representer les accélérations peuvent être donne par les équations suivantes:
 \begin{equation}
@@ -149,13 +174,14 @@ De cette façon là on peut representer les accélérations peuvent être donne 
     \quad
     \mathbf{X}(k) = [x(k)\;y(k)\;\dot{x}(k)\;\dot{y}(k)\;\ddot{x}(k)\;\ddot{y}(k)]^{\text{T}}
 \end{equation}
-D'abbord on considere les équations de mouvement pour un corps dans le temps sont:
+
+\paragraph{Résolution}D'abbord on considere les équations de mouvement pour un corps dans le temps sont:
 \begin{equation*}
-    x(t) = x(0) + \dot{x}(t) \cdot t + \ddot{x}(t) \cdot \frac{1}{2}t^2
+    x(t) = x(t_0) + \dot{x}(t) \cdot t + \ddot{x}(t) \cdot \frac{1}{2}t^2
     \qquad
-    \dot{x}(t) = \dot{x}(0) + \ddot{x}(t) \cdot t
+    \dot{x}(t) = \dot{x}(t_0) + \ddot{x}(t) \cdot t
 \end{equation*}
-\paragraph{Résolution}Avant c'est considère le cas continue. Pour le cas discrete la dynamique de l'état est obtenue avec les équations suivant:
+Avant c'est considère le cas continue. Pour le cas discrete la dynamique de l'état est obtenue avec les équations suivant:
 \begin{center}
     \begin{minipage}{0.45\textwidth}
         \begin{align*}
@@ -168,11 +194,15 @@ D'abbord on considere les équations de mouvement pour un corps dans le temps so
         \begin{align*}
             y(k+1)        &= y(k) + \dot{y}(k) \cdot T + \frac{1}{2}T^2 \cdot \ddot{y}(k)\\
             \dot{y}(k+1)  &= \dot{y}(k) + \ddot{y}(k) \cdot T\\
-            \ddot{y}(k+1) &= \beta \cdot \ddot{y}(k) + w_{y}(k)
+            \ddot{y}(k+1) &= \beta \cdot (\ddot{y}(k) - g) + w_{y}(k)
         \end{align*}
     \end{minipage}
 \end{center}
-Avec ces équations, on peut expliciter les matrices:
+On note que le temps initiale du modele continue est considere comme l'état precedent parce qu'au fur et à mesure des interactions la position initiale sera considere a partir de la première interaction.\\
+
+\noindent Dans le cas du $\ddot{y}$ la gravité doit être considere à cause des conditions du exercice.\\
+
+\noindent Avec ces équations, on peut expliciter les matrices:
 \begin{equation}
     \underbrace{\begin{bmatrix}
         x(k+1)\\
@@ -189,7 +219,7 @@ Avec ces équations, on peut expliciter les matrices:
         0 & 0 & 1 & 0 & T              & 0 \\
         0 & 0 & 0 & 1 & 0              & T \\
         0 & 0 & 0 & 0 & \beta          & 0 \\
-        0 & 0 & 0 & 0 & 0              & \beta \\
+        0 & 0 & 0 & 0 & 0              & \beta - g\\
     \end{bmatrix}}_{\mathbf{F}_{k}}
     \times
     \underbrace{\begin{bmatrix}
@@ -219,13 +249,12 @@ On note que le système d'équations peut être represente par l'équation matri
 \begin{equation}
     \boxed{\mathbf{X}(k+1) = \mathbf{F}_{k} \times \mathbf{X}(k) + \mathbf{G}_{k} \times \mathbf{u}(k)}
 \end{equation}
-Pour considérer la gravité on va la ajouter sur les conditions initialles du problême.
 
 
 \subsection{Part 3}
-\paragraph{Proposition}Exprimer $D_k$ et $\alpha_k$ en fonction des positions de la cible et du dispositif d'observation.
+\paragraph{Proposition}Exprimer $D_k$ et $\alpha_k$ en fonction des positions de la cible, $(x(t),\; y(t))$, et du dispositif d'observation, $(x_0,\; y_0)$.
 
-\paragraph{Résolution}On considere la representation du système \ref{fig:systeme} et on déduire les équations suivantes avec la trigonométrie:
+\paragraph{Résolution}On considere la representation du système donne dans la Figure \ref{fig:systeme} et on déduire les équations suivantes avec la trigonométrie:
 \begin{equation}
     \boxed{D_{k} = \sqrt[2]{(x(t) - x_{0})^2 + (y(t) - y_{0})^2}}
     \qquad
@@ -239,7 +268,7 @@ On note que ces équations ne considerent pas les bruits et incertitudes des mes
     \tilde{x}(k)^{(b)} &= D_{k}^{(b)} \cdot \cos(\alpha_{k}^{(b)})\\
     \tilde{y}(k)^{(b)} &= D_{k}^{(b)} \cdot \sin(\alpha_{k}^{(b)})
 \end{align*}
-Où $D_{k}^{(b)}$ et $\alpha_{k}^{(b)}$ sont considères, par hypothèse, modèleses avec un bruit gaussien.
+Où $D_{k}^{(b)}$ et $\alpha_{k}^{(b)}$ sont considères, par hypothèse, modèleses avec un bruit gaussien donne pour $\mathcal{N}(\mu, \sigma^2)$.
 
 \paragraph{Résolution}D'abbord on considère que le bruit sera modélise pour les equations suivantes:
 \begin{align*}
@@ -266,7 +295,7 @@ Ainsi on a considere que:
 Représentent les mesures sans bruits associes à $x$ et $y$. On note que après les substitutions d'avant on aura $\cos(w_{\alpha_{k}}(k))$ qui represente une opération pas possible, le cossenus d'une fonctionne gaussienne. Ça démontre que la consideration de bruit gaussien c'est pas possible.
 
 
-\section{Exercice 2}
+\section{Exercice 2, Estimation par Filtre de Kalman}
 \subsection{Part 1}
 \paragraph{Proposition}Écrire les équations du filtre de Kalman simple correspondant aux équations dynamiques de l'équation d'observation correspondant aux pseudomesures.
 
@@ -280,142 +309,268 @@ Représentent les mesures sans bruits associes à $x$ et $y$. On note que après
 Où:
 \begin{enumerate}
     \item \textbf{Équation d'Évolution du Système}:
-    \begin{enumerate}[noitemsep]
-        \item $\mathbf{X}_{k}$, \texttt{Vecteur de Mesures} à l'instant $k$;
-        \item $\mathbf{F}_{k}$, \texttt{Matrice d'Évolution} ou Matrice de Transition;
-        \item $\mathbf{G}_{k}$, \texttt{Matrice de Controle};
-        \item $\mathbf{u}_{k}$, \texttt{Vecteur de Entrée};
-        \item $\mathbf{w}_{k}$, \texttt{Vecteur de Bruit d'Évolution}: supposé gaussien, centré et de matrice de covariance $\mathbf{Q}_{k}$;
-    \end{enumerate}
+    \begin{table}[H]
+        \centering\begin{tabular}{c | l l}
+            Taille  & Nom & 
+            \\\hline
+            (n x 1) & $\mathbf{X}_{k}$ & Vecteur de Mesures\\
+            (n x n) & $\mathbf{F}_{k}$ & Matrice d'Évolution ou Matrice de Transition\\
+            (n x n) & $\mathbf{G}_{k}$ & Matrice de Controle\\
+            (n x 1) & $\mathbf{u}_{k}$ & Vecteur de Entrée\\
+            (n x n) & $\mathbf{w}_{k}$ & Vecteur de Bruit d'Évolution
+            \\\hline
+        \end{tabular}
+    \end{table}
+    Où $n$ c'est le numéro d'états du système.
+    % \begin{enumerate}[noitemsep]
+    %     \item $\mathbf{X}_{k}$, \texttt{Vecteur de Mesures} à l'instant $k$;
+    %     \item $\mathbf{F}_{k}$, \texttt{Matrice d'Évolution} ou Matrice de Transition;
+    %     \item $\mathbf{G}_{k}$, \texttt{Matrice de Controle};
+    %     \item $\mathbf{u}_{k}$, \texttt{Vecteur de Entrée};
+    %     \item $\mathbf{w}_{k}$, \texttt{Vecteur de Bruit d'Évolution}: supposé gaussien, centré et de matrice de covariance $\mathbf{Q}_{k}$;
+    % \end{enumerate}
     \item \textbf{Équation d'Observation du Système}:
-    \begin{enumerate}[noitemsep]
-        \item $\mathbf{Z}_{k}$, \texttt{Vecteur de Messures};
-        \item $\mathbf{H}_{k}$, \texttt{Matrice d'Observations};
-        \item $\mathbf{v}_{k}$, \texttt{Vecteur de Bruit de Mesures}: supposé gaussien, centré et de matrice de covariance $\mathbf{R}_{k}$;
-    \end{enumerate}
+    \begin{table}[H]
+        \centering\begin{tabular}{c | l l}
+            Taille  & Nom & 
+            \\\hline
+            (m x 1) & $\mathbf{Z}_{k}$ & Vecteur de Messures\\
+            (m x n) & $\mathbf{H}_{k}$ & Matrice d'Observations\\
+            (m x m) & $\mathbf{v}_{k}$ & Vecteur de Bruit de Mesures
+            \\\hline
+        \end{tabular}
+    \end{table}
+    Où $m$ c'est le numéro d'états mesures.
+    % \begin{enumerate}[noitemsep]
+    %     \item $\mathbf{Z}_{k}$, \texttt{Vecteur de Messures};
+    %     \item $\mathbf{H}_{k}$, \texttt{Matrice d'Observations};
+    %     \item $\mathbf{v}_{k}$, \texttt{Vecteur de Bruit de Mesures}: supposé gaussien, centré et de matrice de covariance $\mathbf{R}_{k}$;
+    % \end{enumerate}
 \end{enumerate}
-Où chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour chaque $k$. Dans le cas de ce exercice on ira considérer les matrices suivantes pour décrire le système:
-\begin{equation}
-    \mathbf{X}_{k} = 
-    \begin{bmatrix}
-        x(k)\\
-        y(k)\\
-        \dot{x}(k)\\
-        \dot{y}(k)\\
-        \ddot{x}(k)\\
-        \ddot{y}(k)\\
-    \end{bmatrix}
-    \quad
-    \mathbf{u}_{k}
-    \begin{bmatrix}
-        w_{x}(k)\\
-        w_{y}(k)\\
-    \end{bmatrix}
-    \quad
-    \mathbf{F}_{k} = 
-    \begin{bmatrix}
-        1 & 0 & T & 0 & \frac{T^2}{2}& 0\\
-        0 & 1 & 0 & T & 0 & \frac{T^2}{2}\\
-        0 & 0 & 1 & 0 & T & 0\\
-        0 & 0 & 0 & 1 & 0 & T\\
-        0 & 0 & 0 & 0 & \beta & 0\\
-        0 & 0 & 0 & 0 & 0 & \beta\\
-    \end{bmatrix}
-    \quad
-    \mathbf{G}_{k} = 
-    \begin{bmatrix}
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        1 & 0\\
-        0 & 1\\
-    \end{bmatrix}
-    \quad
-    \mathbf{H}_{k}^{t} = 
-    \begin{bmatrix}
-        1 & 0\\
-        0 & 1\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-        0 & 0\\
-    \end{bmatrix}
-\end{equation}
-\begin{equation}
-    \mathbf{w}_{k} = T \times 
-    \begin{bmatrix}
-        \sigma_{D_{k}}^2 & 0 & 0 & 0 & 0 & 0\\
-        0 & \sigma_{D_{k}}^2 & 0 & 0 & 0 & 0\\
-        0 & 0 & \sigma_{\alpha_{k}}^2 & 0 & 0 & 0\\
-        0 & 0 & 0 & \sigma_{\alpha_{k}}^2 & 0 & 0\\
-        0 & 0 & 0 & 0 & \sigma_{Z_{k}}^2 & 0\\
-        0 & 0 & 0 & 0 & 0 & \sigma_{Z_{k}}^2\\
-    \end{bmatrix}
-    \quad
-    \mathbf{v}_{k} = 
-    \begin{bmatrix}
-        \sigma_{Z}^2 & 0\\
-        0 & \sigma_{Z}^2\\
-    \end{bmatrix}
-\end{equation}
+Chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour chaque $k$. Donc on aura les matrices suivantes:
+% \begin{equation*}
+%     \underbrace{
+%         \begin{bmatrix}
+%             x(k)\\
+%             y(k)\\
+%         \end{bmatrix}
+%     }_{\mathbf{Z}_{k}} 
+%     = 
+%     \underbrace{
+%         \begin{bmatrix}
+%             1 & 0 & 0 & 0 & 0 & 0\\
+%             0 & 1 & 0 & 0 & 0 & 0\\
+%         \end{bmatrix}
+%     }_{\mathbf{H}_{k}} 
+%     \times 
+%     \underbrace{
+%         \begin{bmatrix}
+%             x(k)\\
+%             y(k)\\
+%             \dot{x}(k)\\
+%             \dot{y}(k)\\
+%             \ddot{x}(k)\\
+%             \ddot{y}(k)\\
+%         \end{bmatrix}
+%     }_{\mathbf{X}_{k}} 
+%     + 
+%     \mathbf{v}_{k}
+% \end{equation*}
+\begin{align*}
+    \underbrace{
+        \begin{bmatrix}
+            x(k)\\
+            y(k)\\
+            \dot{x}(k)\\
+            \dot{y}(k)\\
+            \ddot{x}(k)\\
+            \ddot{y}(k)\\
+        \end{bmatrix}
+    }_{\mathbf{X}_{k}} 
+    &= 
+    \underbrace{
+        \begin{bmatrix}
+            1 & 0 & T & 0 & \frac{T^2}{2}& 0\\
+            0 & 1 & 0 & T & 0 & \frac{T^2}{2}\\
+            0 & 0 & 1 & 0 & T & 0\\
+            0 & 0 & 0 & 1 & 0 & T\\
+            0 & 0 & 0 & 0 & \beta & 0\\
+            0 & 0 & 0 & 0 & 0 & \beta - g\\
+        \end{bmatrix}
+    }_{\mathbf{F}_{k}} 
+    \times 
+    \underbrace{
+        \begin{bmatrix}
+            x(k-1)\\
+            y(k-1)\\
+            \dot{x}(k-1)\\
+            \dot{y}(k-1)\\
+            \ddot{x}(k-1)\\
+            \ddot{y}(k-1)\\
+        \end{bmatrix}
+    }_{\mathbf{X}_{k-1}} 
+    + 
+    \underbrace{
+        \begin{bmatrix}
+            0 & 0\\
+            0 & 0\\
+            0 & 0\\
+            0 & 0\\
+            1 & 0\\
+            0 & 1\\
+        \end{bmatrix}
+    }_{\mathbf{G}_{k}} 
+    \times 
+    \underbrace{
+        \begin{bmatrix}
+            w_{x}(k)\\
+            w_{y}(k)\\
+        \end{bmatrix}
+    }_{\mathbf{u}_{k}} 
+    + 
+    \mathbf{w}_{k}\\
+    \underbrace{
+        \begin{bmatrix}
+            x(k)\\
+            y(k)\\
+        \end{bmatrix}
+    }_{\mathbf{Z}_{k}} 
+    &= 
+    \underbrace{
+        \begin{bmatrix}
+            1 & 0 & 0 & 0 & 0 & 0\\
+            0 & 1 & 0 & 0 & 0 & 0\\
+        \end{bmatrix}
+    }_{\mathbf{H}_{k}} 
+    \times 
+    \underbrace{
+        \begin{bmatrix}
+            x(k)\\
+            y(k)\\
+            \dot{x}(k)\\
+            \dot{y}(k)\\
+            \ddot{x}(k)\\
+            \ddot{y}(k)\\
+        \end{bmatrix}
+    }_{\mathbf{X}_{k}} 
+    + 
+    \mathbf{v}_{k}
+\end{align*}
+
 
 \subsection{Part 2}
 \paragraph{Proposition}Suggérer un moyen de déterminer les matrices de covariances associées aux pseudomesures.
 
 \paragraph{Résolution}La Matrice de Covariance \cite{jacobianMatrix} \cite{jacobianMatrixComputation} du vecteur $\mathbf{Z}_{k}$ peut être estimer avec l'utilisation du Jacobian de la façon suivante:
+\begin{equation*}
+    \mathbf{v}_{k} 
+    = 
+    \begin{bmatrix}
+        \sigma_{x}^2 & 0\\
+        0 & \sigma_{y}^2\\
+    \end{bmatrix} 
+    = 
+    \mathbf{J} 
+    \times 
+    \begin{bmatrix}
+        \sigma_{D_{k}}^2 & 0\\
+        0 & \sigma_{\alpha_{k}}^2\\
+    \end{bmatrix}
+    \times 
+    \mathbf{J}^{T}
+\end{equation*}
+On considere $x(k)$ et $y(k)$ définit dans l'Exercice 1 Part 4 et le Jacobian sera donner pour:
+\begin{equation*}
+    \mathbf{J} = 
+    \begin{bmatrix}
+        \frac{\partial f_{1}}{\partial x_{1}} & \cdots & \frac{\partial f_{1}}{\partial x_{n}}\\
+        \vdots & \ddots & \vdots\\
+        \frac{\partial f_{m}}{\partial x_{1}} & \cdots & \frac{\partial f_{m}}{\partial x_{n}}\\
+    \end{bmatrix} 
+    = 
+    \begin{bmatrix}
+        \frac{\partial f_{1}}{\partial x_{1}} & \frac{\partial f_{1}}{\partial x_{2}}\\\\
+        \frac{\partial f_{2}}{\partial x_{1}} & \frac{\partial f_{2}}{\partial x_{2}}\\
+    \end{bmatrix} 
+    = 
+    \begin{bmatrix}
+        \frac{\partial x(k)}{\partial D_{k}} & \frac{\partial x(k)}{\partial \alpha_{k}}\\\\
+        \frac{\partial y(k)}{\partial D_{k}} & \frac{\partial y(k)}{\partial \alpha_{k}}\\
+    \end{bmatrix} 
+    = 
+    \begin{bmatrix}
+        \cos(\alpha_{k}) & -D_{k} \sin(\alpha_{k})\\\\
+        \sin(\alpha_{k}) & +D_{k} \cos(\alpha_{k})\\
+    \end{bmatrix}
+\end{equation*}
 
 \subsection{Part 3}
 \paragraph{Proposition}Implémenter l'algorithme résultant sous MATLAB.
 
 \paragraph{Résolution}Codes en MATLAB:
 \begin{scriptsize}\mycode
-    % \lstinputlisting[language=MATLAB, linerange={1-5}]{TD/2022_09_14/Counter.hpp}
-    \lstinputlisting[language=MATLAB]{exercice1.m}
+    \lstinputlisting[
+        language=MATLAB, 
+        linerange={1-1}
+    ]{kalmanFilterSimple.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=36,
+        linerange={36-73}
+    ]{kalmanFilterSimple.m}
 \end{scriptsize}
-
-\begin{scriptsize}\mycode
-    \lstinputlisting[language=MATLAB]{kalmanCalculation.m}
-\end{scriptsize}
-
-\begin{scriptsize}\mycode
-    \lstinputlisting[language=MATLAB]{kalmanFilter.m}
-\end{scriptsize}
+On note que pendant l'affichage quelques morceaux de code, qui ne sont pas utilises pour l'algorithme, seront supprimés pour améliorer la compréhension du code.
 
 
-\section{Exercice 3}
+
+\section{Exercice 3, Filtre de Kalman Étendu}
+\paragraph{Proposition}On considere qu'un Filtre de Kalman lorsque les équations de la dynamique et / ou d'observation sont des versions linéarisées des équations de départ autour de l'estimation courante de $\mathbf{X} = (x(t),\; y(t))$ à l'instant $k$, represente comme: $\hat{\mathbf{X}} (k \; | \; k-1)$, comme un Filtre de Kalman Étendu.
+
 \subsection{Part 1}
-\paragraph{Proposition}Écrire l'équation d'observation linéarisée autour de $\hat{\mathbf{X}}(k | k-1)$ sous la forme $\hat{\mathbf{X}}(k) = \mathbf{H}_{k} \times \mathbf{X}(k) + \mathbf{b}_{k}$ en exprimant 
+\paragraph{Proposition}Écrire l'équation d'observation linéarisée autour de $\hat{\mathbf{X}}(k \; | \; k-1)$ sous la forme $\hat{\mathbf{X}}(k) = \mathbf{H}_{k} \times \mathbf{X}(k) + \mathbf{b}_{k}$ en exprimant $\mathbf{H}_{k}$ et $\mathbf{b}(k)$ à l'aide de $\hat{\mathbf{X}} (k \; | \; k-1)$, des bruits de mesure $n_D(k)$ et $n_{si}(k)$. $b(k)$ est-il centré?
 
 \paragraph{Résolution}
 
 
 \subsection{Part 2}
-\paragraph{Proposition}
+\paragraph{Proposition}Comment modifier les équations du Filtre de Kalman pour tenir compte d'un bruit de mesure non centré?
 
 \paragraph{Résolution}
 
 
 \subsection{Part 3}
-\paragraph{Proposition}
+\paragraph{Proposition}En déduire les équations du Filtre de Kalman correspondant à ce modèle linéarisé, en faisant apparaître les paramètres nécessaires à l'initialisation et au fonctionnement du filtre d'une récurrence à l'autre.
 
 \paragraph{Résolution}
 
 
 \subsection{Part 4}
-\paragraph{Proposition}
+\paragraph{Proposition}En pratique, il est très courant d'initialiser un Filtre de Kalman avec $\mathbf{X}_{0} = [0]$ et $\mathbf{P}_{0} = \lambda \mathbf{I}$ avec $\lambda$ grand de manière à traduire notre incertitude sur cet état initial.\\
+
+\noindent On démarre le filtre et au bout de quelques récurrences, grâce aux observations, la covariance diminue considérablement traduisant la plus grande confiance que l'on peut accorder à l'estimation de l'état. Que se passe-t-il dans le cas du Filtre de Kalman Étendu considéré? Expliquer ce phénomène.
 
 \paragraph{Résolution}
 
 
 \subsection{Part 5}
-\paragraph{Proposition}
+\paragraph{Proposition}Implémenter l'algorithme résultant sous MATLAB.
 
 \paragraph{Résolution}
 
 
 
-\section{Exercice 4}
+\section{Exercice 4, Filtrage Probabiliste}
+\paragraph{Proposition}Dans la pratique le capteur ne collecte pas un seul vecteur de mesures provenant de la cible mais un ensemble d'échos qui peuvent provenir effectivement de la cible mais également d'échos sur des objets proches d'interférence électromagnétique, d'anomalies acoustiques voire de fausses alarmes.\\
+
+\noindent Il est donc nécessaire d'instaurer une procédure en compte pour 'estimation de l'état de la cible. On se place ici dans l'hypothèse où l'état de la cible a été estimé jusqu'à l'instant $k$ par Filtre de Kalman étendu et que nous disposons des équations classiques:
+\begin{equation*}
+    \begin{cases}
+        \mathbf{X}_{k} &= \mathbf{F}_{k} \times \mathbf{X}_{k-1} + \mathbf{G}_{k} \times \mathbf{u}_{k}\\
+        \mathbf{Z}_{k} &= \mathbf{H}_{k} \times \mathbf{X}_{k} + \mathbf{b}_{k}
+    \end{cases}
+\end{equation*}
+À l'instant $k+1$, le capteur collecte un ensemble de mesures que nous cherchons à trier pour pouvoir ou non les utiliser pour l'estimation de la cible. Nous noterons par la suite $\mathbf{Z}_{k+1}$ l'ensemble des mesures obtenues à l'instant $k+1$ par le capteur.
+
 \subsection{Part 1}
 \paragraph{Proposition}
 
@@ -435,7 +590,7 @@ Où chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour 
 
 
 
-\section{Exercice 5}
+\section{Exercice 5, Filtre Nearest Neighbor Standard}
 \subsection{Part 1}
 \paragraph{Proposition}
 
@@ -455,10 +610,210 @@ Où chaque matrice qui a une souscrit $k$ represente une matrice qui varie pour 
 
 
 
+\section{Exercice 6, Pratique}
+\paragraph{Proposition}On fournit l'ensemble des mesures et la position initiale de la cible $X_0$ ainsi que la période d'échantillonage $T=0.1$. Les mesures sont constituées de valeurs de la distance et de l'angle.\\
+
+\noindent Lorsqu'il y a plusieurs mesures pour le même temps, les premières valeurs sont les valeurs de distance puis les valeurs d'angles.
+
+\subsection{Part 1}
+\paragraph{Données 1}Le premier signal fourni correspond à une trajectoire à vitesse constante. \textbf{Observer} précisément le comportement des deux filtres, convergence et matrice de covariance.
+
+\paragraph{Données 2}Traiter les différents signaux fournis à l'aide du filtre de Kalman simple et du filtre de Kalman étendu.
+
+\paragraph{Données 3}Utiliser le filtre Probabiliste pour le jeu de données.\\
+
+\noindent Finalement, comparer les résultats obtenus par les deux filtres en jouant sur les paramètres d'initialisation et le bruit d'état.\\
+
+\noindent Une analyse du comportement du filtre en fonction du choix des paramètres de réglage est requise. À l'issue des différents tests et des résultats obtenus, on présentera une première synthèses des avantages et inconvénients du filtre étendu.
+
+\subsubsection{Résolution}
+\paragraph{Données 1}Tout d'abbord on implemente l'algorithme suivant pour importer les données fournis:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        % firstnumber=1,
+        % linerange={36-73}
+    ]{ma201_projet.m}
+\end{scriptsize}
+On note que pendant l'affichage quelques morceaux de code, qui ne sont pas utilises pour l'algorithme, seront supprimés pour améliorer la compréhension du code.
+
+\paragraph{Visualization}Après on appelle la fonction \texttt{exercice1()} avec chaque ensemble de données:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=1,
+        linerange={1-1}
+    ]{exercice1.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=21,
+        linerange={21-35}
+    ]{exercice1.m}
+\end{scriptsize}
+Où la fonction \texttt{extractData()} est defini pour le suivant:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=77,
+        linerange={77-86}
+    ]{exercice1.m}
+\end{scriptsize}
+On obtient les graphiques suivants:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[H]{.45\textwidth}
+        \centering
+        \includegraphics[width = 7.5cm]{images/ma201_project_Dk_1_v0.png}
+        \caption{Distance}
+    \end{subfigure}
+    \begin{subfigure}[H]{.45\textwidth}
+        \centering
+        \includegraphics[width = 7.5cm]{images/ma201_project_ak_1_v0.png}
+        \caption{Angle}
+    \end{subfigure}
+    \caption{\texttt{plot} données 1}
+\end{figure}\noindent
+On note que la distance a une comportement linéaire, ça veut dire que la vélocité est constante et l'acceleration est nulle comment décrire pour l'exercice.\\
+
+\newpage\noindent On note que à cause de la définition du système d'équations, avec les états qui considerent les coordonnées physiques du problème, on a décidé de transformer les données reçus en ces équivalents cartesiens avec la fonctionne suivante:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=39,
+        linerange={39-49}
+    ]{exercice1.m}
+\end{scriptsize}
+Cette approche peut gérer des erreurs pendant la conversion entre les coordonnées polaires et les coordonnées cartesiennes, donc il aura des erreurs inattendus.\\
+
+\noindent Avec le vecteur:$$\mathbf{Z}_{k} = \begin{bmatrix} x_{1} & \cdots & x_{k}\\ y_{1} & \cdots & y_{k} \end{bmatrix}$$Aura à chaque colonne les valeurs de $x$ et $y$ pour l'interation $k$ qui sera fourni comme entré pour la fonction \texttt{kalmanSetup()} donnée pour:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=1,
+        linerange={1-1}
+    ]{kalmanSetup.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=7,
+        linerange={7-8}
+    ]{kalmanSetup.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=10,
+        linerange={10-11}
+    ]{kalmanSetup.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=13,
+        linerange={13-17}
+    ]{kalmanSetup.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=19,
+        linerange={19-27}
+    ]{kalmanSetup.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=29,
+        linerange={29-37}
+    ]{kalmanSetup.m}
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=39,
+        linerange={39-43}
+    ]{kalmanSetup.m}
+\end{scriptsize}
 Ces sont les matrices définis dans l'Exercice 2. \cite{cellMATLAB} À la suite on a:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=45,
+        linerange={45-60}
+    ]{kalmanSetup.m}
+\end{scriptsize}
 Pour définir les bruits on utilise les fonctions du MATLAB \cite{awgnMATLAB} \cite{wgnMATLAB} \cite{randnMATLAB} qui donnent des bruits gaussiens centrées et bruits qui suivent une Loi Normale. \cite{bruitBlancMATLAB} \cite{bruitBlancMATLABrand} \cite{bruitBlancMATLABwgn}\\
+
+\noindent Finalement on appelle la fonction \texttt{kalmanFilterSimple()} donne aussi dans l'Exercice 2:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=64,
+        linerange={64-64}
+    ]{kalmanSetup.m}
+\end{scriptsize}
+Après recevoir la matrice $$\mathbf{X} = 
+\begin{bmatrix} 
+    x_{1} & \cdots & x_{k}\\
+    y_{1} & \cdots & y_{k}\\
+    \dot{x}_{1} & \cdots & \dot{x}_{k}\\
+    \dot{y}_{1} & \cdots & \dot{y}_{k}\\
+    \ddot{x}_{1} & \cdots & \ddot{x}_{k}\\
+    \ddot{y}_{1} & \cdots & \ddot{y}_{k}\\
+\end{bmatrix}$$
+Il faut transformer les données reçu en ces équivalents polaires avec la fonction suivante:
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=MATLAB,
+        firstnumber=51,
+        linerange={51-71}
+    ]{exercice1.m}
+\end{scriptsize}
+Ainsi on a les graphique suivant:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 15cm]{images/ma201_project_data_1_v4.png}
+    \caption{\texttt{plot} données 1 après Kalman Simple}
+\end{figure}\noindent
+On note que le Filtre de Kalman Simple a une résultat suffisant précise. On note que après le début les valeurs convergent aux valeurs determines.
+
+\newpage\paragraph{Données 2}On repete le même algorithme pour le deuxième ensemble de données et on obtient les résultas suivants:
+On obtient les graphiques suivants:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[H]{.45\textwidth}
+        \centering
+        \includegraphics[width = 6cm]{images/ma201_project_Dk_2_v0.png}
+        \caption{Distance}
+    \end{subfigure}
+    \begin{subfigure}[H]{.45\textwidth}
+        \centering
+        \includegraphics[width = 6cm]{images/ma201_project_ak_2_v0.png}
+        \caption{Angle}
+    \end{subfigure}
+    \caption{\texttt{plot} données 2}
+\end{figure}\noindent
+On note que la distance a une comportement pas linéaire, ça veut dire que la vélocité n'est pas constante et l'acceleration n'est pas nulle comment décrire pour l'exercice.\\
+
+\noindent Ainsi on a les graphique suivant:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width = 12cm]{images/ma201_project_data_2_v3.png}
+    \caption{\texttt{plot} données 2 après Kalman Simple}
+\end{figure}
 
 \bibliography{ref.bib}
 \bibliographystyle{ieeetr}
 
+% https://fr.wikipedia.org/wiki/Filtre_particulaire
+% https://opg.optica.org/ao/abstract.cfm?uri=ao-27-16-3445
+% https://www.youtube.com/results?search_query=+Nearest-neighbor+median+filter+
+% https://www.youtube.com/results?search_query=Filtre+particulaire+statistique
+
+% @misc{,
+%     title = {{} },
+%     howpublished = {\url{}},
+%     note = {Accessed: }
+% }
+
+% @misc{,
+%     title = {{} },
+%     howpublished = {\url{}},
+%     note = {Accessed: }
+% }
+
+% @misc{,
+%     title = {{} },
+%     howpublished = {\url{}},
+%     note = {Accessed: }
+% }
 \end{document}
