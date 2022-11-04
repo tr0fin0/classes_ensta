@@ -31,7 +31,7 @@ function exercice1(filtreKalman)
     savePlot('ma201_project_Dk')
 
     figure; % plot the data for reference
-    plot(T, ak); formatPlot('Angle', 'Data', 't', '\alpha_k')
+    plot(T, rad2deg(ak)); formatPlot('Angle', {'Data'}, 't', '\alpha_k')
     savePlot('ma201_project_ak')
 
 
