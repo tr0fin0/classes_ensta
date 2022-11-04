@@ -48,15 +48,15 @@ function exercice1(filtreKalman)
 
     X   = kalmanSetup(Z, Dk, ak);
 
-    XDk = [];
-    Xak = [];
+    XD  = [];
+    Xa  = [];
     % cartesian coordinates to polar coordinates
-    for i = 1 : length(X)
-        Dk = sqrt(X(1, i)^2 + X(2, i)^2);
-        ak = atan(X(2, i)/X(1, i));
+    for k = 1 : length(X)
+        Dk = sqrt(X(1, k)^2 + X(2, k)^2);
+        ak = atan(X(2, k)/X(1, k));
 
-        XDk = [XDk, Dk];
-        Xak = [Xak, ak];
+        XD  = [XD, Dk];
+        Xa  = [Xa, ak];
     end
 
 
