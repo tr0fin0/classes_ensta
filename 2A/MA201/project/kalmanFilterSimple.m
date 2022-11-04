@@ -43,10 +43,10 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
     z  = data;
 
 
-    for i = 1 : N
+    for k = 1 : N
         % setup
-        zk = z(:,i);
-        uk = u(:,i);
+        zk = z(:, k);
+        uk = u(:, k);
 
         % Prediction
         x = F * x + B  * uk;    % (n x 1)
