@@ -37,11 +37,9 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
     X   = [];               % matrix to return values
 
 
-    % Matrix Identity
-    I  = eye(length(F));
-
     % support matrixes
-    P  = 1000 * I;          % initial estimation
+    I  = eye(length(F));
+    P  = 1000 * I;          % error covariance matrix of the state estimate
     z  = data;
 
 
