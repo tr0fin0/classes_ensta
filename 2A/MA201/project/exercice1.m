@@ -27,7 +27,7 @@ function exercice1(filtreKalman)
     [Dk, ak] = extractData(mesures);
 
     figure; % plot the data for reference
-    plot(T, Dk); formatPlot('Distance', 'Data', 't', 'D_k')
+    plot(T, Dk); formatPlot('Distance', {'Data'}, 't', 'D_k')
     savePlot('ma201_project_Dk')
 
     figure; % plot the data for reference
