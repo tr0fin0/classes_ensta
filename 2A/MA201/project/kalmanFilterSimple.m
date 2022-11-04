@@ -12,10 +12,10 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
     % 
     % where:
     %   F   : Matrix of Transition  (n x n)
-    %   B   : Matrix of Control     (n x n)
+    %   B   : Matrix of Control     (n x j)
     %   H   : Matrix of Observation (m x n)
     %   x   : Vector of States      (n x 1)
-    %   u   : Vector of Entrates    (n x 1)
+    %   u   : Vector of Entrates    (j x 1)
     %   z   : Vector of Mesures     (m x 1)
     %   where:
     %       n   : number of states
