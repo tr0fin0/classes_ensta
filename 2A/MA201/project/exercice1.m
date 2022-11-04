@@ -46,7 +46,7 @@ function exercice1(filtreKalman)
         Z  = [Z, Zk];
     end
 
-    X = kalmanSetup(Z);
+    X   = kalmanSetup(Z, Dk, ak);
 
     XDk = [];
     Xak = [];
