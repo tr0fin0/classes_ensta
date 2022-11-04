@@ -48,6 +48,18 @@ function X = kalmanSetup(Z, Dk, Ak)
     Q   = (0 + 1 * randn(n));   % Matrix of Covariance Noise of wk
     R   = (0 + 1 * randn(m));   % Matrix of Covariance Noise of vk
 
+    N   = length(Dk);
+    R   = cell(N, 1);   % stores matrices in an array structed
+    for k = 1 : N
+        Jk  = [
+            cos(Ak(k)), -Dk(k) * sin(Ak(k));
+            sin(Ak(k)), +Dk(k) * cos(Ak(k));
+        ];
+
+        R{k}= Jk * [1000, 0; 0, 0.001] * Jk';   % variances in the data set
+    end
+
+
 
     X = kalmanFilterSimple(Z, x, F, B, H, Q, R, u);
 
