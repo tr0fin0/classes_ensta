@@ -1,4 +1,4 @@
-function X = kalmanSetup(input)
+function X = kalmanSetup(Z, Dk, Ak)
     % ========================================
     % Kalman Filter Setup
     % ========================================
