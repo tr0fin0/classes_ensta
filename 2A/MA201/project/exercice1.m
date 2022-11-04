@@ -61,10 +61,14 @@ function exercice1(filtreKalman)
 
 
     figure;
-    subplot(2,2,1); plot(T, Dk, T, XDk); formatPlot('Distance D_k', {'data', 'kalman'}, 't', 'm')
-    subplot(2,2,2); plot(T, Z(1,:), T, X(1,:)); formatPlot('Component D_x', {'data'; 'kalman'}, 't', 'm')
-    subplot(2,2,3); plot(T, Z(2,:), T, X(2,:)); formatPlot('Component D_y', {'data'; 'kalman'}, 't', 'm')
-    subplot(2,2,4); plot(T, ak, T, Xak); formatPlot('Angle \alpha_k', {'data', 'kalman'}, 't', 'degree')
+    subplot(2,2,1); plot(T, Dk, T, XD);
+        formatPlot('Distance D_k', {'data', 'kalman'}, 't', 'm')
+    subplot(2,2,2); plot(T, Z(1,:), T, X(1,:));
+        formatPlot('Component D_x', {'data', 'kalman'}, 't', 'm')
+    subplot(2,2,3); plot(T, Z(2,:), T, X(2,:));
+        formatPlot('Component D_y', {'data', 'kalman'}, 't', 'm')
+    subplot(2,2,4); plot(T, rad2deg(ak), T, rad2deg(Xa));
+        formatPlot('Angle \alpha_k', {'data', 'kalman'}, 't', 'degree')
     % savePlot('ma201_project_Dk_filter')
 
 
