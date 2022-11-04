@@ -47,22 +47,20 @@ function X = kalmanFilterSimple(data, x, F, B, H, Q, R, u)
         % setup
         zk = z(:, k);
         uk = u(:, k);
+        Rk = R{k};
 
         % Prediction
         x = F * x + B  * uk;    % (n x 1)
         P = F * P * F' + Q;     % (n x n)
 
-
         % Correction
         y = zk - H * x;         % (m x 1)
-        S = H  * P * H' + R;    % (m x m)
+        S = H  * P * H' + Rk;   % (m x m)
         K = P  * H' * inv(S);   % (n x m)
-
 
         % Update
         P = (I - K * H) * P;    % (n x n)
         x = x + K * y;          % (n x 1)
-
 
         % Saving
         X = [X, x];             % (n x N)
