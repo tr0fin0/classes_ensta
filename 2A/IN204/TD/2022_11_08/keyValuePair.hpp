@@ -1,30 +1,83 @@
 #include <iostream>
 
+template<typename K = int, typename V = std::string>  // default template
 class keyValuePair {
     private:
-        int key;
-        std::string value;
+        K key;
+        V value;
 
     public:
         keyValuePair();
-        keyValuePair(int theKey, std::string theValue);
+        keyValuePair(K theKey, V theValue);
         keyValuePair(const keyValuePair& anotherPair);
 
+
         // getters 
-        int getKey(void){
+        K getKey(void){
             return (*this).key;
         };
         
-        std::string getValue(void){
+        V getValue(void){
             return (*this).value;
         };
 
+
         // setters
-        void setKey(int newKey){
+        void setKey(K const & newKey){  // use const to be sure that the variable is constant
             (*this).key = newKey;
         };
 
-        void setValue(std::string newValue){
+        void setValue(V const & newValue){
             (*this).value = newValue;
         };
+
+
+        // operators
+        bool operator == (const keyValuePair& rightPair)
+        {
+            K lKey = (*this).key;
+            K rKey = (rightPair).key;
+
+            return (lKey == rKey);
+        }
+
+        bool operator != (const keyValuePair& rightPair)
+        {
+            K lKey = (*this).key;
+            K rKey = (rightPair).key;
+
+            return (lKey != rKey);
+        }
+
+        bool operator <  (const keyValuePair& rightPair)
+        {
+            K lKey = (*this).key;
+            K rKey = (rightPair).key;
+
+            return (lKey < rKey);
+        }
+
+        bool operator <= (const keyValuePair& rightPair)
+        {
+            K lKey = (*this).key;
+            K rKey = (rightPair).key;
+
+            return (lKey <= rKey);
+        }
+
+        bool operator >  (const keyValuePair& rightPair)
+        {
+            K lKey = (*this).key;
+            K rKey = (rightPair).key;
+
+            return (lKey > rKey);
+        }
+
+        bool operator >= (const keyValuePair& rightPair)
+        {
+            K lKey = (*this).key;
+            K rKey = (rightPair).key;
+
+            return (lKey >= rKey);
+        }
 };
