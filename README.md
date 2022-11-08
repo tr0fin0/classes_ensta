@@ -33,3 +33,8 @@ pour l'instant il ne contient que les fichiers .tex, pour les cahiers, et quelqu
 
 ### 3A
 - 
+
+
+# instalation
+https://miktex.org/download
+https://strawberryperl.com/
