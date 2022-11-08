@@ -38,3 +38,6 @@ pour l'instant il ne contient que les fichiers .tex, pour les cahiers, et quelqu
 # instalation
 https://miktex.org/download
 https://strawberryperl.com/
+Ctrl + ,
+latex auto clean
+onBuilt
