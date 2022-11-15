@@ -255,6 +255,19 @@ difference entre array and Vector
 \begin{scriptsize}\mycode
     \lstinputlisting[language=C++, linerange={1-5}]{TD/2022_10_26/reference_TD_1.cpp}
 \end{scriptsize}
-main qui inicialise numeros treads qui va afchi des mensagens avec des variables locaux un plain text qui safhice separadement
-variables partages et atendre les threads à la fin
+
+\newpage\subsection{Séance 15/11/2022}
+\paragraph{Présentation}Dans ce TD on avait besoin d'essayer des fonctions avec des \texttt{threads}. Pour ça on inicialise une número arbitrer de threads qui vont afficher des mensages avec des variables locaux et variables partages/
+\begin{scriptsize}\mycode
+    \lstinputlisting[language=C++, linerange={1-5}]{TD/2022_11_15/main.cpp}
+\end{scriptsize}
+Pour ça c'est necessaire d'ajouter une flag à la compilation:
+\begin{scriptsize}
+    \mycode
+    \begin{lstlisting}
+    g++ -std=c++11 -pthread main.cpp -o main.exe | ./main.exe
+    \end{lstlisting}
+\end{scriptsize}
+https://stackoverflow.com/questions/15632198/c11-include-thread-gives-compile-error
+https://medium.com/swlh/c-thread-synchronization-at-the-restaurant-ab0d125a0b7b
 \end{document}
