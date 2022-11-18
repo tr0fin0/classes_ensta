@@ -46,8 +46,8 @@ function particulesCalculation(input)
 
 
     % inicialization
-    randRange(50, 100)
-    % [x, t]  = particuleFilter(N, Z, F, H, W, V);
+    Nr = randRange(50, 100);
+    [x, t]  = particleFilter(Nr, N, Z, F, H, W, V);
 
 
     function r = randRange(a, b)
