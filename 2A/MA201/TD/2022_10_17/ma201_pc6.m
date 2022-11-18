@@ -13,4 +13,4 @@ feature('DefaultCharacterSet','UTF-8')
 filtrePart = load('filtrePart.mat');
 
 
-% exercice1(filtrePart);
+exercice1(filtrePart);
