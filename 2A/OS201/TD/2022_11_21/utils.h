@@ -20,7 +20,8 @@ void enter_coroutine(coroutine_t cr);
 };
 
 
-void switch_coroutine(coroutine_t *p_from, coroutine_t to) {
+// question 5
+void switch_coroutine(coroutine_t *p_from, coroutine_t to);
 /*
     Sauvegarde le contexte courant dans p_from, et entre dans TO.
 */
