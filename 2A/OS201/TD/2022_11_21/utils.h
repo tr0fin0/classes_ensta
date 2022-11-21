@@ -35,6 +35,13 @@ void fonction_0(void) {
         printf("0: %d\n", i++);
     };
 };
+
+// question 6
+void fonction_1(void) {
+    int j = 0;
+    while(1) {
+        printf("1: %d\n", j++);
+    };
 };
 
 
