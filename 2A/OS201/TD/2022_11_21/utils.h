@@ -25,17 +25,15 @@ void switch_coroutine(coroutine_t *p_from, coroutine_t to) {
     Sauvegarde le contexte courant dans p_from, et entre dans TO.
 */
 
-    .global switch_coroutine // Makes switch_coroutine visible to the linker
-    switch_coroutine:
-    push %r??
-    push %r??
-    push %r??
-    push %r??
-    push %r??
-    push %r??
-    mov %rsp,(%rdi) /* Store the stack pointer to *(first argument) */
-    mov %rsi,%rdi
-    jmp enter_coroutine /* Call enter_coroutine with the second argument. */
+
+
+// question 4
+void fonction_0(void) {
+    int i = 0;
+    while(1) {
+        printf("0: %d\n", i++);
+    };
+};
 };
 
 

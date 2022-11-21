@@ -18,8 +18,13 @@ char stack_3[STACK_SIZE];
     printf("0x%p\n",(char *) &stack_3);
 
 
-int main(void) {
-    printf("TD 21/11/2022");
+    // question 4 
+    coroutine_t routine_0 = init_coroutine(*stack_0, STACK_SIZE, &fonction_0);
+    coroutine_t routine_1 = init_coroutine(*stack_1, STACK_SIZE, &fonction_1);
+
+    enter_coroutine(routine_0);
+    enter_coroutine(routine_1);
+
 
     // 
     char stack[STACK_SIZE];
