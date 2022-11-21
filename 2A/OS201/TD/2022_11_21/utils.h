@@ -68,3 +68,7 @@ coroutine_t init_coroutine(
 
     return ptr;
 };
+
+
+// question 7
+static __thread varThread;
