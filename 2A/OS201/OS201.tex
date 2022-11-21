@@ -73,7 +73,27 @@
 
 \section{Travail Dirigé}
 \subsection{Séance 07/11/2022}
-\paragraph{Définition}
+\paragraph{Définition}Dans ce TD on avait besoin de comprendre la strucute et adresse de mémoire. Ainsi on considere le code suivant:
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[language=C]
+    struct p {
+        uint32_t x; // 32 bits -> 4 octets
+        uint16_t u; // 16 bits -> 2 octets
+        uint32_t y; // 32 bits -> 4 octets
+        uint32_t z; // 32 bits -> 4 octets
+    } __attribute__((packed));;
+
+    struct p *prt;
+    \end{lstlisting}
+\end{scriptsize}
+Le \texttt{packed} assure que les champs des structures sont les uns à la suite des autres, donc il n'aura pas de \textbf{padding} pendant l'execution du code. Si \texttt{prt} point à l'adresse 0x1000 alors:
+\begin{enumerate}[noitemsep]
+    \item \texttt{\&(ptr->x)} pointe à l'adresse 0x1000
+    \item \texttt{\&(ptr->u)} pointe à l'adresse 0x1004
+    \item \texttt{\&(ptr->y)} pointe à l'adresse 0x1006
+    \item \texttt{\&(ptr->z)} pointe à l'adresse 0x100A
+\end{enumerate}
+On rapelle que 0x represente des numéros hexadecimales.
 
 \subsection{Séance 14/11/2022}
 \paragraph{Définition}16 kilo octets = 16 kilo bytes = 16 000 bytes
