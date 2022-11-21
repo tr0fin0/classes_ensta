@@ -72,3 +72,13 @@ coroutine_t init_coroutine(
 
 // question 7
 static __thread varThread;
+
+// question 8
+void yield(void) {
+
+};
+
+// question 8
+void thread_create(void) {
+
+};
