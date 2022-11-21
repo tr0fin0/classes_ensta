@@ -38,18 +38,18 @@ coroutine_t init_coroutine(
         unsigned int stack_size, 
         void (*program_counter)(void)
     ) {
-/*
+    /*
         Initialise la pile et renvoie une coroutine telle que, lorsqu’on entrera dedans, elle commencera à s’exécuter à l’adresse program_counter.
-*/
+    */
     char *stack_end = ((char *)stack_begin) + stack_size;
     void **ptr = stack_end;
 
     ptr--;
     *ptr = program_counter;
-
+    
     // loop used to avoid code repetition 
     for (int i = 0; i < 6; i++) {
-    ptr--;
+        ptr--;
         *ptr = 0;   // arbitrary value NULL
     };
 
