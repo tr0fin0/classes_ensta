@@ -105,7 +105,8 @@ memalloc doit reçu
 \paragraph{Définition}Dans ce TD on avait besoin de comprendre des \texttt{threads} coppératifs. Il faudra linkiez les fichiers C et assembleur avec les options de compilateur \texttt{-static} comme montre:
 \begin{scriptsize}\mycode
     \begin{lstlisting}[language=Bash]
-        gcc -static main.c main.s -o main.exe
+        gcc -static file.s main.c -o main.exe
+        ./main.exe
     \end{lstlisting}
 \end{scriptsize}
 
