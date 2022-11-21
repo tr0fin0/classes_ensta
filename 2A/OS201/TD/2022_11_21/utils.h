@@ -1,7 +1,8 @@
 typedef void * coroutine_t;
 
 
-void enter_coroutine(coroutine_t cr) {
+// question 2
+void enter_coroutine(coroutine_t cr);
 /* 
     Quitte le contexte courant et charge les registres et la pile de CR.
 */
