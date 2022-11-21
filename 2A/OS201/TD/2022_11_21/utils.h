@@ -39,24 +39,26 @@ void switch_coroutine(coroutine_t *p_from, coroutine_t to) {
 };
 
 
+// question 3
 coroutine_t init_coroutine(
         void *stack_begin, 
         unsigned int stack_size, 
-        void (*initial_pc)(void)
+        void (*program_counter)(void)
     ) {
 /*
-    Initialise la pile et renvoie une coroutine telle que, lorsqu’on entrera dedans, elle commencera à s’exécuter à l’adresse initial_pc.
+        Initialise la pile et renvoie une coroutine telle que, lorsqu’on entrera dedans, elle commencera à s’exécuter à l’adresse program_counter.
 */
     char *stack_end = ((char *)stack_begin) + stack_size;
     void **ptr = stack_end;
 
     ptr--;
-    *ptr = initial_pc;
+    *ptr = program_counter;
 
+    // loop used to avoid code repetition 
+    for (int i = 0; i < 6; i++) {
     ptr--;
-    // *ptr = ...
+        *ptr = 0;   // arbitrary value NULL
+    };
 
-    ptr--;
-    // ...
     return ptr;
 };
