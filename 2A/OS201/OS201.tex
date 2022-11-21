@@ -26,6 +26,50 @@
 \subsection{Information Matier}
 \paragraph{Référence}Dans cette matière le but sera de comprendre comment une Système d'Exploitation marche.
 
+\newpage\subsection{Vocabulaire}
+\begin{definition}
+    \textbf{Noyau} est la partie fondamentale du Système d'Exploitation, responsable pour gèrer les ressources de l'ordinateur.    
+    \begin{remark}
+        Nomme \textbf{Kernel} en Anglais.
+    \end{remark}
+\end{definition}
+
+\begin{definition}
+    \textbf{Service} est le programme qui origanise le partage de ressources de l'ordinateur.
+\end{definition}
+
+\begin{definition}
+    \textbf{Pilote Périphérique} est le responsable pour communiquer avec le \textbf{Noyau} avec les périphériques de l'ordinateur.    
+    \begin{remark}
+        Nomme \textbf{Driver} en Anglais.
+    \end{remark}
+\end{definition}
+
+\begin{definition}
+    \textbf{Padding} consiste à garantir que la taille des données soit compatible avec les algorithmes utilisés.
+\end{definition}
+
+\subsubsection{Endianness}
+\begin{definition}
+    Convention pour lire les octets dans un mot:
+    \begin{enumerate}[noitemsep]
+        \item \textbf{Big Endian}: On commence par l'octet plus grand, gauche à droite;
+        \item \textbf{Little Endian}: On commence par l'octet plus petit, droite à gauche;
+    \end{enumerate}
+    Exemple    
+    \begin{scriptsize}\myRISCV
+        \begin{lstlisting}
+    variable = {0x11, 0x22, 0x33, 0x44};
+    
+    # code little endian, plus commun
+    .word 0x11223344
+    
+    # code big endian
+    .word 0x44332211
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
 
 \section{Travail Dirigé}
 \subsection{Séance 07/11/2022}
