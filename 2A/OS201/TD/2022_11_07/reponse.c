@@ -4,15 +4,16 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <unistd.h>
-#include <sys/mman.h>
-#include <stdint.h>
+#include <sys/mman.h>   // package only for Unix
+#include <stdint.h>     // package for question 2
 #include <string.h>
 #include <stdio.h>
 
 
+// question 2
 struct fs_header {
-  char magic[8];
-  uint32_t size;
+  char magic[8];      // char: 1 octet
+  uint32_t size;      // uint32_t: datatype from stdint.h
   uint32_t checksum;
   char name[];
 } __attribute__((packed));
