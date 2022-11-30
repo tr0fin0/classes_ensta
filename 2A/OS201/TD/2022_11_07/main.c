@@ -3,7 +3,8 @@
 #include <fcntl.h>
 #include <assert.h>
 #include <unistd.h>
-#include <sys/mman.h>
+#include <sys/mman.h>   // package only for Unix
+#include <stdint.h>
 
 
 void decode(struct fs_header *p, size_t size){
@@ -17,7 +18,7 @@ int main(void){
     off_t fsize;
     fsize = lseek(fd,0,SEEK_END);
 
-    // printf("size is %d", fsize);
+    printf("size is %d", fsize);
     
     char *addr = mmap(addr, fsize, PROT_READ, MAP_SHARED, fd, 0);
     assert(addr != MAP_FAILED);
