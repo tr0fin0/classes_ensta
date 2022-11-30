@@ -18,6 +18,8 @@ void switch_coroutine(coroutine_t *p_from, coroutine_t to);
 // question 4
 void fonction_0(void) {
     int i = 0;
+    putchar('a');
+    // printf("func_0\n");
     while(1) {
         printf("0: %d\n", i++);
     };
@@ -26,6 +28,7 @@ void fonction_0(void) {
 // question 6
 void fonction_1(void) {
     int j = 0;
+    printf("func_1\n");
     while(1) {
         printf("1: %d\n", j++);
     };
@@ -43,6 +46,8 @@ coroutine_t init_coroutine(
     */
     char *stack_end = ((char *)stack_begin) + stack_size;
     void **ptr = stack_end;
+
+    ptr = ptr -20;
 
     ptr--;
     *ptr = program_counter;

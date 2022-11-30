@@ -16,7 +16,7 @@ char stack_3[STACK_SIZE];
 int main(void) {
     printf("TD 21/11/2022\n");
     // question 9
-    fcntl(0, F_SETFL, fcntl(0, F_GETFL) | O_NONBLOCK);
+    // fcntl(0, F_SETFL, fcntl(0, F_GETFL) | O_NONBLOCK);
 
     // question 1
     printf("0x%p\n",(char *) &stack_0);
@@ -25,12 +25,20 @@ int main(void) {
     printf("0x%p\n",(char *) &stack_3);
 
 
+    printf("kill me\n");
     // question 4 
-    coroutine_t routine_0 = init_coroutine(*stack_0, STACK_SIZE, &fonction_0);
-    coroutine_t routine_1 = init_coroutine(*stack_1, STACK_SIZE, &fonction_1);
+    coroutine_t routine_0 = init_coroutine(&stack_0, STACK_SIZE, &fonction_0);
+    coroutine_t routine_1 = init_coroutine(&stack_1, STACK_SIZE, &fonction_1);
+    printf("kill me\n");
+
+    printf("%p\n", routine_0);
+    printf("%p\n", routine_1);
 
     enter_coroutine(routine_0);
+    printf("kill me\n");
     enter_coroutine(routine_1);
+
+    printf("kill me\n");
 
 
     // question 9
