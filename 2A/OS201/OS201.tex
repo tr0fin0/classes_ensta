@@ -122,10 +122,16 @@ On note que c'est necessaire declarer des fonctions en Assemble avec les codes s
 \begin{scriptsize}\mycode
     \lstinputlisting[language=C, linerange={1-5}]{TD/2022_11_28/main.c}
 \end{scriptsize}
-gcc -static utils.s -g main.c -o main.exe
-gdb ./main.exe
-break enter_coroutine
-run
-n
-Thread 1 received signal SIGSEGV, Segmentation fault.
+% gcc -static utils.s -g main.c -o main.exe
+% gdb ./main.exe
+% break enter_coroutine
+% run
+% n
+% Thread 1 received signal SIGSEGV, Segmentation fault.
+
+\newpage\subsection{Séance 05/12/2022}
+\paragraph{Définition}
+\begin{scriptsize}\mycode
+    \lstinputlisting[language=C, linerange={1-5}]{TD/2022_12_05/main.c}
+\end{scriptsize}
 \end{document}
