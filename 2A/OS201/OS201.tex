@@ -272,6 +272,85 @@ inline uint32_t BigEndian32(uint32_t value)
 
 
 
+\section{Multi-Tâche}
+
+\subsection{Thread}
+\begin{definition}
+    Séquence d'exécution indépendante qui peut avoir des statuts suivants:
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[]
+        
+        \node[state, initial] (S0) {prt};
+        \node[state, above right= of S0] (S1) {att};
+        \node[state, below right= of S1] (S2) {exe};
+
+        \draw[->] (S0) edge[bend left, below]  node{élection}    (S2);
+        \draw[->] (S2) edge[bend left, below]  node{préparation} (S0);
+        \draw[->] (S1) edge[bend right, left]  node{déblocage}   (S0);
+        \draw[->] (S2) edge[bend right, right] node{blocage}     (S1);
+
+        \end{tikzpicture}
+    \end{figure}
+    Où: prt est \textbf{prêt}, att est \textbf{en attente} et exe est \textbf{en exécution}.
+    
+    \begin{remark}
+        L'Unité d'Ordonnancement est responsable pour ordonner les Threads.
+    \end{remark}
+\end{definition}
+
+\subsubsection{Processus}
+\begin{definition}
+    L'Ensemble Threads et ses permissions, donc avec son espace d'adressage séparé.
+
+    \begin{remark}
+        En général une instance de l'exécution d'un programme est considère comme Processus.
+    \end{remark}
+\end{definition}
+
+\subsubsection{Atomicité}
+\begin{definition}
+    \texttt{f} est \textbf{atomique} par rapport à \texttt{g} si \texttt{f} apparaît s'exécuter d'un seul coup sans être interrompue par l'exécution de \texttt{g}.\\
+
+    Deux fonctions \texttt{f} et \texttt{g} sont atomiques si l'exécution entrelacée de \texttt{f} et \texttt{g} est équivalente à une exécution séquentielle de \texttt{f} puis \texttt{g} ou de \texttt{g} puis \texttt{f}.
+\end{definition}
+
+\subsection{Tâche}
+\begin{definition}
+    Terme ambigu, souvent synonyme de Processus mais parfois de Thread. Il faut faire attention à son utilisation.
+\end{definition}
+
+
+\subsection{Synchronisation}
+\begin{definition}
+    Mécanismes permettant de coordonner l'exécution de plusieurs threads en bloquant leur exécution à des points de programmes précis pour régler les problèmes de concurrence sur l'accès à une ressource, logicielle ou matérielle, partagée.
+
+    \begin{remark}
+        Bloquer c'est à dire changer le statut de tâches à bloqué.
+    \end{remark}
+    \begin{remark}
+        Débloquer c'est à dire changer le statut des taches à prêt.
+    \end{remark}
+
+    Pendant le changement entre threads la CPU restera inactif pour un des threads et donc perdra du temps d'exécution. Il faut copier les adresses de mémoire nécessaires que prend un peu de temps.
+\end{definition}
+
+\subsubsection{\texttt{mutex}}
+\begin{definition}
+    Utilisation de code qui permet de gérer des conflit pour ressources. 
+\end{definition}
+
+\subsubsection{Concurrence}
+\begin{definition}
+    Quand les tâches accèdent simultanément à une même ressource.
+\end{definition}
+
+\subsubsection{Parallélisme}
+\begin{definition}
+    Quand il y a utilisation de plusieurs resources.
+\end{definition}
+
+
 \section{Travail Dirigé}
 \subsection{Séance 07/11/2022}
 \paragraph{Définition}Dans ce TD on avait besoin de comprendre la strucute et adresse de mémoire. Ainsi on considere le code suivant:
