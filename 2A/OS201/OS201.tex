@@ -254,6 +254,24 @@ inline uint32_t BigEndian32(uint32_t value)
 
 
 
+\section{Hardware}
+\subsection{MPU}
+\begin{definition}
+    Positionné entre le CPU et le BUS, fait la gestion des registres spéciaux en guardant:
+    \begin{enumerate}[noitemsep]
+        \item Adresse de début;
+        \item Adresse de fin;
+        \item Permission;
+    \end{enumerate}
+    Tout accès mémoire en dehors de ces plages provoque une interruption.
+
+    \begin{remark}
+        Il faut modifier le paramétrage de la MPU quand on change de thread, seulement le noyau peut y acceder car le changement des registres de protection d'une MPU est privilégié.
+    \end{remark}
+\end{definition}
+
+
+
 \section{Travail Dirigé}
 \subsection{Séance 07/11/2022}
 \paragraph{Définition}Dans ce TD on avait besoin de comprendre la strucute et adresse de mémoire. Ainsi on considere le code suivant:
