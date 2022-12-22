@@ -353,7 +353,7 @@ inline uint32_t BigEndian32(uint32_t value)
 
 \section{Travail Dirigé}
 \subsection{Séance 07/11/2022}
-\paragraph{Définition}Dans ce TD on avait besoin de comprendre la strucute et adresse de mémoire. Ainsi on considere le code suivant:
+\paragraph{Définition}Dans ce TD on avait besoin de comprendre la structure et adresse de mémoire. Ainsi on considère le code suivant:
 \begin{scriptsize}\mycode
     \begin{lstlisting}[language=C]
     struct p {
@@ -382,14 +382,14 @@ char *heap c'est un tableau de pointeurs et char heap c'est un tableau de char
 memalloc doit reçu
 
 \newpage\subsection{Séance 21/11/2022}
-\paragraph{Définition}Dans ce TD on avait besoin de comprendre des \texttt{threads} coppératifs. Il faudra linkiez les fichiers C et assembleur avec les options de compilateur \texttt{-static} comme montre:
+\paragraph{Définition}Dans ce TD on avait besoin de comprendre des \texttt{threads} coopératifs. Il faudra link les fichiers C et assembleur avec les options de compilateur \texttt{-static} comme montre:
 \begin{scriptsize}\mycode
     \begin{lstlisting}[language=Bash]
         gcc -static file.s main.c -o main.exe
         ./main.exe
     \end{lstlisting}
 \end{scriptsize}
-On note que c'est necessaire declarer des fonctions en Assemble avec les codes suivants:
+On note que c'est nécessaire declarer des fonctions en Assemble avec les codes suivants:
 \begin{scriptsize}\mycode
     \lstinputlisting[language=C, linerange={1-5}]{TD/2022_11_21/main.c}
 \end{scriptsize}
