@@ -89,46 +89,169 @@
 
 
 
+\section{Software}
+
+
+\subsection{Taille d'Information}
+\subsubsection{bit}
+\begin{definition}
+    Valeur binaire, soit 0 ou soit 1. La plus petite unité d'inforamtion.
+\end{definition}
+
+\subsubsection{octet}
+\begin{definition}
+    Généralement, un ensemble de 8 bits binaires. La plus petite unité de mémoire adressable.
+    
     \begin{remark}
-        Nomme \textbf{Kernel} en Anglais.
+        Nomme \textbf{byte} en anglais.
     \end{remark}
 \end{definition}
 
+\subsubsection{mot}
 \begin{definition}
-    \textbf{Service} est le programme qui origanise le partage de ressources de l'ordinateur.
-\end{definition}
+    Ensemble de plusieurs \texttt{octets}. La unité de mémoire manipulée naturellement par un processeur: 8, 16, 32, 64 ou 128 bits.
 
-\begin{definition}
-    \textbf{Pilote Périphérique} est le responsable pour communiquer avec le \textbf{Noyau} avec les périphériques de l'ordinateur.    
     \begin{remark}
-        Nomme \textbf{Driver} en Anglais.
+        Nomme \textbf{word} en anglais.
     \end{remark}
 \end{definition}
 
+\subsubsection{Padding}
 \begin{definition}
-    \textbf{Padding} consiste à garantir que la taille des données soit compatible avec les algorithmes utilisés.
+    Consiste à garantir que la taille des données soit compatible avec les algorithmes utilisés.
 \end{definition}
 
 \subsubsection{Endianness}
 \begin{definition}
     Convention pour lire les octets dans un mot:
     \begin{enumerate}[noitemsep]
-        \item \textbf{Big Endian}: On commence par l'octet plus grand, gauche à droite;
-        \item \textbf{Little Endian}: On commence par l'octet plus petit, droite à gauche;
+        \item \textbf{big endian}: On commence par l'octet plus grand, gauche à droite;
+        \item \textbf{little endian}: On commence par l'octet plus petit, droite à gauche;
     \end{enumerate}
-    Exemple    
-    \begin{scriptsize}\myRISCV
-        \begin{lstlisting}
+    
+    \begin{example}
+        On considère le code suivante:
+        \begin{scriptsize}\myRISCV
+            \begin{lstlisting}
     variable = {0x11, 0x22, 0x33, 0x44};
     
-    # code little endian, plus commun
-    .word 0x11223344
+    .word 0x11223344    # code little endian, plus commun
     
-    # code big endian
-    .word 0x44332211
+    .word 0x44332211    # code big endian
+            \end{lstlisting}
+        \end{scriptsize}
+    \end{example}
+
+    On peut convertir les variables d'une codage à une autre avec l'\href{https://codereview.stackexchange.com/questions/151049/endianness-conversion-in-c}{algorithme} suivant:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=C, linerange={1-7}]
+inline uint32_t Reverse32(uint32_t value) 
+{
+    return (((value & 0x000000FF) << 24) |
+            ((value & 0x0000FF00) <<  8) |
+            ((value & 0x00FF0000) >>  8) |
+            ((value & 0xFF000000) >> 24));
+}
+
+inline uint32_t LittleEndian32(uint32_t value)
+{
+    #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        return value;
+    #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+        return Reverse32(value);
+    #else
+    #    error unsupported endianness
+    #endif
+}
+
+inline uint32_t BigEndian32(uint32_t value)
+{
+    #if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+        return Reverse32(value);
+    #elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+        return value;
+    #else
+    #    error unsupported endianness
+    #endif
+}
         \end{lstlisting}
     \end{scriptsize}
 \end{definition}
+
+
+\subsection{Noyau}
+\begin{definition}
+    Partie fondamentale du Système d'Exploitation, responsable pour gérer les ressources de l'ordinateur.    
+    
+    \begin{remark}
+        Nomme \textbf{kernel} en anglais.
+    \end{remark}
+\end{definition}
+
+\subsubsection{Service}
+\begin{definition}
+    Programme qui organise le partage de ressources de l'ordinateur.
+\end{definition}
+
+\subsubsection{Pilote Périphérique}
+\begin{definition}
+    Responsable pour communiquer avec le \textbf{noyau} avec les périphériques de l'ordinateur.    
+    
+    \begin{remark}
+        Nomme \textbf{driver} en anglais.
+    \end{remark}
+\end{definition}
+
+
+\subsection{Ordonnanceur}
+\begin{definition}
+    Composant du noyau du système d'exploitation choisissant l'ordre d'exécution des processus sur les processeurs d'un ordinateur.
+    
+    \begin{remark}
+        En anglais, l'Ordonnanceur est appelé \textbf{scheduler}.
+    \end{remark}
+    L'Ordonnanceur implémente une politique d'ordonnancement.
+\end{definition}
+
+\subsubsection{Politique d'Ordonnancement}
+\begin{definition}
+    Contraintes permettant de décider à tout instant quel travail exécuter par les travaux prêts.
+\end{definition}
+\subsubsection{Algorithme d'Ordonnancement}
+\begin{definition}
+    Représente la Politique d'Ordonnancements désiré pour le noyau comme par exemple:
+    \begin{enumerate}[noitemsep, rightmargin = \leftmargin]
+        \item \texttt{FIFO}: First in First Out, Premier Entré Premier Sorti, PEPS;
+        \begin{example}
+            File d'Attente, en anglais \textbf{queue}.
+        \end{example}
+        \item \texttt{LIFO}: Last in First Out, Dernier Entré Premier Sorti, DEPS;
+        \begin{example}
+            Pile, en anglais \textbf{stack};
+        \end{example}
+        \item \texttt{SJF}: Shortest Job First;
+        \item \texttt{EDF}: Earliest Deadline First;
+    \end{enumerate}
+\end{definition}
+
+\subsection{Système de Fichiers}
+\begin{definition}
+    Responsable pour organiser le partage de la Mémoire de Masse entre les différents fichiers.
+
+    \begin{remark}
+        Une mémoire de grande capacité, non volatile et qui peut être lue et écrite, entre autres, par un ordinateur est considère comme \textbf{Mémoire de Masse}.
+    \end{remark}
+\end{definition}
+\subsubsection{Fichier}
+\begin{definition}
+    Représente un ensemble de secteurs, adressés en continu. 
+\end{definition}
+
+\subsubsection{Répertoires}
+\begin{definition}
+    Organisent les fichiers en une arborescence.
+\end{definition}
+
 
 
 \section{Travail Dirigé}
