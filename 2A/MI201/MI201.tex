@@ -64,8 +64,35 @@
 
 
 \section{Supervised Learning}
+\subsection{PPV, Plus Proche Voisin}
+\paragraph{Définition}
 
-\subsubsection{Prédiction}
+\subsubsection{1-PPV}
+\paragraph{Définition}
+\subsubsection{k-PPV}
+\paragraph{Définition}
+
+\paragraph{Surapprentissage}En générale augmenter la quantité de voisins ira ammeliorer la prédiction et par consequence eviter le surapprentissage.
+
+
+\subsection{Arbres de Décision}
+\paragraph{Définition}Un arbre de décision est un modèle composé d'une collection de "questions" organisées de manière hiérarchique en forme d'arbre. Les questions sont généralement appelées condition, split ou test. Nous utiliserons le terme "état" dans cette classe. Chaque nœud non feuille contient une condition, et chaque nœud feuille contient une prédiction.
+
+\paragraph{Répresentation}Les arbres botaniques poussent généralement avec la racine en bas. Toutefois, les arbres de décision sont généralement représentés par la racine, le premier nœud, en haut.
+
+\paragraph{Surapprentissage}In general, the deeper you allow your tree to grow, the more complex your model will become because you will have more splits and it captures more information about the data and this is one of the root causes of overfitting in decision trees because your model will fit perfectly for the training data and will not be able to generalize well on test set.
+
+\subsection{SVM, Support vector machine}
+\paragraph{Définition}The optimization problem SVM training solves has two terms:
+\begin{enumerate}[noitemsep]
+    \item A regularization term that benefits "simpler" weights;
+    \item A loss term that makes sure that that the weights classify the training data points correctly;
+\end{enumerate}
+C is just the balance between the importance of these to terms. If C is high you're giving a lot of weight to (2), if C is low you're giving a lot of weight to (1).
+
+\paragraph{Surapprentissage}En générale augmenter le paramètre C ira ammeliorer la précision pour les données de trainning mais pour les données de testing la précision sera faiable donc le surapprentissage augmente.
+
+\subsection{Réseaux de Neurones}
 
 
 \subsection{La Généralisation}
