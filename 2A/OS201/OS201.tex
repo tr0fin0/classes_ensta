@@ -28,9 +28,67 @@
 \subsection{Information Matier}
 \paragraph{Référence}Dans cette matière le but sera de comprendre comment une Système d'Exploitation marche.
 
-\newpage\subsection{Vocabulaire}
+\section{Architecture}
+\subsection{Architecture Matérielle}
 \begin{definition}
-    \textbf{Noyau} est la partie fondamentale du Système d'Exploitation, responsable pour gèrer les ressources de l'ordinateur.    
+    Décrit l'agencement interne de composants électroniques ainsi que leurs interactions.
+\end{definition}
+\subsubsection{Architecture Von Neumann}
+\begin{definition}
+    La même mémoire est utilisée pour stocker les instructions et les données des programmes.
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[]
+        
+            % modules
+            \node[module] (CPU) {CPU};
+            \node[module, right=of CPU] (BUS) {BUS};
+            \node[module, below=of BUS] (MEM) {Mémoire};
+            \node[module, right=of BUS] (PR0) {Périphériques};
+            \node[module, above=5mm of PR0] (PR1) {Périphériques};
+            \node[module, below=5mm of PR0] (PR2) {Périphériques};
+            
+            % connections
+            \foreach \i in {0,1,2}
+                \draw[<->] (BUS)--(PR\i);
+            \draw[<->] (CPU)--(BUS);
+            \draw[<->] (BUS)--(MEM);
+
+        \end{tikzpicture}
+    \end{figure}
+    On considère comme des Périphériques: Clavier, Souris, USB, Réseau et Audio par exemple. 
+\end{definition}
+
+\subsubsection{Architecture Complet}
+\begin{definition}
+    On considère les éléments suivants comme les principales:
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[]
+        
+            % modules
+            \node[module] (CPU) {CPU};
+            \node[module, below=5mm of CPU] (MPU) {MPU};
+            \node[module, right=of MPU] (BUS) {BUS};
+            \node[module, below=of BUS] (MEM) {Mémoire};
+            \node[module, right=of BUS] (PR0) {Périphériques};
+            \node[module, above=5mm of PR0] (PR1) {Périphériques};
+            \node[module, below=5mm of PR0] (PR2) {Périphériques};
+            
+            % connections
+            \foreach \i in {0,1,2}
+                \draw[<->] (BUS)--(PR\i);
+            \draw[<->] (CPU)--(MPU);
+            \draw[<->] (MPU)--(BUS);
+            \draw[<->] (BUS)--(MEM);
+
+        \end{tikzpicture}
+    \end{figure}
+\end{definition}
+
+
+
     \begin{remark}
         Nomme \textbf{Kernel} en Anglais.
     \end{remark}
