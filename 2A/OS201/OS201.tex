@@ -200,8 +200,11 @@ inline uint32_t BigEndian32(uint32_t value)
 
 
 \subsection{Noyau}
-\begin{definition}
-    Partie fondamentale du Système d'Exploitation, responsable pour gérer les ressources de l'ordinateur.    
+    Partie fondamentale du Système d'Exploitation, responsable privilégié pour gérer les ressources de l'ordinateur:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{allocation}: comment répartir la mémoire
+        \item \texttt{ordonnancement}: définir quel processus s'exécute à un instant;
+    \end{enumerate}
     
     \begin{remark}
         Nomme \textbf{kernel} en anglais.
