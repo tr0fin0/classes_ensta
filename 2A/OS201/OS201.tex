@@ -261,6 +261,62 @@
 \end{definition}
 
 
+\subsection{Exécution Programme}
+\subsubsection{Compilation}
+\begin{definition}
+    Les instructions sont exécutes en transformant à language de machine.
+
+    \begin{figure}[H]
+        \centering\begin{tikzpicture}[]
+            % modules
+            \node[module] (LNK) {linker};
+            \node[module, right=5mm of LNK] (EXE) {f.exe};
+            \node[module, right=5mm of EXE] (FNC) {f};
+
+            \node[module, above=5mm of LNK] (FO0) {f0.o};
+            \node[module, left=5mm of FO0] (AS0) {assembleur};
+            \node[module, left=5mm of AS0] (FS0) {f0.s};
+            \node[module, left=5mm of FS0] (CM0) {compilateur};
+            \node[module, left=5mm of CM0] (FC0) {f0.c};
+
+            \node[module, below=5mm of LNK] (FO1) {f1.o};
+            \node[module, left=5mm of FO1] (AS1) {assembleur};
+            \node[module, left=5mm of AS1] (FS1) {f1.s};
+            \node[module, left=5mm of FS1] (CM1) {compilateur};
+            \node[module, left=5mm of CM1] (FC1) {f1.c};
+            
+            % connections
+            \draw[->] (FC0)--(CM0);
+            \draw[->] (CM0)--(FS0);
+            \draw[->] (FS0)--(AS0);
+            \draw[->] (AS0)--(FO0);
+            \draw[->] (FO0)--(LNK);
+
+            \draw[->] (FC1)--(CM1);
+            \draw[->] (CM1)--(FS1);
+            \draw[->] (FS1)--(AS1);
+            \draw[->] (AS1)--(FO1);
+            \draw[->] (FO1)--(LNK);
+
+            \draw[->] (LNK)--(EXE);
+            \draw[->] (EXE)--(FNC);
+        \end{tikzpicture}
+    \end{figure}
+
+    \begin{remark}
+        La language C est \textbf{compilé}.
+    \end{remark}
+
+    \begin{remark}
+        C'est le rôle du \textbf{linker}, éditeur de lien, de calculer l'offset correspondant à une cible de saut.
+    \end{remark}
+\end{definition}
+\subsubsection{Interprétation}
+\begin{definition}
+    Les instructions sont exécutes sans les traduire à language de machine.
+\end{definition}
+
+
 
 \section{Hardware}
 \subsection{MPU}
