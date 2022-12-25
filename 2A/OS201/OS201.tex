@@ -46,7 +46,7 @@
 
 \section{Architecture}
 \subsection{Architecture Matérielle}
-\begin{definition}
+\begin{definition}\label{def:architectureMaterielle}
     Décrit l'agencement interne de composants électroniques ainsi que leurs interactions.
 
     \begin{phrase}
@@ -54,7 +54,7 @@
     \end{phrase}
 \end{definition}
 \subsubsection{Architecture Von Neumann}
-\begin{definition}
+\begin{definition}\label{def:architectureVonNeumann}
     La même mémoire est utilisée pour stocker les instructions et les données des programmes.
 
     \begin{figure}[H]
@@ -81,7 +81,7 @@
 \end{definition}
 
 \subsubsection{Architecture Complet}
-\begin{definition}
+\begin{definition}\label{def:architectureComplet}
     On considère les éléments suivants comme les principales:
     \begin{figure}[H]
         \centering
@@ -114,12 +114,12 @@
 
 \subsection{Taille d'Information}
 \subsubsection{bit}
-\begin{definition}
+\begin{definition}\label{def:bit}
     Valeur binaire, soit 0 ou soit 1. La plus petite unité d'inforamtion.
 \end{definition}
 
 \subsubsection{octet}
-\begin{definition}
+\begin{definition}\label{def:octet}
     Généralement, un ensemble de 8 bits binaires. La plus petite unité de mémoire adressable.
     
     \begin{remark}
@@ -128,7 +128,7 @@
 \end{definition}
 
 \subsubsection{mot}
-\begin{definition}
+\begin{definition}\label{def:mot}
     Ensemble de plusieurs \texttt{octets}. La unité de mémoire manipulée naturellement par un processeur: 8, 16, 32, 64 ou 128 bits.
 
     \begin{remark}
@@ -137,12 +137,12 @@
 \end{definition}
 
 \subsubsection{Padding}
-\begin{definition}
+\begin{definition}\label{def:padding}
     Consiste à garantir que la taille des données soit compatible avec les algorithmes utilisés.
 \end{definition}
 
 \subsubsection{Endianness}
-\begin{definition}
+\begin{definition}\label{def:endianness}
     Convention pour lire les octets dans un mot:
     \begin{enumerate}[noitemsep]
         \item \textbf{big endian}: On commence par l'octet plus grand, gauche à droite;
@@ -167,6 +167,7 @@
 
 
 \subsection{Noyau}
+\begin{definition}\label{def:noyau}
     Partie fondamentale du Système d'Exploitation, responsable privilégié pour gérer les ressources de l'ordinateur:
     \begin{enumerate}[noitemsep]
         \item \texttt{allocation}: comment répartir la mémoire
@@ -179,12 +180,12 @@
 \end{definition}
 
 \subsubsection{Service}
-\begin{definition}
+\begin{definition}\label{def:service}
     Programme qui organise le partage de ressources de l'ordinateur.
 \end{definition}
 
 \subsubsection{Pilote Périphérique}
-\begin{definition}
+\begin{definition}\label{def:pilotePeripherique}
     Service responsable pour organiser le partage des périphériques de l'ordinateur en communicant avec le \textbf{noyau} \ref{def:noyau}.
     
     \begin{remark}
@@ -194,29 +195,29 @@
 
 
 \subsection{Ordonnanceur}
-\begin{definition}
+\begin{definition}\label{def:ordonnanceur}
     Composant du noyau du système d'exploitation choisissant l'ordre d'exécution des processus sur les processeurs d'un ordinateur.
     
     \begin{remark}
         En anglais, l'Ordonnanceur est appelé \textbf{scheduler}.
     \end{remark}
-    L'Ordonnanceur implémente une politique d'ordonnancement.
+    L'Ordonnanceur implémente une Politique d'Ordonnancement \ref{def:politiqueOrdonnancement}.
 \end{definition}
 
 \subsubsection{Politique d'Ordonnancement}
-\begin{definition}
+\begin{definition}\label{def:politiqueOrdonnancement}
     Contraintes permettant de décider à tout instant quel travail exécuter par les travaux prêts.
 \end{definition}
 \subsubsection{Algorithme d'Ordonnancement}
-\begin{definition}
+\begin{definition}\label{def:algorithmeOrdonnancement}
     Représente la Politique d'Ordonnancements désiré pour le noyau comme par exemple:
     \begin{enumerate}[noitemsep, rightmargin = \leftmargin]
         \item \texttt{FIFO}: First in First Out, Premier Entré Premier Sorti, PEPS;
-        \begin{example}
+        \begin{example}\label{def:queue}
             File d'Attente, en anglais \textbf{queue}.
         \end{example}
         \item \texttt{LIFO}: Last in First Out, Dernier Entré Premier Sorti, DEPS;
-        \begin{example}
+        \begin{example}\label{def:stack}
             Pile, en anglais \textbf{stack};
         \end{example}
         \item \texttt{SJF}: Shortest Job First;
@@ -226,12 +227,12 @@
 
 
 \subsection{Système de Fenêtres}
-\begin{definition}
+\begin{definition}\label{def:systemeFenetres}
     Seulement la fenêtre sélectionnée doit recevoir les entrées clavier et souris.
 \end{definition}
 
 \subsection{Système de Fichiers}
-\begin{definition}
+\begin{definition}\label{def:systemeFichiers}
     Responsable pour organiser le partage de la Mémoire de Masse entre les différents fichiers.
 
     \begin{remark}
@@ -239,18 +240,18 @@
     \end{remark}
 \end{definition}
 \subsubsection{Fichier}
-\begin{definition}
+\begin{definition}\label{def:fichiers}
     Représente un ensemble de secteurs, adressés en continu. 
 \end{definition}
 
 \subsubsection{Répertoires}
-\begin{definition}
+\begin{definition}\label{def:repertoires}
     Organisent les fichiers en une arborescence.
 \end{definition}
 
 
 \subsection{Système d'Exploitation}
-\begin{definition}
+\begin{definition}\label{def:systemeExploitation}
     Au minimum un Système d'Exploitation est un ensemble composé de:
     \begin{enumerate}[noitemsep]
         \item \textbf{noyau} \ref{def:noyau};
@@ -263,7 +264,7 @@
 
 \section{Hardware}
 \subsection{MPU}
-\begin{definition}
+\begin{definition}\label{def:MPU}
     Positionné entre le CPU et le BUS, fait la gestion des registres spéciaux en guardant:
     \begin{enumerate}[noitemsep]
         \item Adresse de début;
@@ -282,7 +283,7 @@
 \section{Multi-Tâche}
 
 \subsection{Thread}
-\begin{definition}
+\begin{definition}\label{def:thread}
     Séquence d'exécution indépendante qui peut avoir des statuts suivants:
     \begin{figure}[H]
         \centering
@@ -307,7 +308,7 @@
 \end{definition}
 
 \subsubsection{Processus}
-\begin{definition}
+\begin{definition}\label{def:processus}
     L'Ensemble Threads et ses permissions, donc avec son espace d'adressage séparé.
 
     \begin{remark}
@@ -326,20 +327,20 @@
 \end{definition}
 
 \subsubsection{Atomicité}
-\begin{definition}
+\begin{definition}\label{def:atomicite}
     \texttt{f} est \textbf{atomique} par rapport à \texttt{g} si \texttt{f} apparaît s'exécuter d'un seul coup sans être interrompue par l'exécution de \texttt{g}.\\
 
     Deux fonctions \texttt{f} et \texttt{g} sont atomiques si l'exécution entrelacée de \texttt{f} et \texttt{g} est équivalente à une exécution séquentielle de \texttt{f} puis \texttt{g} ou de \texttt{g} puis \texttt{f}.
 \end{definition}
 
 \subsection{Tâche}
-\begin{definition}
+\begin{definition}\label{def:tache}
     Terme ambigu, souvent synonyme de Processus mais parfois de Thread. Il faut faire attention à son utilisation.
 \end{definition}
 
 
 \subsection{Synchronisation}
-\begin{definition}
+\begin{definition}\label{def:synchronisation}
     Mécanismes permettant de coordonner l'exécution de plusieurs threads en bloquant leur exécution à des points de programmes précis pour régler les problèmes de concurrence sur l'accès à une ressource, logicielle ou matérielle, partagée.
 
     \begin{remark}
@@ -353,17 +354,17 @@
 \end{definition}
 
 \subsubsection{\texttt{mutex}}
-\begin{definition}
+\begin{definition}\label{def:mutex}
     Utilisation de code qui permet de gérer des conflit pour ressources. 
 \end{definition}
 
 \subsubsection{Concurrence}
-\begin{definition}
+\begin{definition}\label{def:concurrence}
     Quand les tâches accèdent simultanément à une même ressource.
 \end{definition}
 
 \subsubsection{Parallélisme}
-\begin{definition}
+\begin{definition}\label{def:parallelisme}
     Quand il y a utilisation de plusieurs resources.
 \end{definition}
 
