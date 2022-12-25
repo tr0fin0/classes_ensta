@@ -335,6 +335,46 @@
 \end{definition}
 
 
+\subsection{CPU}
+\begin{definition}\label{def:CPU}
+    Responsable pour l'exécution des instructions:
+    \begin{enumerate}[noitemsep]
+        \item lire instructions depuis la mémoire, en suivant le pointeur d'instruction;
+        \item lire et écrit entre la mémoire et ses registres;
+        \item faire des opérations arithmétiques et logiques;
+    \end{enumerate}
+\end{definition}
+
+\subsubsection{Fetch}
+\begin{definition}\label{def:fetch}
+    Récupération du mot d'instruction pointé par le pointeur d'instruction.
+
+    \begin{remark}\label{def:PC}
+        En anglais, le Pointeur d'Instruction est appelé \textbf{program counter}, PC.
+    \end{remark}
+\end{definition}
+
+\subsubsection{Decode}
+\begin{definition}\label{def:decode}
+    Activation desc composants et chemins correspondant au traitement de l'instruction.
+\end{definition}
+
+\subsubsection{Execute}
+\begin{definition}\label{def:execute}
+    Traitement de l'instruction par les composants activés.
+\end{definition}
+
+\subsubsection{Memory Access}
+\begin{definition}\label{def:memoryAccess}
+    Lecture ou écriture des données de la mémoire, t    ransitant par le bus
+\end{definition}
+
+\subsubsection{Writeback}
+\begin{definition}\label{def:writeBack}
+    Écriture des registres incluant la mise à jour de PC \ref{def:PC}.
+\end{definition}
+
+
 
 \section{Multi-Tâche}
 
