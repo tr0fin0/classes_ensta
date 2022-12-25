@@ -313,6 +313,16 @@
     \begin{remark}
         En général une instance de l'exécution d'un programme est considère comme Processus.
     \end{remark}
+
+    \begin{phrase}
+        un processus peut être vu comme une \textbf{machine virtuelle} disposant de:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{thread}: CPU virtuel;
+            \item \texttt{espace d'adressage}: mémoire virtuelle;
+            \item \texttt{périphériques virtuels}: permettent d'acceder des périphériques réels;
+            \item \texttt{hyperviseur}: noyau virtuelle;
+        \end{enumerate}
+    \end{phrase}
 \end{definition}
 
 \subsubsection{Atomicité}
