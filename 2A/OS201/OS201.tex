@@ -375,6 +375,51 @@
 \end{definition}
 
 
+\subsection{Mémoire}
+\begin{definition}
+    Memory is the part of the computer that holds data and instructions for processing, normally divided in:
+    \begin{figure}[H]
+        \centering\begin{tikzpicture}[]
+            \node[module, minimum width=30mm] (sysData) {System Data};
+            \node[module, minimum width=30mm, below=of sysData] (code) {Code};
+            \node[module, minimum width=30mm, below=0mm of code] (readOnly) {Read Only Data};
+            \node[module, minimum width=30mm, below=of readOnly] (stack) {Stack};
+            \node[module, minimum width=30mm, below=0mm of stack] (heap) {Heap};
+            \node[module, minimum width=30mm, below=0mm of heap] (globals) {Globals};
+
+
+            \node[fit=(sysData), draw, inner sep=2mm] (fit0) {};
+            \node[fit=(code) (readOnly), draw, inner sep=2mm] (fit1) {};
+            \node[fit=(stack) (heap) (globals), draw, inner sep=2mm] (fit2) {};
+            \node[fit=(fit0) (fit1) (fit2), draw, inner sep=2mm] (fit3) {};
+
+            \draw[decorate, decoration = {calligraphic brace, raise=5mm}] (fit0.north -| fit3.east) -- (fit0.south -| fit3.east);
+            \draw[decorate, decoration = {calligraphic brace, raise=5mm}] (fit1.north -| fit3.east) -- (fit1.south -| fit3.east);
+            \draw[decorate, decoration = {calligraphic brace, raise=5mm}] (fit2.north -| fit3.east) -- (fit2.south -| fit3.east);
+        \end{tikzpicture}
+    \end{figure}
+    Où:
+    \begin{enumerate}[noitemsep]
+        \item \textbf{code read-only}: contient les instructions;
+        \item \textbf{data read-only}: contient constantes, chaîne des caractères;
+        \item \textbf{data read-write}: divisé en:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{stack}: variables locales d'un thread;
+            \item \texttt{heap}: allocation dynamique de mémoire;
+            \item \texttt{globals}: allocation statique de mémoire;
+        \end{enumerate}
+    \end{enumerate}
+
+    \begin{remark}
+        Although closely associated with the CPU, memory is separate from it.
+    \end{remark}
+    
+    \begin{remark}
+        Memory stores program instructions or data for only as long as the program they pertain to is in operation.
+    \end{remark}
+\end{definition}
+
+
 
 \section{Multi-Tâche}
 
