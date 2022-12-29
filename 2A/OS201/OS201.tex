@@ -204,7 +204,25 @@
 
 \subsubsection{Politique d'Ordonnancement}
 \begin{definition}\label{def:politiqueOrdonnancement}
-    Contraintes permettant de décider à tout instant quel travail exécuter par les travaux prêts.
+    Contraintes permettant de décider à tout instant quel travail exécuter par les travaux prêts en considérant les aspects suivants:
+    \begin{enumerate}
+        \item \textbf{Coût de Préemption}, coût pour interrompre un travail:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{élevé}: ;
+            \item \texttt{faible}: ;
+        \end{enumerate}
+        \item \textbf{Coût de Migration}, coût pour changer d'une ressource à une autre:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{élevé}: ;
+            \item \texttt{faible}: ;
+        \end{enumerate}
+        \item \textbf{Critère d'Optimisation}, peut varier d'application à application:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{débit}: maximiser le nombre de tâches faites;
+            \item \texttt{latence}: minimiser les temps de réponse à des évènements;
+            \item \texttt{équité}: faire en sorte que toutes les t6aches aient accès aux ressources;
+        \end{enumerate}
+    \end{enumerate}
 \end{definition}
 \subsubsection{Algorithme d'Ordonnancement}
 \begin{definition}\label{def:algorithmeOrdonnancement}
