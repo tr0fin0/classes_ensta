@@ -1,0 +1,294 @@
+\documentclass{article}
+\usepackage{C:/Users/guitr/Documents/git_repositories/tpack/tpack}
+% \usepackage{C:/Users/Admin-PC/Documents/git_repository/tpack/tpack}
+% \usepackage{/home/tr0fin0/git_repositories/tpack/tpack}
+
+
+\title{IC203 - Reseaux d'Information}
+\project{Travail Dirige 3 - Résolution}
+\author{Guilherme Nunes Trofino}
+\authorRA{2022-2024}
+
+
+\makeatletter
+\begin{document}\selectlanguage{french}
+\maketitle
+
+\newcommand{\tablesCommutation}[3]{
+    \begin{center}
+        \begin{minipage}[t]{0.3\textwidth}
+            \begin{table}[H]
+                \centering\begin{tabular}{r|l}
+                    \multicolumn{2}{l}{S1}\\
+                    port & MAC\\
+                    \hline
+                        #1
+                    \hline
+                \end{tabular}
+            \end{table}
+        \end{minipage}
+        \begin{minipage}[t]{0.3\textwidth}
+            \begin{table}[H]
+                \centering\begin{tabular}{r|l}
+                    \multicolumn{2}{l}{S2}\\
+                    port & MAC\\
+                    \hline
+                        #2
+                    \hline
+                \end{tabular}
+            \end{table}
+        \end{minipage}
+        \begin{minipage}[t]{0.3\textwidth}
+            \begin{table}[H]
+                \centering\begin{tabular}{r|l}
+                    \multicolumn{2}{l}{S3}\\
+                    port & MAC\\
+                    \hline
+                        #3
+                    \hline
+                \end{tabular}
+            \end{table}
+        \end{minipage}
+    \end{center}
+}
+
+
+\section*{Exercice 1}
+\noindent Dans ce exercice on étudiera la Commutation Ethernet.
+
+\subsection*{Question 1}
+\begin{definition}
+    On considère qu'un \textbf{hub} connecte des équipements et envoie toujours des signaux de diffusion d'information qui cause collisions de données.  
+\end{definition}
+
+\begin{definition}
+    On considère qu'un \textbf{commutateur} implémente communication de couche 1 et 2 et permet de connecter des différents supports physiques en isolant les domaines de collision.
+
+    \begin{remark}
+        On considère qu'un commutateur à 2 ports est un \textbf{pont} qui permet de connecter les réseaux internet en fonction de filtrage de signaux.
+    \end{remark}
+    Nomme \textbf{switch} en anglais.
+\end{definition}
+
+\subsection*{Question 2}
+\begin{definition}
+    Une adresse MAC est également appelée adresse matérielle ou adresse Ethernet. C'est un identifiant unique et propre à la carte réseau de l'ordinateur. 
+    \begin{remark}
+        Généralement le format XX.XX.XX.XX.XX.XX, chaque X représentant un chiffre ou une lettre de A à F, numéros hexadécimales.
+    \end{remark}
+\end{definition}
+
+\newpage
+\subsection*{Question 3}
+\noindent On considère la structure suivante pour les prochains questions:
+\begin{exercise}
+    On considère le réseau d'entreprise décrit dans la Figure suivant:
+    \begin{figure}[H]
+        \centering\begin{tikzpicture}[]
+            \node[module, minimum width=15mm, minimum height=15mm, label={[right=8mm]{S1}}] (sw1) {};
+            \node[module, minimum width=15mm, minimum height=15mm, label={[right=8mm]{S2}}, above=5mm of sw1] (sw2) {};
+            \node[module, minimum width=15mm, minimum height=15mm, label={[right=8mm]{S3}}, above=5mm of sw2] (sw3) {};
+
+            \node[module, left= of sw3] (a1) {aa:bb:cc:dd:ee:01 (A1)};
+            \node[module, left= of sw2] (a2) {aa:bb:cc:dd:ee:02 (A2)};
+            \node[module, left= of sw1] (a3) {aa:bb:cc:dd:ee:03 (A3)};
+            \node[module, right= of sw1] (a4) {aa:bb:cc:dd:ee:04 (A4)};
+
+            \draw[-] (sw1) node[above=-5mm of sw1]{U}  -- (sw2) node[below=-5mm of sw2] {U2};
+            \draw[-] (sw2) node[above=-5mm of sw2]{U1} -- (sw3) node[below=-5mm of sw3] {U};
+            \draw[-] (a1) -- (sw3) node[left=-6mm of sw3] {02};
+            \draw[-] (a2) -- (sw2) node[left=-6mm of sw2] {03};
+            \draw[-] (a3) -- (sw1) node[left=-6mm of sw1] {01};
+            \draw[-] (a4) -- (sw1) node[right=-6mm of sw1] {19};
+        \end{tikzpicture}
+    \end{figure}
+    Ce réseau comprend quatre machines et trois commutateurs Ethernet. Les adresses Ethernet de ces équipements sont donnes à l'image. À fin de simplification, on utilisera le nom de machine au lieu de son adresse MAC.\\
+
+    Au début les Tables de Commutation des commutateurs sont vides comme représente:
+    \tablesCommutation{&\\}{&\\}{&\\}
+    \begin{definition}
+        Une \textbf{Table de Commutations} associé les adresses MAC à des interfaces sur les ports du commutateur.
+    \end{definition}
+\end{exercise}
+
+\newpage
+\begin{resolution}
+    On suppose que A3 envoi un trame à A4:\\
+
+    A3 est connecte au switch S1 qui, au début, n'a pas l'adresse de A4 dans sa Table de Communication. Donc il faudrait faire un broadcast, un transmission de diffusion:
+        \tablesCommutation{
+            01 & A3\\
+        }{
+            & \\
+        }{
+            & \\
+        }
+    \begin{remark}
+        Quand il y a un broadcast le switch fera la transmission de l'adresse de la machine qu'envoie des données pour que le réseau peut connaître cette nouvelle machine qui communique.
+    \end{remark}
+    Comme S1 et S2 sont connectes, la diffusion sera transmisse à S2 qui n'a pas non plus l'adresse de A4 dans sa Table de Communication. Donc il faudrait faire un broadcast:
+        \tablesCommutation{
+            01 & A3\\
+        }{
+            U2 & A3\\
+        }{
+            & \\
+        }
+    \begin{remark}
+        L'adresse estoque sera l'adresse d'origine de la message.
+    \end{remark}
+    Le même se passe entre S2 et S3. Donc il faudrait un broadcast:
+        \tablesCommutation{
+            01 & A3\\
+        }{
+            U2 & A3\\
+        }{
+            U & A3\\
+        }
+    \begin{remark}
+        Quand il aura un broadcast, transmission de diffusion, le signal sera retransmettre dans tous les ports sauf pour la port d'où le signal vient.
+    \end{remark}
+\end{resolution}
+
+\newpage
+\subsection*{Question 4}
+\begin{resolution}
+    On suppose que A4 envoi un trame à A1:\\
+
+    A4 est connecte au switch S1 qui, au début, n'a pas l'adresse de A1 dans sa Table de Communication. Donc il faudrait faire un broadcast, un transmission de diffusion:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+        }{
+            U2 & A3\\
+        }{
+            U & A3\\
+        }
+    Comme S1 et S2 sont connectes il aura faire un broadcast:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+        }{
+            U & A3\\
+        }
+    \begin{remark}
+        Quand il y a des machines qui sont connectes en dehors d'un commutateur c'est commun d'y avoir le même adresse.\\
+        
+        S'il y a un transmission l'autre commutateur s'occupe de retransmettre à la machine correcte. 
+    \end{remark}
+    Le même se passe entre S2 et S3. Donc il aura un broadcast:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+        }{
+            U & A3\\
+            U & A4\\
+        }
+\end{resolution}
+
+\newpage
+\subsection*{Question 5}
+\begin{resolution}
+    On suppose que A4 envoi un trame à A2:\\
+
+    Comme les Tables de Communication n'ont pas l'adresse de A2 il y aura un broadcast sur les switches, mais cette fois-ci il n'y aura pas d'alteration sur les Tables car l'adresse de A4 est déjà-là:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+        }{
+            U & A3\\
+            U & A4\\
+        }
+\end{resolution}
+
+\subsection*{Question 6}
+\begin{resolution}
+    On suppose que A2 envoi un trame à A4:\\
+
+    A2 est connecte au switch 2 qui connaît déjà l'adresse de A4 et donc la trame sera directement envoyé à S1 sur le port U2:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+            03 & A2\\
+        }{
+            U & A3\\
+            U & A4\\
+        }
+    \begin{remark}
+        Comme S2 n'avait pas l'adresse de A2 sur sa Table de Commutation il l'ajoute.
+    \end{remark}
+    En suite S1 consulte sa Table de Commutation et relaye la trame vers le port 19 en ajoutant l'adresse de A2 à sa Table car il ne la connaît pas:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+            U  & A2\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+            03 & A2\\
+        }{
+            U & A3\\
+            U & A4\\
+        }
+    \begin{remark}
+        S2 ne relaye pas la trame vers le switch 3 car il connaissait déjà l'adresse d'A4 et donc S3 n'aura pas la possibilité de mémoriser l'adresse d'A2. 
+    \end{remark}
+\end{resolution}
+
+\newpage
+\subsection*{Question 7}
+\begin{resolution}
+    On suppose que A4 envoi un trame à A1:\\
+
+    Comme les Tables de Communication n'ont pas l'adresse de A1 il y aura un broadcast sur les switches, mais cette fois-ci il n'y aura pas d'alteration sur les Tables car l'adresse de A4 est déjà-là:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+            U  & A2\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+            03 & A2\\
+        }{
+            U & A3\\
+            U & A4\\
+        }
+\end{resolution}
+
+\subsection*{Question 8}
+\begin{resolution}
+    On suppose que A1 envoi un trame à A4:\\
+
+    A1 est connecte au switch 3 qui connaît déjà l'adresse de A4 et donc la trame sera directement envoyé à S2 sur le port U qu'enverra en suite à S1 sur le port U2:
+        \tablesCommutation{
+            01 & A3\\
+            19 & A4\\
+            U  & A2\\
+            U  & A1\\
+        }{
+            U2 & A3\\
+            U2 & A4\\
+            03 & A2\\
+            U1 & A1\\
+        }{
+            U & A3\\
+            U & A4\\
+            02 & A1\\
+        }
+    \begin{remark}
+        Le même process décrit à la page precedent se répété ici. Pas besoin de préciser les détails encore un fois.
+    \end{remark}
+\end{resolution}
+\end{document}
