@@ -369,6 +369,42 @@
     \end{enumerate}
 \end{definition}
 
+\subsection{Cloud Service Models}
+\begin{definition}
+    They are sometimes referred to as cloud service models or cloud computing service models:
+    \begin{figure}[H]
+        \centering\begin{tikzpicture}[]
+            \node[module, minimum width=30mm] (bx0) {Application Data};
+            \node[module, minimum width=30mm, below=    of bx0] (bx1) {Runtime};
+            \node[module, minimum width=30mm, below=0mm of bx1] (bx2) {Middleware};
+            \node[module, minimum width=30mm, below=0mm of bx2] (bx3) {Operating System};
+            \node[module, minimum width=30mm, below=    of bx3] (bx4) {Virtualization};
+            \node[module, minimum width=30mm, below=0mm of bx4] (bx5) {Servers};
+            \node[module, minimum width=30mm, below=0mm of bx5] (bx6) {Networking};
+            \node[module, minimum width=30mm, below=0mm of bx6] (bx7) {Storage};
+
+
+            \node[fit=(bx4) (bx5) (bx6) (bx7),  draw, inner sep=2mm, label={above:{IaaS}}] (iaas) {};
+            \node[fit=(bx1) (bx2) (bx3) (iaas), draw, inner sep=2mm, label={above:{PaaS}}] (paas) {};
+            \node[fit=(bx0) (paas),             draw, inner sep=2mm, label={above:{SaaS}}] (saas) {};
+        \end{tikzpicture}
+    \end{figure}
+\end{definition}
+\subsubsection{IaaS}
+\begin{definition}
+    Infrastructure as a Service: mise à disposition de matériel pour faire tourner les machines virtuelles.
+\end{definition}
+
+\subsubsection{PaaS}
+\begin{definition}
+    Platform as a Service: mise à disposition de plateforme pour faire tourner les logiciels.
+\end{definition}
+
+\subsubsection{SaaS}
+\begin{definition}
+    Software as a Service: mise à disposition de logiciel.
+\end{definition}
+
 
 \subsection{Exécution Programme}
 \subsubsection{Compilation}
