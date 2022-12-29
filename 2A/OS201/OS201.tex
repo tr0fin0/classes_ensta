@@ -224,21 +224,114 @@
         \end{enumerate}
     \end{enumerate}
 \end{definition}
-\subsubsection{Algorithme d'Ordonnancement}
+
+\subsection{Algorithme d'Ordonnancement}
 \begin{definition}\label{def:algorithmeOrdonnancement}
-    Représente la Politique d'Ordonnancements désiré pour le noyau comme par exemple:
-    \begin{enumerate}[noitemsep, rightmargin = \leftmargin]
-        \item \texttt{FIFO}: First in First Out, Premier Entré Premier Sorti, PEPS;
-        \begin{example}\label{def:queue}
-            File d'Attente, en anglais \textbf{queue}.
-        \end{example}
-        \item \texttt{LIFO}: Last in First Out, Dernier Entré Premier Sorti, DEPS;
+    Représente la Politique d'Ordonnancements désiré pour le noyau. On peut classifier de la façon suivante:
+    \begin{enumerate}
+        \item \textbf{Statique}: plan d'ordonnancement est décide avant l'exécution;
+        \begin{enumerate}[noitemsep]
+            \item McNaughton;
+        \end{enumerate}
+        \item \textbf{Dynamique}: plan d'ordonnancement est décide pendant l'exécution;
+        \begin{enumerate}[noitemsep]
+            \item \texttt{Non Préemptif}: les tâches ne peuvent pas être interrompre;
+            \begin{enumerate}[noitemsep]
+                \item FIFO;
+            \end{enumerate}
+            \item \texttt{Préemptif}: les tâches peuvent être interrompre;
+            \begin{enumerate}
+                \item Priorité Statique: priorité des travaux ne change pas;
+                \begin{enumerate}[noitemsep]
+                    \item RM;
+                    \item Round-Robin;
+                \end{enumerate}
+                \item Priorité Dynamique: priorité des travaux peut changer;
+                \begin{enumerate}[noitemsep]
+                    \item EDF;
+                    \item Multi-Level Feedback;
+                \end{enumerate}
+            \end{enumerate}
+        \end{enumerate}
+
+    \end{enumerate}
+\end{definition}
+    
+\subsubsection{FIFO}
+\begin{definition}
+    First in First Out; First Come First Served, FCFS; Premier Entré Premier Sorti, PEPS.
+
+    \begin{example}\label{def:queue}
+        File d'Attente, en anglais \textbf{queue}.
+    \end{example}
+\end{definition}
+
+\subsubsection{LIFO}
+\begin{definition}
+    Last in First Out, Dernier Entré Premier Sorti, DEPS
         \begin{example}\label{def:stack}
             Pile, en anglais \textbf{stack};
         \end{example}
-        \item \texttt{SJF}: Shortest Job First;
-        \item \texttt{EDF}: Earliest Deadline First;
-    \end{enumerate}
+\end{definition}
+
+\subsubsection{SJF}
+\begin{definition}
+    Shortest Job First
+\end{definition}
+
+\subsubsection{EDF}
+\begin{definition}
+    Earliest Deadline First
+\end{definition}
+
+\subsubsection{McNaughton}
+\begin{definition}
+    a
+    \begin{example}
+        4 étudiants veulent faire 60 abdominaux chacun, 1 par seconde, en y passant un minimum de temps. Il n'y a que 3 tapis. Comment le faire?
+
+        \begin{resolution}
+            Il y a 240 secondes de travail à faire, 60 abdominaux chaque étudiant. Donc le temps minimum pour tout faire est de 80 secondes en considérant que les tapis sont utilisés au même temps. À la fin on aura:
+
+        \end{resolution}
+    \end{example}
+
+    \begin{remark}
+        Nécessite de faire des migrations et de connaître tous les travaux et leurs durée en avancée.
+    \end{remark}
+
+    \begin{phrase}
+        Optimal, prend le temps minimal, sur multi-processeur.
+    \end{phrase}
+\end{definition}
+
+\subsubsection{Round-Robin}
+\begin{definition}
+    
+\end{definition}
+
+\subsubsection{Priorité Fixe}
+\begin{definition}
+    a
+    \begin{theorem}
+        Si on peut ordonnancer les tâches en priorité fixe, on saure le faire en affectant les priorités dans l'ordre inverse des périodes.
+    \end{theorem}
+
+    \begin{theorem}
+        Si la charge du système est $<69\%$, alors les tâches sont ordonnançables en priorité fixe.
+    \end{theorem}
+
+    \begin{theorem}
+        En monoprocesseur, tout système de tâche périodique faisable, charge processeur $<100\%$ est faisable avec l'algorithme EDF.
+
+        \begin{remark}
+            EDF reste optimal sur des tâches non périodiques. Connaissance des durées de calcul des tâches non nécessaire.
+        \end{remark}
+
+        \begin{phrase}
+            Il n'existe pas d'ordonnancement optimal en multi-processeur.
+        \end{phrase}
+    \end{theorem}
 \end{definition}
 
 
