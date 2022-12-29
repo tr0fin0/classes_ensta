@@ -61,42 +61,18 @@
         \centering\begin{tikzpicture}[]
             % modules
             \node[module] (CPU) {CPU};
-            \node[module, right=of CPU] (BUS) {BUS};
-            \node[module, below=of BUS] (MEM) {Mémoire};
-            \node[module, right=of BUS] (PR0) {Périphériques};
-            \node[module, above=5mm of PR0] (PR1) {Périphériques};
-            \node[module, below=5mm of PR0] (PR2) {Périphériques};
-            
-            % connections
-            \foreach \i in {0,1,2}
-                \draw[<->] (BUS)--(PR\i);
-            \draw[<->] (CPU)--(BUS);
-            \draw[<->] (BUS)--(MEM);
-        \end{tikzpicture}
-    \end{figure}
-    On considère comme des Périphériques: Clavier, Souris, USB, Réseau et Audio par exemple. 
-\end{definition}
-
-\subsubsection{Architecture Complet}
-\begin{definition}\label{def:architectureComplet}
-    On considère les éléments suivants comme les principales:
-    \begin{figure}[H]
-        \centering\begin{tikzpicture}[]
-            % modules
-            \node[module] (CPU) {CPU};
-            \node[module, below=5mm of CPU] (MPU) {MPU};
+            \node[module, right=of CPU] (MPU) {MPU};
             \node[module, right=of MPU] (BUS) {BUS};
-            \node[module, below=of BUS] (MEM) {Mémoire};
+            \node[module, above=of BUS] (MM0) {Mémoire Disque};
+            \node[module, below=of BUS] (MM1) {Mémoire Vive};
             \node[module, right=of BUS] (PR0) {Périphériques};
-            \node[module, above=5mm of PR0] (PR1) {Périphériques};
-            \node[module, below=5mm of PR0] (PR2) {Périphériques};
             
             % connections
-            \foreach \i in {0,1,2}
-                \draw[<->] (BUS)--(PR\i);
+            \draw[<->] (BUS)--(PR0);
             \draw[<->] (CPU)--(MPU);
             \draw[<->] (MPU)--(BUS);
-            \draw[<->] (BUS)--(MEM);
+            \draw[<->] (BUS)--(MM0);
+            \draw[<->] (BUS)--(MM1);
         \end{tikzpicture}
     \end{figure}
 \end{definition}
