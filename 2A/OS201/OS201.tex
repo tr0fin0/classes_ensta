@@ -627,9 +627,62 @@
     Deux fonctions \texttt{f} et \texttt{g} sont atomiques si l'exécution entrelacée de \texttt{f} et \texttt{g} est équivalente à une exécution séquentielle de \texttt{f} puis \texttt{g} ou de \texttt{g} puis \texttt{f}.
 \end{definition}
 
-\subsection{Tâche}
-\begin{definition}\label{def:tache}
-    Terme ambigu, souvent synonyme de Processus mais parfois de Thread. Il faut faire attention à son utilisation.
+
+\subsection{Changement de Contexte}
+\begin{definition}
+    Consiste à sauvegarder en mémoire la valeur de tous les registres du thread en cours d'exécution, par exemple les données sur la pile, puis à restaurer les registres d'un thread dont les valeurs ont été précédemment sauvées.
+
+    \begin{phrase}
+        essentially suspending the process and then resuming it.
+    \end{phrase}
+
+    \begin{remark}
+        Sert à implémenter plusieurs fils d'exécution, threads, indépendants sur un seul processeur.
+    \end{remark}
+
+    \begin{example}
+        On suppose qu'on est en train de lire un livre. S'on est appelé pour faire un autre tâche plus important, on marque la page, fait la tâche et après on reprend là où on s'est arrêté pour continuer à lire.
+    \end{example}
+\end{definition}
+
+
+\subsection{Polling}
+\begin{definition}
+    The process in which the CPU constantly checks the status of the device to see if it needs the CPU's attention.
+\end{definition}
+
+
+\subsection{Interruptions}
+\begin{definition}
+    Mécanisme permettant de signaler au processeur un évènement requérant son attention immédiate.
+
+    \begin{remark}
+        Le \textbf{Interrupt Handler} c'est le service d'interruption qui est appellee comme réponse du processeur à une interruption.
+    \end{remark}
+
+    Lors d'une interruption: Il faut sauvegarder le pc, sp, flags et d'autres registre, soit sur pile ou registres systèmes.\\
+    
+    Après il faut mettre à jour pc, avec l'adresse fixe du numéro d'interruption, et sp, l'adresse d'une pile du noyau.\\
+    
+    En sequence exécuter la routine et à la fin restaurer tous les registres du thread interrompu et le pc.
+\end{definition}
+
+\subsubsection{Interruptions Matérielles}
+\begin{definition}
+    Interruptions qui provient d'un périphérique matériel.
+
+    \begin{example}
+        On peut considère: entrée clavier, arrivée d'un paquet réseau, fin de traitement d'une lecture ou écriture disque, d'un envoi de paquet réseau, réveil à une heure programmée d'une horloge...
+    \end{example}
+\end{definition}
+
+\subsubsection{Interruptions Logicielles}
+\begin{definition}
+    Interruptions qui provient du processeur lui-même.
+
+    \begin{example}
+        On peut considère: division par zéro, accès à une zone mémoire interdit ou impossible, interruptions volontaires...
+    \end{example}
 \end{definition}
 
 
