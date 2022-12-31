@@ -316,17 +316,17 @@
 
 \subsubsection{McNaughton}
 \begin{definition}
-    a
+    Algorithme d'Ordonnancement a McNaughton
     \begin{example}
         4 étudiants veulent faire 60 abdominaux chacun, 1 par seconde, en y passant un minimum de temps. Il n'y a que 3 tapis. Comment le faire?
-
-        \begin{resolution}
-            Il y a 240 secondes de travail à faire, 60 abdominaux chaque étudiant. Donc le temps minimum pour tout faire est de 80 secondes en considérant que les tapis sont utilisés au même temps. À la fin on aura:
-
-        \end{resolution}
     \end{example}
-
-    \begin{remark}
+    \begin{resolution}
+        Il y a 240 secondes de travail à faire, 60 abdominaux chaque étudiant. Donc le temps minimum pour tout faire est de 80 secondes en considérant que les tapis sont utilisés au même temps. À la fin on aura:
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=60mm]{images/mcNaughton_output.png}
+        \end{figure}
+    \end{resolution}
     \comparison{
         \item optimal sur multi-processeur;
     }{
