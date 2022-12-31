@@ -27,6 +27,12 @@
 On considère que l'algorithme peut être définie par la définition suivante:
 \begin{definition}
     Prédire la classe d'une nouvelle donnée en annotant les k plus proches voisins du donnée à classifier.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=60mm]{images/kNN_diagram.png}
+        \caption{Representation kNN}
+    \end{figure}
+    La décision se fait pour le vote majoritaire, s'il n'y a pas de majorité la région reste blanche. 
 \end{definition}
 \begin{remark}
     On nomme kNN aussi comme kPPV, k Plus Proche Voisin en français.
@@ -49,7 +55,12 @@ La choix de k déterminera la qualité de la prédiction. Si on augmente k la qu
 \end{remark}
 On note qu'une variation très commun de cet algorithme est le 1NN:
 \begin{definition}
-    Prédire la classe d'une nouvelle donnée en annotant le plus proche voisin du donnée à classifier.    
+    Prédire la classe d'une nouvelle donnée en annotant le plus proche voisin du donnée à classifier.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[height=60mm]{images/1NN_diagram.png}
+        \caption{Representation 1NN}
+    \end{figure}
 \end{definition}
 \begin{phrase}
     Tous les sensibilités de kNN seront encore plus grand dans 1NN.
