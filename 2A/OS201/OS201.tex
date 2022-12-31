@@ -636,6 +636,55 @@
     Quand la mémoire des plusieurs programmes sont divisés en plusieurs morceaux la mémoire est considère \textbf{Fragmenté}.
 \end{definition}
 
+\subsubsection{Pagination}
+\begin{definition}
+    Division de la mémoire en zones de taille fixe qui s'appellent de \textbf{pages}.
+    \begin{figure}[H]
+        \centering\begin{tikzpicture}[]
+            \node[rectangle, draw] (r00) {};
+            \node[rectangle, draw, below=1mm of r00] (r10) {};
+            \node[rectangle, draw, below=1mm of r10] (r20) {};
+            \node[rectangle, draw, below=1mm of r20] (r30) {};
+            
+            \node[rectangle, draw, right=4mm of r00] (r01) {};
+            \node[rectangle, draw, below=1mm of r01] (r11) {};
+            \node[rectangle, draw, below=1mm of r11] (r21) {};
+            \node[rectangle, draw, below=1mm of r21] (r31) {};
+
+            \node[rectangle, draw, right=4mm of r01] (r02) {};
+            \node[rectangle, draw, below=1mm of r02] (r12) {};
+            \node[rectangle, draw, below=1mm of r12] (r22) {};
+            \node[rectangle, draw, below=1mm of r22] (r32) {};
+            
+            \node[rectangle, draw, right=4mm of r02] (r03) {};
+            \node[rectangle, draw, below=1mm of r03] (r13) {};
+            \node[rectangle, draw, below=1mm of r13] (r23) {};
+            \node[rectangle, draw, below=1mm of r23] (r33) {};
+            
+            \node[rectangle, draw, right=4mm of r03] (r04) {};
+            \node[rectangle, draw, below=1mm of r04] (r14) {};
+            \node[rectangle, draw, below=1mm of r14] (r24) {};
+            \node[rectangle, draw, below=1mm of r24] (r34) {};
+            
+            \node[rectangle, draw, right=4mm of r04] (r05) {};
+            \node[rectangle, draw, below=1mm of r05] (r15) {};
+            \node[rectangle, draw, below=1mm of r15] (r25) {};
+            \node[rectangle, draw, below=1mm of r25] (r35) {};
+            
+            
+            \foreach \i in {0,...,5}
+                \node[fit=(r0\i) (r1\i) (r2\i) (r3\i), draw, inner sep=1mm] (pg\i) {};
+    
+            \node[fit=(pg0) (pg1) (pg2) (pg3) (pg4) (pg5), draw, inner sep=1mm] (mem) {};
+        \end{tikzpicture}
+    \end{figure}
+
+    \begin{remark}
+        Couramment la taille de la page est de 4ko.
+    \end{remark}
+    Quand il y a de perte de mémoire quand toute la page n'est pas utilisée on considère qu'il y a \textbf{fragmentation interne} de la mémoire.
+\end{definition}
+
         \comparison{
             \item plus haut niveau de confinement;
         }{
