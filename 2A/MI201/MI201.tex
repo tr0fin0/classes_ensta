@@ -13,6 +13,7 @@
 \makeatletter
 \begin{document}\selectlanguage{french}
 \maketitle
+\setlength{\parindent}{0pt}
 
 
 \newpage\tableofcontents
@@ -27,102 +28,126 @@
 \paragraph{Référence}
 \url{https://cs231n.github.io/python-numpy-tutorial/}
 
-\subsection{Modélisations Basiques}
-\subsubsection{Régression Linéaire}
-\paragraph{Définition}
 
-\subsubsection{Bayésienne}
-\paragraph{Définition}
+\section{Classification}
 
-\subsubsection{Bayésienne Naïve}
-\paragraph{Définition}
+\subsection{Supervised Learning}
+\subsubsection{kNN, k Nearest Neighbours}
+\subsubsection{Decision Trees}
+\subsubsection{SVM, Support Vector Machines}
+\subsubsection{Neural Networks}
 
+\subsection{Semi-Supervised Learning}
+\subsubsection{Linear Regression}
 
-\section{Apprendisage Automatique}
-\paragraph{Définition}L'apprentissage automatique est une démarche de conception d'un prédicteur et par une modélisation ou programmation non explicité à partir d'exemples.
-
-\subsection{Apprentissage}
-\paragraph{Définition}
-\subsubsection{Inicialization}
-\subsubsection{Visualization}
-\subsubsection{Trainning}
+\subsection{Unsupervised Learning}
+\subsubsection{k-Means Clustering}
 
 
-\subsection{Prédiction}
-\paragraph{Définition}
-\subsubsection{Analysis}
+\subsection{Reinforcement Learning}
 
-\subsection{Surapprentissage}
-\paragraph{Définition}En anglais, overfitting, veut dire que le modèle propose est très specifique et portant est mauvais pour la generalisation des données de validation.
-\subsubsection{Limiter Surapprentissage}
-\paragraph{Définition}Surapprentissage est une problème que doit être eviter et pour ça les méthodes suivants peuvent être implementer:
-\begin{enumerate}[noitemsep]
-    \item ajouter des données;
-    \item réduire le nombre de caractéristiques;
+
+\section{Apprentissage}
+L'apprentissage automatique est une démarche de conception d'un prédicteur et par une modélisation ou programmation non explicité à partir d'exemples.
+
+\subsection{Algorithme}
+On considère que l'algorithme peut être définie par la définition suivante:
+\begin{definition}
+    .
+\end{definition}
+
+Généralement on aura le comportement suivant:
+\begin{table}[H]
+    \centering\begin{tabular}{lll}
+        k $\uparrow  $ & biais $\uparrow  $ & variance $\downarrow$\\
+        k $\downarrow$ & biais $\downarrow$ & variance $\uparrow$\\
+    \end{tabular}
+    \caption{Comportement Neural Network}
+\end{table}
+
+\subsubsection{Avantages}
+Dans ce cas, cet algorithme 
+
+\subsubsection{Incovenients}
+Dans ce cas, cet algorithme 
+
+\subsubsection{Applications}
+Cet algorithme est souvent utilisé 
+
+
+\subsection{Initialization}
+\subsection{Visualization}
+caractéristiques sont des features
+\subsection{Training}
+
+
+
+\section{Prédiction}
+\subsection{Analyses}
+Parmi les possibilités d'évaluation la plus simple c'est le Taux d'Erreur Moyen:
+\begin{definition}
+    \begin{equation}
+        \boxed{
+            e = \frac{\text{nombre d'étiquettes erronées}}{\text{nombre total de données}}
+        }
+    \end{equation}
+\end{definition}
+
+\subsubsection{Confusion Matrix}
+Util qui permet de visualizer la performance d'un algorithme, généralement supervisé, défini par le suivant:
+\begin{definition}
+    Table qui permet de visualizer les prévisions d'un algorithme:
+    \begin{equation}
+        \boxed{
+            \mathcal{M} = 
+            \begin{bmatrix}
+                m_{00} & \cdots & m_{0j} & \cdots & m_{0n}\\
+                \vdots & \ddots & \vdots & \ddots & \vdots\\
+                m_{i0} & \cdots & m_{ij} & \cdots & m_{in}\\ 
+                \vdots & \ddots & \vdots & \ddots & \vdots\\
+                m_{n0} & \cdots & m_{nj} & \cdots & m_{nn}\\ 
+            \end{bmatrix}
+        }
+    \end{equation}
+    Où:
+    \begin{enumerate}[noitemsep]
+        \item $i$: chaque ligne représente des instances de la classe actuelle;
+        \item $j$: chaque colonne représente des instances de la classe de prévision;
+    \end{enumerate}
+    Quand on considère que les données avaient $n$ caractéristiques.
+    \begin{remark}
+        Dans un bon résultat:
+        \begin{equation*}
+            m_{ij} \to 
+            \begin{cases}
+                0 & \forall i\neq j\\
+                N\in\mathbb{N} & \forall i= j\\
+            \end{cases}
+        \end{equation*}
+    \end{remark}
+\end{definition}
+
+\subsubsection{Validation Croisée}
+\subsubsection{Dilemme Biais-Variance}
+
+\subsubsection{Surapprentissage}
+Quand on balance le Biais et la Variance il faut toujours considère le Surapprentissage, Over-Fitting:
+\begin{definition}
+    Quand le modèle proposé est très spécialise, apprend pas coeur les données de traînement, et portant est mauvais pour la généralisation des données de validation.
+\end{definition}
+C'est indésirable et donc il faut toujours l'éviter. À ce propos on peut:
+\begin{enumerate}[noitemsep, rightmargin = \leftmargin]
+    \item \textbf{Data Augmentation}:
+    \begin{definition}
+        Ajouter des données pour l'apprentissage.
+    \end{definition}
+    \item \textbf{Reduced Complexity}:
+    \begin{definition}
+        Réduire le nombre de caractéristiques considères pour l'apprentissage.
+    \end{definition}
+    On peut le faire en:
+    \begin{enumerate}[noitemsep]
+        \item early stopping;
+    \end{enumerate}
 \end{enumerate}
-
-
-
-\section{Supervised Learning}
-\subsection{PPV, Plus Proche Voisin}
-\paragraph{Définition}
-
-\subsubsection{1-PPV}
-\paragraph{Définition}
-\subsubsection{k-PPV}
-\paragraph{Définition}
-
-\paragraph{Surapprentissage}En générale augmenter la quantité de voisins ira ammeliorer la prédiction et par consequence eviter le surapprentissage.
-
-
-\subsection{Arbres de Décision}
-\paragraph{Définition}Un arbre de décision est un modèle composé d'une collection de "questions" organisées de manière hiérarchique en forme d'arbre. Les questions sont généralement appelées condition, split ou test. Nous utiliserons le terme "état" dans cette classe. Chaque nœud non feuille contient une condition, et chaque nœud feuille contient une prédiction.
-
-\paragraph{Répresentation}Les arbres botaniques poussent généralement avec la racine en bas. Toutefois, les arbres de décision sont généralement représentés par la racine, le premier nœud, en haut.
-
-\paragraph{Surapprentissage}In general, the deeper you allow your tree to grow, the more complex your model will become because you will have more splits and it captures more information about the data and this is one of the root causes of overfitting in decision trees because your model will fit perfectly for the training data and will not be able to generalize well on test set.
-
-\subsection{SVM, Support vector machine}
-\paragraph{Définition}The optimization problem SVM training solves has two terms:
-\begin{enumerate}[noitemsep]
-    \item A regularization term that benefits "simpler" weights;
-    \item A loss term that makes sure that that the weights classify the training data points correctly;
-\end{enumerate}
-C is just the balance between the importance of these to terms. If C is high you're giving a lot of weight to (2), if C is low you're giving a lot of weight to (1).
-
-\paragraph{Surapprentissage}En générale augmenter le paramètre C ira ammeliorer la précision pour les données de trainning mais pour les données de testing la précision sera faiable donc le surapprentissage augmente.
-
-\subsection{Réseaux de Neurones}
-
-
-\section{Semi-supervised Learning}
-\paragraph{Définition}
-
-\section{Unsupervised Learning}
-\paragraph{Définition}
-
-\section{Reinforcement Learning}
-\paragraph{Définition}
-
-
-\section{Travail Dirigé}
-\subsection{Séance 10/11/2022}
-\paragraph{Définition}
-
-\subsection{Séance 17/11/2022}
-\paragraph{Définition}
-
-\subsection{Séance 24/11/2022}
-\paragraph{Définition}
-
-\subsection{Séance 01/12/2022}
-\paragraph{Définition}
-
-\subsection{Séance 08/12/2022}
-\paragraph{Définition}
-
-\subsection{Séance 15/12/2022}
-\paragraph{Définition}
-
-
 \end{document}
