@@ -349,6 +349,22 @@
     }
 \end{definition}
 
+\subsubsection{Multi-Level Feedback Queue}
+\begin{definition}
+    Amélioration de l'algorithme du Round-Robin avec plusieurs files qui change à partir de deux situations:
+    \begin{enumerate}[noitemsep]
+        \item \textbf{remonte} dans les priorités, quand un thread est:
+        \begin{enumerate}[noitemsep]
+            \item bloqué;
+            \item attends depuis trop longtemps;
+        \end{enumerate}
+        \item \textbf{descend} dans les priorités, quand un thread est:
+        \begin{enumerate}[noitemsep]
+            \item utilise tout son quota de temps;
+        \end{enumerate}
+    \end{enumerate}
+\end{definition}
+
 \subsubsection{Priorité Fixe}
 \begin{definition}
     a
