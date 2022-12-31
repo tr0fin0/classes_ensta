@@ -685,6 +685,38 @@
     Quand il y a de perte de mémoire quand toute la page n'est pas utilisée on considère qu'il y a \textbf{fragmentation interne} de la mémoire.
 \end{definition}
 
+\subsection{Confinement et Isolation}
+\begin{definition}
+    Assurer que l'exécution d'un code ne puisse pas nuire au reste du système.
+\end{definition}
+
+\subsubsection{Confinement Mémoire}
+\begin{definition}
+    Assurer que l'exécution d'un code ne peut pas accéder, lire et écrire, aux zones mémoires du reste du système. Dans le cas des threads consiste à isoler l'exécution dans des espaces d'adressages séparés en visant:
+    \begin{enumerate}
+        \item améliorer la \textbf{sûreté} / disponibilité:
+        \begin{enumerate}[noitemsep]
+            \item autres tâches continuent de tourner sans être impactées;
+            \item détection d'une erreur permet de redémarrer la tâche fautive;
+        \end{enumerate}
+        \item faciliter la \textbf{mise au point}:
+        \begin{enumerate}[noitemsep]
+            \item détecter les erreur au plus tôt;
+        \end{enumerate}
+        \item améliorer la \textbf{sécurité}:
+        \begin{enumerate}[noitemsep]
+            \item limiter la prise de contrôle d'un attaquant à un seul composant;
+            \item empêcher la lecture de secrets;
+        \end{enumerate}
+    \end{enumerate}
+    On peut réaliser la séparation:
+    \begin{enumerate}[rightmargin = \leftmargin]
+        \item \textbf{physique} assure absence d'interférence entre programmes:
+        \begin{enumerate}[noitemsep]
+            \item machines différents;
+            \item mémoires et processeurs séparées sur une même carte;
+            \item coeur d'exécution séparés sur une même puce;
+        \end{enumerate}
         \comparison{
             \item plus haut niveau de confinement;
         }{
@@ -692,11 +724,55 @@
             \item pas mémoire partagée;
         }
 
+        \item \textbf{logicielle} assure absence d'interférence entre programmes sans support matériel:
+        \begin{enumerate}
+            \item techniques \textbf{dynamiques}: vérification pendant l'exécution;
+            \item techniques \textbf{statiques}: vérification avant ou à la compilation;
+        \end{enumerate}
         \comparison{
             \item pas de modification au processeur;
         }{
             \item surcoût à l'exécution;
         }
+
+        \item \textbf{matérielle} assure absence d'interférence entre les programmes sans support logicielle:
+        \begin{enumerate}
+            \item utilisation d'une MPU;
+        \end{enumerate}
+    \end{enumerate}
+\end{definition}
+
+\subsubsection{Espace d'Adressage}
+\begin{definition}
+    Ensemble des adresses accessibles par des threads sera l'Espace d'Adressage.
+\end{definition}
+
+\subsubsection{Mémoire Virtuele}
+\begin{definition}
+    Décomposition des adresses physiques en adresses virtuelles pour faciliter la distribution d'hardware et la compréhension de software.
+
+    \begin{remark}
+        Décomposition des adresses virtuelles en \textbf{numéro de page}, bits plus significatifs, et un \textbf{déplacement}, bits moins significatifs.
+    \end{remark}
+
+    \begin{remark}
+        la \textbf{Memory Management Unit}, MMU, sera responsable pour faire les conversions nécessaires en stockant les données dans une table.
+    \end{remark}
+    Si la translation d'adresse échoue soit il n'y a pas de page correspondant à une adresse virtuelle dans la table des pages, page non mappée, ou soit il y a une page mais accessible avec des droits différents. Ainsi une interruption est générée: défaut de page, et quand la mémoire virtuelle est utilisée seulement pour la protection mémoire la solution sera: tuer ou redémarrer la tâche.
+\end{definition}
+
+\subsubsection{Swapping}
+
+\subsubsection{mmap()}
+\begin{definition}
+    appel système UNIX permettant de projeter un fichier en mémoire qui récupère automatique une donnée, sur le disque dur, de la partie du fichier lors des défauts de page.
+\end{definition}
+
+\subsubsection{fork()}
+\begin{definition}
+    duplique un processus. initialement toute la mémoire est partagée entre les deux copies jusqu'à première modification qui modifiera l'accès aux pages partagées en lecture seule.
+\end{definition}
+
 
 
 \section{Multi-Tâche}
