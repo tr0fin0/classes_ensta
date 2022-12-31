@@ -15,6 +15,26 @@
 \begin{document}\selectlanguage{french}
 \maketitle
 
+\newcommand{\comparison}[2]{
+    \begin{remark}
+        On considère les caractéristiques suivants:
+        \begin{center}
+            \begin{minipage}[t]{0.495\textwidth}
+                \textbf{Avantages}:
+                \begin{enumerate}[noitemsep]
+                    #1
+                \end{enumerate}
+            \end{minipage}
+            \begin{minipage}[t]{0.495\textwidth}
+                \textbf{Inconvénients}:
+                \begin{enumerate}[noitemsep]
+                    #2
+                \end{enumerate}
+            \end{minipage}
+        \end{center}
+    \end{remark}
+}
+
 
 \newpage\tableofcontents
 
@@ -264,6 +284,13 @@
     \begin{example}\label{def:queue}
         File d'Attente, en anglais \textbf{queue}.
     \end{example}
+    \comparison{
+        \item optimal s'il y a une seule ressource;
+        \item aucune connaissance sur les travaux;
+    }{
+        \item pas de prise en compte de priorités;
+        \item pas de parallélisation du CPU;
+    }
 \end{definition}
 
 \subsubsection{LIFO}
@@ -297,17 +324,22 @@
     \end{example}
 
     \begin{remark}
-        Nécessite de faire des migrations et de connaître tous les travaux et leurs durée en avancée.
-    \end{remark}
-
-    \begin{phrase}
-        Optimal, prend le temps minimal, sur multi-processeur.
-    \end{phrase}
+    \comparison{
+        \item optimal sur multi-processeur;
+    }{
+        \item faire des migrations;
+        \item connaître tous les travaux;
+    }
 \end{definition}
 
 \subsubsection{Round-Robin}
 \begin{definition}
-    
+    \comparison{
+        \item simple;
+        \item easy to implement;
+    }{
+        \item multiples préemptions prennent du temps CPU;
+    }
 \end{definition}
 
 \subsubsection{Priorité Fixe}
@@ -565,7 +597,18 @@
         Memory stores program instructions or data for only as long as the program they pertain to is in operation.
     \end{remark}
 \end{definition}
+        \comparison{
+            \item plus haut niveau de confinement;
+        }{
+            \item coûte cher;
+            \item pas mémoire partagée;
+        }
 
+        \comparison{
+            \item pas de modification au processeur;
+        }{
+            \item surcoût à l'exécution;
+        }
 
 
 \section{Multi-Tâche}
