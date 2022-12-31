@@ -866,12 +866,28 @@
     \begin{remark}
         Le \textbf{Interrupt Handler} c'est le service d'interruption qui est appellee comme réponse du processeur à une interruption.
     \end{remark}
+    Lors d'une interruption il faut:
+    \begin{enumerate}[]
+        \item \textbf{sauvegarder} les données anciennes:
+        \begin{enumerate}[noitemsep]
+            \item pc;
+            \item sp;
+        \end{enumerate}
+        Généralement ce process est automatique et considère flags et d'autres registres utilises.
 
-    Lors d'une interruption: Il faut sauvegarder le pc, sp, flags et d'autres registre, soit sur pile ou registres systèmes.\\
-    
-    Après il faut mettre à jour pc, avec l'adresse fixe du numéro d'interruption, et sp, l'adresse d'une pile du noyau.\\
-    
-    En sequence exécuter la routine et à la fin restaurer tous les registres du thread interrompu et le pc.
+        \item \textbf{recevoir} les nouveaux valeurs:
+        \begin{enumerate}[noitemsep]
+            \item pc reçoit une adresse fixe qui dépend du numéro d'interruption;
+            \item sp reçoit l'adresse d'une pile du noyau; 
+        \end{enumerate}
+
+        \item \textbf{exécution} de la routine;
+        \item \textbf{restauration} de tous les registres du thread interrompu;
+    \end{enumerate}
+    Quand il y a une interruption pendant le traitement d'une autre interruption les nouvelles interruption sont masquées, ça veut dire que sont mises en attentes.
+    \begin{remark}
+        Masquage des interruptions introduit de la latence dans le traitement des interruptions. Ainsi les interrupt handlers peuvent découper le traitement pour les exécuter plus rapidement.
+    \end{remark}
 \end{definition}
 
 \subsubsection{Interruptions Matérielles}
