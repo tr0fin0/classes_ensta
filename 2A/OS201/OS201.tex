@@ -956,6 +956,67 @@
 \end{definition}
 
 
+
+\section{Sécurité}
+\begin{definition}
+    Découpage des fonctionnalités en processus indépendants en laissant les services, parties sensibles, minimales et incontournables.
+\end{definition}
+
+\subsection{Principes de Sécurité de Saltzer et Schroeder}
+
+\subsubsection{Open Design}
+\begin{definition}
+    ne pas se reposer sur le fait que les attaquants ignoreront certains détails.
+\end{definition}
+
+\subsubsection{Psychological Acceptability}
+\begin{definition}
+    Si la sécurité d'un système le rend trop pénible à utiliser, les utilisateurs contourneront les protections.
+\end{definition}
+
+\subsubsection{Work Factor}
+\begin{definition}
+    Concevoir le système en évaluant les ressources d'un attaquant.
+\end{definition}
+
+\subsubsection{Compromise Recording}
+\begin{definition}
+    On peut parfois reporter son attention sur la détection d'une compromission plutôt que sur sa prévention.
+\end{definition}
+
+\subsection*{Sécurisation d'un Système}
+\subsubsection{Structuration}
+\begin{definition}
+    Séparation des privilèges en isolant les compromission de chaque partie du système.
+    \begin{remark}
+        Il faut minimiser les mécanismes communs pour minimiser l'impact d'une compromission.
+    \end{remark}
+    \begin{phrase}
+        \textbf{processus}: séparation des tâches en domaines de protection.
+    \end{phrase}
+    \begin{phrase}
+        \textbf{micro-noyau}: séparation des services en domaines de protections.
+    \end{phrase}
+    \begin{phrase}
+        \textbf{exo-noyau}: minimisation des noyau et services.
+    \end{phrase}
+\end{definition}
+
+\subsubsection{Gestion de Privilèges}
+\begin{definition}
+    Application du Principe du Moindre Privilège: autoriser seulement le nécessaire.
+    \begin{phrase}
+        tout ce qui n'est pas explicitement autorisé est interdit
+    \end{phrase}
+    \begin{remark}
+        Il faudrait implementer une contrôle d'accès, ACL Access Control List, pour contrôler qui a accès à quoi. 
+    \end{remark}
+\end{definition}
+
+\subsection{ACL Access Control List}
+
+
+
 \section{Travail Dirigé}
 \subsection{Séance 07/11/2022}
 \paragraph{Définition}Dans ce TD on avait besoin de comprendre la structure et adresse de mémoire. Ainsi on considère le code suivant:
