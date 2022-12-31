@@ -279,10 +279,10 @@
     
 \subsubsection{FIFO}
 \begin{definition}
-    First in First Out; First Come First Served, FCFS; Premier Entré Premier Sorti, PEPS.
+    Algorithme d'Ordonnancement a First in First Out; First Come First Served, FCFS; Premier Entré Premier Sorti, PEPS.
 
-    \begin{example}\label{def:queue}
-        File d'Attente, en anglais \textbf{queue}.
+    \begin{example}
+        Une imprimante est partagée entre 20 personnes. Dans quel ordre faire les impressions?
     \end{example}
     \comparison{
         \item optimal s'il y a une seule ressource;
@@ -291,6 +291,9 @@
         \item pas de prise en compte de priorités;
         \item pas de parallélisation du CPU;
     }
+    \begin{remark}\label{def:queue}
+        File d'Attente, en anglais \textbf{queue}, implémente FIFO.
+    \end{remark}
 \end{definition}
 
 \subsubsection{LIFO}
