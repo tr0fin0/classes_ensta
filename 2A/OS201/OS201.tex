@@ -367,7 +367,18 @@
 
 \subsubsection{Priorité Fixe}
 \begin{definition}
-    a
+    Un \textbf{Système Temps-Réel} est un système qui a la capacité de répondre à des évènements asynchrones issus du monde extérieur dans des délais pré-déterminés.
+    \begin{phrase}
+        temps-réel est différent de rapide
+    \end{phrase}
+    Généralement le système sera divise en deux types de tâches qui seront découper en différents threads:
+    \begin{enumerate}[noitemsep]
+        \item \textbf{Périodiques} déclenchement sur timer avec durée fixe;
+        \item \textbf{Sporadiques} déclenchement sur interruption avec une durée minimale;
+    \end{enumerate}
+\end{definition}
+\begin{definition}
+    Algorithme d'Ordonnancement a Priorité Fixe
     \begin{theorem}
         Si on peut ordonnancer les tâches en priorité fixe, on saure le faire en affectant les priorités dans l'ordre inverse des périodes.
     \end{theorem}
