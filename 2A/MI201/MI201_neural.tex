@@ -29,15 +29,43 @@ On considère que l'algorithme peut être définie par la définition suivante:
     .
 \end{definition}
 
-Généralement on aura le comportement suivant:
+La choix de n déterminera la qualité de la prédiction. Si on réduire n la qualité de la prediction améliore et le sur-apprentissage diminue. Généralement on aura le comportement suivant:
 \begin{table}[H]
     \centering\begin{tabular}{lll}
-        k $\uparrow  $ & biais $\uparrow  $ & variance $\downarrow$\\
-        k $\downarrow$ & biais $\downarrow$ & variance $\uparrow$\\
+        n $\uparrow$   & biais $\downarrow$ & variance $\uparrow$\\
+        n $\downarrow$ & biais $\uparrow  $ & variance $\downarrow$\\
     \end{tabular}
     \caption{Comportement Neural Network}
 \end{table}
 
+Comme fonction d'activation on considère souvent la fonction \textbf{relu} pour sa simplicité et capacité de reproduire d'autres fonctions:
+\begin{definition}
+    On considère que la \textbf{relu} sera donne pour:
+    \begin{equation}
+        \boxed{
+            relu(x) = \max(x, 0)
+        }
+    \end{equation}
+\end{definition}
+C'est possible d'avoir plusieurs fonctions à partir de la \textbf{relu} comme 
+\begin{equation}
+    |x| = relu(x) + relu(-x)
+\end{equation}
+\begin{equation}
+    \| \mathbf{x}  \|_{1} = |x_{1}| + |x_{2}| = 
+\end{equation}
+\begin{equation}
+    \min(x, y) = relu(x-y)\frac{x}{x-y} + relu(y-x)\frac{y}{y-x}
+\end{equation}
+
+Comme les réseaux de neurones sont beaucoup utilises on peut faire une modification de structure pour implémenter le \textbf{Deep Learning}:
+\begin{definition}
+    On utilise des \textbf{Neurones Convolutif}...
+
+    \begin{remark}
+        \textbf{Neurones Convolutifs} sont une variation de construction de réseaux de neurones où...
+    \end{remark}
+\end{definition}
 \subsubsection{Avantages}
 Dans ce cas, cet algorithme 
 
