@@ -145,7 +145,16 @@ Util qui permet de visualizer la performance d'un algorithme, généralement sup
 \end{definition}  
 
 \subsubsection{Validation Croisée}
-\subsubsection{Dilemme Biais-Variance}
+Les algorithmes auront des performances différents pour des données distinctes, alors comme les données sont divises entre apprentissage et validation ira affecter les résultats. À fin de minimiser cette variation on peut utiliser la \textbf{Validation Croisée}:
+\begin{definition}
+    Cross Validation is a resampling method that uses different portions of the data, named \textbf{Fold}, to test and train a model on different iterations.\\
+    
+    In the end a mean of the results is taken.
+    \begin{phrase}
+        useful to compare the performance of different algorithmes in the same data or to validate a model
+    \end{phrase}
+\end{definition}
+
 
 \subsubsection{Surapprentissage}
 Quand on balance le Biais et la Variance il faut toujours considère le Surapprentissage, Over-Fitting:
