@@ -106,6 +106,64 @@ La choix de la profondeur p de l'Arbre de Décision déterminera la qualité de 
     \end{tabular}
     \caption{Comportement Decision Tree}
 \end{table}
+Comme les Arbres de Décision ont une tendance au surapprentissage on peut utiliser des \textbf{Forêts Aléatoires}:
+\begin{definition}
+    Construction de plusieurs arbres se basant non seulement sur des échantillons différents mais aussi sur des variables différents. On considère le diagramme:
+    \begin{figure}[H]
+        \centering
+        \begin{forest} % from https://tex.stackexchange.com/a/304002/121799
+            for tree={
+                s sep = 10mm,   % Horizontal Distance
+                l = 0mm,        % Vertical Distance
+                where n children={0}{ev}{iv},
+                l+=8mm,
+                if n=1{
+                    edge label={
+                        node [midway, left] {1}
+                    }
+                }{
+                    edge label={
+                        node [midway, right] {0}
+                    }
+                }
+            }
+            [?
+                [?
+                    [0.4] [0.3]
+                ]
+                [?
+                    [0.2][0.1]
+                ]
+            ]
+        \end{forest}
+        \qquad
+        \begin{forest} % from https://tex.stackexchange.com/a/304002/121799
+            for tree={
+                s sep = 10mm,   % Horizontal Distance
+                l = 0mm,        % Vertical Distance
+                where n children={0}{ev}{iv},
+                l+=8mm,
+                if n=1{
+                    edge label={
+                        node [midway, left] {1}
+                    }
+                }{
+                    edge label={
+                        node [midway, right] {0}
+                    }
+                }
+            }
+            [?
+                [?
+                    [0.4] [0.3]
+                ]
+                [0.3]
+            ]
+        \end{forest}
+        \caption{Representation Forêt de Décision}
+    \end{figure}
+    La décision finale sera fait avec le vote majoritaire.
+\end{definition} 
 
 \subsubsection{Avantages}
 Dans ce cas, cet algorithme 
