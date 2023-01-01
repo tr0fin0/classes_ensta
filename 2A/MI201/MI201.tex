@@ -155,6 +155,39 @@ Les algorithmes auront des performances différents pour des données distinctes
     \end{phrase}
 \end{definition}
 
+\subsubsection{Compromis Biais-Variance}
+Toujours quand on analyse une algorithme de Apprentissage Automatique il faut considère le \textbf{Compromis Biais-Variance}:
+\begin{definition}
+    Le problème de minimiser simultanément deux sources d'erreurs qui empêchent les algorithmes d'apprentissage supervisé de généraliser au-delà de leur échantillon d'apprentissage:
+    \begin{enumerate}[rightmargin = \leftmargin]
+        \item \textbf{biais}:
+        \begin{enumerate}[noitemsep]
+            \item l'erreur provenant de la quantité d'hypothèses erronées;
+        \end{enumerate}
+        \begin{remark}
+            Un biais élevé peut entraîner un \textbf{sous-apprentissage}, algorithme qui manque de relations pertinentes entre les données en entrée et les sorties prévues.
+        \end{remark}
+        On peut minimiser ce problème:
+        \begin{itemize}[noitemsep]
+            \item train more;
+            \item increase model complexity en ajoutant des features;
+        \end{itemize}
+
+        \item \textbf{variance}:
+        \begin{enumerate}[noitemsep]
+            \item l'erreur provenant de la sensibilité aux petites fluctuations;
+        \end{enumerate}
+        \begin{remark}
+            Une variance élevée peut entraîner un \textbf{sur-apprentissage}, algorithme modélise le bruit aléatoire des données d'apprentissage plutôt que les sorties prévues.
+        \end{remark}
+        On peut minimiser ce problème:
+        \begin{itemize}[noitemsep]
+            \item introduce more data;
+            \item use regularization;
+        \end{itemize}
+    \end{enumerate}    
+    La décomposition biais-variance est une façon d'analyser l'espérance de l'erreur de prédiction d'un algorithme d'apprentissage d'un problème particulier comme une somme de trois termes: le biais, la variance et une quantité, appelée erreur irréductible, résultant du bruit dans le problème lui-même. 
+\end{definition}
 
 \subsubsection{Surapprentissage}
 Quand on balance le Biais et la Variance il faut toujours considère le Surapprentissage, Over-Fitting:
