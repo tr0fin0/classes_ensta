@@ -188,7 +188,105 @@ Le directeur des assurances Mondass, vous confie la mission de proposer un plan 
 \end{itemize}
 \end{exercise}
 \begin{resolution}
-    
+    Tout d'abord il faut considère les contraintes du système:
+    \begin{enumerate}[rightmargin=\leftmargin]
+        \item \textbf{adresse entreprise}: on utilisera 193.252.0.0/16 comme adresse du système;
+        \item \textbf{sites}:
+        \begin{enumerate}[noitemsep, rightmargin=\leftmargin]
+            \item 4x installes;
+            \item 4x prévus;
+        \end{enumerate}
+        Dans ce cas on considère qu'il aura 8 sites au totale.
+        \begin{remark}
+            Il faut au moins 3 bits pour les sites du système, car $2^3 = 8$.
+        \end{remark}
+
+        \item \textbf{sous réseaux}:
+        \begin{enumerate}[noitemsep, rightmargin=\leftmargin]
+            \item chaque sous réseau doit avoir au plus 100 machines;
+        \end{enumerate}
+
+        \item \textbf{machines}:
+        \begin{enumerate}[noitemsep, rightmargin=\leftmargin]
+            \item \texttt{minimum}: 300 machines / site;
+            \item \texttt{maximum}: 2000 machines / site;
+        \end{enumerate}
+        Dans ce cas on a deux options pour codifier les machines d'un sous réseau:
+        \begin{itemize}[noitemsep, rightmargin = \leftmargin]
+            \item utilise \texttt{6 bits} qui donne 64 adresses machines et 32 sous-réseaux / site, 5 bits;
+            \item utilise \texttt{7 bits} qui donne 128 adresses machines et 16 sous-réseaux / site, 4 bits;
+        \end{itemize}
+        \begin{remark}
+            Dans le deux cas la quantité totale d'adresses est 2048, en accord avec le numéro maximale d'un sous-réseau.
+        \end{remark}
+        Dans ce cas on considère qu'il aura 7 bits pour codifier les machines dans un sous-réseau et par consequence 4 bits pour codifier les sous-réseaux.
+    \end{enumerate}
+    De cette façon-ci on aura utilise $3+4+7=14$ bits pour faire du codage du système mais comme on doit utiliser 16 bits il manque 2 bits dans la proposition. On considère donc qu'il aura 4 bits pour codifier les sites et 5 bits pour codifier les sous-réseaux:
+    \begin{definition}
+        Proposition de codage pour ce réseau sera:
+        \begin{equation}
+            \boxed{
+                193.252.\underbrace{0000}_{\text{site}}\;\underbrace{0000.0}_{\text{sous-réseau}}\;\underbrace{0000000}_{\text{machine}}
+            }
+        \end{equation}
+        Où:
+        \begin{center}
+            \begin{minipage}[t]{0.3\textwidth}
+                \begin{table}[H]
+                    \centering\begin{tabular}{rl}
+                        \multicolumn{2}{c}{\textbf{site}}\\
+                        \hline
+                        1 & 0000\\
+                        2 & 0001\\
+                        3 & 0010\\
+                        4 & 0011\\
+                        ... & ...\\
+                        \hline
+                    \end{tabular}
+                \end{table}
+            \end{minipage}
+            \begin{minipage}[t]{0.3\textwidth}
+                \begin{table}[H]
+                    \centering\begin{tabular}{rl}
+                        \multicolumn{2}{c}{\textbf{sous-réseau}}\\
+                        \hline
+                        1 & 00000\\
+                        2 & 00001\\
+                        3 & 00010\\
+                        4 & 00011\\
+                        ... & ...\\
+                        \hline
+                    \end{tabular}
+                \end{table}
+            \end{minipage}
+            \begin{minipage}[t]{0.3\textwidth}
+                \begin{table}[H]
+                    \centering\begin{tabular}{rl}
+                        \multicolumn{2}{c}{\textbf{machine}}\\
+                        \hline
+                        1 & 0000000\\
+                        2 & 0000001\\
+                        3 & 0000010\\
+                        4 & 0000011\\
+                        ... & ...\\
+                        \hline
+                    \end{tabular}
+                \end{table}
+            \end{minipage}
+        \end{center}
+    \end{definition}
+    \begin{remark}
+        On considère que le site, sous-réseau ou machine N désiré sera donne pour l'équivalent binaire de N-1.
+    \end{remark}
+    Avec cette définition on aura:
+    \begin{itemize}[noitemsep]
+        \item $\boxed{\text{A} : 193.252.0000\;0000.1\;0011001 = 193.252.000.153}$ pour machine 25, sous-réseau 2 et site 1;
+        \item $\boxed{\text{B} : 193.252.0000\;0000.1\;0011010 = 193.252.000.154}$ pour machine 26, sous-réseau 2 et site 1;
+        \item $\boxed{\text{C} : 193.252.0000\;0100.1\;0110100 = 193.252.004.180}$ pour machine 52, sous-réseau 10 et site 1;
+        \item $\boxed{\text{D} : 193.252.0001\;0100.1\;0010111 = 193.252.020.151}$ pour machine 23, sous-réseau 10 et site 2;
+        \item $\boxed{\text{E} : 193.252.0010\;0101.0\;0000100 = 193.252.037.004}$ pour machine 4, sous-réseau 11 et site 3;
+        \item $\boxed{\text{F} : 193.252.0011\;0101.0\;0000100 = 193.252.053.004}$ pour machine 4, sous-réseau 11 et site 4;
+    \end{itemize}
 \end{resolution}
 
 \subsection*{Question 3}
