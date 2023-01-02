@@ -98,59 +98,54 @@ On note que l'adresses 137.194.20.10 n'est pas dans l'intervale d'adresses valab
 \end{resolution}
 
 \subsection*{Question 2}
-La présence de plusieurs interfaces sur cette machine rend nécessaire l’activation du routage.
-La commande netstat –rn retourne le contenu de la table de routage de la machine courante.
-Les informations suivantes sont alors retournées :
-Destination Mask Gateway Device Mxfrg Rtt Ref Flg Out In/Fwd
--------------------- --------------- -------------------- ------ ----- ----- --- --- ----- ------
-137.194.168.0 255.255.254.0 137.194.168.1 qfe2 1500* 0 2 U 41867 0
-137.194.200.0 255.255.254.0 137.194.200.1 qfe3 1500* 0 3 U 46857 0
-137.194.204.0 255.255.254.0 137.194.204.1 qfe1 1500* 0 2 U 34388 0
-137.194.160.0 255.255.254.0 137.194.160.3 hme0 1500* 0 2 U 293056 0
-137.194.192.0 255.255.254.0 137.194.192.1 qfe0 1500* 0 2 U 618612 0
-default 0.0.0.0 137.194.192.14 1500* 0 0 UG 8513070 0
-127.0.0.1 255.255.255.255 127.0.0.1 lo0 8232* 0 0 UH 1229083 0
+La présence de plusieurs interfaces sur cette machine rend nécessaire l'activation du routage. La commande netstat -rn retourne le contenu de la table de routage de la machine courante. Les informations suivantes sont alors retournées :
+\begin{table}[H]
+    \centering\begin{tabular}{lll}
+        Destination & Mask Gateway & Device\\
+        \hline
+        137.194.168.0 & 255.255.254.0   & 137.194.168.1\\
+        137.194.200.0 & 255.255.254.0   & 137.194.200.1\\
+        137.194.204.0 & 255.255.254.0   & 137.194.204.1\\
+        137.194.160.0 & 255.255.254.0   & 137.194.160.3\\
+        137.194.192.0 & 255.255.254.0   & 137.194.192.1\\
+        default       & 0.0.0.0         & 137.194.192.14\\
+        127.0.0.1     & 255.255.255.255 & 127.0.0.1\\
+        \hline
+    \end{tabular}
+\end{table}
 \begin{exercise}
-    Cette machine cherche à joindre l'équipement 137.194.160.85.
-    • Expliquer brièvement ce qui se passe.
-    • Même question pour les destinations 137.194.161.122, 137.194.204.22 et
-    137.194.20.10
+    Cette machine cherche à joindre l'équipement 137.194.160.85:
+    \begin{itemize}
+        \item Expliquer brièvement ce qui se passe;
+    \end{itemize}
+    Même question pour les destinations 137.194.161.122, 137.194.204.22 et 137.194.20.10.
 \end{exercise}
 
 
 \section*{Exercise 2}
-Un utilisateur de la machine esmeralda.enst.fr cherche des documents sur l’IP. Il se connecte
-au serveur FTP de l’ENST (ftp.enst.fr) pour rapatrier des RFCs (Request for Comments).
+Un utilisateur de la machine esmeralda.enst.fr cherche des documents sur l'IP. Il se connecte au serveur FTP de l'ENST (ftp.enst.fr) pour rapatrier des RFCs (Request for Comments).\\
 
+Le même utilisateur désire à présent consulter des documents administratifs sur la page web de l'ENST (www.enst.fr). On considère les données:
+\adressRTP{esmeralda.enst.fr}{137.194.160.071}{08:00:20:AC:3F:38}{
+    Default: & 137.194.160.121 & & \\
+}
 
-Le même utilisateur désire à présent consulter des documents administratifs sur la page web
-de l’ENST (www.enst.fr). (2,5 points)
+\adressRTP{ftp.enst.fr}{137.194.160.003}{08:00:20:A2:8E:AC}{
+    Default: & 137.194.160.121 & & \\
+}
 
-Données :
-esmeralda.enst.fr Adr.IP : 137.194.160.71 Masque : 255.255.254.0
+\adressRTP{www.enst.fr}{137.194.002.045}{08:00:20:A6:8A:5C}{
+    Default: & 137.194.002.096 & & \\
+}
 
-Adr.MAC: 8 :0 :20:AC:3F:38
-Routeur par default: 137.194.160.121
+\adressRTP{benelos.enst.fr}{137.194.160.121}{00:80:2D:6F:EC:81}{
+    Adr.IP:  & 137.194.002.096 & Masque: & 255.255.254.0\\
+    Adr.MAC: & 00:80:2D:6F:EC:2B & & \\
+}
 
-ftp.enst.fr Adr.IP : 137.194.160.3 Masque : 255.255.254.0
-
-Adr.MAC: 8 :0 :20:A2:8E:AC
-Routeur par default: 137.194.160.121
-www.enst.fr Adr.IP : 137.194.2.45Masque : 255.255.254.0
-
-Adr.MAC: 08 :00 :20:a6:8a:5c
-Routeur par default: 137.194.2.96
-
-benelos.enst.fr Adr.IP : 137.194.160.121 Masque : 255.255.254.0
-
-Adr.MAC: 0 :80:2D:6F:EC:81
-Adr.IP : 137.194. 2.96 Masque : 255.255.254.0
-Adr.MAC : 0 :80:2D:6F:EC:2B
 \subsection*{Question 1}
 \begin{exercise}
-    1. Décrire le déroulement des actions au niveau des couches 2 et 3 nécessaires à ces
-transferts de fichier. Donner les en-têtes IP et Ethernet des paquets envoyés par le
-serveur ftp vers le client.
+    1. Décrire le déroulement des actions au niveau des couches 2 et 3 nécessaires à ces transferts de fichier. Donner les en-têtes IP et Ethernet des paquets envoyés par le serveur ftp vers le client.
 \end{exercise}
 \begin{resolution}
     a
@@ -158,9 +153,7 @@ serveur ftp vers le client.
 
 \subsection*{Question 2}
 \begin{exercise}
-    2. Même question : Décrire la « vie d’un paquet IP » de esmeralda jusqu’au serveur
-Web et donner les en-têtes IP et Ethernet des paquets reçus par esmeralda. (2,5
-points)
+    2. Même question : Décrire la « vie d'un paquet IP » de esmeralda jusqu'au serveur Web et donner les en-têtes IP et Ethernet des paquets reçus par esmeralda.
 \end{exercise}
 \begin{resolution}
 
