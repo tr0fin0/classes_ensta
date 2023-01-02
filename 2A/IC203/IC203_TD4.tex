@@ -15,6 +15,21 @@
 \maketitle
 \setlength{\parindent}{0pt}
 
+\newcommand{\adressTable}[7]{
+    \begin{table}[H]
+        \centering\begin{tabular}{c|ll}
+            \multirow{5}{*}{#1} & 193.215.124.#2/#7 & sous-réseau\\
+            \cline{2-3}
+            & 193.215.124.#3 & \multirow{2}{*}{adresses disponibles}\\
+            & 193.215.124.#4 &\\
+            \cline{2-3}
+            & 193.215.124.#5 & broadcast\\
+            \cline{2-3}
+            & 255.255.255.#6 & netmask\\
+        \end{tabular}
+    \end{table}
+}
+
 
 
 \section*{Exercice 1}
