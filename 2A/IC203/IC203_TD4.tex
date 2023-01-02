@@ -306,6 +306,21 @@ Le directeur des assurances Mondass, vous confie la mission de proposer un plan 
     \end{table}
 \end{exercise}
 \begin{resolution}
-
+    Avec la proposition de routage on aura la table suivante:
+    \begin{table}[H]
+        \centering\begin{tabular}{clll}
+            (Site) & Préfixe d'adresse & Masque & Interface de sortie\\
+            \hline
+            1 & 193.252.00/20 & 255.255.240.0 & I0\\
+            2 & 193.252.16/20 & 255.255.240.0 & I1\\
+            3 & 193.252.32/20 & 255.255.240.0 & I2\\
+            4 & 193.252.48/20 & 255.255.240.0 & I3\\
+            ... & ... & ... & ...\\
+            \hline
+        \end{tabular}
+    \end{table}
+    \begin{remark}
+        Chaque proposition aura un résultat différent et donc pour comparer il faut vérifie l'algorithme.
+    \end{remark}
 \end{resolution}
 \end{document}
