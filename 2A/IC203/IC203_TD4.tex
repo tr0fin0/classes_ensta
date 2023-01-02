@@ -18,15 +18,185 @@
 
 
 \section*{Exercice 1}
-\noindent Dans ce exercice on étudiera la Commutation Ethernet.
+\noindent Dans ce exercice on étudiera l'Adressage IP.\\
+
+Les assurances Mondass s'installent dans leurs nouveaux locaux de Moulinsart, qui viennent d'être câblées. Il faut installer 150 machines réparties de cette manière:
+\begin{enumerate}
+    \item \textbf{Bâtiment A}:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{1er Étage}: 30;
+        \item \texttt{2ième Étage}: 25;
+        \item \texttt{3ième Étage}: 50;
+    \end{enumerate}
+    
+    \item \textbf{Bâtiment B}:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{1er Étage}: 15;
+        \item \texttt{2ième Étage}: 30;
+    \end{enumerate}
+\end{enumerate}
+Le directeur du service informatique propose de connecter tous les équipements vers des commutateurs Ethernet au niveau d'un local technique pour chaque étage.\\
+
+Il a obtenu la classe C 193.215.124.0 de son fournisseur de service. Il pense que le plus simple serait de segmenter le réseau en sous-réseaux correspondant chacun à un étage de chaque bâtiment.
+
 
 \subsection*{Question 1}
 \begin{exercise}
-    On considère
+    Quel est l'avantage de cette division en sous-réseaux ?
 \end{exercise}
+\begin{resolution}
+    C'est une division facile à comprendre car si on connaît le sous réseau on connaît par consequence sa localisation physique dans le terrain.
+\end{resolution}
+
+\subsection*{Question 2}
+\begin{exercise}
+    Que pensez vous de cette solution « Un étage = Un sous-réseau » ?
+\end{exercise}
+\begin{resolution}
+    Il semble une bonne solution, il faut essayer un plan d'adressage pour valider si c'est viable et faisable avec le réseau classe C propose.
+\end{resolution}
 
 \newpage
+\subsection*{Question 3}
+\begin{exercise}
+    Proposez un plan d'adressage pour les équipements.
+\end{exercise}
 \begin{resolution}
-    On suppose
+    On suppose que c'est mask variable. En suite il faut recalculer la quantité d'adresses nécessaires pour chaque sous-réseau:
+    \begin{enumerate}
+        \item \textbf{Bâtiment A}:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{A1)}, 33 adresses nécessaires: sous-réseau de 64 adresses;
+            \item \texttt{A2)}, 28 adresses nécessaires: sous-réseau de 32 adresses;
+            \item \texttt{A3)}, 53 adresses nécessaires: sous-réseau de 64 adresses;
+        \end{enumerate}
+        
+        \item \textbf{Bâtiment B}:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{B1)}, 18 adresses nécessaires: sous-réseau de 32 adresses;
+            \item \texttt{B2)}, 33 adresses nécessaires: sous-réseau de 64 adresses;
+        \end{enumerate}
+    \end{enumerate}
+    Il faut considérer 3 adresses supplémentaires pour chaque sous-réseau:
+    \begin{enumerate}[noitemsep]
+        \item 1x \textbf{adresse routeur}: identification machine;
+        \item 1x \textbf{adresse broadcast}: communication en diffusion;
+        \item 1x \textbf{adresse sous-réseau}: identification réseau;
+    \end{enumerate}
+    \begin{remark}
+        L'inclusion d'une adresse de sous-réseau n'est pas toujours obligatoire, c'est une recommendation.
+    \end{remark}
+    Après il faut choisir la taille de MASK, et par consequence, la quantité totale d'adresses disponibles pour comporte chaque sous-réseau:
+    \begin{enumerate}
+        \item \textbf{Bâtiment A}:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{A1)}: sous-réseau de 64 adresses;
+            \item \texttt{A2)}: sous-réseau de 32 adresses;
+            \item \texttt{A3)}: sous-réseau de 64 adresses;
+        \end{enumerate}
+        
+        \item \textbf{Bâtiment B}:
+        \begin{enumerate}[noitemsep]
+            \item \texttt{B1)}: sous-réseau de 32 adresses;
+            \item \texttt{B2)}: sous-réseau de 64 adresses;
+        \end{enumerate}
+    \end{enumerate}
+    \begin{remark}
+        On choisit la puissance de 2 plus grand que la quantité nécessaire d'adresses la plus proche. On peut utiliser le tableau suivant:
+        \begin{table}[H]
+            \centering\begin{tabular}{rlll}
+                sous-réseau & mask & quantité adresses & quantité sous-réseau\\
+                \hline
+                193.215.124.000/24 & 24 & 256 & 1\\
+                193.215.124.128/25 & 25 & 128 & 2\\
+                193.215.124.192/26 & 26 & 64  & 4\\
+                193.215.124.224/27 & 27 & 32  & 8\\
+                193.215.124.240/28 & 28 & 16  & 16\\
+                193.215.124.248/29 & 29 & 8   & 32\\
+                193.215.124.252/30 & 30 & 4   & 64\\
+                193.215.124.254/31 & 31 & 2   & 128\\
+                193.215.124.255/32 & 32 & 1   & 256\\
+                \hline 
+            \end{tabular}
+            \caption{Relation de Sous-Réseaux}
+        \end{table}
+    \end{remark}
+    Après il faut ordonner comment les sous-réseaux seront adresses. On commence avec les réseaux de plus grand taille à cause de la mask. Au fur et a mesure que des nouveaux adresses sont ajoutés on peut seulement augmenter le valeur de la masque. On considère l'ordre suivant: A1, A3, B2, A2, B1.
+    \begin{remark}
+        Quand il y a des sous-réseau avec la même taille l'ordre est arbitraire.
+    \end{remark}  
+    De cette façon on propose l'adressage suivante:
+    \adressTable{A1}{000}{001}{062}{063}{192}{26}
+    \begin{remark}
+        Par convention on considère que l'adresse de sous-réseau sera le première et l'adresse de broadcast sera le dernière. 
+    \end{remark}
+    \adressTable{A3}{064}{065}{126}{127}{192}{26}
+    \begin{remark}
+        Quand un sous-réseau termine une autre commence, les adresses sont séquentielles. 
+    \end{remark}
+    \adressTable{B2}{128}{129}{190}{191}{192}{26}
+    \begin{remark}
+        L'adresse finale sera: adresse initiale plus taille du sous-réseau moins 1 car le premier adresse est inclue.
+    \end{remark}
+    \adressTable{A2}{192}{193}{222}{223}{224}{27}
+    \adressTable{B1}{224}{225}{254}{255}{224}{27}
+
+
+    \begin{definition}
+        \textbf{Mask Variables} c'est une Mask qui peut changer de taille pour chaque sous-réseau dans une réseau.
+    \end{definition}
+\end{resolution}
+
+\section*{Exercice 2}
+Le directeur des assurances Mondass, vous confie la mission de proposer un plan d'adressage pour la migration de son entreprise à l'IP. L'adresse 193.252.0.0/16 sera utilisée pour l'Intranet de l'entreprise:
+\begin{itemize}
+    \item Cette entreprise comprend 4 sites distribués sur toute la France, mais d'autres sites sont prévus en Europe par le biais d'échanges de capitaux ou d'acquisitions d'entreprises.  Un maximum de 4 sites est à prévoir dans les années à venir. Si la croissance s'accentue, une nouvelle plage d'adresse sera attribuée.
+    \item Après enquête, il apparaît que les différents sites contiennent entre 300 et 2000 machines, toutes équipées de cartes Ethernet.
+    \item Les constructeurs vous recommandent de ne pas placer plus de 100 équipements environ par sous-réseau IP.
+    \item Finalement, il est nécessaire de donner aux différents sous-réseaux appartenant à un même site un préfixe d'adresse commun de manière à simplifier le routage dans le réseau fédérateur permettant d'interconnecter les différents sites.
+\end{itemize}
+\subsection*{Question 1}
+\begin{exercise}
+    Pour quelles raisons vous est-il recommandé de ne pas placer plus de 100 machines par sous-réseau IP ?
+\end{exercise}
+\begin{resolution}
+    C'est recommandé de ne pas placer plus de 100 machines à cause des perturbations de réseau et la possibilité de interference quand plusieurs machines se communiquent.
+\end{resolution}
+    
+
+\subsection*{Question 2}
+\begin{exercise}
+    Proposez un plan d'adressage pour l'entreprise (site, sous-réseau, machine). Utilisez la notation CIDR (id est 193.252.32.0/19, 193.252.33.0/24, etc.). Précisez en particulier l'adresse des machines A, B, C, D, E, F ci-dessous.
+\begin{itemize}[noitemsep]
+    \item A : Machine 25, sous-réseau 2, site 1;
+    \item B : Machine 26, sous-réseau 2, site 1;
+    \item C : Machine 52, sous-réseau 10, site 1;
+    \item D : Machine 23, sous-réseau 10, site 2;
+    \item E : Machine 4, sous-réseau 11, site 3;
+    \item F : Machine 4, sous-réseau 11, site 4;
+\end{itemize}
+\end{exercise}
+\begin{resolution}
+    
+\end{resolution}
+
+\subsection*{Question 3}
+\begin{exercise}
+    Les sites 2, 3 et 4 sont interconnectés par des liaisons spécialisées au site 1 (maison mère à Moulinsart). Ces liaisons se terminent au niveau d'un routeur, comme le montre la figure suivante. Représenter la table de routage de ce routeur avec le format suivant :
+    \begin{table}[H]
+        \centering\begin{tabular}{clll}
+            (Site) & Préfixe d'adresse & Masque & Interface de sortie\\
+            \hline
+            1 & 193.252.... & 255.255.... & I0\\
+            2 & 193.252.... & 255.255.... & I1\\
+            3 & 193.252.... & 255.255.... & I2\\
+            4 & 193.252.... & 255.255.... & I3\\
+            ... & ... & ... & ...\\
+            \hline
+        \end{tabular}
+    \end{table}
+\end{exercise}
+\begin{resolution}
+
 \end{resolution}
 \end{document}
