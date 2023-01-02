@@ -33,83 +33,52 @@
 \section*{Exercice 1}
 \noindent Dans ce exercice on étudiera Routage et Protocole ARP.\\
 
-On considère qu'un dispositif a la table de connections suivante:
-\begin{table}[H]
-    \centering\begin{tabular}{lll | ll}
-        Destination   & Mask Gateway    & Device        & First Address & Last Address\\
-        \hline
-        default       & 0.0.0.0         & 137.194.192.14 \\
-        127.0.0.1     & 255.255.255.255 & 127.0.0.1      \\
-        \hline
-        137.194.160.0 & 255.255.254.0   & 137.194.160.3 & 137.194.160.1 & 137.194.161.255\\
-        137.194.168.0 & 255.255.254.0   & 137.194.168.1 & 137.194.168.1 & 137.194.169.255\\
-        137.194.192.0 & 255.255.254.0   & 137.194.192.1 & 137.194.192.1 & 137.194.193.255\\
-        137.194.200.0 & 255.255.254.0   & 137.194.200.1 & 137.194.200.1 & 137.194.201.255\\
-        137.194.204.0 & 255.255.254.0   & 137.194.204.1 & 137.194.204.1 & 137.194.205.255\\
-        \hline
-    \end{tabular}
-\end{table}
-
-\begin{remark}
-    On considère l'adresse $137.194.192.22$ comme la \textbf{Notation Décimale} pointée.
-\end{remark}
-\begin{remark}
-    On considère l'adresse $000.000.000.000$/x. x est la \textbf{Masque d'Adressage} e représente combien de bits de l'adresse sont immutables à compter du MSB en direction au LSB.
-\end{remark}
-\begin{remark}
-    On considère que le premier adresse sera \textbf{l'Adresse du Sous-Réseau}.
-\end{remark}
-\begin{remark}
-    On considère que le dernier adresse sera \textbf{l'Adresse de Diffusion}, Broadcast.
-\end{remark}
-
-Ça donne le diagramme suivant:
-\begin{figure}[H]
-    \centering\begin{tikzpicture}[]
-        % modules
-        \node[module] (R0) {137.194.192.14};
-        \node[module, right= of R0] (SR0) {137.194.192.0/23};
-        
-        \node[module, above right=5mm of SR0] (SR1) {137.194.200.0/23};
-        \node[module, above=5mm of SR0] (SR2) {137.194.204.0/23};
-
-        \node[module, below right=5mm of SR0] (SR3) {137.194.168.0/23};
-        \node[module, below=5mm of SR0] (SR4) {137.194.160.0/23};
-        
-        % connections
-        \foreach \i in {1,2,3,4}
-            \draw[<->] (SR0)--(SR\i);
-        \draw[<->] (R0)--(SR0);
-    \end{tikzpicture}
-\end{figure}
-
-Cette machine cherche à joindre les équipements: 137.194.160.85, 137.194.161.122, 137.194.204.22 et 137.194.20.10.\\
-
-On note que les adresses 137.194.160.85, 137.194.161.122 et 137.194.204.22 sont dans l'intervale d'adresses valables pour le sous-réseau correspondant. Dans ce-cas là on a le premier cas de requête ARP.\\
-
-On note que l'adresses 137.194.20.10 n'est pas dans l'intervale d'adresses valables pour les sous-réseaux. Dans ce-cas là on a le deuxième cas de requête ARP.
-
 \subsection*{Question 1}
 \begin{exercise}
     Pour chaque sous réseau raccordé à la station, identifier le netmask, l'adresse du sous réseau et l'adresse de diffusion du sous réseau (en notation décimale pointée).
 \end{exercise}
 \begin{resolution}
-
+    On considère qu'un dispositif a la table de connections suivante:
+    \begin{table}[H]
+        \centering\begin{tabular}{rl | rl}
+            Sous-Réseau & Mask    & First Address & Last Address\\
+            \hline\hline
+            137.194.160.0 & 255.255.254.0 & 137.194.160.1 & 137.194.161.255\\
+            137.194.168.0 & 255.255.254.0 & 137.194.168.1 & 137.194.169.255\\
+            137.194.192.0 & 255.255.254.0 & 137.194.192.1 & 137.194.193.255\\
+            137.194.200.0 & 255.255.254.0 & 137.194.200.1 & 137.194.201.255\\
+            137.194.204.0 & 255.255.254.0 & 137.194.204.1 & 137.194.205.255\\
+            \hline
+        \end{tabular}
+    \end{table}
+    
+    \begin{remark}
+        On considère l'adresse $137.194.192.22$ comme la \textbf{Notation Décimale} pointée.
+    \end{remark}
+    \begin{remark}
+        On considère l'adresse $000.000.000.000$/x. x est la \textbf{Masque d'Adressage} e représente combien de bits de l'adresse sont immutables à compter du MSB en direction au LSB.
+    \end{remark}
+    \begin{remark}
+        On considère que le premier adresse sera \textbf{l'Adresse du Sous-Réseau}.
+    \end{remark}
+    \begin{remark}
+        On considère que le dernier adresse sera \textbf{l'Adresse de Diffusion}, Broadcast.
+    \end{remark}
 \end{resolution}
 
 \subsection*{Question 2}
 La présence de plusieurs interfaces sur cette machine rend nécessaire l'activation du routage. La commande netstat -rn retourne le contenu de la table de routage de la machine courante. Les informations suivantes sont alors retournées :
 \begin{table}[H]
-    \centering\begin{tabular}{lll}
-        Destination & Mask Gateway & Device\\
+    \centering\begin{tabular}{lll |l}
+        Destination & Mask & Gateway & Device\\
         \hline
-        137.194.168.0 & 255.255.254.0   & 137.194.168.1\\
-        137.194.200.0 & 255.255.254.0   & 137.194.200.1\\
-        137.194.204.0 & 255.255.254.0   & 137.194.204.1\\
-        137.194.160.0 & 255.255.254.0   & 137.194.160.3\\
-        137.194.192.0 & 255.255.254.0   & 137.194.192.1\\
-        default       & 0.0.0.0         & 137.194.192.14\\
-        127.0.0.1     & 255.255.255.255 & 127.0.0.1\\
+        137.194.168.0 & 255.255.254.0   & 137.194.168.1 & qfe2\\
+        137.194.200.0 & 255.255.254.0   & 137.194.200.1 & qfe3\\
+        137.194.204.0 & 255.255.254.0   & 137.194.204.1 & qfe1\\
+        137.194.160.0 & 255.255.254.0   & 137.194.160.3 & hme0\\
+        137.194.192.0 & 255.255.254.0   & 137.194.192.1 & qfe0\\
+        default       & 0.0.0.0         & 137.194.192.14 & -\\
+        127.0.0.1     & 255.255.255.255 & 127.0.0.1 & lo0\\
         \hline
     \end{tabular}
 \end{table}
@@ -120,6 +89,41 @@ La présence de plusieurs interfaces sur cette machine rend nécessaire l'activa
     \end{itemize}
     Même question pour les destinations 137.194.161.122, 137.194.204.22 et 137.194.20.10.
 \end{exercise}
+\begin{resolution}
+    Avec les données de la dernière table on a le diagramme suivant:
+    \begin{figure}[H]
+        \centering\begin{tikzpicture}[]
+            % modules
+            \node[module] (R0) {137.194.192.14};
+            
+            \node[module, above right=5mm of R0] (SR1) {137.194.200.0/23};
+            \node[module, above=5mm of R0] (SR2) {137.194.204.0/23};
+            
+            \node[module, right= of R0] (SR0) {137.194.192.0/23};
+            
+            \node[module, below right=5mm of R0] (SR3) {137.194.168.0/23};
+            \node[module, below=5mm of R0] (SR4) {137.194.160.0/23};
+            
+            % connections
+            \foreach \i in {0,1,2,3,4}
+                \draw[<->] (R0)--(SR\i);
+        \end{tikzpicture}
+    \end{figure}
+    On suppose que au début la Table ARP était vide. Quand la machine cherche l'équipement 137.194.160.85 il regarde sa Table ARP et ne trouve pas l'équipement.
+    \begin{remark}
+        Table ARP estoque sur chaque machine à relation d'adresses Ethernet's, MAC, physique de chaque équipement et son respective adresse IP.
+    \end{remark}
+    Il faudrait faire une requête ARP en envoyant une signale en diffusion sous le réseau 137.194.160.0/23 pour trouver l'adresse Ethernet du dispositif. Après la réception la machine recevra l'adresse MAC du dispositif 137.194.160.85.
+    \begin{remark}
+        On dit que ce mechanism est le première type de requête ARP.
+    \end{remark}
+    Le même se passera pour les adresses 137.194.161.122 et 137.194.204.22 car ils sont dans le même réseau.\\
+
+    Par contre l'adresse 137.194.20.10 n'est pas directement raccordée à la machine locale. D'autre part, son entrée n'apparaît explicitement pas dans la table de routage. La machine locale va donc décider d'envoyer ce paquet vers le routeur par défaut (ici la machine d'adresse IP 137.194.192.14). La paquet IP sera encapsulé dans une trame Ethernet dont l'adresse destination est l'adresse Ethernet du routeur.
+    \begin{remark}
+        On dit que ce mechanism est le deuxième type de requête ARP.
+    \end{remark}
+\end{resolution}
 
 
 \section*{Exercise 2}
