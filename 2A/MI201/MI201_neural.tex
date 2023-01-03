@@ -53,9 +53,14 @@ C'est possible d'avoir plusieurs fonctions à partir de la \textbf{relu} comme
 \end{equation}
 \begin{equation}
     \| \mathbf{x}  \|_{1} = |x_{1}| + |x_{2}| = 
+    relu((1,0)\cdot\mathbf{x}) + relu((-1,0)\cdot\mathbf{x}) + 
+    relu((0,1)\cdot\mathbf{x}) + relu((0,-1)\cdot\mathbf{x})
 \end{equation}
 \begin{equation}
-    \min(x, y) = relu(x-y)\frac{x}{x-y} + relu(y-x)\frac{y}{y-x}
+    \max(x, y) = relu(x-y)\frac{x}{x-y} + relu(y-x)\frac{y}{y-x}
+\end{equation}
+\begin{equation}
+    \min(x, y) = relu(x-y)\frac{y}{x-y} + relu(y-x)\frac{x}{y-x}
 \end{equation}
 
 Comme les réseaux de neurones sont beaucoup utilises on peut faire une modification de structure pour implémenter le \textbf{Deep Learning}:
