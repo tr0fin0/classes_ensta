@@ -91,12 +91,45 @@ On classifiée l'Arbre de Décision en:
     \item \textbf{Classification}: les outputs sont des categories;
     \item \textbf{Regression}: les outputs sont des numéros;
 \end{enumerate}
+À chaque noeud on choisit le test $T$ qui maximise le gain en homogénéité:
+\begin{equation}
+    T = \arg_{T}\max(Gain(D, T))
+\end{equation}
+Où:
+\begin{enumerate}[noitemsep]
+    \item $D$: population de données;
+    \item $Gain(D, T)$: gain of the test T in the population D:
+    \begin{equation}
+        Gain(D, T) = I(D) - \sum_{i} (p(D_{i}|D, T) \cdot I(D_{i}))
+        \qquad\text{où}\qquad
+        p(D_{i}|D, T) = \frac{|D_{i}|}{|D|}
+    \end{equation}
+    Où:
+    \begin{enumerate}[noitemsep]
+        \item $I(D)$: Critère d'Hétérogénéité;
+        \item $p(D_{i}|D, T)$: Proportion de Données dans D sélectionnées par la branche $i$;
+    \end{enumerate}
+\end{enumerate}
 La décision sera fait à partir d'une critère arbitraire, entre les plus communs on a:
 \begin{enumerate}[noitemsep]
     \item \textbf{Indice de Gini}: seulement pour une arbre binaire;
+    \begin{equation}
+        I(D) = \sum_{i} p_{i}(D)\cdot(1- p_{i}(D))
+    \end{equation}
+    \item \textbf{Indice d'Erreur};
+    \begin{equation}
+        I(D) = 1 - \max_{i} (p_{i}(D))
+    \end{equation}
     \item \textbf{Entropie};
+    \begin{equation}
+        I(D) = -\sum_{i} p_{i}(D)\cdot\log_{2}(p_{i}(D))
+    \end{equation}
 \end{enumerate}
-
+À la fin on aura une division des données qui peut se rassembler à le suivant:
+\begin{figure}[H]
+    \centering\includegraphics[height=50mm]{images/tree_diagram.png}
+    \caption{Representation Division}
+\end{figure}
 La choix de la profondeur p de l'Arbre de Décision déterminera la qualité de la prédiction. Si on augment p la prediction améliore. Généralement on aura le comportement suivant:
 \begin{table}[H]
     \centering\begin{tabular}{lll}
@@ -165,10 +198,16 @@ Comme les Arbres de Décision ont une tendance au surapprentissage on peut utili
 \end{definition} 
 
 \subsubsection{Avantages}
-Dans ce cas, cet algorithme 
+On peut citer:
+\begin{enumerate}[noitemsep, rightmargin=\leftmargin]
+    \item representation facile à comprendre;
+\end{enumerate}
 
 \subsubsection{Incovenients}
-Dans ce cas, cet algorithme à une tendance au sur-apprentissage.
+On peut citer:
+\begin{enumerate}[noitemsep, rightmargin=\leftmargin]
+    \item tendance au sur-apprentissage;
+\end{enumerate}
 
 \subsubsection{Applications}
 Cet algorithme n'est que utilise dans le cadre de problèmes de classification.
