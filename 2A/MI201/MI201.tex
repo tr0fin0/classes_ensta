@@ -33,9 +33,44 @@
 
 \subsection{Supervised Learning}
 \subsubsection{kNN, k Nearest Neighbours}
+La choix de k déterminera la qualité de la prédiction. Si on augmente k la qualité de la prediction améliore et le sur-apprentissage diminue. Généralement on aura le comportement suivant:
+\begin{table}[H]
+    \centering\begin{tabular}{lll}
+        k $\uparrow  $ & biais $\uparrow  $ & variance $\downarrow$\\
+        k $\downarrow$ & biais $\downarrow$ & variance $\uparrow$\\
+    \end{tabular}
+    \caption{Comportement kNN}
+\end{table}
+
 \subsubsection{Decision Trees}
+La choix de la profondeur p de l'Arbre de Décision déterminera la qualité de la prédiction. Si on augment p la prediction améliore. Généralement on aura le comportement suivant:
+\begin{table}[H]
+    \centering\begin{tabular}{lll}
+        p $\uparrow$   & biais $\downarrow$ & variance $\uparrow$\\
+        p $\downarrow$ & biais $\uparrow  $ & variance $\downarrow$\\
+    \end{tabular}
+    \caption{Comportement Decision Tree}
+\end{table}
+
 \subsubsection{SVM, Support Vector Machines}
+Généralement on aura le comportement suivant:
+\begin{table}[H]
+    \centering\begin{tabular}{rlll}
+        merge rigide & C $\uparrow$   & biais $\downarrow$ & variance $\uparrow$\\
+        merge soupe  & C $\downarrow$ & biais $\uparrow  $ & variance $\downarrow$\\
+    \end{tabular}
+    \caption{Comportement SVM}
+\end{table}
+
 \subsubsection{Neural Networks}
+La choix de n déterminera la qualité de la prédiction. Si on réduire n la qualité de la prediction améliore et le sur-apprentissage diminue. Généralement on aura le comportement suivant:
+\begin{table}[H]
+    \centering\begin{tabular}{lll}
+        n $\uparrow$   & biais $\downarrow$ & variance $\uparrow$\\
+        n $\downarrow$ & biais $\uparrow  $ & variance $\downarrow$\\
+    \end{tabular}
+    \caption{Comportement Neural Network}
+\end{table}
 
 \subsection{Semi-Supervised Learning}
 \subsubsection{Linear Regression}
@@ -47,39 +82,39 @@
 \subsection{Reinforcement Learning}
 
 
-\section{Apprentissage}
-L'apprentissage automatique est une démarche de conception d'un prédicteur et par une modélisation ou programmation non explicité à partir d'exemples.
+% \section{Apprentissage}
+% L'apprentissage automatique est une démarche de conception d'un prédicteur et par une modélisation ou programmation non explicité à partir d'exemples.
 
-\subsection{Algorithme}
-On considère que l'algorithme peut être définie par la définition suivante:
-\begin{definition}
-    Generative Model;
-    Discriminative Model;
-\end{definition}
+% \subsection{Algorithme}
+% On considère que l'algorithme peut être définie par la définition suivante:
+% \begin{definition}
+%     Generative Model;
+%     Discriminative Model;
+% \end{definition}
 
-Généralement on aura le comportement suivant:
-\begin{table}[H]
-    \centering\begin{tabular}{lll}
-        k $\uparrow  $ & biais $\uparrow  $ & variance $\downarrow$\\
-        k $\downarrow$ & biais $\downarrow$ & variance $\uparrow$\\
-    \end{tabular}
-    \caption{Comportement Neural Network}
-\end{table}
+% Généralement on aura le comportement suivant:
+% \begin{table}[H]
+%     \centering\begin{tabular}{lll}
+%         k $\uparrow  $ & biais $\uparrow  $ & variance $\downarrow$\\
+%         k $\downarrow$ & biais $\downarrow$ & variance $\uparrow$\\
+%     \end{tabular}
+%     \caption{Comportement Neural Network}
+% \end{table}
 
-\subsubsection{Avantages}
-Dans ce cas, cet algorithme 
+% \subsubsection{Avantages}
+% Dans ce cas, cet algorithme 
 
-\subsubsection{Incovenients}
-Dans ce cas, cet algorithme 
+% \subsubsection{Incovenients}
+% Dans ce cas, cet algorithme 
 
-\subsubsection{Applications}
-Cet algorithme est souvent utilisé 
+% \subsubsection{Applications}
+% Cet algorithme est souvent utilisé 
 
 
-\subsection{Initialization}
-\subsection{Visualization}
-caractéristiques sont des features
-\subsection{Training}
+% \subsection{Initialization}
+% \subsection{Visualization}
+% caractéristiques sont des features
+% \subsection{Training}
 
 
 
