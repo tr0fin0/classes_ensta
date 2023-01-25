@@ -23,10 +23,76 @@
 % \subfile{C:/Users/Admin-PC/Documents/git_repository/classes_ensta/intro.tex}
 \subfile{/home/tr0fin0/Documents/git_repositories/classes_ensta/intro.tex}
 % \subfile{/home/Documents/git_repositories/classes_ensta/intro.tex}
+
+https://github.com/JuvignyEnsta/IN203_SUPPORT_COURS
+https://github.com/JuvignyEnsta/Promotion_2022
+
+
 07/03 examen écrit
 21/03 examen algorithme
 projet
+jean-didier.garaud@onera.fr
 
+
+
+différent configurations pour la constrution d'une système parallele
+    bus partager
+        plus facile
+        moins efficace
+        conflit d'information entre les différents processeurs
+
+latency memory example haswell architecture
+l1 cache
+l2 cache
+l3 cache
+ram
+swap
+
+la vélocité est inverse à la taille
+plus grand, plus lente
+plus petit, plus rapide
+
+solutions pour résoudre le problème, temps d'accès, de mémoire
+    interleaved RAMS
+        many physical memory units interleaved by the memory bus
+        number of physical memory units
+        number of contiguous bytes in a unique physique memory
+
+        utilise la mémoire pendant qu'on attend la réception d'une information d'une requeté anterieur
+
+    cache memory fast small memory unit where one stores temporary data
+        when multiple access to a same variable in a short time, speedup the read or write access
+        cache memory managed by the CPU
+
+        to optimize his program the programmer must know the strategies used by the CPU
+
+        associative memory cache each cache memory address mapped on fixed RAM address with a modulo
+
+UC calculus unit
+
+problème de coerance de cache
+\href{https://en.wikipedia.org/wiki/Cache_coherence}{cache coherence}
+
+#include <mpi.h> // assembly of library used for parallel programming
+
+it must precise what type of data is used because different machines can have different endiness and memory configuration, parallel computing was conceived to work in heterogenous machines
+
+
+
+interlocking, interblocage
+situation where many processes are waiting each other for an infinite time to complete their messages
+I uppercase in a command is a non blocking function
+
+
+Distributed parallel rules
+    ethernet data exchange is very slow compared to memory access limit as possible the data exchanges
+    to hide data exchange cost it's better to compute some values during the exchange of data : prefer to use non blocking message exchange
+    each message has an initial cost: prefer to regroup data in a temporary buffer if needed
+    all processes quit the program at the same time: try to balance the computing load among computing nodes
+
+
+TD 1
+https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf
 
 
 

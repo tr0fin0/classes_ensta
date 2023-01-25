@@ -1,0 +1,85 @@
+\documentclass{article}
+% \usepackage{C:/Users/guitr/Documents/git_repositories/tpack/tpack}
+% \usepackage{C:/Users/Admin-PC/Documents/git_repository/tpack/tpack}
+\usepackage{/home/tr0fin0/Documents/git_repositories/tpack/tpack}
+% \usepackage{/home/Documents/git_repositories/tpack/tpack}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+
+\title{OS202 - Programming Parallel Computers}
+\project{Résumé Théorique}
+\author{Guilherme Nunes Trofino}
+\authorRA{2022-2024}
+
+
+\makeatletter
+\begin{document}\selectlanguage{french}
+\maketitle
+\setlength{\parindent}{0pt}
+
+\newpage\tableofcontents
+
+\section{Introduction}
+% \subfile{C:/Users/guitr/Documents/git_repositories/classes_ensta/intro.tex}
+% \subfile{C:/Users/Admin-PC/Documents/git_repository/classes_ensta/intro.tex}
+\subfile{/home/tr0fin0/Documents/git_repositories/classes_ensta/intro.tex}
+% \subfile{/home/Documents/git_repositories/classes_ensta/intro.tex}
+
+https://github.com/JuvignyEnsta/IN203_SUPPORT_COURS
+https://github.com/JuvignyEnsta/Promotion_2022
+
+lscpu commande pour avoir des informations sur l'ordinateur, plus précisement avec les CPUs.
+chercher hyperthreading
+
+TD 1
+https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf
+
+presenter le TD
+presenter les caracteristiques de mon ordinateur pour justifier des conditions differents pour les essayes
+
+question 1
+    sans changement d'ordre ijk
+        1023 1.17911 1815.94
+        1024 2.89563  741.63
+        1025 1.22712 1755.14
+
+        2047  9.9369 1726.37
+        2048 33.1686 517.956
+        2049 10.2921 1671.68
+
+    on note qu'il y a une grand différence entre l'exécution d'une programme avec une matrix de puissances de 2
+
+    TODO justifier la différence de performance
+        memoire cache associative
+        quand il cherche une valeur, il guarde les valeurs proches
+        matrixes stoques par colognes
+        avec multiples de 2 il fau recopier les données par chaque fois qu'on a besoin d'information
+        comme l'addressage est fait à partir du module des informations 
+
+question 2
+    changement d'ordre jik
+        1023 1.26207 1696.58
+        1024 3.01302 712.735
+        1025 1.37956 1561.21
+
+        2047 23.6272 726.057
+        2048 70.8302 242.55
+        2049 24.7906 694.016
+    
+essayer avec les parties de la matrice
+regarder le fichier Transparent / examples pour avoir des programmes utilise
+essayer avec la librairie #pragemomp parallel for
+#pragma omp parallel for ... parallelise les for au dessous de la ligne de pragma
+
+
+BLAS libraire pour faire mieux les operations de multiplication de matrice en considerant les caracteristiques de l'ordinateur
+
+
+
+partie 2
+tous les questions sont dans les examples et propablement sur youtube, pas trop difficile a faire
+
+
+\subsection{Information Matier}
+\paragraph{Référence}Dans cette matière le but sera de comprendre comment une Système d'Exploitation marche.
+
+\end{document}
