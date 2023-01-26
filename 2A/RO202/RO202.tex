@@ -27,7 +27,167 @@
 \subsection{Information Matier}
 \paragraph{Référence}Dans cette matière le but sera de comprendre comment une Système d'Exploitation marche.
 
+ensemble des méthodes et techniques rationnelles orientées vers la recherche du meilleur choix
 
+optimisation combinatoire: https://en.wikipedia.org/wiki/Combinatorial_optimization
+
+objectif du étude
+maximiser ou minimiser une fonction objectif tout en respectant un ensemble de contraintes
+
+problème discrete et continuos
+
+optimisation des graphes
+    arbre couvrant
+    chemin
+    flot
+programmation linéaire
+programmation linéaire
+    en nombres entiers
+
+
+definition des graphes
+    des points et des traots ou des flèches
+    une relation binaire
+    representation abstre des reseaux
+
+    G=(V,A)
+        ensemble sommets
+        ensemble d'arcs
+
+        sucesseur et predecesseurs
+        gama(v)= {successeurs du somme}
+        gama-1(v)= {predecesseurs du somme}
+
+    on utikise des graphes simples, pas paralelel
+
+    graphe value cosidere
+
+
+circuit
+chemin
+racine existe un chemin de r  tut autre
+degree
+
+chaine sequence d'aretes telle qu'il existe un sequence de sommets telle que ei (ajouter la math)
+exemple de la etoile n'est pas une chaine
+
+voisinage les sommestx et y sont dits voisins si [xy] in E
+N(x) voisins de x
+d(x) = |N(x)|
+
+cycle élémentaire chaine dont les deux extremites coincident
+
+(faire le memse dessins et chapitres avec les donnes orientes et pas orientes avec chaqu'une avec uns section)
+
+hypotheses pour la suite
+les graphes sont simplesles cycles sont elementaires
+les graphes 
+
+connexite relation soit x et y deux sommets d'un graphe G=(V, A) xRy iff x y sont relies par une chaine
+
+composante connexe r est une relation d'equivalence dont les classes d'équivalences sont appélles compossantes connexes
+
+arbre
+graphe ----- connexe et ---- sans cycles
+theoreme avec des explications téoriques plus précises
+forêt
+graphe ----
+
+arborescence
+arbre possédant une racine r telle que r est reliée à tout v in V par un chemin unique
+arborescence = "arbre enraciné"= "arbre" en informatique
+
+arbre couvrant de poids minimal
+    graphe non orienté valué
+    objets à relier
+    liens possibles
+    longueur du lien
+sélectionner des arêtes d'un graphe orienté valué G=(V, E, p) afin de former un arbre
+solution optimale arbre couvrant de poids minimal
+arbre praphe sans cycle et connexe
+couvrant passant par tous les sommetsminimal avoir les poids les moins grand
+
+
+algorithme de kruskal
+données
+
+résultat
+
+complexe O(m log m)
+
+p(v) leq p(u)
+p(v) geq p(u)
+docn p(v) eq p(u)
+
+est un algorithme glouton
+    a chaque étape faire le choix le plus intéressant à cet instant et ne plus le remettre en question
+        facile 
+        rapide
+        rarement optimale
+            l'arbre couvrant de poids minimal est une exception
+            algorithme dit heuristique
+        choix gouton choix localement optimal et pas globalment 
+
+    detecter des cycles c'est une fonction important et essential pou rle fonctionnement des algoorithmes
+
+
+
+complexité du algorithme
+problème facile à résoudre sera résoudre avec une complexité polynomiale au maximale
+on ne connaît aucun algorithme permettant de résoudre P en un nombre polynomial d'étapes
+
+
+voyageur de commerce
+comment passer un e fois par chaque ville tout en minimisant la longueur totale parcourue
+on cherche un cycle hamiltonien de valeur minimale
+passant par tous les sommets
+
+
+cheminement
+définir les problèmes différents possibles
+
+
+circuit absorbant: somme des poids est négatif
+théorème il existe un chemin de longueur minimale finie de r à tous les sommets du graphe
+si et seulement si r est une racine du praphe et le praphe ne contient pas de circuit absorbant
+
+algorithme de dijkstra
+construire une arborescence H(V, A2) dont r est la racine et correspondant au plus court chemin entre r et les autres sommets
+le plus court chemin entre r et son sommet le plus proche v est p(r,v)
+même raisonnement pour le sommet le plus proche de r ou v
+on répète cette idée jusqu'à ce que
+    problème 1: le sommet cible soit atteint
+    problème 2: tous les sommets soient atteints
+
+soient les applications pred(x) et pi (x)
+    où pred est le prédécesseur de x sur le meilleur chemin connu de r à x
+    longueur du meilleur chemin connu entre r et x
+
+    les nombres négatifs ne marchent pas pour cette algorithme
+    minimisation avec les valeurs négatives est impossible
+
+
+
+algorithme de Bellman
+just pour des graphes sans circuits
+tri topologique des sommets d'un grapheordre toatl sur V tel que i précède j pour tout ij in A
+propriété on peut toujours trier topologiquement les osmmets d'un graphe sans circuit
+algorithme
+    le sommet de départ a pour valeur 0
+    à chaque itération: on value un sommet
+
+
+algorithme de roy-warshall-floyd
+problèmes 1, 2 et 3
+
+trouver le cheminement minimal entre toute paire de sommets pas de contraintes sur le graphe
+chercher chaque algoritme pour bien le compreendre et faire une définition précis de comment il marche et comment il est implement sur python
+
+
+faire le tableau de comparasion de chaque algorithme pour mieux visualiser comment chaque algorithme marche
+
+
+définition de graphy.py
 
 
 \end{document}
