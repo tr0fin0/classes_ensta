@@ -9,19 +9,20 @@
 
 
 namespace {
-  void prodSubBlocks(int iRowBlkA, int iColBlkB, int iColBlkA, int szBlock,
-                    const Matrix& A, const Matrix& B, Matrix& C) {
+  void prodSubBlocks(int iRowBlkA, int iColBlkB, int iColBlkA, int szBlock, const Matrix& A, const Matrix& B, Matrix& C) {
 
-    #pragma omp parallel
-    int i, j, k;
-    #pragma omp for
-
-    for (i = iRowBlkA; i < std::min(A.nbRows, iRowBlkA + szBlock); ++i)
+    #pragma omp parallel  // parallel declaration
+    {
+      int i, j, k;
+      omp_set_num_threads(20);
+      #pragma omp for     // declare for function as parallel
       for (j = iColBlkB; j < std::min(B.nbCols, iColBlkB + szBlock); j++)
         for (k = iColBlkA; k < std::min(A.nbCols, iColBlkA + szBlock); k++)
-          C(i, j) += A(i, k) * B(k, j);
+          for (i = iRowBlkA; i < std::min(A.nbRows, iRowBlkA + szBlock); ++i)
+            C(i, j) += A(i, k) * B(k, j);
+    const int szBlock = 32;
+    }
   }
-  const int szBlock = 32;
 }  // namespace
 
 Matrix operator*(const Matrix& A, const Matrix& B) {
