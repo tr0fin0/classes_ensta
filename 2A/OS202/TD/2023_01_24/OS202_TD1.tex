@@ -16,7 +16,7 @@
 \maketitle
 \setlength{\parindent}{0pt}
 
-\newcommand{\tableN}[3]{
+\newcommand{\tableN}[4]{
     \begin{table}[H]
         \centering\begin{tabular}{lrl}
             n & secondes & MFloops\\
@@ -25,6 +25,7 @@
             \hline
             #3
             \hline
+            #4
         \end{tabular}
         \caption{ordre \texttt{#1}}
     \end{table}
@@ -99,6 +100,8 @@ Ces données seront utilisés pour l'analyse des performances.
         2047 &  9.9369 & 1726.37\\
         2048 & 33.1686 & 517.956\\
         2049 & 10.2921 & 1671.68\\
+    }{
+        - & 9.7832 & 1371.45\\
     }
     On note qu'il y a une grand différence entre l'exécution avec une matrix de taille égale à une puissances de 2.\\
 
@@ -124,6 +127,8 @@ Ces données seront utilisés pour l'analyse des performances.
                 2047 &  9.9369 & 1726.37\\
                 2048 & 33.1686 & 517.956\\
                 2049 & 10.2921 & 1671.68\\
+            }{
+                - & 9.7832 & 1371.45\\
             }
         \end{minipage}
         \begin{minipage}[b]{0.3\textwidth}
@@ -135,6 +140,8 @@ Ces données seront utilisés pour l'analyse des performances.
                 2047 & 23.6272 & 726.057\\
                 2048 & 70.8302 & 242.55\\
                 2049 & 24.7906 & 694.016\\
+            }{
+                - & 20.8171 & 938.86\\
             }
         \end{minipage}
         \begin{minipage}[b]{0.3\textwidth}
@@ -146,6 +153,8 @@ Ces données seront utilisés pour l'analyse des performances.
                 2047 & 4.91225 & 3492.23\\
                 2048 & 5.02442 & 3419.27\\
                 2049 & 5.12015 & 3360.27\\
+            }{
+                - &  & \\
             }
         \end{minipage}
     \end{center}
@@ -160,6 +169,8 @@ Ces données seront utilisés pour l'analyse des performances.
                 2047 & 76.2133 & 225.088\\
                 2048 & 109.086 & 157.489\\
                 2049 & 73.7907 & 233.16\\
+            }{
+                - &  & \\
             }
         \end{minipage}
         \begin{minipage}[b]{0.3\textwidth}
@@ -171,6 +182,8 @@ Ces données seront utilisés pour l'analyse des performances.
                 2047 & 62.4818 & 274.555\\
                 2048 & 132.456 & 129.702\\
                 2049 & 73.0916 & 235.39\\
+            }{
+                - &  & \\
             }
         \end{minipage}
         \begin{minipage}[b]{0.3\textwidth}
@@ -182,6 +195,8 @@ Ces données seront utilisés pour l'analyse des performances.
                 2047 & 5.77844 & 2968.75\\
                 2048 & 5.63255 & 3050.11\\
                 2049 & 5.69804 & 3019.47\\
+            }{
+                - &  & \\
             }
         \end{minipage}
     \end{center}
@@ -214,8 +229,109 @@ Ces données seront utilisés pour l'analyse des performances.
 
 \newpage\subsection*{Question 3}
 \begin{resolution}
-    \href{https://stackoverflow.com/questions/22634121/openmp-c-matrix-multiplication-run-slower-in-parallel}
-    
+    a
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+...
+#pragma omp parallel  // parallel declaration
+{
+    int i, j, k;
+    omp_set_num_threads(8);
+    #pragma omp for     // declare for function as parallel
+    for (j = iColBlkB; j < std::min(B.nbCols, iColBlkB + szBlock); j++)
+      for (k = iColBlkA; k < std::min(A.nbCols, iColBlkA + szBlock); k++)
+        for (i = iRowBlkA; i < std::min(A.nbRows, iRowBlkA + szBlock); ++i)
+          C(i, j) += A(i, k) * B(k, j);
+    const int szBlock = 32;
+}
+...
+        \end{lstlisting}
+    \end{scriptsize}
+
+\begin{center}
+    \begin{minipage}[b]{0.3\textwidth}
+        \tableN{jki [1]}{
+            1023 & 0.0970206 & 22069.5\\
+            1024 & 0.1016900 & 21118.0\\
+            1025 & 0.1103160 & 19523.8\\
+        }{
+            2047 & 0.557667 & 30761.6\\
+            2048 & 0.455107 & 37749.1\\
+            2049 & 0.491632 & 34995.8\\
+        }{
+            - &  & \\
+        }
+    \end{minipage}
+    \begin{minipage}[b]{0.3\textwidth}
+        \tableN{jki [4]}{
+            1023 & 0.1024900 & 20891.8\\
+            1024 & 0.0908985 & 23625.1\\
+            1025 & 0.1195870 & 18010.2\\
+        }{
+            2047 & 0.497154 & 34505.9\\
+            2048 & 0.570854 & 30095.0\\
+            2049 & 0.500602 & 34368.7\\
+        }{
+            - &  & \\
+        }
+    \end{minipage}
+    \begin{minipage}[b]{0.3\textwidth}
+        \tableN{jki [8]}{
+            1023 & 0.0997595 & 21463.6\\
+            1024 & 0.1197250 & 17936.8\\
+            1025 & 0.1059470 & 20328.8\\
+        }{
+            2047 & 0.513362 & 33416.4\\
+            2048 & 0.471373 & 36446.5\\
+            2049 & 0.475105 & 36213.1\\
+        }{
+            - &  & \\
+        }
+    \end{minipage}
+\end{center}
+\begin{center}
+    \begin{minipage}[b]{0.3\textwidth}
+        \tableN{jki [12]}{
+            1023 & 0.0961568 & 22267.8\\
+            1024 & 0.0929003 & 23116.0\\
+            1025 & 0.0865847 & 24874.8\\
+        }{
+            2047 & 0.513362 & 31964.4\\
+            2048 & 0.479124 & 35856.8\\
+            2049 & 0.486361 & 35375.1\\
+        }{
+            - &  & \\
+        }
+    \end{minipage}
+    \begin{minipage}[b]{0.3\textwidth}
+        \tableN{jki [16]}{
+            1023 & 0.0848282 & 25241.6\\
+            1024 & 0.0990637 & 21677.8\\
+            1025 & 0.1216330 & 17707.3\\
+        }{
+            2047 & 0.513362 & 31244.3\\
+            2048 & 0.439260 & 39110.9\\
+            2049 & 0.483793 & 35561.8\\
+        }{
+            - &  & \\
+        }
+    \end{minipage}
+    \begin{minipage}[b]{0.3\textwidth}
+        \tableN{jki [20]}{
+            1023 & 0.0998027 & 21454.3\\
+            1024 & 0.1108460 & 19373.5\\
+            1025 & 0.1088740 & 19782.3\\
+        }{
+            2047 & 0.568054 & 30199.1\\
+            2048 & 0.473769 & 36262.1\\
+            2049 & 0.493240 & 34881.7\\
+        }{
+            - &  & \\
+        }
+    \end{minipage}
+\end{center}
+Informations utiles étaient prises de le site suivant: \href{https://stackoverflow.com/questions/22634121/openmp-c-matrix-multiplication-run-slower-in-parallel}{https://stackoverflow.com/}
 \end{resolution}
 
 \newpage\subsection*{Question 4}
