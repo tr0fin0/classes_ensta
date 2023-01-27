@@ -87,52 +87,161 @@ Ces données seront utilisés pour l'analyse des performances.
 % BLAS libraire pour faire mieux les operations de multiplication de matrice en considerant les caracteristiques de l'ordinateur
 
 
+\section{Produit Matrice-Matrice}
+\subsection*{Question 1}
+\begin{resolution}
+    Les tailles suivants on était essayés:
+    \tableN{ijk}{
+        1023 & 1.17911 & 1815.94\\
+        1024 & 2.89563 &  741.63\\
+        1025 & 1.22712 & 1755.14\\
+    }{
+        2047 &  9.9369 & 1726.37\\
+        2048 & 33.1686 & 517.956\\
+        2049 & 10.2921 & 1671.68\\
+    }
+    On note qu'il y a une grand différence entre l'exécution avec une matrix de taille égale à une puissances de 2.\\
 
-lscpu commande pour avoir des informations sur l'ordinateur, plus précisement avec les CPUs.
-chercher hyperthreading
+    Ce comportement peut être justifié avec la façon que la mémoire est gérer pour la CPU et pour la construction de la mémoire.\\
 
-TD 1
-https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf
+    Quand on utilise une variable à la position \texttt{i} c'est commun d'utiliser la variable à la position \texttt{i+1}. Le CPU considère ce principe et enregistre des variables en sequence.\\
 
-presenter le TD
-presenter les caracteristiques de mon ordinateur pour justifier des conditions differents pour les essayes
+    La mémoire est construit à partir des structures binaires donc elle aura une taille multiple de 2. Son addressage sera fait à partir du module de la taille de la mémoire.\\
 
-question 1
-    sans changement d'ordre ijk
-        1023 1.17911 1815.94
-        1024 2.89563  741.63
-        1025 1.22712 1755.14
+    Quand il y a une matrice d'une taille multiple de 2, le module se rendre toujours au même endroit et donc chaque fois qui le CPU veut enregistre une variable il faut recopier tous les données en prenant plus de temps.
+\end{resolution}
 
-        2047  9.9369 1726.37
-        2048 33.1686 517.956
-        2049 10.2921 1671.68
+\newpage\subsection*{Question 2}
+\begin{resolution}
+    A
+    \begin{center}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{ijk}{
+                1023 & 1.17911 & 1815.94\\
+                1024 & 2.89563 &  741.63\\
+                1025 & 1.22712 & 1755.14\\
+            }{
+                2047 &  9.9369 & 1726.37\\
+                2048 & 33.1686 & 517.956\\
+                2049 & 10.2921 & 1671.68\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{jik}{
+                1023 & 1.26207 & 1696.58\\
+                1024 & 3.01302 & 712.735\\
+                1025 & 1.37956 & 1561.21\\
+            }{
+                2047 & 23.6272 & 726.057\\
+                2048 & 70.8302 & 242.55\\
+                2049 & 24.7906 & 694.016\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{jki}{
+                1023 & 0.394346 & 5429.74\\
+                1024 & 0.407676 & 5267.63\\
+                1025 & 0.416262 & 5174.1\\
+            }{
+                2047 & 4.91225 & 3492.23\\
+                2048 & 5.02442 & 3419.27\\
+                2049 & 5.12015 & 3360.27\\
+            }
+        \end{minipage}
+    \end{center}
 
-    on note qu'il y a une grand différence entre l'exécution d'une programme avec une matrix de puissances de 2
+    \begin{center}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{ikj}{
+                1023 & 2.38203 & 898.897\\
+                1024 & 7.31333 & 293.64\\
+                1025 & 2.13751 & 1007.61\\
+            }{
+                2047 & 76.2133 & 225.088\\
+                2048 & 109.086 & 157.489\\
+                2049 & 73.7907 & 233.16\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{kij}{
+                1023 & 2.27681 & 940.437\\
+                1024 & 7.27702 & 295.105\\
+                1025 & 2.52188 & 854.038\\
+            }{
+                2047 & 62.4818 & 274.555\\
+                2048 & 132.456 & 129.702\\
+                2049 & 73.0916 & 235.39\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{kji}{
+                1023 & 0.571053 & 3749.56\\
+                1024 & 0.462365 & 4644.56\\
+                1025 & 0.454393 & 4739.91\\
+            }{
+                2047 & 5.77844 & 2968.75\\
+                2048 & 5.63255 & 3050.11\\
+                2049 & 5.69804 & 3019.47\\
+            }
+        \end{minipage}
+    \end{center}
+    Comment précise pour la question précédent les données de la mémoire sont enregistres en groupe l'ordre entre lignes et colognes va influencer le résultat.\\
 
-    TODO justifier la différence de performance
-        memoire cache associative
-        quand il cherche une valeur, il guarde les valeurs proches
-        matrixes stoques par colognes
-        avec multiples de 2 il fau recopier les données par chaque fois qu'on a besoin d'information
-        comme l'addressage est fait à partir du module des informations 
+    Sur ma machine l'ordre \texttt{jki} était la plus efficace, les operations on pris moins de temps et la différence entre une matrice de taille multiple de 2 et une autre matrice n'était pas très significative.\\
 
-question 2
-    changement d'ordre jik
-        1023 1.26207 1696.58
-        1024 3.01302 712.735
-        1025 1.37956 1561.21
+    On considère le code suivant:
+    \begin{scriptsize}
+        \mycode\lstinputlisting[language=C++, linerange={11-17}]{ProdMatMat.cpp}
+    \end{scriptsize}
+    On peut voir:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{i} représente les lignes;
+        \item \texttt{j} représente les colognes;
+    \end{enumerate}
+    Comment l'algorithme est plus rapide quand l'interation "plus frequente" est sur \texttt{i} ça veut dire que les données sont estoquées pour lignes.
+    % TODO confirm interpretation
 
-        2047 23.6272 726.057
-        2048 70.8302 242.55
-        2049 24.7906 694.016
+    % \tableN{}{
+    %     1023 &  & \\
+    %     1024 &  & \\
+    %     1025 &  & \\
+    % }{
+    %     2047 &  & \\
+    %     2048 &  & \\
+    %     2049 &  & \\
+    % }
+\end{resolution}
+
+\newpage\subsection*{Question 3}
+\begin{resolution}
+    \href{https://stackoverflow.com/questions/22634121/openmp-c-matrix-multiplication-run-slower-in-parallel}
     
-essayer avec les parties de la matrice
-regarder le fichier Transparent / examples pour avoir des programmes utilise
-essayer avec la librairie #pragemomp parallel for
-#pragma omp parallel for ... parallelise les for au dessous de la ligne de pragma
+\end{resolution}
 
+\newpage\subsection*{Question 4}
+\begin{resolution}
+    
+\end{resolution}
 
-BLAS libraire pour faire mieux les operations de multiplication de matrice en considerant les caracteristiques de l'ordinateur
+\newpage\subsection*{Question 5}
+\begin{resolution}
+    
+\end{resolution}
+
+\newpage\subsection*{Question 6}
+\begin{resolution}
+    
+\end{resolution}
+
+\newpage\subsection*{Question 7}
+\begin{resolution}
+    
+\end{resolution}
+
+\newpage\subsection*{Question 8}
+\begin{resolution}
+    
+\end{resolution}
 
 
 
