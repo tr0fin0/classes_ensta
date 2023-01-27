@@ -16,6 +16,22 @@
 \maketitle
 \setlength{\parindent}{0pt}
 
+\newcommand{\tableN}[3]{
+    \begin{table}[H]
+        \centering\begin{tabular}{lrl}
+            n & secondes & MFloops\\
+            \hline\hline
+            #2
+            \hline
+            #3
+            \hline
+        \end{tabular}
+        \caption{ordre \texttt{#1}}
+    \end{table}
+}
+
+
+
 \newpage\tableofcontents
 
 \section{Introduction}
