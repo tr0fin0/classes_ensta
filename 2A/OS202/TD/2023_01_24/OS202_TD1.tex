@@ -217,32 +217,13 @@ Ces données seront utilisés pour l'analyse des performances.
 
 \newpage\subsection*{Question 3}
 \begin{resolution}
-    a
-    \begin{scriptsize}
-        \mycode
-        \begin{lstlisting}[language=C++]
-...
-#pragma omp parallel  // parallel declaration
-{
-    int i, j, k;
-    omp_set_num_threads(8);
-    #pragma omp for     // declare for function as parallel
-    for (j = iColBlkB; j < std::min(B.nbCols, iColBlkB + szBlock); j++)
-      for (k = iColBlkA; k < std::min(A.nbCols, iColBlkA + szBlock); k++)
-        for (i = iRowBlkA; i < std::min(A.nbRows, iRowBlkA + szBlock); ++i)
-          C(i, j) += A(i, k) * B(k, j);
-    const int szBlock = 32;
-}
-...
-        \end{lstlisting}
-    \end{scriptsize}
-
+    Les tableaux suivants représentent le temps necessaires pour calculer la multiplication avec l'ordre la plus efficace du \texttt{loop}, \texttt{jki} et une quantité n de threads représentes par \texttt{[n]}:
 \begin{center}
     \begin{minipage}[b]{0.3\textwidth}
         \tableN{jki [1]}{
             1023 & 0.0970206 & 22069.5\\
-            1024 & 0.1016900 & 21118.0\\
-            1025 & 0.1103160 & 19523.8\\
+            1024 & 0.101690 & 21118.0\\
+            1025 & 0.110316 & 19523.8\\
             2047 & 0.557667 & 30761.6\\
             2048 & 0.455107 & 37749.1\\
             2049 & 0.491632 & 34995.8\\\hline
@@ -251,9 +232,9 @@ Ces données seront utilisés pour l'analyse des performances.
     \end{minipage}
     \begin{minipage}[b]{0.3\textwidth}
         \tableN{jki [4]}{
-            1023 & 0.1024900 & 20891.8\\
+            1023 & 0.102490 & 20891.8\\
             1024 & 0.0908985 & 23625.1\\
-            1025 & 0.1195870 & 18010.2\\
+            1025 & 0.119587 & 18010.2\\
             2047 & 0.497154 & 34505.9\\
             2048 & 0.570854 & 30095.0\\
             2049 & 0.500602 & 34368.7\\\hline
@@ -263,8 +244,8 @@ Ces données seront utilisés pour l'analyse des performances.
     \begin{minipage}[b]{0.3\textwidth}
         \tableN{jki [8]}{
             1023 & 0.0997595 & 21463.6\\
-            1024 & 0.1197250 & 17936.8\\
-            1025 & 0.1059470 & 20328.8\\
+            1024 & 0.119725 & 17936.8\\
+            1025 & 0.105947 & 20328.8\\
             2047 & 0.513362 & 33416.4\\
             2048 & 0.471373 & 36446.5\\
             2049 & 0.475105 & 36213.1\\\hline
@@ -298,8 +279,8 @@ Ces données seront utilisés pour l'analyse des performances.
     \begin{minipage}[b]{0.3\textwidth}
         \tableN{jki [20]}{
             1023 & 0.0998027 & 21454.3\\
-            1024 & 0.1108460 & 19373.5\\
-            1025 & 0.1088740 & 19782.3\\
+            1024 & 0.110846 & 19373.5\\
+            1025 & 0.108874 & 19782.3\\
             2047 & 0.568054 & 30199.1\\
             2048 & 0.473769 & 36262.1\\
             2049 & 0.493240 & 34881.7\\\hline
@@ -307,6 +288,30 @@ Ces données seront utilisés pour l'analyse des performances.
         }
     \end{minipage}
 \end{center}
+On peut voir que l'utilisation de threads a rendu l'exécution du programme: 8.9758, 8.6138, 9.1176, 9.2767, 9.3438 et 8.7755 fois plus rapide pour 1, 4, 8, 12, 16 et 20 threads respectivement.\\
+
+Quand une nouvelle thread est crée on gagne la capacité de faire plusieurs calcules au même temps sur différents parties du processeur au prix d'avoir moins de mémoire pour chaque thread car la quantité de mémoire disponible reste constant.\\
+
+De cette façon, on peut voir que 16 était la configuration la plus rapide pour faire les calcules.\\
+
+Code considère:
+\begin{scriptsize}
+    \mycode
+    \begin{lstlisting}[language=C++]
+#pragma omp parallel  // parallel declaration
+{
+int i, j, k;
+omp_set_num_threads(8);
+#pragma omp for     // declare for function as parallel
+for (j = iColBlkB; j < std::min(B.nbCols, iColBlkB + szBlock); j++)
+  for (k = iColBlkA; k < std::min(A.nbCols, iColBlkA + szBlock); k++)
+    for (i = iRowBlkA; i < std::min(A.nbRows, iRowBlkA + szBlock); ++i)
+      C(i, j) += A(i, k) * B(k, j);
+const int szBlock = 32;
+}
+    \end{lstlisting}
+\end{scriptsize}
+
 Informations utiles étaient prises de le site suivant: \href{https://stackoverflow.com/questions/22634121/openmp-c-matrix-multiplication-run-slower-in-parallel}{https://stackoverflow.com/}
 \end{resolution}
 
