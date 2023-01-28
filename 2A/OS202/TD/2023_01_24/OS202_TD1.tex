@@ -110,7 +110,14 @@ Ces données seront utilisés pour l'analyse des performances.
 
 \newpage\subsection*{Question 2}
 \begin{resolution}
-    A
+    On considère que la multiplication de 2 matrices sera fait avec les variables \texttt{i j k}:
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+    C(i, j) += A(i, k) * B(k, j)
+        \end{lstlisting}
+    \end{scriptsize}
+    Les tableaux suivants représentent le temps necessaires pour calculer la multiplication avec des différents configurations de \texttt{loop}:
     \begin{center}
         \begin{minipage}[b]{0.3\textwidth}
             \tableN{ijk}{
@@ -146,7 +153,6 @@ Ces données seront utilisés pour l'analyse des performances.
             }
         \end{minipage}
     \end{center}
-
     \begin{center}
         \begin{minipage}[b]{0.3\textwidth}
             \tableN{ikj}{
@@ -182,13 +188,13 @@ Ces données seront utilisés pour l'analyse des performances.
             }
         \end{minipage}
     \end{center}
-    Comment précise pour la question précédent les données de la mémoire sont enregistres en groupe l'ordre entre lignes et colognes va influencer le résultat.\\
+    L'ordre \texttt{jki} était la plus efficace: les operations on pris moins de temps et la différence entre une matrice de taille multiple de 2 et une autre matrice n'était pas très significative.\\
 
-    Sur ma machine l'ordre \texttt{jki} était la plus efficace, les operations on pris moins de temps et la différence entre une matrice de taille multiple de 2 et une autre matrice n'était pas très significative.\\
+    Comment précise pour la question précédent les données de la mémoire sont enregistres en groupe donc l'ordre entre lignes et colognes va influencer le résultat.\\
 
-    On considère le code suivant:
+    Code considère:
     \begin{scriptsize}
-        \mycode\lstinputlisting[language=C++, linerange={11-17}]{ProdMatMat.cpp}
+        \mycode\lstinputlisting[language=C++, linerange={19-22}]{ProdMatMat.cpp}
     \end{scriptsize}
     On peut voir:
     \begin{enumerate}[noitemsep]
