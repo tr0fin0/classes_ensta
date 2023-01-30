@@ -328,17 +328,81 @@ Informations utiles étaient prises de le site suivant: \href{https://stackoverf
 
 \newpage\subsection*{Question 5}
 \begin{resolution}
-    
-\end{resolution}
+    Les tableaux suivants représentent le temps necessaires pour calculer la multiplication avec des différents configurations de \texttt{loop}:
+    \begin{center}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{mnjki [16]}{
+                1024 & 0.842497 & 2548.95\\
+                2048 & 7.283589 & 2358.71\\
+                \hline
+                avg  & 4.063043 & 2453.83\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{mnjki [64]}{
+                1024 & 0.655394 & 3276.63\\
+                2048 & 5.342796 & 3215.52\\
+                \hline
+                avg  & 2.999095 & 3246.08\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{mnjki [256]}{
+                1024 & 0.552740 & 3885.16\\
+                2048 & 4.578990 & 3751.89\\
+                \hline
+                avg  & 2.565865 & 3818.53\\
+            }
+        \end{minipage}
+    \end{center}
 
-\newpage\subsection*{Question 6}
-\begin{resolution}
-    
-\end{resolution}
+    \begin{center}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [16]}{
+                1024 & 0.812334 & 2643.60\\
+                2048 & 7.745882 & 2217.94\\
+                \hline
+                avg  & 4.279108 & 2430.77\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [64]}{
+                1024 & 0.656772 & 3269.75\\
+                2048 & 5.463736 & 3144.34\\
+                \hline
+                avg  & 3.060254 & 3207.05\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [256]}{
+                1024 & 0.550865 & 3898.38\\
+                2048 & 4.661620 & 3685.39\\
+                \hline
+                avg  & 2.606242 & 3791.89\\
+            }
+        \end{minipage}
+    \end{center}
 
-\newpage\subsection*{Question 7}
-\begin{resolution}
-    
+    On peut voir que la configuration \texttt{nmjki} est l'ordre de \texttt{loop} la plus efficace et 256 comme taille de bloque.\\
+
+    Code considère:
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+{
+int dim = std::max({A.nbRows, B.nbCols, A.nbCols});
+
+int m, n, i, j, k;
+
+for (m = 0; m < dim; m+=sizeBlock)
+    for (n = 0; n < dim; n+=sizeBlock)
+        for (j = n; j < n+sizeBlock; j++)
+        for (k = 0; k < dim; k++)
+            for (i = m; i < m+sizeBlock; i++)
+                C(i, j) += A(i, k) * B(k, j);
+}
+        \end{lstlisting}
+    \end{scriptsize}
 \end{resolution}
 
 \newpage\subsection*{Question 8}
