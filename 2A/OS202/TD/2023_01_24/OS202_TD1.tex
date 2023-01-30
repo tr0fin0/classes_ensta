@@ -194,7 +194,13 @@ Ces données seront utilisés pour l'analyse des performances.
 
     Code considère:
     \begin{scriptsize}
-        \mycode\lstinputlisting[language=C++, linerange={19-22}]{ProdMatMat.cpp}
+        \mycode
+        \begin{lstlisting}[language=C++]
+    for (int j = iColBlkB; j < std::min(B.nbCols, iColBlkB + szBlock); j++)
+      for (int k = iColBlkA; k < std::min(A.nbCols, iColBlkA + szBlock); k++)
+        for (int i = iRowBlkA; i < std::min(A.nbRows, iRowBlkA + szBlock); ++i)
+          C(i, j) += A(i, k) * B(k, j);
+        \end{lstlisting}
     \end{scriptsize}
     On peut voir:
     \begin{enumerate}[noitemsep]
