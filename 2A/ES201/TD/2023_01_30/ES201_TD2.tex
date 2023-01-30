@@ -122,5 +122,47 @@ aléas de données data hazards
 \end{resolution}
 
 
+\newpage\subsection*{Question 2}
+\begin{resolution}
+    a
+    \begin{scriptsize}
+        \myRISCV
+        \begin{lstlisting}
+    andi s1, s1, 0          // sum = 0
+    andi s2, s2, 0          // i = 0
+    addi s3, zero, 500      // j = 500
+    andi s4, s4,0           // k = 0
+    addi t2, zero, 1000     // 1st loop upper bound = 1000
+    andi t3, s6, 0          // 2nd loop lower bound = 0
+    addi t4, zero, 300      // 3rd loop upper bound = 300
+
+    loop1:
+    loop2:
+    loop3:
+    add  s1, s1, s2         // sum = sum + (i);
+    add  s1, s1, s3         // sum = sum + (i + j);
+    add  s1, s1, s4         // sum = sum + (i + j + k);
+    addi s4, s4, 10         // k = k + 10
+
+    bne  s4, t4, loop3      // if (k < 300) goto loop3, else execute 2nd loop
+    andi s4, s4,0           // reinitialize k = 0
+    subi s3, s3, 1          // j--
+
+    bne  s3, t3, loop2      // if (j > 0) goto loop2, else execute 1st loop
+    addi s3, zero, 500      // reinitialize j = 500
+    addi s2, s2, 1          // i++
+
+    bne  s2, t2, loop1      // if (i < 1000) goto loop1, else end program
+    exit:
+        \end{lstlisting}
+    \end{scriptsize}
+    Chaque register devrait avoir un \$ dans la convection de cette matière mais ici ce caractère a été élevé car le style du code ne marchait pas.\\
+    
+    Ici, en fait, au lieu d'avoir 3 couples c'est plus facile pour comprendre qu'il y a un grand couple avec 3 conditions necessaires à attendre pour que le code s'arrêt. 
+\end{resolution}
+
+
+
+\newpage\subsection*{Question 3}
 
 \end{document}
