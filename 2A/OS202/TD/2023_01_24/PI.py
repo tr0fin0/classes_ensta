@@ -40,21 +40,22 @@ def plotEstimation(input, title: str):
 MIN_POINTS = 0
 MAX_POINTS = 1e4
 
-def main():
+def estimatePi(points: int, showPlot: bool = True) -> None:
     estimation = []
 
-    # start = time.perf_counter()
-    for n in range(int(MAX_POINTS)):
-        estimation.append(approximate_pi(n))
-    # end = time.perf_counter()
+    for n in range(points):
+        estimation.append(monteCarloPi(n))
 
     pi_mean = np.mean(estimation)
-    error   = pi_mean - np.pi
-    # time    = end - start
+    error   = pi_mean - PI
 
-    print(f'~pi: {pi_mean:1.6f} error: {error:1.6f}')
-    plotEstimation(estimation, "stochastique")
 
+    print(f'pi: {pi_mean:1.6f} error: {error:1.6f}')
+
+    if showPlot == True:
+        plotEstimation(estimation, "stochastique")
+
+    return None
 
 
 def estimatePiMultithread(points: int) -> None:
