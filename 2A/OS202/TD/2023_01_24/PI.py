@@ -35,6 +35,8 @@ def plotEstimation(input, title: str) -> None:
     plt.show()
 
     return None
+
+
 def monteCarloPi(n: int) -> float:
     """
     https://www.youtube.com/watch?v=prPyPvjvfqM
@@ -45,7 +47,7 @@ def monteCarloPi(n: int) -> float:
     if n == 0: return 0
 
     return 4 * inside / n
-MAX_POINTS = 1e4
+
 
 def estimatePi(points: int, showPlot: bool = True) -> None:
     estimation = []
