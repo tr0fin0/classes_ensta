@@ -16,9 +16,7 @@ from multiprocessing import Pool
 
 
 
-    return 4 * inside / n
-
-def plotEstimation(input, title: str):
+def plotEstimation(input, title: str) -> None:
     # let us make a simple graph
     fig = plt.figure(figsize=[8, 8])
     ax  = plt.subplot(111)
@@ -28,7 +26,7 @@ def plotEstimation(input, title: str):
     ax.set_ylabel('pi')
     ax.set_title(title)
 
-    ax.hlines(y=np.pi, xmin=0, xmax=(len(input)-1), linewidth=1, linestyles='--')
+    ax.hlines(y=PI, xmin=0, xmax=(len(input)-1), linewidth=1, linestyles='--')
 
     # set the grid on
     ax.grid('on')
@@ -36,6 +34,7 @@ def plotEstimation(input, title: str):
     plt.plot(input)
     plt.show()
 
+    return None
 def monteCarloPi(n: int) -> float:
     """
     https://www.youtube.com/watch?v=prPyPvjvfqM
