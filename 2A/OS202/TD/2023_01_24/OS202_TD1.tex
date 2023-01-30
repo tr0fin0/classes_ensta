@@ -412,31 +412,86 @@ for (m = 0; m < dim; m+=sizeBlock)
     Ici seulement les tailles 1024 et 2048 étaient considères car, pour la division en bloques le code a besoin des tailles divisibles pour une valeur commun.
 \end{resolution}
 
-
-\section{Parallélisation MPI, Circulation}
-
-partie 2
-tous les questions sont dans les examples et propablement sur youtube, pas trop difficile a faire
-
-
-\subsection*{Question 1}
+\newpage\subsection*{Question 7}
 \begin{resolution}
-    
-\end{resolution}
+    Les tableaux suivants représentent le temps necessaires pour calculer la multiplication avec des différents tailles de bloque représentes par \texttt{[s]} avec la configuration de \texttt{loop} la plus efficace, \texttt{nmjki}:
+    \begin{center}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [16]}{
+                1024 & 0.165874 & 12946.51\\
+                2048 & 1.252230 & 13719.42\\
+                \hline
+                avg  & 0.709052 & 13332.97\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [32]}{
+                1024 & 0.159252 & 13484.84\\
+                2048 & 1.128784 & 15219.81\\
+                \hline
+                avg  & 0.644018 & 14352.32\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [64]}{
+                1024 & 0.125556 & 17103.75\\
+                2048 & 0.950782 & 18069.19\\
+                \hline
+                avg  & 0.538169 & 17586.47\\
+            }
+        \end{minipage}
+    \end{center}
 
-\newpage\subsection*{Question 2}
-\begin{resolution}
-    
-\end{resolution}
+    \begin{center}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [128]}{
+                1024 & 0.134669 & 15946.42\\
+                2048 & 0.674998 & 25451.72\\
+                \hline
+                avg  & 0.404833 & 20699.07\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [256]}{
+                1024 & 0.175878 & 12210.04\\
+                2048 & 0.771701 & 22262.34\\
+                \hline
+                avg  & 0.473790 & 17236.19\\
+            }
+        \end{minipage}
+        \begin{minipage}[b]{0.3\textwidth}
+            \tableN{nmjki [512]}{
+                1024 & 0.263427 & 8152.11\\
+                2048 & 1.064857 & 16133.50\\
+                \hline
+                avg  & 0.664142 & 12142.80\\
+            }
+        \end{minipage}
+    \end{center}
 
-\newpage\subsection*{Question 3}
-\begin{resolution}
-    
-\end{resolution}
+    On peut voir que même avec l'utilisation des bloques l'exécution du code n'était pas plus efficace. Ici la quantité de threads utilise, 16, pourrait-être pas idéale pour le système.\\
 
-\newpage\subsection*{Question 4}
-\begin{resolution}
-    
+    Code considère:
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+#pragma omp parallel        // parallel declaration
+{
+int dim = std::max({A.nbRows, B.nbCols, A.nbCols});
+
+int m, n, i, j, k;
+omp_set_num_threads(16);
+
+#pragma omp for
+for (n = 0; n < dim; n+=sizeBlock)
+    for (m = 0; m < dim; m+=sizeBlock)
+        for (j = n; j < n+sizeBlock; j++)
+            for (k = 0; k < dim; k++)
+                for (i = m; i < m+sizeBlock; i++)
+                    C(i, j) += A(i, k) * B(k, j);
+}
+        \end{lstlisting}
+    \end{scriptsize}
 \end{resolution}
 
 \newpage\subsection*{Question 5}
