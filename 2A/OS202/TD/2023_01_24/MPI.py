@@ -1,7 +1,9 @@
 from mpi4py import MPI
 
+
 PROCESS_MAX     = 10
 INTERATION_MAX  = 25
+
 def serialWhile() -> None:
     interation  = 0
     process     = 0
@@ -18,6 +20,8 @@ def serialWhile() -> None:
             process     += 1
             value       += 1
             interation  += 1
+
+
 def parallelWhile(value: int):
     comm = MPI.COMM_WORLD   # instantice the communication world
     size = comm.Get_size()  # size of the communication world
@@ -33,6 +37,8 @@ def parallelWhile(value: int):
         print("="*20)
 
     MPI.Finalize()
+
+
 def main():
     serialWhile()
     # parallelWhile(0)
