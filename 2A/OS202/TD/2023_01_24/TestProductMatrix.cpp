@@ -1,11 +1,13 @@
-#include <cstdlib>
-#include <vector>
 #include <cassert>
-#include <cmath>
-#include <iostream>
 #include <chrono>
+#include <cmath>
+#include <cstdlib>
+#include <iostream>
+#include <iomanip>  // std::setprecision, std::setw
+#include <vector>
 #include "Matrix.hpp"
 #include "ProdMatMat.hpp"
+
 
 std::tuple<std::vector<double>,std::vector<double>,
 	   std::vector<double>,std::vector<double>>  computeTensors(int dim)
@@ -64,37 +66,76 @@ bool verifProduct(const std::vector < double >&uA, std::vector < double >&vA,
   return true;
 }
 
+void printLine(float dim, float time, float instr)
+{
+  std::cout << std::fixed
+            << std::setprecision(0)
+            << std::setw(4) << dim  << " & "
+            << std::fixed
+            << std::setprecision(6)
+            << std::setw(5) << time << " & "
+            << std::fixed
+            << std::setprecision(2)
+            << std::setw(5) << instr << "\\\\" << std::endl;
+
+}
+
+
 int main(int nargs, char *vargs[])
 {
   int dim = 1024;
   if (nargs > 1)
-    dim = atoi(vargs[1]);
-  std::vector < double >uA, vA, uB, vB;
-  std::tie(uA, vA, uB, vB) = computeTensors(dim);
+    dim = atoi(vargs[1]); // dim gets value from X when ./TestProductMatrix.exe X
 
-  Matrix A = initTensorMatrices(uA, vA);
-  Matrix B = initTensorMatrices(uB, vB);
+  // std::vector <int> dims{1023, 1024, 1025, 2047, 2048, 2049};
+  std::vector <int> dims{1024, 2048};
+  float times  = 0;
+  float instrs = 0;
 
-  std::chrono::time_point < std::chrono::system_clock > start, end;
-  start = std::chrono::system_clock::now();
-  Matrix C = A * B;
-  end = std::chrono::system_clock::now();
-  std::chrono::duration < double >elapsed_seconds = end - start;
+  bool isPassed = true;
+  for(int i = 0; i < dims.size(); i++)
+  {
+    dim = dims[i];
 
-  bool isPassed = verifProduct(uA, vA, uB, vB, C);
-  if (isPassed)
-    {
-      // std::cout << "Test passed\n";
-      // std::cout << "Temps CPU produit matrice-matrice naif : " << elapsed_seconds.count() << " secondes\n";
-      // std::cout << "MFlops -> " << (2.*dim*dim*dim)/elapsed_seconds.count()/1000000 <<std::endl;
-      std::cout << "[dim: " << dim << ", time: " << elapsed_seconds.count() << " s, MFloops: " << (2.*dim*dim*dim)/elapsed_seconds.count()/1000000 << "]" << std::endl;
-      // n*n*d*m
-      //  n: size of matrix 
-      //  d: size of double, data storeaged
-      //  m: number of matrices, A B C 
-    }
-  else
-    std::cout << "Test failed\n";
+    std::vector < double >uA, vA, uB, vB;
+    std::tie(uA, vA, uB, vB) = computeTensors(dim);
+
+    Matrix A = initTensorMatrices(uA, vA);
+    Matrix B = initTensorMatrices(uB, vB);
+
+    std::chrono::time_point < std::chrono::system_clock > start, end;
+    start = std::chrono::system_clock::now();
+    Matrix C = A * B;
+    end = std::chrono::system_clock::now();
+    std::chrono::duration < double >elapsed_seconds = end - start;
+
+
+    isPassed = verifProduct(uA, vA, uB, vB, C);
+    if (isPassed)
+      {
+        // std::cout << "Test passed\n";
+        // std::cout << "Temps CPU produit matrice-matrice naif : " << elapsed_seconds.count() << " secondes\n";
+        // std::cout << "MFlops -> " << (2.*dim*dim*dim)/elapsed_seconds.count()/1000000 <<std::endl;
+        // std::cout << "[dim: " << dim << ", time: " << elapsed_seconds.count() << " s, MFloops: " << (2.*dim*dim*dim)/elapsed_seconds.count()/1000000 << "]" << std::endl;
+
+        float MFloops = (2.*dim*dim*dim)/elapsed_seconds.count()/1000000;
+        float time = elapsed_seconds.count();
+        printLine(dim, time, MFloops);
+
+        times  += time;
+        instrs += MFloops;
+      }
+    else
+      std::cout << "Test failed\n";
+  }
+  std::cout << "\\hline\n" 
+            << "avg  & "
+            << std::fixed
+            << std::setprecision(6)
+            << std::setw(5) << (times/dims.size()) << " & "
+            << std::fixed
+            << std::setprecision(2)
+            << std::setw(5) << (instrs/dims.size()) << "\\\\" << std::endl;
 
   return (isPassed ? EXIT_SUCCESS : EXIT_FAILURE);
 }
