@@ -513,27 +513,50 @@ tous les questions sont dans les examples et propablement sur youtube, pas trop 
 
 \newpage\subsection{Calcul $\pi$}
 
-\newpage\subsection*{Question 2}
-
-\newpage\subsection*{Question 3}
-
-\newpage\subsection*{Question 4}
-
-\newpage\subsection*{Question 5}
-
-\newpage\subsection*{Question 6}
-
-
-
-\section{Parallélisation MPI, Hypercube}
-\subsection*{Question 1}
 \begin{resolution}
-    
-\end{resolution}
+    Le calcul de $\pi$ propose est expliqué et implémenté sur le vidéo: \href{https://www.youtube.com/watch?v=prPyPvjvfqM}{Inside Code}.\\
 
-\newpage\subsection*{Question 2}
-\begin{resolution}
+    On considère le code suivant:
+    \begin{scriptsize}
+        \mycode\lstinputlisting[language=Python, linerange={1-5}]{PI.py}
+    \end{scriptsize}
+    Observation, pour y accéder il suifit clique sur le code. En comparant les résultats de chaque exécution on aura:
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=bash]
+    pi: 3.141774 error: 0.000182
+    serial: 0.529775 s
+
+    CPUs: 20
+    pi: 3.148800 error: 0.007207
+    parrel: 0.025772 s
+        \end{lstlisting}
+    \end{scriptsize}
+    Dans cette essayé 1e4 points étaient utilisés pour estimer Pi. On peut voir que le code parallèle a été 20.56 fois plus rapide que la version séquentielle.\\
+
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=bash]
+    pi: 3.141522 error: -0.000070
+    serial: 73.425146 s
     
+    CPUs: 20
+    pi: 3.161720 error: 0.020127
+    parrel: 0.024069 s
+        \end{lstlisting}
+    \end{scriptsize}
+    Dans cette essayé 1e5 points étaient utilisés pour estimer Pi. On peut voir que le code parallèle a été 3050.61 fois plus rapide que la version séquentielle.\\
+
+    On peut voir que la version parallèle est beaucoup plus rapide en temps d'exécution par contre son erreur est plus significative car au lieu d'avoir une grande quantité de points chaque CPU aura une quantité réduit. On essayé la version de blocs avec 1e8 points et on trouve:
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=bash]
+    CPUs: 20
+    pi: 3.141279 error: -0.000313
+    parrel: 0.625430 s
+        \end{lstlisting}
+    \end{scriptsize}
+    Maintenant, avec beaucoup plus de points par thread, on trouvé une résultat plus précis et avec un temps de calcule plus modeste.
 \end{resolution}
 
 \newpage\subsection*{Question 3}
