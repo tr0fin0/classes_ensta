@@ -56,4 +56,33 @@ def main():
     plotEstimation(estimation, "stochastique")
 
 
+
+def estimatePiMultithread(points: int) -> None:
+    """
+    https://gist.github.com/amitsaha/2036026
+    """
+
+    totalCPUs = multiprocessing.cpu_count()
+    print(f'CPUs: {totalCPUs:2.0f}')
+
+    # iterable with a list of points to generate in each worker
+    # each worker process gets n/np number of points to calculate Pi from
+
+    pointsCPUs = [int(points/totalCPUs) for i in range(totalCPUs)]
+
+    #Create the worker pool
+    # http://docs.python.org/library/multiprocessing.html#module-multiprocessing.pool
+    pool = Pool(processes=totalCPUs)
+
+    # parallel map
+    estimation  = pool.map(monteCarloPi, pointsCPUs)
+
+    pi_mean = np.mean(estimation)
+    error   = pi_mean - PI
+
+
+    print(f'pi: {pi_mean:1.6f} error: {error:1.6f}')
+
+    return None
+
 main()
