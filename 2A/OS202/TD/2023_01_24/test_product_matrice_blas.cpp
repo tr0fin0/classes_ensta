@@ -86,7 +86,8 @@ int main(int nargs, char *vargs[])
   end = std::chrono::system_clock::now();
   std::chrono::duration < double >elapsed_seconds = end - start;
 
-  bool isPassed = verifProduct(uA, vA, uB, vB, C);
+  bool isPassed = true;
+  isPassed = verifProduct(uA, vA, uB, vB, C);
   if (isPassed)
     {
       std::cout << "Test passed\n";
