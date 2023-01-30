@@ -164,5 +164,35 @@ aléas de données data hazards
 
 
 \newpage\subsection*{Question 3}
+\begin{resolution}
+    a
+    \begin{scriptsize}
+        \myRISCV
+        \begin{lstlisting}
+    leaf:
+    
+    subi  sp, sp, 12    // adjust stack to make room for 3 items
+    sw    s2, 8(sp)     // save register s2 for further use
+    sw    s1, 4(sp)     // save register s1 for further use
+    sw    s0, 0(sp)     // save register s0 for further use
+    
+    add   s2, a0, a1    // register s2 contains g + h
+    add   s1, a2, a3    // register s1 contains i + j
+    sub   s0, s2, s1    // f = s2 - s1 which is (g+h) - (i+j)
+    add   v0, s0, zero  // returns f (v0 = s0 + 0)
+    
+    lw    s0, 0(sp)     // restore register s0 for caller
+    lw    s1, 4(sp)     // restore register s1 for caller
+    lw    s2, 8(sp)     // restore register s2 for caller
+    addi  sp, sp, 12    // readjust the stack pointer
+
+    jr ra               // jump back to calling routine (ra = return address)
+        \end{lstlisting}
+    \end{scriptsize}
+    Les registres a0, ..., a7 (il faut confirmer la quantité précise) sont les endroits où les entrées et sortis d'une fonction seront estoquées.\\
+
+    Comme on va utiliser les registres s0, s1 et s2 pour faire les calculs de cette fonction il faut qu'on les estoquées avant les données sur ses registres car une autre fonction pourrait les utiliser et on ne peut pas les déranges.
+\end{resolution}
+
 
 \end{document}
