@@ -84,6 +84,43 @@ aléas de contrôle control hazards
 aléas de données data hazards
 
 
+\newpage\subsection*{Question 1}
+\begin{resolution}
+    a
+    \begin{scriptsize}
+        \myRISCV
+        \begin{lstlisting}
+    switch:
+    andi  s6, s6, 0          // counter = 0
+    
+    case0:
+    bne  s6, s5, case1      // k = 0
+    add  s0, s3, s4         // f = i + j
+
+    case1:
+    addi  s6, s6, 1
+    bne   s6, s5, case2      // k = 1
+    add   s0, s1, s2         // f = g + h
+
+    case2:
+    addi  s6, s6, 1
+    bne   s6, s5, case3      // k = 2
+    sub   s0, s1, s2         // f = g - h
+
+    case3:
+    addi  s6, s6, 1
+    bne   s6, s5, end        // k = 3
+    sub   s0, s3, s4         // f = i - j
+
+    end:
+    j ret
+        \end{lstlisting}
+    \end{scriptsize}
+    Le code précédent sera scalable, donc il peut être facilement changer pour ajouter des nouvelles conditions dans le case.\\
+
+    Ici il y a le problème de temps d'exécution pas constant, ça veut dire qu'il y aura des temps d'exécution différent par chaque cas car il y aura besoin de plusieurs essayes avant d'arriver à le bon résultat.
+\end{resolution}
+
 
 
 \end{document}
