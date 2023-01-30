@@ -2,24 +2,19 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 
-from mpi4py import MPI
 
-comm = MPI.COMM_WORLD   # instantice the communication world
-size = comm.Get_size()  # size of the communication world
-rank = comm.Get_rank()  # process ID ('rank')
+import multiprocessing
+from multiprocessing import Pool
 
-PID = os.getpid()
+# from mpi4py import MPI
+
+# comm = MPI.COMM_WORLD   # instantice the communication world
+# size = comm.Get_size()  # size of the communication world
+# rank = comm.Get_rank()  # process ID ('rank')
+
+# PID = os.getpid()
 
 
-
-def approximate_pi(n):
-    """
-    https://www.youtube.com/watch?v=prPyPvjvfqM
-    """
-    points = np.random.uniform(-1, 1, (n,2))
-    inside = np.sum(points[:,0]**2 + points[:,1]**2 <= 1)
-
-    if n == 0: return 0
 
     return 4 * inside / n
 
