@@ -36,8 +36,16 @@ def plotEstimation(input, title: str):
     plt.plot(input)
     plt.show()
 
+def monteCarloPi(n: int) -> float:
+    """
+    https://www.youtube.com/watch?v=prPyPvjvfqM
+    """
+    points = np.random.uniform(-1, 1, (n,2))
+    inside = np.sum(points[:,0]**2 + points[:,1]**2 <= 1)
 
-MIN_POINTS = 0
+    if n == 0: return 0
+
+    return 4 * inside / n
 MAX_POINTS = 1e4
 
 def estimatePi(points: int, showPlot: bool = True) -> None:
