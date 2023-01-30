@@ -93,4 +93,26 @@ def estimatePiMultithread(points: int) -> None:
 
     return None
 
+
+PI = np.pi
+MIN_POINTS = 0
+MAX_POINTS = 1e8
+
+def main() -> None:
+
+    # start = time.time()
+    # estimatePi(int(MAX_POINTS), showPlot=False)
+    # end = time.time()
+    # print(f'serial: {(end - start):2.6f} s')
+
+
+    start = time.time()
+    estimatePiMultithread(int(MAX_POINTS))
+    end = time.time()
+    print(f'parrel: {(end - start):2.6f} s')
+
+    return None
+
+
+
 main()
