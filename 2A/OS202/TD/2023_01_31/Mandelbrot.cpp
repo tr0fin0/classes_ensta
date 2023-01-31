@@ -124,7 +124,7 @@ void savePicture( const std::string& filename, int W, int H, const std::vector<i
         double iter = scaleCol*nbIters[i];
         unsigned char r = (unsigned char)(256 - (unsigned (iter*256.) & 0xFF));
         unsigned char b = (unsigned char)(256 - (unsigned (iter*65536) & 0xFF));
-        unsigned char g = (unsigned char)(256 - (unsigned( iter*16777216) & 0xFF));
+        unsigned char g = (unsigned char)(256 - (unsigned (iter*16777216) & 0xFF));
         ofs << r << g << b;
     }
     ofs.close();
@@ -140,5 +140,9 @@ int main(int argc, char *argv[] )
     const int maxIter = 8*65536;
     auto iters = computeMandelbrotSet( W, H, maxIter );
     savePicture("mandelbrot.tga", W, H, iters, maxIter);
+
+    // TODO chercher comment faire parallele
+    // TODO utiliser diff .tga et ref.tga
+    // TODO comparer l'image parallel pixel par pixel avec l'exemple serielle
     return EXIT_SUCCESS;
  }
