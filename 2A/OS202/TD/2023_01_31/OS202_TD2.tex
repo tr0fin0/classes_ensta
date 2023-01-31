@@ -1,0 +1,71 @@
+\documentclass{article}
+% \usepackage{C:/Users/guitr/Documents/git_repositories/tpack/tpack}
+% \usepackage{C:/Users/Admin-PC/Documents/git_repository/tpack/tpack}
+\usepackage{/home/tr0fin0/Documents/git_repositories/tpack/tpack}
+% \usepackage{/home/Documents/git_repositories/tpack/tpack}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+
+\title{OS202 - Programming Parallel Computers}
+\project{Travail Dirigée}
+\author{Guilherme Nunes Trofino}
+\authorRA{2022-2024}
+
+
+\makeatletter
+\begin{document}\selectlanguage{french}
+\maketitle
+\setlength{\parindent}{0pt}
+
+
+
+
+\newpage\tableofcontents
+
+\section{Introduction}
+% \subfile{C:/Users/guitr/Documents/git_repositories/classes_ensta/intro.tex}
+% \subfile{C:/Users/Admin-PC/Documents/git_repository/classes_ensta/intro.tex}
+\subfile{/home/tr0fin0/Documents/git_repositories/classes_ensta/intro.tex}
+% \subfile{/home/Documents/git_repositories/classes_ensta/intro.tex}
+
+
+\subsection{Information Matier}
+\paragraph{Référence}Dans cette matière le but sera de comprendre \title{}. Ce travail est sur \href{https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf}{https://github.com/} avec l'objectif d'étudier et démontrer l'augmentation de performance quand on utilise la programmation parallèle.
+
+\subsection{Caracteristiques Ordinateur}
+\paragraph{CPU}On utilisé le commande \texttt{lscpu} pour avoir des informations sur le processeur de mon ordinateur en retournant le suivant:
+\begin{scriptsize}
+    % \mycode\lstinputlisting[language=bash]{example/main.cpp}
+    \mycode
+    \begin{lstlisting}[language=bash]
+    Architecture:           x86_64
+        CPU op-mode(s):         32-bit, 64-bit
+        Address sizes:          39 bits physical, 48 bits virtual
+        Byte Order:             Little Endian
+        CPU(s):                 20
+        On-line CPU(s) list:    0-19
+        Vendor ID:              GenuineIntel
+    Model name:            12th Gen Intel(R) Core(TM) i7-12700H
+        CPU family:          6
+        Model:               154
+        Thread(s) per core:  2
+        Core(s) per socket:  14
+        Socket(s):           1
+        Stepping:            3
+        CPU max MHz:         4700.0000
+        CPU min MHz:         400.0000
+    \end{lstlisting}
+\end{scriptsize}
+On peut voir qui mon ordinateur a, théoriquement, 20 CPU's disponibles avec les mémoires suivants:
+\begin{scriptsize}
+    \mycode
+    \begin{lstlisting}[language=bash]
+    Caches (sum of all):     
+        L1d:    544  KiB    (14 instances)
+        L1i:    704  KiB    (14 instances)
+        L2:     11.5 MiB    ( 8 instances)
+        L3:     24   MiB    ( 1 instance)
+    \end{lstlisting}
+\end{scriptsize}
+Ces données seront utilisés pour l'analyse des performances. 
+
+\end{document}
