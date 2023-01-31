@@ -4,6 +4,7 @@
 *.synctex.gz
 *.png
 *.jpg
+*.tga
 *.zip
 *.x.gnuplot
 */__pycache__
