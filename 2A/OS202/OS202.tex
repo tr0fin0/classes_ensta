@@ -94,6 +94,58 @@ Distributed parallel rules
 TD 1
 https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf
 
+amphi2
+speed up
+mesure pour évaleur l'efficace d'une code parrallel par rapport à sa version sérielle
+S(n) = \frac{ts}{tp(n)}
+
+amdahl's law
+give a limit for the speed up 
+let ts, temps sequentielle, be the time necessary to run the code in sequential
+let f be the fraction of ts to the part of the code which can't be parallelise
+so the best expected speed up is
+
+s(n) =  frac{ts}{f ts + (1-f)ts/n} = \frac{n}{1 + (n+1)f}
+this law is useful to find a reasonable number of computing cores to use for an application 
+limitation may change with volue of input data 
+
+
+gustafson's law
+speedup behavior with constant volume input data per processes
+
+
+granularity
+ratio between ocmputing intensity and quantity of data exchanged between processes
+
+load balancing
+all processes execute a comptation section of the code with asme duration
+speedup is badly impacted if some parts of the code are far away from load balancing
+
+
+embarrassingly parallel algorithms
+each data used and computed are independent
+no data race in multithread context
+no communication between processes in distributed environment
+
+property
+in distributed parallel context no data must be exchanged between processes to compute the results
+
+
+syracuse series
+definition
+uo chosen
+un+1 un/2 if un is even ou 3un+1 si un is odd
+
+one cycle exists a conjucture the series reaches the cycle below in a finite number of iterations
+1 4 2 1 ...
+
+some definiions
+lenght of flight number of iterations
+height of the flight maximal value reached by a strategies
+
+goal of the program compute de taille
+
+
 
 
 \subsection{Information Matier}
