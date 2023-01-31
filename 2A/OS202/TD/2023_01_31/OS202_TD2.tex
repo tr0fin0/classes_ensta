@@ -66,6 +66,68 @@ On peut voir qui mon ordinateur a, théoriquement, 20 CPU's disponibles avec les
         L3:     24   MiB    ( 1 instance)
     \end{lstlisting}
 \end{scriptsize}
-Ces données seront utilisés pour l'analyse des performances. 
+Ces données seront utilisés pour l'analyse des performances.
+
+
+\section{Cours Amphi}
+\begin{resolution}
+
+\end{resolution}
+
+\subsection{Interblocage}
+\begin{resolution}
+    On considère le l'exercice sur l'interblocage donné dans le cours et décrivez deux scénarios...
+    % TODO chercher sur les slides
+
+    regarder les données du cours
+    apparemment on devrait déjà comprendre quelques codes MPIs pour faire ce travail même qu'ils n'étaient pas données en cours.
+    MPI...
+    % TODO chercher sur les examples de codes MPI
+    
+\end{resolution}
+
+\subsection{Alice Problem's}
+\begin{resolution}
+    Il faudrait regarder les equations sur le slide du amphi 2 pour faire les calcules pas difficile et pas utile
+    ...
+    
+\end{resolution}
+
+\section{Mandelbrot}
+\begin{resolution}
+    On considère que Mandelbrot est un ensemble fractal:
+    \begin{equation}
+        z_{n+1} = 
+        \begin{cases}
+            z_{0}   &= 0\\
+            z_{n+1} &= z_{n}^{2} + c\\
+        \end{cases}
+        \qquad\text{où $c$: valeurs complexe donnée}
+    \end{equation}
+    On peut montrer que si il existe $N$ tel que $|z_N|>2$, alors la suite diverge
+    % TODO chercher la démonstration
+
+    \begin{equation}
+        c = (x_{\min} + p_{i}\frac{x_{\max} - x_{\min}}{W}) + i(y_{\min} + p_{j}\frac{y_{\max} - y_{\min}}{H})
+    \end{equation}
+    Image de $W$ par $H$ pixels telle qu'à chaque pixel $(p_{i}, p_{j})$
+    % TODO comprendre equation
+
+    Il semble qu'on étude ses fractals car un français les a découvert.
+    
+\end{resolution}
+
+\section{Produit Matrice-Vector}
+\subsection{Vecteur Colonne}
+\begin{resolution}
+    
+\end{resolution}
+
+\subsection{Vecteur Ligne}
+\begin{resolution}
+    
+\end{resolution}
+
+
 
 \end{document}
