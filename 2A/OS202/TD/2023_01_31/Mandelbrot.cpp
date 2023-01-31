@@ -6,6 +6,7 @@
 # include <cmath>
 # include <vector>
 # include <fstream>
+#include <iomanip>  // std::setprecision, std::setw
 
 
 /** Une structure complexe est définie pour la bonne raison que la classe
@@ -102,8 +103,13 @@ computeMandelbrotSet( int W, int H, int maxIter )
     }
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
-    std::cout << "Temps calcul ensemble mandelbrot : " << elapsed_seconds.count() 
-              << std::endl;
+    
+    std::cout   << "mandelbrot : " 
+                << std::fixed
+                << std::setprecision(6)
+                << std::setw(5) << elapsed_seconds.count() << " s"
+                << std::endl;
+    
     return pixels;
 }
 
