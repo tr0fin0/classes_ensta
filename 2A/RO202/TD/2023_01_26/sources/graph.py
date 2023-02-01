@@ -139,3 +139,16 @@ class Graph:
                         result += repr(self.nodes[i]) + " - " + repr(self.nodes[j]) + " (" + repr(self.adjacency[i][j]) + ")\n" 
     
         return result
+
+
+    def __str__(self):
+        output = ""
+
+        edges = self.getEdges()
+        for i in range(len(edges)):
+            start  = edges[i].id1
+            finish = edges[i].id2
+            weight = edges[i].weight
+            output += f'[{i:2.0f}: ({start:2.0f}, {finish:2.0f}) {weight:2.0f}]\n'
+
+        return output[:-1]
