@@ -36,10 +36,9 @@ def main():
 # Applique l'algorithme de Kruskal pour trouver un arbre couvrant de poids minimal d'un graphe
 # Retourne: Un arbre couvrant de poids minimal du graphe ou None s'il n'en existe pas
 def kruskal(g):
-    
     # Créer un nouveau graphe contenant les mêmes sommets que g
     tree = graph.Graph(g.nodes)
-    
+
     # Nombre d'arêtes dans l'arbre
     addedEdges = 0
     
@@ -48,6 +47,18 @@ def kruskal(g):
     
     # Trier les arêtes par poids croissant
     edges.sort()
+
+
+    for edge in edges:
+        # check with edge makes a cycle
+        if tree.createACycle(edge) == False:
+            tree.addCopyOfEdge(edge)
+            addedEdges += 1
+
+    return tree
+
+
+
 
 if __name__ == '__main__':
     main()
