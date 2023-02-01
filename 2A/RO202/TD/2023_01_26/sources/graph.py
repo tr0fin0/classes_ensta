@@ -17,6 +17,7 @@ class Edge:
     def __eq__(self, other):
         return self.id1 == other.id1 and self.id2 == other.id2 or self.id1 == other.id2 and self.id2 == other.id1
 
+
 class Graph:
 
     n = 0
@@ -116,13 +117,13 @@ class Graph:
         for i in range(len(self.nodes)):
             if self.nodes[i] == sName:
                 return i
-        
+
         return -1
 
     def __repr__(self):
 
         result = ""
-    
+
         for i in range(self.n):
             for j in range(self.n):
                 if self.adjacency[i][j] != 0:
@@ -133,11 +134,11 @@ class Graph:
                         # Si c'est la première fois qu'on croise cet arête
                         if i < j:
                             result += repr(self.nodes[i]) + " - " + repr(self.nodes[j]) + " (" + repr(self.adjacency[i][j]) + ")\n" 
-    
+
                     # S'il y a un arc
                     else:
                         result += repr(self.nodes[i]) + " - " + repr(self.nodes[j]) + " (" + repr(self.adjacency[i][j]) + ")\n" 
-    
+
         return result
 
 
