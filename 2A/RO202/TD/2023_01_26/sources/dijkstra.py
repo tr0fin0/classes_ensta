@@ -4,6 +4,7 @@ import sys
 def main():
     ex4_2()
     ex4_3()
+    ex6()
 def dijkstra(g: graph, origin: str) -> graph:
     # creates graph with the same nodes
     tree    = graph.Graph(g.nodes)
@@ -182,18 +183,34 @@ def ex4_3():
     else:
         print("no possible tree")
 
-   # Next node considered 
-   pivot = r
-   
-   # Liste qui contiendra les sommets ayant été considérés comme pivot
-   v2 = []
-   v2.append(r)
-   
-   pred = [0] * g.n
-   
-   # Les distances entre r et les autres sommets sont initialement infinies
-   pi = [sys.float_info.max] * g.n
-   pi[r] = 0
+def ex6():
+    print("exercice 6) min")
+    cities = []
+    cities.append("a")
+    cities.append("b")
+    cities.append("c")
+    cities.append("d")
+    cities.append("e")
+
+    g = graph.Graph(cities)
+
+    g.addArc("a", "c", 4)
+    g.addArc("a", "d", 8)
+    g.addArc("d", "c", 6)
+    g.addArc("c", "d", 4)
+    g.addArc("c", "b", 3)
+    g.addArc("b", "d", 2)
+    g.addArc("d", "e", 1)
+    g.addArc("b", "e", 2)
+
+    tree = dijkstra(g, "a")
+    # tree = dijkstra(g, "Amsterdam")
+
+    if tree != None:
+        # print(tree)
+        print(repr(tree))
+    else:
+        print("no possible tree")
 
    # Ajouter votre code ici 
    # ...
