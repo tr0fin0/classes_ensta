@@ -4,6 +4,68 @@ import sys
 def main():
     ex4_2()
     ex4_3()
+def dijkstra(g: graph, origin: str) -> graph:
+    # creates graph with the same nodes
+    tree    = graph.Graph(g.nodes)
+
+    # information from graph
+    nNodes = g.n
+    unvisitedNodes = list(range(nNodes))
+
+    # function variables
+    originIndex = g.indexOf(origin)
+    originPred = -1
+
+    # list of nodes already considered as pivots
+    pivots = []
+
+    # list of predecessors
+    pred = [''] * nNodes
+    pred[originIndex] = originPred
+
+    # list of distances from origin to the other nodes
+    dist = [sys.float_info.max] * nNodes
+    dist[originIndex] = 0
+
+
+    # need to consider all nodes in graph
+    while unvisitedNodes:
+
+        # search node with lowest weight
+        currentMin = None
+        for node in unvisitedNodes:
+            if currentMin == None:
+                currentMin = node
+            elif dist[node] < dist[currentMin]:
+                currentMin = node
+
+        # save neighbors of the lowest weight node
+        neighbors = g.getNeighbors(currentMin)
+
+        # update weight with shortest path is found
+        for neighbor in neighbors:
+            distValue = dist[currentMin] + g.adjacency[currentMin][neighbor]
+
+            if distValue < dist[neighbor]:
+                dist[neighbor] = distValue
+                pred[neighbor] = currentMin
+
+
+        unvisitedNodes.remove(currentMin)
+
+
+    # return shortest path graph
+    for i in range(len(pred)):
+        if pred[i] == '':
+            pass
+        else:
+            while pred[i] != originPred:
+                weight = g.adjacency[pred[i]][i]
+                tree.addArcByIndex(pred[i], i, weight)
+
+                i = pred[i]
+
+    return tree
 def ex4_2():
     print("exercice 4.2)")
     cities = []
