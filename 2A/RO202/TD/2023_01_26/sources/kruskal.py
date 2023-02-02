@@ -3,6 +3,7 @@ import graph
 import sys
 
 def main():
+    ex3_3()
 def kruskal(g: graph, isMax: bool = False) -> graph:
     # Créer un nouveau graphe contenant les mêmes sommets que g
     tree = graph.Graph(g.nodes)
@@ -26,8 +27,9 @@ def kruskal(g: graph, isMax: bool = False) -> graph:
     return tree
 
 
+def ex3_3():
+    print('exercice 3.3)')
     g = graph.Graph(np.array(["a", "b", "c", "d", "e", "f", "g"]))
-
     g.addEdge("a", "b",  1.0)
     g.addEdge("a", "c",  8.0)
     g.addEdge("b", "c",  2.0)
@@ -42,10 +44,20 @@ def kruskal(g: graph, isMax: bool = False) -> graph:
     g.addEdge("f", "g", 10.0)
 
     tree = kruskal(g)
-
-
     if tree != None:
-        print(tree)
+        # print(tree)
+        print(repr(tree))
+    else:
+        print("no possible tree")
+
+
+    tree = kruskal(g, True)
+    if tree != None:
+        # print(tree)
+        print(repr(tree))
+    else:
+        print("no possible tree")
+
     else:
         print("Pas d'arbre couvrant")
 
