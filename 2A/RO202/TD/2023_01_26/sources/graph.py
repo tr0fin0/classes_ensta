@@ -62,7 +62,17 @@ class Graph:
                 if self.adjacency[i][j] != 0:
                     edges.append(Edge(i, j, self.adjacency[i][j]))
         return edges
-        
+
+    def getNeighbors(self, index: int) -> list:
+        neighbors = []
+
+        for i in range(self.n):
+            if self.adjacency[index][i] != 0:
+                neighbors.append(i)
+
+        return neighbors
+
+
     def createACycle(self, edge):
         cycleDetected = False
         reachedNodes = []
