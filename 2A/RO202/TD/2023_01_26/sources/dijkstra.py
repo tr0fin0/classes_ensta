@@ -1,10 +1,14 @@
 import graph
 import sys
 
+
+
 def main():
     ex4_2()
     ex4_3()
     ex6()
+
+
 def dijkstra(g: graph, origin: str) -> graph:
     # creates graph with the same nodes
     tree    = graph.Graph(g.nodes)
@@ -67,6 +71,10 @@ def dijkstra(g: graph, origin: str) -> graph:
                 i = pred[i]
 
     return tree
+
+
+
+
 def ex4_2():
     print("exercice 4.2)")
     cities = []
@@ -183,6 +191,8 @@ def ex4_3():
     else:
         print("no possible tree")
 
+
+
 def ex6():
     print("exercice 6) min")
     cities = []
@@ -212,9 +222,8 @@ def ex6():
     else:
         print("no possible tree")
 
-   # Ajouter votre code ici 
-   # ...
 
-   
+
+
 if __name__ == '__main__':
     main()
