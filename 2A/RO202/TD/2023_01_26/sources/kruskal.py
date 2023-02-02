@@ -119,13 +119,7 @@ def ex3_4():
     else:
         print("no possible tree")
 
-    for edge in edges:
-        # check with edge makes a cycle
-        if tree.createACycle(edge) == False:
-            tree.addCopyOfEdge(edge)
-            addedEdges += 1
 
-    return tree
 
 
 
