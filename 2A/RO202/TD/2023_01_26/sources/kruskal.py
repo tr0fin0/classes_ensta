@@ -3,6 +3,29 @@ import graph
 import sys
 
 def main():
+def kruskal(g: graph, isMax: bool = False) -> graph:
+    # Créer un nouveau graphe contenant les mêmes sommets que g
+    tree = graph.Graph(g.nodes)
+
+    # Nombre d'arêtes dans l'arbre
+    addedEdges = 0
+
+    # Récupérer toutes les arêtes de g
+    edges = g.getEdges()
+
+    # Trier les arêtes par poids croissant
+    edges.sort(reverse=isMax)
+
+
+    for edge in edges:
+        # check with edge makes a cycle
+        if tree.createACycle(edge) == False:
+            tree.addCopyOfEdge(edge)
+            addedEdges += 1
+
+    return tree
+
+
     g = graph.Graph(np.array(["a", "b", "c", "d", "e", "f", "g"]))
 
     g.addEdge("a", "b",  1.0)
