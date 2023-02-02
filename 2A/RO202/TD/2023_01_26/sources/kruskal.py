@@ -5,6 +5,9 @@ import sys
 def main():
     ex3_3()
     ex3_4()
+
+
+
 def kruskal(g: graph, isMax: bool = False) -> graph:
     # Créer un nouveau graphe contenant les mêmes sommets que g
     tree = graph.Graph(g.nodes)
@@ -58,6 +61,7 @@ def ex3_3():
         print(repr(tree))
     else:
         print("no possible tree")
+
 
 def ex3_4():
     print('exercice 3.4)')
