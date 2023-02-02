@@ -155,11 +155,9 @@ class Graph:
     def __str__(self):
         output = ""
 
-        edges = self.getEdges()
-        for i in range(len(edges)):
-            start  = edges[i].id1
-            finish = edges[i].id2
-            weight = edges[i].weight
-            output += f'[{i:2.0f}: ({start:2.0f}, {finish:2.0f}) {weight:2.0f}]\n'
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.adjacency[i][j] != 0:
+                    output += f'[({i:2.0f}, {j:2.0f}) {self.adjacency[i][j]}]\n'
 
         return output[:-1]
