@@ -190,4 +190,56 @@ faire le tableau de comparasion de chaque algorithme pour mieux visualiser comme
 définition de graphy.py
 
 
+% =============================
+algorithme de ford-fulkerson
+problème de flot maximal
+
+commen transfere une quantité maximale de matrière de sa à t sans dépaser les capacités des arcs?
+conditions
+    conservation de la matière
+    il est possible de décompeser / récomposer la matière transferée
+        tout que entree dans un noue il faut sortir du noud
+
+la reelité fictitice est different de la realite. on peut faire la differentiation s'on veut
+
+definitions:
+flux: quantité de matière circulant sur l'arc
+flot: flux sur chaque arc de G
+flot réalisable: vérifiant en chaque arc:
+    la contrainte de capacités
+    la loi de conservation ~ loi de kirschoff
+
+flot complet: est dit complet si et seulement si tous les chemins de s à t comportent au moins 1 arc saturé
+
+au début prendre tous les chemins et plus la plus petit capacité et l'ajouté
+
+valeur d'un flot:
+    flux des arcs entrants en t
+    flot maximal: le flot plus grand possible
+
+chaîne améliorante
+    vérifiant que :
+        les chemins en bon sens vont avoir des augmentations
+        les chemins en mauvais sens vont avoir des décrements
+
+polinomynal
+
+coupe est la somme des poids quand on eleve les valeurs
+\begin{equation}
+    \sum_{y \in w^{-}(T)} \phi_{ij} = \sum_{y \in w^{+}(T)} \phi_{ij} + \phi_{ts} ...
+\end{equation}
+
+chercher la photo et adicioner les diagrammes
+flots toujours plus petit que les couples
+
+la capacité d'une coupe minimale
+il n'existe pas de chaine améliorante de s à T
+
+ford-fulkerson plus important pour la recherche operationnelle
+
+
+complexite O(m2n/2)
+    si on considere le flot minimal à chaque étape
+    
+
 \end{document}
