@@ -37,3 +37,4 @@ tblank.*
 *.npz
 *.csv
 *.txt
+*.pyc
