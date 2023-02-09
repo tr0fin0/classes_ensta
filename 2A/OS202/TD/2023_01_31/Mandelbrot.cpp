@@ -1,12 +1,13 @@
 
-# include <iostream>
-# include <cstdlib>
-# include <string>
-# include <chrono>
-# include <cmath>
-# include <vector>
-# include <fstream>
+#include <iostream>
+#include <cstdlib>
+#include <string>
+#include <chrono>
+#include <cmath>
+#include <vector>
+#include <fstream>
 #include <iomanip>  // std::setprecision, std::setw
+#include <mpi.h>
 
 
 /** Une structure complexe est définie pour la bonne raison que la classe
@@ -95,12 +96,14 @@ std::vector<int>
 computeMandelbrotSet( int W, int H, int maxIter )
 {
     std::chrono::time_point<std::chrono::system_clock> start, end;
-    std::vector<int> pixels(W*H);
     start = std::chrono::system_clock::now();
+
+    std::vector<int> pixels(W*H);
     // On parcourt les pixels de l'espace image :
     for ( int i = 0; i < H; ++i ) {
       computeMandelbrotSetRow(W, H, maxIter, i, pixels.data() + W*(H-i-1) );
     }
+
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
     
@@ -112,6 +115,8 @@ computeMandelbrotSet( int W, int H, int maxIter )
     
     return pixels;
 }
+
+
 
 /** Construit et sauvegarde l'image finale **/
 void savePicture( const std::string& filename, int W, int H, const std::vector<int>& nbIters, int maxIter )
