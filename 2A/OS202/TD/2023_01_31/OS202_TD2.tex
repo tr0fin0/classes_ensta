@@ -77,20 +77,67 @@ Ces données seront utilisés pour l'analyse des performances.
 \subsection{Interblocage}
 \begin{resolution}
     On considère le l'exercice sur l'interblocage donné dans le cours et décrivez deux scénarios...
-    % TODO chercher sur les slides
-
-    regarder les données du cours
-    apparemment on devrait déjà comprendre quelques codes MPIs pour faire ce travail même qu'ils n'étaient pas données en cours.
-    MPI...
-    % TODO chercher sur les examples de codes MPI
-    
+    \begin{enumerate}
+        \item \texttt{Blocking}: 
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+    if (rank==0)
+    {
+        MPI_Recv(rcvbuf, count, MPI_DOUBLE, 1, 101, commGlob, &status);
+        MPI_Send(sndbuf, count, MPI_DOUBLE, 1, 102, commGlob);
+    }
+    else if (rank==1)
+    {
+        MPI_Recv(rcvbuf, count, MPI_DOUBLE, 0, 102, commGlob, &status);
+        MPI_Send(sndbuf, count, MPI_DOUBLE, 0, 101, commGlob);
+    }
+        \end{lstlisting}
+    \end{scriptsize}
+        \item \texttt{Non-Blocking}: 
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+    MPI_Request req;
+    if (rank == 0)
+    {
+        double vecteur[5] = { 1., 3., 5., 7., 22. };
+        MPI_Isend(vecteurs, 5, MPI_DOUBLE, 1, 101, commGlob, &req);
+        // Some compute with other data can be executed here!
+        MPI_Wait(req, MPI_STATUS_IGNORE);
+    }
+    else if (rank==1)
+    {
+        MPI_Status status; double vecteurs[5];
+        MPI_Irecv(vecteurs, 5, MPI_DOUBLE, 0, 101, commGlob, &req);
+        int flag = 0;
+        
+        do {
+            // Do computation while message is not received on another data
+            MPI_Test(&req, &flag, &status);
+        } while(flag);
+    }
+        \end{lstlisting}
+    \end{scriptsize}
+    \end{enumerate}
+    La probabilité d'une interblocage est grand car une erreur dans le rank d'une variable pour causer une loop.
 \end{resolution}
 
 \subsection{Alice Problem's}
 \begin{resolution}
-    Il faudrait regarder les equations sur le slide du amphi 2 pour faire les calcules pas difficile et pas utile
-    ...
-    
+    On considère les equations suivants:
+    \begin{equation}
+        \boxed{
+            S(n) = \lim_{n\to\infty}\frac{n}{1 + (n-1)f} \to \frac{1}{f}
+        }
+    \end{equation}
+    Où:
+    \begin{enumerate}[noitemsep]
+        \item $n$: number of computing units;
+        \item $f$: fraction of $t_s$ which can't be parallelized;
+        \item $t_s$: time to run code sequential;
+    \end{enumerate}
+    Comme le code 90\% du code peut-être parallèle $f = 1 - 0.9 = 10\%$ et comme $n \gg 1$ on a que $S(n)$ sera au maximum $S(n) = 10$.
 \end{resolution}
 
 \section{Mandelbrot}
@@ -114,6 +161,30 @@ Ces données seront utilisés pour l'analyse des performances.
     % TODO comprendre equation
 
     Il semble qu'on étude ses fractals car un français les a découvert.
+    \begin{scriptsize}
+        \mycode
+        \begin{lstlisting}[language=C++]
+    MPI_Request req;
+    if (rank == 0)
+    {
+        double vecteur[5] = { 1., 3., 5., 7., 22. };
+        MPI_Isend(vecteurs, 5, MPI_DOUBLE, 1, 101, commGlob, &req);
+        // Some compute with other data can be executed here!
+        MPI_Wait(req, MPI_STATUS_IGNORE);
+    }
+    else if (rank==1)
+    {
+        MPI_Status status; double vecteurs[5];
+        MPI_Irecv(vecteurs, 5, MPI_DOUBLE, 0, 101, commGlob, &req);
+        int flag = 0;
+        
+        do {
+            // Do computation while message is not received on another data
+            MPI_Test(&req, &flag, &status);
+        } while(flag);
+    }
+        \end{lstlisting}
+    \end{scriptsize}
     mpirun -np 4 ./helloWorldMPI.exe
 \end{resolution}
 
