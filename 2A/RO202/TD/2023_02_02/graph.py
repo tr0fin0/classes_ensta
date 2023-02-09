@@ -72,6 +72,37 @@ class Graph:
 
         return neighbors
 
+    def getNextNodes(self, index: int) -> list:
+        nextNodes = []
+
+        for i in range(self.n):
+            if self.adjacency[index][i] != 0:
+                nextNodes.append(i)
+
+        return nextNodes
+
+    def getPreviousNodes(self, index: int) -> list:
+        previousNodes = []
+
+        for i in range(self.n):
+            if self.adjacency[i][index] != 0:
+                previousNodes.append(i)
+
+        return previousNodes
+
+    def getConnections(self, index: int) -> dict:
+        connections = {}
+
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.adjacency[i][j] != 0:
+                    if   index == j:
+                        connections[i] = -1
+                    elif index == i:
+                        connections[j] = +1
+
+        return connections
+
 
     def createACycle(self, edge):
         cycleDetected = False
