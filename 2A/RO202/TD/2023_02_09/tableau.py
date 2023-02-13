@@ -2,35 +2,27 @@ import numpy as np
 import sys
 
 class Tableau:
+    n = 0           # Nombre de variables
+    m = 0           # Nombre de contraintes
 
-    # Nombre de variables
-    n = 0
+    A = np.empty(0) # 
+    b = np.array([])# 
+    c = np.array([])# 
 
-    # Nombre de contraintes
-    m = 0
 
-    A = np.empty(0)
-    b = np.array([])
-    c = np.array([])
+    basis = np.array([])    # base actuelle
+                            #   [] si aucune n'a été définie
 
-    # Base actuelle ou [] si aucune n'a été définie
-    basis = np.array([])
+    bestSolution = None     # Vector (1xn) contenant la meilleure solution actuellement
+                            #   [] si aucune n'a été trouvée 
 
-    # Vector de taille n contenant la meilleure solution actuellement connue (ou [] si aucune n'a été trouvée) 
-    bestSolution = None
+    bestObjective = 0       # Valeur de l'objectif de la meilleure solution connue
 
-    # Valeur de l'objectif de la meilleure solution connue
-    bestObjective = 0
-
-    # Vrai si on considère un problème dont l'objectif est une minimisation
     isMinimization = True
 
-    # Vrai si on souhaite afficher le tableau à chaque itération de l'algorithme
     DISPLAY_SIMPLEX_LOGS = True
 
-    # Crée un tableau
     def __init__(self, A, b, c, isMinimization):
-
         self.n = len(c)
         self.m = len(A)
         self.A = np.copy(A)
@@ -41,6 +33,7 @@ class Tableau:
         self.basis = np.array([])
         self.bestSolution = None
         self.bestObjective = 0.0
+
 
     def ex1(): 
 
