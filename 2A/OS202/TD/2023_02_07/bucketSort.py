@@ -48,11 +48,7 @@ def bucketSort(array: list, numBuckets: int = 10) -> list:
 
     return sortedArray
 
-
-
-
-
-def main():
+def execution() -> None:
     # initialization random array
     array = getRandomArray(int(1e7))
     # printArrayInfo(array)   # debug
@@ -70,6 +66,16 @@ def main():
     # if (arraySorted == sorted(array)):
     #     end = time.time()
     #     print(f"[{(end - start):2.6f} s]: sorting successful")
+
+    return None
+
+
+
+
+
+def main():
+    execution()
+    # print([0]*10)
 
 
 
