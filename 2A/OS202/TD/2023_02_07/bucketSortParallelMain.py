@@ -13,7 +13,7 @@ nProcess = comm.Get_size()
 process  = comm.Get_rank()
 
 root = 0
-size = 1e2
+size = 1e7
 
 if process == root:
     # main process:
@@ -40,6 +40,9 @@ if process == root:
 
         sizeBuckets[index] = sizeBuckets[index] + 1
 
+# chaque processus avec les donnes
+# were one process creates the entire array of random numbers but this is not efficient. each process can creates a slice of the data and pass to the respectivy bucket with the same index function used previously.
+# even with it is costly to declare and read the array it will be faster with each process can 
     for i in range(nProcess-1):
         # there is one bucket for each process
         comm.send(buckets[i], dest = (i+1))
@@ -47,9 +50,13 @@ if process == root:
     for i in range(nProcess-1):
         sortedBucket = comm.recv(source = (i+1))
 
-        for j in range(sizeBuckets[i]):
-            sortedArray.append(sortedBucket[j])
+        sortedArray += sortedBucket # array concatenate
 
+        # for j in range(sizeBuckets[i]):     # value to value append
+        #     sortedArray.append(sortedBucket[j])
+
+# there is no need to append with value separately, appends takes time because it recopies the memory every time it is executed.
+# concatenate arrays
     end = time.time()
     print(f'[{(end - start):2.6f} s]: parallel ({size})')
     # print(f'{sizeBuckets}')
@@ -58,3 +65,9 @@ if process == root:
 else:
     bucket = comm.recv(source = root)
     comm.send(sorted(bucket), dest=root)
+
+
+# benchmark:
+#   [27.253314 s]: parallel (10000000.0) | original code
+#   [33.639024 s]: parallel (10000000.0) | w/ concatenate arrays
+#   
