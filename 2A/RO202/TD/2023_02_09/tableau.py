@@ -255,6 +255,23 @@ class Tableau:
 
         # 3 - Retourner vrai si une nouvelle base est trouvée et faux sinon
 
+
+        if self.isMinimization:
+            print("minimization")
+            for j in range(S_cols):
+                if S[-1][j] < 0:
+                    # print('not end')
+                    # print(S[-1][j])
+                    return False
+        else:
+            print("maximization")
+            for j in range(S_cols):
+                if S[-1][j] > 0:
+                    print('not end')
+                    # print(S[-1][j])
+                    return False
+        # print('True')
+        return True
         # TODO
 
 
