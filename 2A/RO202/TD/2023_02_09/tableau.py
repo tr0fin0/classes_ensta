@@ -104,7 +104,24 @@ class Tableau:
          * - dans l4, ne pas oublier de mettre à jour bestObjective
         """
 
-        # TODO
+        # S = np.zeros((self.m + 1, self.n + 2))  # simplex matrix
+        S = np.zeros((self.m + 1, self.n + 1))  # simplex matrix
+        S_rows = S.shape[0]
+        S_cols = S.shape[1]
+
+        # adding A values, conditions of system
+        #   A has array the identity matrix associated with it
+        for i in range(self.m):
+            for j in range(self.n):
+                S[i][j] = self.A[i][j]
+
+        # adding c values, targets of system
+        for j in range(self.n):
+            S[-1][j] = self.c[j]
+
+        # adding b values, conditions of system targets
+        for i in range(self.m):
+            S[i][-1] = self.b[i]
 
         # Afficher le tableau sous forme canonique
         if self.DISPLAY_SIMPLEX_LOGS:
