@@ -76,7 +76,7 @@ class Tableau:
 
     """
      Effectuer un pivotage. Une base doit avoir été sélectionnée
-     Sortie : Vrai si une nouvelle vase a été trouvée, faux si une solution optimale est atteinte
+     Sortie : Vrai si une nouvelle base a été trouvée, faux si une solution optimale est atteinte
     """ 
     def pivot(self):
 
