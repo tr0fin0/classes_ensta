@@ -173,8 +173,85 @@ class Tableau:
          
          Remarque : il faut une nouvelle fois faire des comparaisons à epsilon prêt.
         """
-         
+
+        indexOut = -1
+        minMax = float('inf')
+        maxMin = float('-inf')
+        for i in range(S_rows - 1): # exclude coûts réduits
+            if S[i][indexIn] == 0:
+                pass
+            else:
+                ratio = S[i][-1] / S[i][indexIn]
+
+                if ratio < minMax and ratio > 0 + epsilon:
+                    minMax = ratio
+                    indexOut = i
+                    # print(f'ratio: {ratio}')
+                # print(f'S: {S[i][indexIn]}')
+        print(f'indexOut {indexOut}')
+
+        print(f'basis: {self.basis}')
+        self.basis[indexOut] = indexIn
+        print(f'basis: {self.basis}')
+
+        # gauss jordan elimination
+        print(f'{S.shape}')
+        # base = [1, 3, 4]
+        for z in range(len(self.basis)): # for every value in the basis
+        # for z in range(len(base)): # for every value in the basis
+            pivot = S[z][self.basis[z]]
+            # pivot = S[z][base[z]]
+            print(f"pivot: {pivot}")
+
+            if pivot == 0:  # impossible identity matrix
+                # print(f"pivot == 0")
+                break
+
+            # elif pivot == 1:
+            #     continue
+
+            # pivot != 1
+            else:
+                print(f'{S}\n')
+
+                for j in range(S_cols):
+                    if S[z][j] != 0:
+                        S[z][j] = S[z][j] / pivot
+                print(f'{S}\n')
+
+                for i in range(S_rows):
+                    if i != z:
+                        factor = S[i][self.basis[z]]
+                        print(f'{factor}')
+
+                        for j in range(S_cols):
+                            S[i][j] -= factor * S[z][j]
+                print(f'{S}\n')
+
+
+            # print(f'{self.basis[z]}')
+            # print(f"pivot: {S[z][self.basis[z]]}")
+            # for i in range(S_rows):
+            #     for j in range(S_cols):
+            #         # print(f'z: {z} S: {S[i][j]}')
+            #         continue
         # TODO
+
+                # adding A values, conditions of system
+        #   A has array the identity matrix associated with it
+        for i in range(self.m):
+            for j in range(self.n):
+                self.A[i][j] = S[i][j]
+
+        # adding c values, targets of system
+        for j in range(self.n):
+            self.c[j] = S[-1][j]
+
+        # adding b values, conditions of system targets
+        for i in range(self.m):
+            self.b[i] = S[i][-1]
+
+        self.bestObjective = -S[-1][-1]
 
         # 3 - Retourner vrai si une nouvelle base est trouvée et faux sinon
 
