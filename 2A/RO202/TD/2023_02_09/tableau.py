@@ -142,6 +142,25 @@ class Tableau:
                - si vous voulez tester si a est inférieur à 1, il faut écrire : a < 1 - epsilon (sinon la condition serait vérifiée pour a = 0.99999999999).
         """  
 
+        epsilon = 1e-7
+        indexIn = -1
+        if self.isMinimization:
+            for j in range(S_cols - 1):
+                # print(S[-1][j])
+                if S[-1][j] < 0 - epsilon:
+                    indexIn = j
+                    # print(S[-1][j])
+                    break
+            # print("minimization")
+        else:
+            for j in range(S_cols - 1):
+                # print(S[-1][j])
+                if S[-1][j] > 0 + epsilon:
+                    indexIn = j
+                    # print(S[-1][j])
+                    break
+            # print("maximization")
+        print(f'indexIn {indexIn}')
         # TODO
 
         """
