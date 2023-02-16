@@ -91,10 +91,9 @@ class Tableau:
          * - bestObjective : valeur de l'objectif de la solution courante
          * - basis[] : indice des variables dans la base courante (taille m)
          *     - basis[  0] : indice de la première variable dans la base 
-         *     - basis[m-1] : indice de la dernière variable de la base.
+         *     - basis[m-1] : indice de la dernière variable de   la base.
          *
-         * Pseudo-code:
-         *
+         * Pseudo-code :
          * l1 - Pour chaque contrainte i (i.e., pour chaque ligne i de A)
          *       l2 - Utiliser une combinaison linéaire de la contrainte i pour fixer à 1 le coefficient en ligne i et en colonne basis[i]
          *       l3 - Utiliser une combinaison linéaire de la contrainte i et des autres contraintes pour fixer les autres coefficients de la colonne basis[i] à 0
@@ -103,7 +102,6 @@ class Tableau:
          * Remarques :
          * - dans l2 et l3, ne pas oublier de mettre à jour b
          * - dans l4, ne pas oublier de mettre à jour bestObjective
-         *              
         """
 
         # TODO
