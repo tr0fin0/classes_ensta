@@ -36,45 +36,6 @@ class Tableau:
         self.bestObjective = 0.0
 
 
-    def ex1(): 
-
-        A = np.array([[1, -1], [0, 1], [8, 5]], dtype = float)
-
-        c = np.array([2, 1], dtype = float)
-        b = np.array([4, 8, 56], dtype = float)
-
-        return Tableau(A, b, c, False) 
-
-    def ex2():
-
-        A = np.array([[1, -2, 1, -1, 0, 0], [0, 1, 3, 0, 1, 0], [2, 0, 1, 2, 0, 1]], dtype = float)
-
-        c = np.array([2, -3, 5, 0, 0, 0], dtype = float)
-        b = np.array([4, 6, 7], dtype = float)
-
-        return Tableau(A, b, c, True)
-
-    def main():
-
-        # Si le problème n'est pas sous forme normale, il faut le transformer 
-        normalForm = False
-
-        # Si on résout un problème sous forme normale 
-        if normalForm:
-
-            #** 1er cas - PL Ax = b et une base est fournie (aucune variable d'écart n'est ajoutée au problème) 
-            t1 = ex2()
-            t1.basis = np.array([0, 2, 5])
-            t1.applySimplex()
-            
-        # Si on résout un problème qui n'est pas sous forme normale 
-        else: 
-
-            #** 2ème cas - PL Ax <= b, ajouter des variables d'écart et les utiliser comme base
-            t2 = ex1()
-            t2.addSlackAndSolve()
-            t2.displaySolution()
-
     # Crée un tableau avec une variable d'écart pour chaque contrainte et résoudre
     def addSlackAndSolve(self):
 
