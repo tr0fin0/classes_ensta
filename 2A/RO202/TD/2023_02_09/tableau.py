@@ -123,10 +123,18 @@ class Tableau:
         for i in range(self.m):
             S[i][-1] = self.b[i]
 
+        # setting z value
+        # S[-1][self.n] = 1
+
+        # print(f'basis: {self.basis}')
+        # print(f'S:\n{S}')
+
         # Afficher le tableau sous forme canonique
         if self.DISPLAY_SIMPLEX_LOGS:
             print("Tableau in canonical form")
             self.display()
+        # TODO
+
 
         # 2 - Obtenir la nouvelle base
 
@@ -140,7 +148,7 @@ class Tableau:
            - Comme les calculs machine sont approchés, il faut toujours faire des comparaisons numériques à un epsilon prêt. Par exemple :
                - si vous voulez tester si a est supérieur à 1, il faut écrire : a > 1 + epsilon (sinon la condition serait vérifiée pour a = 1.00000000001) 
                - si vous voulez tester si a est inférieur à 1, il faut écrire : a < 1 - epsilon (sinon la condition serait vérifiée pour a = 0.99999999999).
-        """  
+        """
 
         epsilon = 1e-7
         indexIn = -1
@@ -363,7 +371,7 @@ class Tableau:
         toDisplay = "\nVar.\t"
 
         for i in range(self.n):
-            toDisplay += "x" + str(i+1) + "\t"
+            toDisplay += "x" + str(i) + "\t"
 
         dottedLine = ""
         for i in range(self.n + 2):
@@ -531,6 +539,54 @@ class Tableau:
 def isFractional(d): 
     return abs(round(d) - d) > 1E-6
 
-            
+
+def ex1():
+    """
+    max +2x +1y
+        +1x -1y <= 4
+            +1y <= 8
+        +8x +5y <= 56
+
+    * non standard matrix will always be as "equation <= value" form
+    """
+
+    A = np.array([[1, -1], [0, 1], [8, 5]], dtype = float)
+    b = np.array([4, 8, 56], dtype = float)
+    c = np.array([2, 1], dtype = float)
+
+    return Tableau(A, b, c, False)
+
+def ex2():
+    """
+    min +2x -3y +5z
+        +1x -2y +1z -1a +0b +0c <= 4
+        +0x +1y +3z +0a +1b +0c <= 6
+        +2x +0y +1z +2a +0b +1c <= 7
+    """
+
+    A = np.array([[1, -2, 1, -1, 0, 0], [0, 1, 3, 0, 1, 0], [2, 0, 1, 2, 0, 1]], dtype = float)
+    b = np.array([4, 6, 7], dtype = float)
+    c = np.array([2, -3, 5, 0, 0, 0], dtype = float)
+
+    return Tableau(A, b, c, True)
+
+def main():
+    normalForm = False
+
+    if normalForm:
+        #** 1er cas - PL Ax = b et une base est fournie (aucune variable d'écart n'est ajoutée au problème) 
+        t1 = ex2()
+        t1.basis = np.array([0, 2, 5])
+        t1.applySimplex()
+
+    else:
+        #** 2ème cas - PL Ax <= b, ajouter des variables d'écart et les utiliser comme base
+        t2 = ex1()
+        t2.addSlackAndSolve()
+        t2.displaySolution()
+
+
+
+
 if __name__ == '__main__':
     main()
