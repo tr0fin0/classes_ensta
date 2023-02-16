@@ -298,14 +298,14 @@ class Tableau:
 
         for varId in range(self.n):
             self.bestSolution[varId] = tSlack.bestSolution[varId]
-            print("varId = ", varId, " solution value: ", "%.2f" % tSlack.bestSolution[varId])
+            print("varId = ", varId, " solution value: ", "%2.2f" % tSlack.bestSolution[varId])
 
         self.bestObjective = tSlack.bestObjective
 
     # Afficher la solution courante
     def displaySolution(self):
 
-        print("z = ", "%.2f" % self.bestObjective, ", ")
+        print("z = ", "%2.2f" % self.bestObjective, ", ")
 
         variables = "("
         values = "("
@@ -314,9 +314,9 @@ class Tableau:
                 variables += "x" + str(i+1) + ", "
 
                 if isFractional(self.bestSolution[i]):
-                    values += str("%.2f" % self.bestSolution[i]) + ", "
+                    values += str("%2.2f" % self.bestSolution[i]) + ", "
                 else:
-                    values += str("%.2f" % self.bestSolution[i]) + ", "
+                    values += str("%2.2f" % self.bestSolution[i]) + ", "
 
         variables = variables[0:max(0, len(variables) - 2)]
         values = values[0:max(0, len(values) - 2)]
@@ -376,16 +376,16 @@ class Tableau:
             toDisplay = "(C" + str(l+1) + ")\t"
 
             for c in range(self.n):
-                toDisplay += str("%.2f" % self.A[l][c]) + "\t"
-            print(toDisplay, "| ",  "%.2f" % self.b[l])
+                toDisplay += str("%2.2f" % self.A[l][c]) + "\t"
+            print(toDisplay, "| ",  "%2.2f" % self.b[l])
 
         print(dottedLine)
         toDisplay = "(Obj)\t"
 
         for i in range(self.n):
-            toDisplay += str("%.2f" % self.c[i]) + "\t"
+            toDisplay += str("%2.2f" % self.c[i]) + "\t"
 
-        print(toDisplay, "|  ", "%.2f" % self.bestObjective)
+        print(toDisplay, "|  ", "%2.2f" % self.bestObjective)
 
         # Si un solution a été calculée
         if len(self.basis) > 0:
