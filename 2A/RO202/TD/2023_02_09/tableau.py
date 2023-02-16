@@ -5,9 +5,10 @@ class Tableau:
     n = 0           # Nombre de variables
     m = 0           # Nombre de contraintes
 
-    A = np.empty(0) # 
-    b = np.array([])# 
-    c = np.array([])# 
+    A = np.empty(0) #*  A(m x n)[][]: matrice des contraintes
+    b = np.array([])#*  b(m x 1)[]  : coefficients du membre de droite
+    c = np.array([])#*  c(n x 1)[]  : coefficients de l'objectif
+
 
 
     basis = np.array([])    # base actuelle
