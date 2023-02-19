@@ -20,7 +20,7 @@ def main():
         return np.random.rand(nProcess)
 
 
-    def bucketSortParallel(arraySize: float = 1e1) -> list:
+    def bucketSortParallel(arraySize: float = 1e7) -> list:
 
         if process == root:
             # main process:
@@ -80,7 +80,7 @@ def main():
 
     if process == 0:
         print(f'[{(end - start):2.6f} s]: parallel')
-        print(f'{arraySorted}')
+        # print(f'{arraySorted}')
 
 
 
