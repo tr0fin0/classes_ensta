@@ -15,6 +15,11 @@ process  = comm.Get_rank()
 root = 0
 size = 1e7
 
+
+
+# chaque processus avec les donnes
+# were one process creates the entire array of random numbers but this is not efficient. each process can creates a slice of the data and pass to the respectivy bucket with the same index function used previously.
+# even with it is costly to declare and read the array it will be faster with each process can 
 if process == root:
     # main process:
     # generate data
@@ -30,19 +35,13 @@ if process == root:
     for i in range(nProcess-1):
         buckets.append([])
 
-    sizeBuckets = [0]*len(buckets)
-
 
     # adding values
     for value in array:
         index = int(value * (nProcess-1))
         buckets[index].append(value)
 
-        sizeBuckets[index] = sizeBuckets[index] + 1
 
-# chaque processus avec les donnes
-# were one process creates the entire array of random numbers but this is not efficient. each process can creates a slice of the data and pass to the respectivy bucket with the same index function used previously.
-# even with it is costly to declare and read the array it will be faster with each process can 
     for i in range(nProcess-1):
         # there is one bucket for each process
         comm.send(buckets[i], dest = (i+1))
@@ -52,15 +51,9 @@ if process == root:
 
         sortedArray += sortedBucket # array concatenate
 
-        # for j in range(sizeBuckets[i]):     # value to value append
-        #     sortedArray.append(sortedBucket[j])
-
-# there is no need to append with value separately, appends takes time because it recopies the memory every time it is executed.
-# concatenate arrays
     end = time.time()
-    print(f'[{(end - start):2.6f} s]: parallel ({size})')
-    # print(f'{sizeBuckets}')
-    # print(f'{sortedArray}')
+    print(f'[{(end - start):2.6f} s]: parallelMain ({size})')
+
 
 else:
     bucket = comm.recv(source = root)
@@ -70,4 +63,5 @@ else:
 # benchmark:
 #   [27.253314 s]: parallel (10000000.0) | original code
 #   [33.639024 s]: parallel (10000000.0) | w/ concatenate arrays
-#   
+#   [20.876480 s]: parallel (10000000.0)
+#   [22.114769 s]: parallel (10000000.0) | remove sizeBuckets
