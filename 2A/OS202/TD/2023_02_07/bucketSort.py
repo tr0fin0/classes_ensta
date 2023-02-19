@@ -50,7 +50,8 @@ def bucketSort(array: list, numBuckets: int = 10) -> list:
 
 def execution() -> None:
     # initialization random array
-    array = getRandomArray(int(1e7))
+    size = 1e7
+    array = getRandomArray(int(size))
     # printArrayInfo(array)   # debug
 
 
@@ -58,7 +59,7 @@ def execution() -> None:
     start = time.time()
     arraySorted = bucketSort(array)
     end = time.time()
-    print(f'[{(end - start):2.6f} s]: serial')
+    print(f'[{(end - start):2.6f} s]: serial ({size})')
 
 
     # verification
