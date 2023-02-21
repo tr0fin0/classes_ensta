@@ -220,17 +220,8 @@ class Tableau:
                 print(f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix')
                 break
 
-
-            # print(f'{self.basis[z]}')
-            # print(f"pivot: {S[z][self.basis[z]]}")
-            # for i in range(S_rows):
-            #     for j in range(S_cols):
-            #         # print(f'z: {z} S: {S[i][j]}')
-            #         continue
-        # TODO
-
-                # adding A values, conditions of system
-        #   A has array the identity matrix associated with it
+        # adding back the Simplex Matrix values in A, b and c
+        # adding A values, conditions of system
         for i in range(self.m):
             for j in range(self.n):
                 self.A[i][j] = S[i][j]
@@ -243,7 +234,7 @@ class Tableau:
         for i in range(self.m):
             self.b[i] = S[i][-1]
 
-        self.bestObjective = -S[-1][-1]
+        self.bestObjective = S[-1][-1]
 
         # 3 - Retourner vrai si une nouvelle base est trouvée et faux sinon
 
