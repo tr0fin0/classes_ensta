@@ -167,9 +167,10 @@ class Tableau:
                     indexIn = j
                     # print(S[-1][j])
                     break
-            # print("maximization")
-        print(f'indexIn {indexIn}')
-        # TODO
+
+        if indexIn == -1:
+            print(f'error: indexIn = {indexIn} no base change, end pivot')
+            return False
 
         """
          2.2 - Obtenir la variable quittant la base
