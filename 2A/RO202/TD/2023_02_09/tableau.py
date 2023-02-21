@@ -236,26 +236,18 @@ class Tableau:
 
         self.bestObjective = S[-1][-1]
 
+
         # 3 - Retourner vrai si une nouvelle base est trouvée et faux sinon
-
-
+        # minimization is inverse of maximization
         if self.isMinimization:
-            print("minimization")
-            for j in range(S_cols):
+            for j in range(S_cols): # search in the objectivy values for < 0
                 if S[-1][j] < 0:
-                    # print('not end')
-                    # print(S[-1][j])
-                    return False
+                    return True     # simplex not ended
         else:
-            print("maximization")
-            for j in range(S_cols):
+            for j in range(S_cols): # search in the objectivy values for > 0
                 if S[-1][j] > 0:
-                    print('not end')
-                    # print(S[-1][j])
-                    return False
-        # print('True')
-        return True
-        # TODO
+                    return True     # simplex not ended
+        return False                # simplex ended
 
 
     # Obtenir la solution du tableau qui est supposé être sous forme canonique
