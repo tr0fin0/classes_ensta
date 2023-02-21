@@ -135,11 +135,9 @@ class Tableau:
         if self.DISPLAY_SIMPLEX_LOGS:
             print("Tableau in canonical form")
             self.display()
-        # TODO
 
 
         # 2 - Obtenir la nouvelle base
-
         """
          2.1 - Obtenir la variable entrant en base
           
@@ -161,15 +159,11 @@ class Tableau:
             for j in range(S_cols - 1): # don't look to the RHS column
                 if S[-1][j] < 0 - epsilon:
                     indexIn = j
-                    # print(S[-1][j])
                     break
-            # print("minimization")
         else:
             for j in range(S_cols - 1):
-                # print(S[-1][j])
                 if S[-1][j] > 0 + epsilon:
                     indexIn = j
-                    # print(S[-1][j])
                     break
 
         if indexIn == -1:
