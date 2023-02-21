@@ -154,9 +154,11 @@ class Tableau:
 
         epsilon = 1e-7
         indexIn = -1
+
+        # search for a base change if simplex is not over
+        # minimization is inverse of maximization
         if self.isMinimization:
-            for j in range(S_cols - 1):
-                # print(S[-1][j])
+            for j in range(S_cols - 1): # don't look to the RHS column
                 if S[-1][j] < 0 - epsilon:
                     indexIn = j
                     # print(S[-1][j])
