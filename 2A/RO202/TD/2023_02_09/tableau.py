@@ -537,6 +537,20 @@ def ex2():
 
     return Tableau(A, b, c, True)
 
+def ex0():
+    """
+    max +2x +1y
+        +1x -1y +1a +0b +0c <= 3
+        +1x +2y +0a +1b +0c <= 6
+        -1x +2y +0a +0b +1c <= 2
+    """
+
+    A = np.array([[1, -1], [1, 2], [-1, 2]], dtype = float)
+    b = np.array([3, 6, 2], dtype = float)
+    c = np.array([2, 1], dtype = float)
+
+    return Tableau(A, b, c, False)
+
 def main():
     normalForm = False
 
@@ -549,6 +563,7 @@ def main():
     else:
         #** 2ème cas - PL Ax <= b, ajouter des variables d'écart et les utiliser comme base
         t2 = ex1()
+        # t2 = ex0()
         t2.addSlackAndSolve()
         t2.displaySolution()
 
