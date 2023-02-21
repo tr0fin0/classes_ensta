@@ -201,39 +201,24 @@ class Tableau:
         # remove column and consider the new one
         self.basis[indexOut] = indexIn
 
-        # gauss jordan elimination
-        print(f'{S.shape}')
-        # base = [1, 3, 4]
-        for z in range(len(self.basis)): # for every value in the basis
-        # for z in range(len(base)): # for every value in the basis
+        # Gauss-Jordan elimination
+        for z in range(len(self.basis)):    # for every value in the basis
             pivot = S[z][self.basis[z]]
-            # pivot = S[z][base[z]]
-            print(f"pivot: {pivot}")
 
-            if pivot == 0:  # impossible identity matrix
-                # print(f"pivot == 0")
-                break
-
-            # elif pivot == 1:
-            #     continue
-
-            # pivot != 1
-            else:
-                print(f'{S}\n')
-
-                for j in range(S_cols):
+            if pivot != 0:
+                for j in range(S_cols):     # normalize the line
                     if S[z][j] != 0:
                         S[z][j] = S[z][j] / pivot
-                print(f'{S}\n')
 
-                for i in range(S_rows):
+                for i in range(S_rows):     # eliminate values
                     if i != z:
                         factor = S[i][self.basis[z]]
-                        print(f'{factor}')
 
                         for j in range(S_cols):
                             S[i][j] -= factor * S[z][j]
-                print(f'{S}\n')
+            else:
+                print(f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix')
+                break
 
 
             # print(f'{self.basis[z]}')
