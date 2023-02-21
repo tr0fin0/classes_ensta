@@ -28,6 +28,17 @@ import time
 import sys
 
 
+# initialization MPI
+# mpirun -np 10 python3 bucketSort.py
+from mpi4py import MPI
+comm = MPI.COMM_WORLD
+root = 0
+nProcess = comm.Get_size()
+process  = comm.Get_rank()
+
+def pprint(*args, **kwargs):
+    print("[%03d]"%process, *args, **kwargs)
+
 
 
 class Grille:
