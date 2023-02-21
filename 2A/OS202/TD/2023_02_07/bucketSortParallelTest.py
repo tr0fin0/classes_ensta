@@ -13,8 +13,11 @@ nProcess = comm.Get_size()
 process  = comm.Get_rank()
 
 root = 0
-size = 1e2
+size = 1e3
 
+
+def pprint(*args, **kwargs):
+    print("[%03d]"%process, *args, **kwargs)
 
 
 # chaque processus avec les donnes
@@ -28,14 +31,17 @@ if process == root:
 
     for i in range(nProcess-1):
     # for i in range(nProcess):
+
+        # pprint("Waiting bucket from", i+1)
         sortedBucket = comm.recv(source = (i+1))
+        print(f'r[{i}:{i+1}] ({len(sortedBucket)})')
+        # pprint("Received bucket from", i+1)
         # sortedBucket = comm.recv(source = (i))
 
         sortedArray += sortedBucket # array concatenate
 
     end = time.time()
     print(f'[{(end - start):2.6f} s]: parallelTest ({size})')
-    print(f'{sortedArray}')
 
 
 else:
@@ -61,8 +67,10 @@ else:
     for i in range(nProcess-1):
     # for i in range(nProcess):
         # there is one bucket for each process
-        if i != process:
+        if i+1 != process:
+            # pprint("Sending bucket", buckets[i], " to", i+1)
             comm.send(buckets[i], dest = (i+1))
+            print(f's[{i+1}:{i}] ({len(buckets[i])})')
         else:
             bucket += buckets[i]
         # comm.send(buckets[i], dest = (i))
@@ -71,13 +79,18 @@ else:
     # bucket = comm.recv(source = root)
 
     for i in range(nProcess-1):
-        if i != process:
+        if i+1 != process:
+            # pprint("Waiting bucket from", i+1)
             arrayReceived = comm.recv(source = (i+1))
+            print(f'r[{i}:{i+1}] ({len(arrayReceived)})')
+            # pprint("Received bucket from", i+1)
             bucket += arrayReceived
 
     # bucket += comm.recv(source = MPI.ANY_SOURCE)
 
+    # pprint("Sending bucket", bucket, " to", root)
     comm.send(sorted(bucket), dest=root)
+    print(f's[{i+1}:{i}] ({len(bucket)})')
 
 
 # benchmark:
