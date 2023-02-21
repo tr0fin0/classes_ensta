@@ -104,8 +104,11 @@ class Tableau:
          * - dans l4, ne pas oublier de mettre à jour bestObjective
         """
 
-        # S = np.zeros((self.m + 1, self.n + 2))  # simplex matrix
-        S = np.zeros((self.m + 1, self.n + 1))  # simplex matrix
+        # create simplex matrix:
+        #   here the A, b and c matrixes and vectors could be used directly
+        #   but the by creating the simplex matrix the algorithm behaves just
+        #   as the execution by wand helping on debugging
+        S = np.zeros((self.m + 1, self.n + 1))      # simplex matrix
         S_rows = S.shape[0]
         S_cols = S.shape[1]
 
