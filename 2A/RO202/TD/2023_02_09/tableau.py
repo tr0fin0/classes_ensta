@@ -127,11 +127,9 @@ class Tableau:
         for i in range(self.m):
             S[i][-1] = self.b[i]
 
-        # setting z value
-        # S[-1][self.n] = 1
-
-        # print(f'basis: {self.basis}')
-        # print(f'S:\n{S}')
+        # setting z value, result of the mix, or max, problem
+        #   it's sign needs to be carefull manipulate in the different problems
+        S[-1][self.n] = self.bestObjective
 
         # Afficher le tableau sous forme canonique
         if self.DISPLAY_SIMPLEX_LOGS:
