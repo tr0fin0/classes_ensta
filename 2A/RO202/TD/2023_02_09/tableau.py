@@ -188,24 +188,18 @@ class Tableau:
         """
 
         indexOut = -1
-        minMax = float('inf')
-        maxMin = float('-inf')
+        minRatio = float('inf')
+        # minimization and maximization have the same condition
         for i in range(S_rows - 1): # exclude coûts réduits
-            if S[i][indexIn] == 0:
-                pass
-            else:
+            if S[i][indexIn] != 0:
                 ratio = S[i][-1] / S[i][indexIn]
 
-                if ratio < minMax and ratio > 0 + epsilon:
-                    minMax = ratio
+                if ratio < minRatio and ratio > 0 + epsilon:
+                    minRatio = ratio
                     indexOut = i
-                    # print(f'ratio: {ratio}')
-                # print(f'S: {S[i][indexIn]}')
-        print(f'indexOut {indexOut}')
 
-        print(f'basis: {self.basis}')
+        # remove column and consider the new one
         self.basis[indexOut] = indexIn
-        print(f'basis: {self.basis}')
 
         # gauss jordan elimination
         print(f'{S.shape}')
