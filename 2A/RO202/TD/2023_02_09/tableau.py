@@ -113,6 +113,7 @@ class Tableau:
         S_cols = S.shape[1]
 
         # adding A values, conditions of system
+        #   sizes of matrixes and vectors can be found in the constructor
         #   A has array the identity matrix associated with it
         for i in range(self.m):
             for j in range(self.n):
