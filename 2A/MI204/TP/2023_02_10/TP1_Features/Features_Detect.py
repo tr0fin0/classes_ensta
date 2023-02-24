@@ -71,3 +71,37 @@ plt.imshow(img2)
 plt.title('Image n°2')
 
 plt.show()
+
+
+# detection de harris 
+# page 28 2_caracteristiques
+
+# page 34 2_caracteristiques
+# EVALUATION DES DETECTEURS DE POINTS D’INTERET
+# La plupart des détecteurs de point d’intérêt sont définis indépendamment des descripteurs
+# avec lesquels on les utilise. Il est donc nécessaire de pouvoir les évaluer en eux-mêmes.
+# Les propriétés recherchées d’un bon détecteur :
+# • Répétabilité : le point doit
+# apparaître aux mêmes endroits
+# quelque soit la déformation.
+# • Représentativité : les points
+# doivent être le plus nombreux
+# possible.
+# • Efficacité : le détecteur doit être
+# rapide à calculer (cf SURF, FAST)
+# (Rq : répétabilité et représentativité ne
+# sont pas indépendants !)
+
+# documentation of the openCV library to better understand the different codes avaleables the video is an interpretation of the text
+#   https://docs.opencv.org/3.4/df/d54/tutorial_py_features_meaning.html
+#     https://www.youtube.com/watch?v=DZtUt4bKtmY
+# 
+
+# introduction of the facts with the wikipedia page to explain what is the features detection method
+#   https://en.wikipedia.org/wiki/Feature_(computer_vision)#Detectors
+
+# sobel kernels are the a kind of feature detection, an edge detection features
+
+
+# paper that explains in its abstract the differences in the code of the laze and in the orb explaining why it is beeter in some ways
+#   https://www.doc.ic.ac.uk/~ajd/Publications/alcantarilla_etal_eccv2012.pdf
