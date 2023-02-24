@@ -178,8 +178,12 @@ if __name__ == "__main__":
 
   # Q1
   #   comment on peut voir avec le temps d'exécution, l'OpenCV est beaucoup plus efficace.
+  #     OpenCV:   4.2532e-04s
+  #     Discrete: 5.6706e-02s
+  #   tous les images ont êtes imprimées ensemble pour la comparaison visuelle.
 
-  #   les fonctions pythons sont interpretes par contre que l'OpenCV est compile de la libraire du C++ que rende le code plus efficace.
+  #   les fonctions pythons sont interpretes par contre que l'OpenCV est compile de la libraire du C++ que rende le code plus efficace pendant l'exécution.
+
 
   # Q2
   #   on voir que le kernel propose est:
@@ -190,5 +194,24 @@ if __name__ == "__main__":
   #   le rehaussement de contraste arrive...
   #   f-ftt equations from the board you took from the last class need the math proof
 
+
   # Q3
-  #   see poly
+  #   À partir de la page 56 du slide "1 Introduction Modeles" on peut voir que les composantes du gradient peut être faites avec la convolution des Masques de Sobel données pour les Kernels hx et hy suivants:
+
+  #   fx[i,j] = (f * hx)[i,j]
+  #     hx = [
+  #         [-1, +0, +1],
+  #         [-2, +0, +2],
+  #         [-1, +0, +1],
+  #       ]
+  #   fj[i,j] = (f * hj)[i,j]
+  #     hy = [
+  #         [-1, -2, -1],
+  #         [+0, +0, +0],
+  #         [+1, +2, +1],
+  #       ]
+
+  #   Après la Norme Euclidienne du Gradient, https://en.wikipedia.org/wiki/Norm_(mathematics), aussi connu comment la Norme 2, peut être obitenu avec l'equation suivante:
+  #   ||Df||2 = sqrt(fx^2 + fy^2)
+
+  # Pour l'affichage correcte il faudrait normalizer les valeurs de l'image en modifiant les variables "vmin" et "vmax" sur la fonction ".imshow()"
