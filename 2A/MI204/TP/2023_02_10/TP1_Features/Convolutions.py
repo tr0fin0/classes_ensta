@@ -24,26 +24,23 @@ def plotImg(image, title: str = 'title', vmin: float = -1.0, vmax: float = -1.0)
   return None
 
 
-def methodDiscrete(image) -> np.float64:
-  """
-  methodDiscrete():
-
-  """
-
-  #Méthode directe
-  start = cv2.getTickCount()
+def convolution(image, kernel) -> np.float64:
   img = cv2.copyMakeBorder(image,0,0,0,0,cv2.BORDER_REPLICATE)
   (h, w) = img.shape
 
   for x in range(1,w-1):
     for y in range(1,h-1):
-      # kernel:
-      #    -1
-      # -1 +5 -1
-      #    -1
+      val = kernel[0][0]*image[y+1, x-1] + kernel[0][1]*image[y+1, x+0] + kernel[0][2]*image[y+1, x+1] + kernel[1][0]*image[y+0, x-1] + kernel[1][1]*image[y+0, x+0] + kernel[1][2]*image[y+0, x+1] +kernel[2][0]*image[y-1, x-1] + kernel[2][1]*image[y-1, x+0] + kernel[2][2]*image[y-1, x+1]
 
-      val = -5*image[y, x] + image[y-1, x] + image[y, x-1] + image[y+1, x] + image[y, x+1] 
+      # for i in [-1, 0, +1]:
+      #   for j in [-1, 0, +1]:
+          # val += kernel[0,0]*image[y+1, x-1] + kernel[0,1]*image[y+1, x+0] + kernel[0,2]*image[y+1, x+1] + kernel[1,0]*image[y+0, x-1] + kernel[1,1]*image[y+0, x+0] + kernel[1,2]*image[y+0, x+1] +kernel[2,0]*image[y-1, x-1] + kernel[2,1]*image[y-1, x+0] + kernel[2,2]*image[y-1, x+1]
+      # image[y-1, x] - image[y, x-1] - image[y+1, x] - image[y, x+1] 
+      # val = +5*image[y, x] - image[y-1, x] - image[y, x-1] - image[y+1, x] - image[y, x+1] 
+
       img[y,x] = min(max(val,0),255)
+
+  return img
   end = cv2.getTickCount()
 
   time = (start - end)/ cv2.getTickFrequency()
