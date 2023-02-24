@@ -41,12 +41,29 @@ def convolution(image, kernel) -> np.float64:
       img[y,x] = min(max(val,0),255)
 
   return img
+
+
+def methodDiscrete(image, showImage: bool = True) -> np.float64:
+  """
+  methodDiscrete():
+
+  """
+
+  #Méthode directe
+  start = cv2.getTickCount()
+  kernel= [
+    [+0, -1, +0],
+    [-1, +5, -1],
+    [+0, -1, +0]
+  ]
+  img = convolution(image, kernel)
   end = cv2.getTickCount()
 
-  time = (start - end)/ cv2.getTickFrequency()
-  print(f"Méthode Directe : {time:1.8f} s")
+  time = (end - start)/ cv2.getTickFrequency()
+  print(f"Méthode Directe : {time:1.4e} s")
 
-  plotImg(img, 'Convolution - Méthode Directe')
+  if showImage:
+    plotImg(img, 'Convolution - Méthode Directe')
 
   return img
 
