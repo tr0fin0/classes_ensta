@@ -98,3 +98,7 @@ else:
 #   [33.639024 s]: parallel (10000000.0) | w/ concatenate arrays
 #   [20.876480 s]: parallel (10000000.0)
 #   [22.114769 s]: parallel (10000000.0) | remove sizeBuckets
+
+# check which process is send / receiving from what process
+# it works with size array 1e4 but not more
+# use function from different apparence
