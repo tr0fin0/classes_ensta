@@ -112,12 +112,51 @@ def Q1() -> None:
   plt.show()
 
   return None
+
+
+def Q3() -> None:
+  """
+  Q3()
+
+  """
+  print("[Q3]")
   image = np.float64(cv2.imread('../Image_Pairs/FlowerGarden2.png',0))
 
-  plotImg(image, 'image original')
+  start = cv2.getTickCount()
+  hx = [
+      [-1, +0, +1],
+      [-2, +0, +2],
+      [-1, +0, +1],
+    ]
+  hy = [
+      [-1, -2, -1],
+      [+0, +0, +0],
+      [+1, +2, +1],
+    ]
 
-  imageDiscrete = methodDiscrete(image)
-  imageOpenCV = methodOpenCV(image)
+  fx = convolution(image, hx)
+  fy = convolution(image, hy)
+
+  img = (fx**2 + fy**2)**(1/2)
+  end = cv2.getTickCount()
+
+  time = (end-start)/ cv2.getTickFrequency()
+  print(f"\tNorme Gradient Euclidienne: {time:1.4e} s")
+
+
+  figure, axis = plt.subplots(2, 2)
+
+  axis[0, 0].imshow(image, cmap = 'gray')
+  axis[0, 0].set_title("original")
+  axis[0, 1].imshow(img, cmap = 'gray', vmin = 0.0, vmax = 255.0)
+  axis[0, 1].set_title("gradient euclidienne")
+  axis[1, 0].imshow(fx, cmap = 'gray', vmin = 0.0, vmax = 255.0)
+  axis[1, 0].set_title("derivate x")
+  axis[1, 1].imshow(fy, cmap = 'gray', vmin = 0.0, vmax = 255.0)
+  axis[1, 1].set_title("derivate y")
+  plt.show()
+
+  return None
 
   return None
 
