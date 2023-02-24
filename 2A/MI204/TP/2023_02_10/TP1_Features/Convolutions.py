@@ -158,6 +158,13 @@ def Q3() -> None:
 
   return None
 
+
+
+
+def main() -> None:
+  # Q1()
+  Q3()
+
   return None
 
 
