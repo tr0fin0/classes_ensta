@@ -89,8 +89,29 @@ def methodOpenCV(image, showImage: bool = True) -> np.float64:
   return img
 
 
+def Q1() -> None:
+  """
+  Q1()
 
-def main() -> None:
+  """
+  print("[Q1]")
+  image = np.float64(cv2.imread('../Image_Pairs/FlowerGarden2.png',0))
+
+  imageDiscrete = methodDiscrete(image, False)
+  imageOpenCV = methodOpenCV(image, False)
+
+
+  figure, axis = plt.subplots(2, 2)
+
+  axis[0, 0].imshow(image, cmap = 'gray')
+  axis[0, 0].set_title("original")
+  axis[1, 0].imshow(imageDiscrete, cmap = 'gray')
+  axis[1, 0].set_title("discrete")
+  axis[1, 1].imshow(imageOpenCV, cmap = 'gray', vmin = 0.0, vmax = 255.0)
+  axis[1, 1].set_title("openCV")
+  plt.show()
+
+  return None
   image = np.float64(cv2.imread('../Image_Pairs/FlowerGarden2.png',0))
 
   plotImg(image, 'image original')
