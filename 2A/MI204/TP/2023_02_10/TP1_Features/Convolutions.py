@@ -80,8 +80,8 @@ def methodOpenCV(image) -> np.float64:
   img = cv2.filter2D(image, -1, kernel)
   end = cv2.getTickCount()
 
-  time = (start - end)/ cv2.getTickFrequency()
-  print(f"Méthode Filter2D: {time:1.8f} s")
+  time = (end-start)/ cv2.getTickFrequency()
+  print(f"Méthode Filter2D: {time:1.4e} s")
   # il faut normalizer l'image
   plotImg(image, 'Convolution - filter2D', 0.0, 255.0)
 
