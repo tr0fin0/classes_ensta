@@ -68,7 +68,7 @@ def methodDiscrete(image, showImage: bool = True) -> np.float64:
   return img
 
 
-def methodOpenCV(image) -> np.float64:
+def methodOpenCV(image, showImage: bool = True) -> np.float64:
   """
   methodOpenCV()
 
@@ -83,7 +83,8 @@ def methodOpenCV(image) -> np.float64:
   time = (end-start)/ cv2.getTickFrequency()
   print(f"Méthode Filter2D: {time:1.4e} s")
   # il faut normalizer l'image
-  plotImg(image, 'Convolution - filter2D', 0.0, 255.0)
+  if showImage:
+    plotImg(image, 'Convolution - filter2D', 0.0, 255.0)
 
   return img
 
