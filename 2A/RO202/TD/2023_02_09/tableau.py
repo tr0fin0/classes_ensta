@@ -20,16 +20,18 @@ class Tableau:
     bestObjective = 0       # Valeur de l'objectif de la meilleure solution connue
 
     isMinimization = True
+    isStandard = False
 
     DISPLAY_SIMPLEX_LOGS = True
 
-    def __init__(self, A, b, c, isMinimization):
+    def __init__(self, A, b, c, isMinimization, isStandard):
         self.n = len(c)
         self.m = len(A)
         self.A = np.copy(A)
         self.b = np.copy(b)
         self.c = np.copy(c)
         self.isMinimization = isMinimization
+        self.isStandard = isStandard
 
         self.basis = np.array([])
         self.bestSolution = None
@@ -149,6 +151,29 @@ class Tableau:
                - si vous voulez tester si a est supérieur à 1, il faut écrire : a > 1 + epsilon (sinon la condition serait vérifiée pour a = 1.00000000001) 
                - si vous voulez tester si a est inférieur à 1, il faut écrire : a < 1 - epsilon (sinon la condition serait vérifiée pour a = 0.99999999999).
         """
+
+
+
+        # Gauss-Jordan elimination
+        for z in range(len(self.basis)):    # for every value in the basis
+            pivot = S[z][self.basis[z]]
+
+            if pivot != 0:
+                for j in range(S_cols):     # normalize the line
+                    if S[z][j] != 0:
+                        S[z][j] = S[z][j] / pivot
+
+                for i in range(S_rows):     # eliminate values
+                    if i != z:
+                        factor = S[i][self.basis[z]]
+
+                        for j in range(S_cols):
+                            S[i][j] -= factor * S[z][j]
+            else:
+                print(f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix')
+                break
+
+
 
         epsilon = 1e-7
         indexIn = -1
@@ -274,13 +299,13 @@ class Tableau:
     # Afficher la solution courante
     def displaySolution(self):
 
-        print("z = ", "%2.2f" % self.bestObjective, ", ")
+        print("z = ", "%2.2f" % -self.bestObjective, ", ")
 
         variables = "("
         values = "("
         for i in range(len(self.bestSolution)):
             if self.bestSolution[i] != 0.0:
-                variables += "x" + str(i+1) + ", "
+                variables += "x" + str(i) + ", "
 
                 if isFractional(self.bestSolution[i]):
                     values += str("%2.2f" % self.bestSolution[i]) + ", "
@@ -297,31 +322,52 @@ class Tableau:
     """
     def tableauWithSlack(self):
 
-        ASlack = np.zeros((self.m, self.n+self.m))
+        print(f'A.shape: {(self.A).shape}')
+        print(f'size: {self.n + self.m}')
+        print(f'n: {self.n}')
+        print(f'm: {self.m}')
+        # if (self.A).shape[1] != self.n + self.m:
+        if self.isStandard != True:
+            ASlack = np.zeros((self.m, self.n+self.m))
 
-        # Pour chaque contrainte
-        for cstr in range(self.m):
+            # Pour chaque contrainte
+            for cstr in range(self.m):
 
-            # Fixer les coefficients des n variables d'origine
-            for col in range(self.n):
-                ASlack[cstr][col] = self.A[cstr][col]
+                # Fixer les coefficients des n variables d'origine
+                for col in range(self.n):
+                    ASlack[cstr][col] = self.A[cstr][col]
 
-            # Fixer le coefficient de la variable de slack non nulle
-            ASlack[cstr][self.n + cstr] = 1.0
+                # Fixer le coefficient de la variable de slack non nulle
+                ASlack[cstr][self.n + cstr] = 1.0
 
-        # Augmenter le nombre de variables dans l'objectif
-        cSlack = np.array([0.0] * (self.n + self.m))
+            # Augmenter le nombre de variables dans l'objectif
+            cSlack = np.array([0.0] * (self.n + self.m))
 
-        for i in range(self.n):
-            cSlack[i] = self.c[i]
+            for i in range(self.n):
+                cSlack[i] = self.c[i]
+
+            # for i in range(self.m):
+            #     self.basis[i] = i + self.n
+        else:
+            ASlack = self.A
+            cSlack = self.c
 
         # Créer une base avec les variables d'écart
         self.basis = np.array([0] * self.m)
 
-        for i in range(self.m):
-            self.basis[i] = i + self.n
+        print(f'basis\n{self.basis}')
 
-        slackTableau = Tableau(ASlack, self.b, cSlack, self.isMinimization)
+        for i in range(self.m):
+            # self.basis[i] = i + self.n
+            self.basis[self.m - i - 1] = (ASlack.shape[1]-i-1)
+            # self.basis[i] = i + self.m
+            # self.basis[i] = i
+
+        print(f'A\n{ASlack}')
+        print(f'b\n{self.b}')
+        print(f'c\n{cSlack}')
+        print(f'basis\n{self.basis}')
+        slackTableau = Tableau(ASlack, self.b, cSlack, self.isMinimization, True)
         slackTableau.basis = self.basis
 
         return slackTableau
@@ -342,7 +388,7 @@ class Tableau:
 
         for l in range(self.m):
 
-            toDisplay = "(C" + str(l+1) + ")\t"
+            toDisplay = "(C" + str(l) + ")\t"
 
             for c in range(self.n):
                 toDisplay += str("%2.2f" % self.A[l][c]) + "\t"
@@ -515,7 +561,7 @@ def ex1():
     b = np.array([4, 8, 56], dtype = float)
     c = np.array([2, 1], dtype = float)
 
-    return Tableau(A, b, c, False)
+    return Tableau(A, b, c, False, False)
 
 def ex2():
     """
@@ -529,24 +575,24 @@ def ex2():
     b = np.array([4, 6, 7], dtype = float)
     c = np.array([2, -3, 5, 0, 0, 0], dtype = float)
 
-    return Tableau(A, b, c, True)
+    return Tableau(A, b, c, True, True)
 
 def ex0():
     """
     max +2x +1y
-        +1x -1y +1a +0b +0c <= 3
-        +1x +2y +0a +1b +0c <= 6
-        -1x +2y +0a +0b +1c <= 2
+        +1x -1y <= 3
+        +1x +2y <= 6
+        -1x +2y <= 2
     """
 
     A = np.array([[1, -1], [1, 2], [-1, 2]], dtype = float)
     b = np.array([3, 6, 2], dtype = float)
     c = np.array([2, 1], dtype = float)
 
-    return Tableau(A, b, c, False)
+    return Tableau(A, b, c, False, False)
 
 def main():
-    normalForm = False
+    normalForm = True
 
     if normalForm:
         #** 1er cas - PL Ax = b et une base est fournie (aucune variable d'écart n'est ajoutée au problème) 
@@ -556,6 +602,7 @@ def main():
 
     else:
         #** 2ème cas - PL Ax <= b, ajouter des variables d'écart et les utiliser comme base
+        # t2 = ex2()
         t2 = ex1()
         # t2 = ex0()
         t2.addSlackAndSolve()
