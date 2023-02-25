@@ -183,12 +183,12 @@ def Q3(kernelSelection:str = 'A', convSelection:str = 'A') -> None:
 
   figure, axis = plt.subplots(2, 2)
 
-  axis[0, 0].imshow(image, cmap = 'gray')
-  axis[0, 0].set_title("original")
+  axis[0, 0].imshow(fx, cmap = 'gray', vmin = 0.0, vmax = 255.0)
+  axis[0, 0].set_title("derivate x")
   axis[0, 1].imshow(img, cmap = 'gray', vmin = 0.0, vmax = 255.0)
   axis[0, 1].set_title("gradient euclidienne")
-  axis[1, 0].imshow(fx, cmap = 'gray', vmin = 0.0, vmax = 255.0)
-  axis[1, 0].set_title("derivate x")
+  axis[1, 0].imshow(image, cmap = 'gray')
+  axis[1, 0].set_title("original")
   axis[1, 1].imshow(fy, cmap = 'gray', vmin = 0.0, vmax = 255.0)
   axis[1, 1].set_title("derivate y")
   plt.savefig(f'./images/Q3{kernelSelection}{convSelection}.svg')
