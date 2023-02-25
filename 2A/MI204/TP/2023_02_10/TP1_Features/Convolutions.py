@@ -111,7 +111,7 @@ def Q1() -> None:
   return None
 
 
-def Q3() -> None:
+def Q3(kernelSelection:str = 'A', convSelection:str = 'A') -> None:
   """
   Q3()
 
@@ -119,26 +119,66 @@ def Q3() -> None:
   print("[Q3]")
   image = np.float64(cv2.imread('../Image_Pairs/FlowerGarden2.png',0))
 
+
   start = cv2.getTickCount()
-  hx = [
+
+  if kernelSelection == 'A':
+    hx = np.array([
       [-1, +0, +1],
       [-2, +0, +2],
       [-1, +0, +1],
-    ]
-  hy = [
-      [-1, -2, -1],
-      [+0, +0, +0],
-      [+1, +2, +1],
-    ]
+    ])
+    hy = np.array([
+        [-1, -2, -1],
+        [+0, +0, +0],
+        [+1, +2, +1],
+      ])
 
-  fx = convolution(image, hx)
-  fy = convolution(image, hy)
+  elif kernelSelection == 'B':
+    hx = np.array([
+      [-0, +0, +0],
+      [-1, +0, +1],
+      [-0, +0, +0]
+    ])
+    hy = np.array([
+      [+0, -1, +0], 
+      [+0, +0, +0], 
+      [+0, +1, +0]
+    ])
+
+  elif kernelSelection == 'C':
+    hx = np.array([
+      [-0, +0, +0],
+      [-1, +1, +0],
+      [-0, +0, +0]
+    ])
+    hy = np.array([
+      [+0, -1, +0], 
+      [+0, +1, +0], 
+      [+0, +0, +0]
+    ])
+
+  else:
+    print(f'error: kernelSelection: {kernelSelection} undefined')
+
+
+  if convSelection == 'A':
+    fx = convolution(image, hx)
+    fy = convolution(image, hy)
+
+  elif convSelection == 'B':
+    fx = cv2.filter2D(image, -1, hx)
+    fy = cv2.filter2D(image, -1, hy)
+
+  else:
+    print(f'error: convSelection: {convSelection} undefined')
+
 
   img = (fx**2 + fy**2)**(1/2)
   end = cv2.getTickCount()
 
   time = (end-start)/ cv2.getTickFrequency()
-  print(f"\tNorme Gradient Euclidienne: {time:1.4e} s")
+  print(f"\t[{kernelSelection}{convSelection}] Gradient Euclidienne: {time:1.4e} s")
 
 
   figure, axis = plt.subplots(2, 2)
@@ -151,6 +191,7 @@ def Q3() -> None:
   axis[1, 0].set_title("derivate x")
   axis[1, 1].imshow(fy, cmap = 'gray', vmin = 0.0, vmax = 255.0)
   axis[1, 1].set_title("derivate y")
+  plt.savefig(f'./images/Q3{kernelSelection}{convSelection}.svg')
   plt.show()
 
   return None
