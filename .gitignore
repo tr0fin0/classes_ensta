@@ -38,3 +38,4 @@ tblank.*
 *.csv
 *.txt
 *.pyc
+*.svg
