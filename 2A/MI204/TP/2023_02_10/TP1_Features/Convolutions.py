@@ -30,13 +30,10 @@ def convolution(image, kernel) -> np.float64:
 
   for x in range(1,w-1):
     for y in range(1,h-1):
-      val = kernel[0][0]*image[y+1, x-1] + kernel[0][1]*image[y+1, x+0] + kernel[0][2]*image[y+1, x+1] + kernel[1][0]*image[y+0, x-1] + kernel[1][1]*image[y+0, x+0] + kernel[1][2]*image[y+0, x+1] +kernel[2][0]*image[y-1, x-1] + kernel[2][1]*image[y-1, x+0] + kernel[2][2]*image[y-1, x+1]
-
-      # for i in [-1, 0, +1]:
-      #   for j in [-1, 0, +1]:
-          # val += kernel[0,0]*image[y+1, x-1] + kernel[0,1]*image[y+1, x+0] + kernel[0,2]*image[y+1, x+1] + kernel[1,0]*image[y+0, x-1] + kernel[1,1]*image[y+0, x+0] + kernel[1,2]*image[y+0, x+1] +kernel[2,0]*image[y-1, x-1] + kernel[2,1]*image[y-1, x+0] + kernel[2,2]*image[y-1, x+1]
-      # image[y-1, x] - image[y, x-1] - image[y+1, x] - image[y, x+1] 
-      # val = +5*image[y, x] - image[y-1, x] - image[y, x-1] - image[y+1, x] - image[y, x+1] 
+      val = 0
+      for j in range(kernel.shape[0]):
+        for i in range(kernel.shape[1]):
+          val += kernel[i, j]*image[y+1-i, x-1+j]
 
       img[y,x] = min(max(val,0),255)
 
