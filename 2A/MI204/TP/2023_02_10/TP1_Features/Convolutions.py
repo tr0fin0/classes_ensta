@@ -57,7 +57,7 @@ def methodDiscrete(image,
     end = cv2.getTickCount()
 
     time = (end - start) / cv2.getTickFrequency()
-    print(f"Méthode Directe : {time:1.4e} s")
+    print(f"\tMéthode Directe : {time:1.4e} s")
 
     if showImage:
         plotImg(img, 'Convolution - Méthode Directe')
@@ -79,7 +79,7 @@ def methodOpenCV(image,
     end = cv2.getTickCount()
 
     time = (end - start) / cv2.getTickFrequency()
-    print(f"Méthode Filter2D: {time:1.4e} s")
+    print(f"\tMéthode Filter2D: {time:1.4e} s")
 
     if showImage:
         plotImg(image, 'Convolution - filter2D', 0.0, 255.0)
