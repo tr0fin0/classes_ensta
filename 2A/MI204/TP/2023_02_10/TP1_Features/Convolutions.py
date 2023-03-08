@@ -53,11 +53,6 @@ def methodDiscrete(image,
 
     #Méthode directe
     start = cv2.getTickCount()
-    # kernel= [
-    #   [+0, -1, +0],
-    #   [-1, +5, -1],
-    #   [+0, -1, +0]
-    # ]
     img = convolution(image, kernel)
     end = cv2.getTickCount()
 
@@ -80,7 +75,6 @@ def methodOpenCV(image,
 
     #Méthode filter2D
     start = cv2.getTickCount()
-    # kernel = np.array([[0, -1, 0],[-1, 5, -1],[0, -1, 0]])
     img = cv2.filter2D(image, -1, kernel)
     end = cv2.getTickCount()
 
