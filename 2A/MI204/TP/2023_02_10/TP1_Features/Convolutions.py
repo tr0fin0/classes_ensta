@@ -119,7 +119,9 @@ def Q1() -> None:
     return None
 
 
-def Q3(kernelSelection: str = 'A', convSelection: str = 'A') -> None:
+def Q3(kernelSelection: str = 'A',
+       convSelection: str = 'A',
+       showSelection: str = 'A') -> None:
     """
     Q3()
 
@@ -168,21 +170,33 @@ def Q3(kernelSelection: str = 'A', convSelection: str = 'A') -> None:
 
     time = (end - start) / cv2.getTickFrequency()
     print(
-        f"\t[{kernelSelection}{convSelection}] Gradient Euclidienne: {time:1.4e} s"
+        f"\t[{kernelSelection}{convSelection}{showSelection}] Gradient Euclidienne: {time:1.4e} s"
     )
 
     figure, axis = plt.subplots(2, 2)
 
-    axis[0, 0].imshow(fx, cmap='gray', vmin=0.0, vmax=255.0)
+    if showSelection == 'A':
+        axis[0, 0].imshow(fx, cmap='gray', vmin=0.0, vmax=255.0)
+        axis[0, 1].imshow(img, cmap='gray', vmin=0.0, vmax=255.0)
+        axis[1, 0].imshow(image, cmap='gray')
+        axis[1, 1].imshow(fy, cmap='gray', vmin=0.0, vmax=255.0)
+
+    elif showSelection == 'B':
+        axis[0, 0].imshow(fx, cmap='gray')
+        axis[0, 1].imshow(img, cmap='gray')
+        axis[1, 0].imshow(image, cmap='gray')
+        axis[1, 1].imshow(fy, cmap='gray')
+
+    else:
+        print(f'error: showSelection: {showSelection} undefined')
+
     axis[0, 0].set_title("derivate x")
-    axis[0, 1].imshow(img, cmap='gray', vmin=0.0, vmax=255.0)
     axis[0, 1].set_title("gradient euclidienne")
-    axis[1, 0].imshow(image, cmap='gray')
     axis[1, 0].set_title("original")
-    axis[1, 1].imshow(fy, cmap='gray', vmin=0.0, vmax=255.0)
     axis[1, 1].set_title("derivate y")
-    plt.savefig(f'./images/Q3{kernelSelection}{convSelection}.svg')
-    plt.show()
+    plt.savefig(f'./images/Q3{kernelSelection}{convSelection}{showSelection}.svg')
+
+    # plt.show()
 
     return None
 
