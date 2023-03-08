@@ -95,8 +95,9 @@ def Q1() -> None:
     print("[Q1]")
     image = np.float64(cv2.imread('../Image_Pairs/FlowerGarden2.png', 0))
 
-    imageDiscrete = methodDiscrete(image, False)
-    imageOpenCV = methodOpenCV(image, False)
+    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+    imageDiscrete = methodDiscrete(image, kernel, False)
+    imageOpenCV = methodOpenCV(image, kernel, False)
 
     figure, axis = plt.subplots(1, 3)
 
