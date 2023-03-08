@@ -103,10 +103,16 @@ def Q1() -> None:
 
     axis[0].imshow(imageDiscrete, cmap='gray')
     axis[0].set_title("discrete")
+    axis[0].set_xticks([])
+    axis[0].set_yticks([])
     axis[1].imshow(image, cmap='gray')
     axis[1].set_title("original")
+    axis[1].set_xticks([])
+    axis[1].set_yticks([])
     axis[2].imshow(imageOpenCV, cmap='gray', vmin=0.0, vmax=255.0)
     axis[2].set_title("openCV")
+    axis[2].set_xticks([])
+    axis[2].set_yticks([])
     plt.savefig('./images/Q1A.svg')
     plt.show()
 
