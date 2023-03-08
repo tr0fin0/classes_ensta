@@ -202,10 +202,11 @@ def Q3(kernelSelection: str = 'A',
 
 
 def main() -> None:
-    # Q1()
-    for kernel in ['A', 'B', 'C']:
-        for conv in ['A', 'B']:
-            Q3(kernel, conv)
+    Q1()
+    # for kernel in ['A', 'B', 'C']:
+    #     for conv in ['A', 'B']:
+    #         for show in ['A', 'B']:
+    #             Q3(kernel, conv, show)
 
     return None
 
