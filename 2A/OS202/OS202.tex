@@ -24,131 +24,263 @@
 \subfile{/home/tr0fin0/Documents/git_repositories/classes_ensta/intro.tex}
 % \subfile{/home/Documents/git_repositories/classes_ensta/intro.tex}
 
-https://github.com/JuvignyEnsta/IN203_SUPPORT_COURS
-https://github.com/JuvignyEnsta/Promotion_2022
+% https://github.com/JuvignyEnsta/IN203_SUPPORT_COURS
+% https://github.com/JuvignyEnsta/Promotion_2022
 
 
-07/03 examen écrit
-21/03 examen algorithme
-projet
-jean-didier.garaud@onera.fr
-
-
-
-différent configurations pour la constrution d'une système parallele
-    bus partager
-        plus facile
-        moins efficace
-        conflit d'information entre les différents processeurs
-
-latency memory example haswell architecture
-l1 cache
-l2 cache
-l3 cache
-ram
-swap
-
-la vélocité est inverse à la taille
-plus grand, plus lente
-plus petit, plus rapide
-
-solutions pour résoudre le problème, temps d'accès, de mémoire
-    interleaved RAMS
-        many physical memory units interleaved by the memory bus
-        number of physical memory units
-        number of contiguous bytes in a unique physique memory
-
-        utilise la mémoire pendant qu'on attend la réception d'une information d'une requeté anterieur
-
-    cache memory fast small memory unit where one stores temporary data
-        when multiple access to a same variable in a short time, speedup the read or write access
-        cache memory managed by the CPU
-
-        to optimize his program the programmer must know the strategies used by the CPU
-
-        associative memory cache each cache memory address mapped on fixed RAM address with a modulo
-
-UC calculus unit
-
-problème de coerance de cache
-\href{https://en.wikipedia.org/wiki/Cache_coherence}{cache coherence}
-
-#include <mpi.h> // assembly of library used for parallel programming
-
-it must precise what type of data is used because different machines can have different endiness and memory configuration, parallel computing was conceived to work in heterogenous machines
+% 07/03 examen écrit
+% 21/03 examen algorithme
+% projet
+% jean-didier.garaud@onera.fr
 
 
 
-interlocking, interblocage
-situation where many processes are waiting each other for an infinite time to complete their messages
-I uppercase in a command is a non blocking function
+% différent configurations pour la constrution d'une système parallele
+%     bus partager
+%         plus facile
+%         moins efficace
+%         conflit d'information entre les différents processeurs
+
+% latency memory example haswell architecture
+% l1 cache
+% l2 cache
+% l3 cache
+% ram
+% swap
+
+% la vélocité est inverse à la taille
+% plus grand, plus lente
+% plus petit, plus rapide
+
+% solutions pour résoudre le problème, temps d'accès, de mémoire
+%     interleaved RAMS
+%         many physical memory units interleaved by the memory bus
+%         number of physical memory units
+%         number of contiguous bytes in a unique physique memory
+
+%         utilise la mémoire pendant qu'on attend la réception d'une information d'une requeté anterieur
+
+%     cache memory fast small memory unit where one stores temporary data
+%         when multiple access to a same variable in a short time, speedup the read or write access
+%         cache memory managed by the CPU
+
+%         to optimize his program the programmer must know the strategies used by the CPU
+
+%         associative memory cache each cache memory address mapped on fixed RAM address with a modulo
+
+% UC calculus unit
+
+% problème de coerance de cache
+% \href{https://en.wikipedia.org/wiki/Cache_coherence}{cache coherence}
+
+% % #include <mpi.h> // assembly of library used for parallel programming
+
+% it must precise what type of data is used because different machines can have different endiness and memory configuration, parallel computing was conceived to work in heterogenous machines
 
 
-Distributed parallel rules
-    ethernet data exchange is very slow compared to memory access limit as possible the data exchanges
-    to hide data exchange cost it's better to compute some values during the exchange of data : prefer to use non blocking message exchange
-    each message has an initial cost: prefer to regroup data in a temporary buffer if needed
-    all processes quit the program at the same time: try to balance the computing load among computing nodes
+
+% interlocking, interblocage
+% situation where many processes are waiting each other for an infinite time to complete their messages
+% I uppercase in a command is a non blocking function
 
 
-TD 1
-https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf
-
-amphi2
-speed up
-mesure pour évaleur l'efficace d'une code parrallel par rapport à sa version sérielle
-S(n) = \frac{ts}{tp(n)}
-
-amdahl's law
-give a limit for the speed up 
-let ts, temps sequentielle, be the time necessary to run the code in sequential
-let f be the fraction of ts to the part of the code which can't be parallelise
-so the best expected speed up is
-
-s(n) =  frac{ts}{f ts + (1-f)ts/n} = \frac{n}{1 + (n+1)f}
-this law is useful to find a reasonable number of computing cores to use for an application 
-limitation may change with volue of input data 
+% Distributed parallel rules
+%     ethernet data exchange is very slow compared to memory access limit as possible the data exchanges
+%     to hide data exchange cost it's better to compute some values during the exchange of data : prefer to use non blocking message exchange
+%     each message has an initial cost: prefer to regroup data in a temporary buffer if needed
+%     all processes quit the program at the same time: try to balance the computing load among computing nodes
 
 
-gustafson's law
-speedup behavior with constant volume input data per processes
+% TD 1
+% https://github.com/JuvignyEnsta/Course2023/blob/main/TravauxDirig%C3%A9s/TD_numero_1/Sujet.pdf
+
+% amphi2
+% speed up
+% % mesure pour évaleur l'efficace d'une code parrallel par rapport à sa version sérielle
+% % S(n) = \frac{ts}{tp(n)}
+
+% amdahl's law
+% give a limit for the speed up 
+% let ts, temps sequentielle, be the time necessary to run the code in sequential
+% let f be the fraction of ts to the part of the code which can't be parallelise
+% so the best expected speed up is
+
+% s(n) =  frac{ts}{f ts + (1-f)ts/n} = \frac{n}{1 + (n+1)f}
+% this law is useful to find a reasonable number of computing cores to use for an application 
+% limitation may change with volue of input data 
 
 
-granularity
-ratio between ocmputing intensity and quantity of data exchanged between processes
-
-load balancing
-all processes execute a comptation section of the code with asme duration
-speedup is badly impacted if some parts of the code are far away from load balancing
+% gustafson's law
+% speedup behavior with constant volume input data per processes
 
 
-embarrassingly parallel algorithms
-each data used and computed are independent
-no data race in multithread context
-no communication between processes in distributed environment
+% granularity
+% ratio between ocmputing intensity and quantity of data exchanged between processes
 
-property
-in distributed parallel context no data must be exchanged between processes to compute the results
+% load balancing
+% all processes execute a comptation section of the code with asme duration
+% speedup is badly impacted if some parts of the code are far away from load balancing
 
 
-syracuse series
-definition
-uo chosen
-un+1 un/2 if un is even ou 3un+1 si un is odd
+% embarrassingly parallel algorithms
+% each data used and computed are independent
+% no data race in multithread context
+% no communication between processes in distributed environment
 
-one cycle exists a conjucture the series reaches the cycle below in a finite number of iterations
-1 4 2 1 ...
+% property
+% in distributed parallel context no data must be exchanged between processes to compute the results
 
-some definiions
-lenght of flight number of iterations
-height of the flight maximal value reached by a strategies
 
-goal of the program compute de taille
+% syracuse series
+% definition
+% uo chosen
+% un+1 un/2 if un is even ou 3un+1 si un is odd
+
+% one cycle exists a conjucture the series reaches the cycle below in a finite number of iterations
+% 1 4 2 1 ...
+
+% some definiions
+% lenght of flight number of iterations
+% height of the flight maximal value reached by a strategies
+
+% goal of the program compute de taille
 
 
 
 
 \subsection{Information Matier}
 \paragraph{Référence}Dans cette matière le but sera de comprendre comment une Système d'Exploitation marche.
+
+\subsection{Utils}
+% Tools for shared memory computation
+% Many tools can be used to use many "threads" and the synchronization in memory. The most used
+% are :
+%     OpenMP : Compilation directives and small C API (#pragma) ;
+%     Standard library in C++ (threads, asynchronous functions) ;
+%     TBB (Threading Building Block library, Intel) : Open source library from Intel
+% But the programmer must take care of memory conflict access :
+%     When a thread writes a datum and some other threads read simultaneously that same datum ;
+%     When some thread writes at the same datum ;
+%     Doesn't rely on the instruction order in the program ! (out-of-order optimization by compiler and
+% processor).
+
+% All libraries managing the distributed parallelism computation provide similar functionalities.
+% Running a distributed parallel application
+% • An application is provided to the user to run his application(s) on a wanted number nbp of
+% computing nodes (given when running the application) ;
+% • The computing nodes where the application(s) is launched is defined by default or in a file
+% provided by the user ;
+% • The default output for all processes are the terminal output from which was launched the
+% application ;
+% • A communicator (defining a set of processes) is defined by default including all launched
+% processes (MPI_COMM_WORLD) ;
+% • The application gives a unique number for each process in a communicator (numbering from
+% zero to nbp-1) ;
+% • All processes terminate the program at the same time ;
+
+% Constitution of a data message to send
+% • The communicator used to send the data ;
+% • The memory address of the contiguous data to send ;
+% • The number of data to send ;
+% • The type of the data (integer, real, user def type, and so.) ;
+% • The rank of destination process ;
+% • A tag number to identify the message
+% Constitution of a data message to receive
+% • The communicator used to receive the data ;
+% • A memory address of a buffer where store the received data ;
+% • The number of data to receive ;
+% • The type of the data (integer, real, user def type, and so.)
+% • The rank of the sender process (can be any process) ;
+% • A tag number to identify the message (can be any tag if needed)
+% • Status of the message (receive status, error, sender, tag) ;
+% if (rank == 0) {
+% double vecteur[5] = { 1., 3., 5., 7., 22. };
+% MPI_Send(vecteurs, 5, MPI_DOUBLE, 1, 101, commGlob); }
+% else if (rank==1) {
+% MPI_Status status; double vecteurs[5];
+% MPI_Recv(vecteurs, 5, MPI_DOUBLE, 0, 101, commGlob, &status); }
+
+% Interlocking
+% Definition
+% • Interlocking is a situation where many processes are waiting each other for an infinite time to complete their messages ;
+% • For example, process 1 waits to receive a message from 0 and 0 waits to receive a message from 1 ;
+% • Or process 0 sends a message to 1 and process 1 waits a message from 0 but with wrong tag !
+
+
+% Blocking and non blocking message
+% Definition
+% • Blocking message : Wait the complete reception of the message before returning from the function ;
+% • Non blocking message : Post the message to send or receive and return from the function immediatly !
+% A non blocking send is copied in a buffer before to be sent ;
+
+% A scheme to avoid interlocking situations
+% The scheme for all processes
+% • First do receptions in non blocking mode ;
+% • Second, do send in blocking mode (or non blocking mode if you want to overlay message cost with computing)
+% • Third, synchronize yours receptions (waiting for completion or testing to overlay message cost with computing)
+
+% MPI_Request req; MPI_Status status;
+% if (rank==0)
+% { MPI_Irecv(rcvbuf, count, MPI_DOUBLE, 1, 101, commGlob, &req);
+% MPI_Send(sndbuf, count, MPI_DOUBLE, 1, 102, commGlob);
+% MPI_Wait(&req, &status);
+% }
+% else if (rank==1)
+% { MPI_Irecv(rcvbuf, count, MPI_DOUBLE, 0, 102, commGlob, &req);
+% MPI_Send(sndbuf, count, MPI_DOUBLE, 0, 101, commGlob);
+% MPI_Wait(&req, &status);
+% }
+
+% Distributed parallel rules
+% • Ethernet data exchange is very slow compared to memory access : limit as possible
+% the data exchanges ;
+% • To hide data exchange cost, it’s better to compute some values during the exchange
+% of data : prefer to use non blocking message exchange
+% • Each message has an initial cost : prefer to regroup data in a temporary buffer if
+% needed ;
+% • All processes quit the program at the same time : Try to balance the computing load
+% among computing nodes ;
+
+% Scalability
+% Definition
+% For a parallel program, scalability is the behaviour of the speed-up when we raise up the
+% number of processes or/and the amount of input data.
+
+% How to evaluate the scalability ?
+% • Evaluate the worst speed-up : For a global fixed amount of data, draw the speed-up
+% curve in function of the number of processes ;
+% • Evaluate the best speed-up : For a fixed amount of data per process, draw the
+% speed-up curve in function of the number of processes ;
+% • In concrete use of the program, the speed-up may be between the worst and best
+% scenario.
+
+% Granularity
+% Ratio between computing intensity and quantity of data exchanged between processes
+% • Sending and receiving data is prohibitive :
+% • Initial cost of a message : each message has an initial cost : set the connection, get the same protocol, etc.This cost
+% is constant.
+% • Cost of the data transfer : at last, the cost of the data flow is linear with the number of data to exchange
+% • These costs are greater than the cost of memory operations in RAM
+% • Better to copy some sparse data in a buffer and send the buffer, rather than send scattered data with multiple send
+% and receives
+% • Try to minimize the number of data exchange between processes
+% • The greater the ratio between number of computation instructions and messages to exchange, the better will be your
+% speed-up !
+% • Low speedup can be improved with non blocking data exchanges.
+
+% Definition
+% Embarrassingly parallel algorithm
+% • Each data used and computed are independent ;
+% • No data race in multithread context ;
+% • No communication between processes in distributed environment
+
+% Memory access and computing operation have the same complexity : On shared memory, memory bound limits the
+% performance
+% • On distributed memory, each process uses his own physical memory and no data must be exchanged : Speed-up may be
+% % linear relative to the number of processes (if data intensity is enough)
+
+% Data exchanges between processes is very expensive, so find some algorithms which minimize data exchanges ;
+% • In general, the receive operation doesn’t know the number of values to receive ⇒ one must probe the received message
+% to get the number of data to receive, allocate the relative buffer and receive the data !
 
 \end{document}
