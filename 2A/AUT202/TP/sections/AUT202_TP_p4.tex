@@ -1,0 +1,184 @@
+\documentclass[class=article, crop=false]{standalone}
+
+\begin{document}
+\section{Partie 4 - Observateur}
+On ne dispose que de capteurs capables de donner les mesures de position $r(t)$ et $\theta(t)$. On va donc devoir construire un observateur asymptotique pour estimer l'intégralité de l'état. On pose:
+\begin{equation}
+    Y(t) = 
+    \begin{bmatrix}
+        y_1(t)\\
+        y_2(t)\\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        x_1(t)\\
+        x_3(t)\\
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        r(t)\\
+        \theta(t)\\
+    \end{bmatrix}
+\end{equation}
+On s'intéresse toujours à l'équilibre associé à $r_{\text{ref}}$, Balle stabilisée sur l'axe de rotation du Plateau.
+
+\newpage
+\subsection{Question 18}
+\begin{exercise}
+    Montrer que le linéarisé tangent du système, avec mesure, autour de la position d'équilibre $r_{\text{ref}} = 0$ s'écrit:
+    \begin{equation}
+        \left\{
+        \begin{aligned}
+            \frac{\text{d}}{\text{dt}} 
+            \underbrace{
+            \begin{bmatrix}
+                x_{1}(t)\\
+                x_{2}(t)\\
+                x_{3}(t)\\
+                x_{4}(t)\\
+            \end{bmatrix}}_{X(t)}
+            &=
+            \underbrace{
+            \begin{bmatrix}
+                0 & 1 & 0 & 0\\
+                0 & 0 & -\frac{g}{1 + \sigma} & 0\\
+                0 & 0 & 0 & 1\\
+                -\frac{mg}{J_p} & 0 & 0 & 0\\
+            \end{bmatrix}}_{A}
+            \underbrace{
+            \begin{bmatrix}
+                x_{1}(t)\\
+                x_{2}(t)\\
+                x_{3}(t)\\
+                x_{4}(t)\\
+            \end{bmatrix}}_{X(t)}
+            +
+            \underbrace{
+            \begin{bmatrix}
+                0\\
+                0\\
+                0\\
+                \frac{1}{J_p}\\
+            \end{bmatrix}}_{B}
+            \delta u(t)
+            \\
+            \underbrace{
+            \begin{bmatrix}
+                y_1(t)\\
+                y_2(t)\\
+            \end{bmatrix}}_{Y(t)}
+            &=
+            \underbrace{
+            \begin{bmatrix}
+                1 & 0 & 0 & 0\\
+                0 & 0 & 1 & 0\\
+            \end{bmatrix}}_{C}
+            \underbrace{
+            \begin{bmatrix}
+                x_{1}(t)\\
+                x_{2}(t)\\
+                x_{3}(t)\\
+                x_{4}(t)\\
+            \end{bmatrix}}_{X(t)}
+        \end{aligned}
+        \right.
+    \end{equation}
+\end{exercise}
+\begin{resolution}
+    % TODO copy Q9
+\end{resolution}
+
+\newpage
+\subsection{Question 19}
+\begin{exercise}
+    Le linéarisé tangent est-il observable? Vérifier le rang de la matrice d'observabilité avec MATLAB. On pourra également s'assurer que la matrice d'observabilité est bien conditionnée.
+\end{exercise}
+\begin{resolution}
+    On note que le système sera Observable si et seulement si la Matrice de Observabilité $\mathcal{O}(A, C)$:
+    \begin{equation}
+        \boxed{
+            \mathcal{O}(A, C) =
+            \begin{bmatrix}
+                C\\
+                C\times A\\
+                \vdots\\
+                C\times A^{n-1}\\
+            \end{bmatrix}
+        }
+    \end{equation}
+    est de rang dim$(x)$, c'est-à-dire: si la matrice $\mathcal{O}(A, C)$ a une numéro de colognes linéairement indépendants égale à dimension du vecteur des états $x$, le système est observable.\\
+
+    En utilisant le code suivant on calcule la matrice de Observabilité:
+    \begin{scriptsize}\mycode
+        \lstinputlisting[language=Matlab]{../src/Q19.m}
+    \end{scriptsize}
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Matlab]
+>>>
+success: system observable, rank 4
+
+OBS =
+
+    1.0000         0         0         0
+         0         0    1.0000         0
+         0         0         0   -5.4500
+         0 -294.3000         0         0
+        \end{lstlisting}
+    \end{scriptsize}
+    Le système est défini avec 4 états et, comme on peut voir avec le résultat du code, le rank de la matrice de commandabilité est aussi 4, car elle a quatre 4 colognes linéairement indépendants, donc le système est commandable.
+\end{resolution}
+
+\newpage
+\subsection{Question 20}
+\begin{exercise}
+    Écrire les équations de l'observateur asymptotique permettant d'estimer l'état $X(t)$ à partir de la mesure $Y(t)$ et la commande $u(t)$. On notera $\hat{X}(t)$ l'état estimé de L le gain de l'observateur.
+\end{exercise}
+\begin{resolution}
+    On considère l'équation suivante:
+    % TODO search detailed prove
+    \begin{equation}
+        \dot{\hat{X}}(t) = A \cdot \hat{X}(t) + B \cdot u(t) + L \cdot (Y(t) - C \cdot \hat{X}(t))
+    \end{equation}
+\end{resolution}
+
+\newpage
+\subsection{Question 21}
+On cherche à placer les valeurs de l'observateur en $-\omega$, $-3\omega$ et $-2\omega \pm i\omega$.
+\begin{exercise}
+    Calculer dans MATLAB le gain $L$ qui place les valeurs propres en boucle fermée sur les valeurs propres voulues. On pourra utiliser la fonction \href{https://www.mathworks.com/help/control/ref/place.html}{\texttt{place}}. Vérifier numériquement les valeurs propres de l'observateur avec MATLAB.
+\end{exercise}
+\begin{resolution}
+    % TODO add explanation as Q12
+\end{resolution}
+
+\newpage
+\subsection{Question 22}
+\begin{exercise}
+    Implémenter l'observateur dans le modèle Simulink. Vérifier qu'il permet bien d'estimer l'état au voisinage de la position $r_{\text{ref}} = 0$ avec un état suffisamment proche de l'équilibre pour que le linéarisé tangent reste une approximation valable.
+\end{exercise}
+\begin{resolution}
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{../images/system_simulink_4.png}
+        \caption{}
+    \end{figure}
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{../images/simulink_scope5_0_1_02.png}
+            \caption{}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.475\textwidth}
+            \centering
+            \includegraphics[width=\textwidth]{../images/simulink_scope5_0_01_02.png}
+            \caption{}
+        \end{subfigure}
+        \caption{}
+    \end{figure}
+    % TODO add pictures of the system
+    % TODO explain the system, add explanation on the system design on simulink
+    % TODO try different values in the surrounds
+    % TODO explain oscillatory movement, try to stabilize but it is outside of the linearization region so it tries but it misses 
+\end{resolution}
+\end{document}
