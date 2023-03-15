@@ -1,23 +1,22 @@
 import numpy as np
 import sys
 
+
 class Tableau:
-    n = 0           # Nombre de variables
-    m = 0           # Nombre de contraintes
+    n = 0  # Nombre de variables
+    m = 0  # Nombre de contraintes
 
-    A = np.empty(0) #*  A(m x n)[][]: matrice des contraintes
-    b = np.array([])#*  b(m x 1)[]  : coefficients du membre de droite
-    c = np.array([])#*  c(n x 1)[]  : coefficients de l'objectif
+    A = np.empty(0)  #*  A(m x n)[][]: matrice des contraintes
+    b = np.array([])  #*  b(m x 1)[]  : coefficients du membre de droite
+    c = np.array([])  #*  c(n x 1)[]  : coefficients de l'objectif
 
+    basis = np.array([])  # base actuelle
+    #   [] si aucune n'a été définie
 
+    bestSolution = None  # Vector (1xn) contenant la meilleure solution actuellement
+    #   [] si aucune n'a été trouvée
 
-    basis = np.array([])    # base actuelle
-                            #   [] si aucune n'a été définie
-
-    bestSolution = None     # Vector (1xn) contenant la meilleure solution actuellement
-                            #   [] si aucune n'a été trouvée 
-
-    bestObjective = 0       # Valeur de l'objectif de la meilleure solution connue
+    bestObjective = 0  # Valeur de l'objectif de la meilleure solution connue
 
     isMinimization = True
     isStandard = False
@@ -37,11 +36,10 @@ class Tableau:
         self.bestSolution = None
         self.bestObjective = 0.0
 
-
     # Crée un tableau avec une variable d'écart pour chaque contrainte et résoudre
     def addSlackAndSolve(self):
 
-        # Crée un tableau dans lequel une variable d'écart est ajouté pour chaque contrainte 
+        # Crée un tableau dans lequel une variable d'écart est ajouté pour chaque contrainte
         # et sélectionne les variables d'écart comme base
         tSlack = self.tableauWithSlack()
 
@@ -58,10 +56,10 @@ class Tableau:
         if self.DISPLAY_SIMPLEX_LOGS:
             print("Tableau initial: ")
             self.display()
-        
+
         # Perturbe chaque valeur de b pour éviter les divisions par zéro quand la base est dégénérée
         eps = 1E-7
-        
+
         for i in range(self.m):
             self.b[i] += eps
             eps *= 0.1
@@ -79,9 +77,9 @@ class Tableau:
     """
      Effectuer un pivotage. Une base doit avoir été sélectionnée
      Sortie : Vrai si une nouvelle base a été trouvée, faux si une solution optimale est atteinte
-    """ 
-    def pivot(self):
+    """
 
+    def pivot(self):
         """
          1) Mise sous forme canonique
          *   (rendre la matrice B égale à la matrice unité)
@@ -110,7 +108,7 @@ class Tableau:
         #   here the A, b and c matrixes and vectors could be used directly
         #   but the by creating the simplex matrix the algorithm behaves just
         #   as the execution by wand helping on debugging
-        S = np.zeros((self.m + 1, self.n + 1))      # simplex matrix
+        S = np.zeros((self.m + 1, self.n + 1))  # simplex matrix
         S_rows = S.shape[0]
         S_cols = S.shape[1]
 
@@ -138,7 +136,6 @@ class Tableau:
             print("Tableau in canonical form")
             self.display()
 
-
         # 2 - Obtenir la nouvelle base
         """
          2.1 - Obtenir la variable entrant en base
@@ -152,28 +149,26 @@ class Tableau:
                - si vous voulez tester si a est inférieur à 1, il faut écrire : a < 1 - epsilon (sinon la condition serait vérifiée pour a = 0.99999999999).
         """
 
-
-
         # Gauss-Jordan elimination
-        for z in range(len(self.basis)):    # for every value in the basis
+        for z in range(len(self.basis)):  # for every value in the basis
             pivot = S[z][self.basis[z]]
 
             if pivot != 0:
-                for j in range(S_cols):     # normalize the line
+                for j in range(S_cols):  # normalize the line
                     if S[z][j] != 0:
                         S[z][j] = S[z][j] / pivot
 
-                for i in range(S_rows):     # eliminate values
+                for i in range(S_rows):  # eliminate values
                     if i != z:
                         factor = S[i][self.basis[z]]
 
                         for j in range(S_cols):
                             S[i][j] -= factor * S[z][j]
             else:
-                print(f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix')
+                print(
+                    f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix'
+                )
                 break
-
-
 
         epsilon = 1e-7
         indexIn = -1
@@ -181,7 +176,7 @@ class Tableau:
         # search for a base change if simplex is not over
         # minimization is inverse of maximization
         if self.isMinimization:
-            for j in range(S_cols - 1): # don't look to the RHS column
+            for j in range(S_cols - 1):  # don't look to the RHS column
                 if S[-1][j] < 0 - epsilon:
                     indexIn = j
                     break
@@ -194,7 +189,6 @@ class Tableau:
         if indexIn == -1:
             print(f'error: indexIn = {indexIn} no base change, end pivot')
             return False
-
         """
          2.2 - Obtenir la variable quittant la base
           
@@ -209,7 +203,7 @@ class Tableau:
         indexOut = -1
         minRatio = float('inf')
         # minimization and maximization have the same condition
-        for i in range(S_rows - 1): # exclude coûts réduits
+        for i in range(S_rows - 1):  # exclude coûts réduits
             if S[i][indexIn] != 0:
                 ratio = S[i][-1] / S[i][indexIn]
 
@@ -221,22 +215,24 @@ class Tableau:
         self.basis[indexOut] = indexIn
 
         # Gauss-Jordan elimination
-        for z in range(len(self.basis)):    # for every value in the basis
+        for z in range(len(self.basis)):  # for every value in the basis
             pivot = S[z][self.basis[z]]
 
             if pivot != 0:
-                for j in range(S_cols):     # normalize the line
+                for j in range(S_cols):  # normalize the line
                     if S[z][j] != 0:
                         S[z][j] = S[z][j] / pivot
 
-                for i in range(S_rows):     # eliminate values
+                for i in range(S_rows):  # eliminate values
                     if i != z:
                         factor = S[i][self.basis[z]]
 
                         for j in range(S_cols):
                             S[i][j] -= factor * S[z][j]
             else:
-                print(f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix')
+                print(
+                    f'error: pivot S[{z}][{self.basis[z]}] = 0, impossible identity matrix'
+                )
                 break
 
         # adding back the Simplex Matrix values in A, b and c
@@ -255,26 +251,24 @@ class Tableau:
 
         self.bestObjective = S[-1][-1]
 
-
         # 3 - Retourner vrai si une nouvelle base est trouvée et faux sinon
         # minimization is inverse of maximization
         if self.isMinimization:
-            for j in range(S_cols): # search in the objectivy values for < 0
+            for j in range(S_cols):  # search in the objectivy values for < 0
                 if S[-1][j] < 0:
-                    return True     # simplex not ended
+                    return True  # simplex not ended
         else:
-            for j in range(S_cols): # search in the objectivy values for > 0
+            for j in range(S_cols):  # search in the objectivy values for > 0
                 if S[-1][j] > 0:
-                    return True     # simplex not ended
-        return False                # simplex ended
-
+                    return True  # simplex not ended
+        return False  # simplex ended
 
     # Obtenir la solution du tableau qui est supposé être sous forme canonique
     def getSolution(self):
 
         self.bestSolution = np.array([0.0] * self.n)
 
-        # For each basic variable, get its value 
+        # For each basic variable, get its value
         for varBase in range(self.m):
             varId = self.basis[varBase]
             self.bestSolution[varId] = self.b[varBase]
@@ -283,6 +277,7 @@ class Tableau:
      Fixer la solution du tableau self à celle du tableau tSlack
      tSlack: Tableau contenant la solution
     """
+
     def setSolution(self, tSlack):
 
         # Obtenur la solution de tSlack
@@ -292,14 +287,15 @@ class Tableau:
 
         for varId in range(self.n):
             self.bestSolution[varId] = tSlack.bestSolution[varId]
-            print("varId = ", varId, " solution value: ", "%2.2f" % tSlack.bestSolution[varId])
+            print("varId = ", varId, " solution value: ",
+                  "%2.2f" % tSlack.bestSolution[varId])
 
         self.bestObjective = tSlack.bestObjective
 
     # Afficher la solution courante
     def displaySolution(self):
 
-        print("z = ", "%2.2f" % -self.bestObjective, ", ")
+        print("z = ", "%2.2f" % -self.bestObjective, ", ") # where the optimal objective is the oposite
 
         variables = "("
         values = "("
@@ -320,6 +316,7 @@ class Tableau:
      * Crée un tableau avec une variable d'écart pour chaque contrainte et utilise ces variables d'écart comme base
      * Sortie: Un tableau comportant n+m variables (les n d'origine + m variables d'écart)
     """
+
     def tableauWithSlack(self):
 
         print(f'A.shape: {(self.A).shape}')
@@ -328,7 +325,7 @@ class Tableau:
         print(f'm: {self.m}')
         # if (self.A).shape[1] != self.n + self.m:
         if self.isStandard != True:
-            ASlack = np.zeros((self.m, self.n+self.m))
+            ASlack = np.zeros((self.m, self.n + self.m))
 
             # Pour chaque contrainte
             for cstr in range(self.m):
@@ -359,7 +356,7 @@ class Tableau:
 
         for i in range(self.m):
             # self.basis[i] = i + self.n
-            self.basis[self.m - i - 1] = (ASlack.shape[1]-i-1)
+            self.basis[self.m - i - 1] = (ASlack.shape[1] - i - 1)
             # self.basis[i] = i + self.m
             # self.basis[i] = i
 
@@ -367,7 +364,8 @@ class Tableau:
         print(f'b\n{self.b}')
         print(f'c\n{cSlack}')
         print(f'basis\n{self.basis}')
-        slackTableau = Tableau(ASlack, self.b, cSlack, self.isMinimization, True)
+        slackTableau = Tableau(ASlack, self.b, cSlack, self.isMinimization,
+                               True)
         slackTableau.basis = self.basis
 
         return slackTableau
@@ -392,7 +390,7 @@ class Tableau:
 
             for c in range(self.n):
                 toDisplay += str("%2.2f" % self.A[l][c]) + "\t"
-            print(toDisplay, "| ",  "%2.2f" % self.b[l])
+            print(toDisplay, "| ", "%2.2f" % self.b[l])
 
         print(dottedLine)
         toDisplay = "(Obj)\t"
@@ -415,6 +413,7 @@ class Tableau:
 
     Utile pour le TP du chapitre 4 sur le branch-and-bound 
     """
+
     def tableauPhase1(self, negativeRHSCount):
 
         tSlack = self.tableauWithSlack()
@@ -435,7 +434,7 @@ class Tableau:
                 APhase1[i][tSlack.n + negativeId] = -1.0
                 cPhase1[tSlack.n + negativeId] = -1
                 negativeId += 1
-                
+
         # Créer le nouveau tableau
         sPhase1 = Tableau(APhase1, self.b, cPhase1, False)
 
@@ -452,14 +451,14 @@ class Tableau:
                 sPhase1.basis[i] = i + self.n
 
         return sPhase1
-    
+
     # Appliquer l'algorithme du simplexe phase 1 et 2
-    # Utile pour le TP du chapitre 4 sur le branch-and-bound 
+    # Utile pour le TP du chapitre 4 sur le branch-and-bound
     def applySimplexPhase1And2(self):
 
         tSlack = self.tableauWithSlack()
 
-        # Compter le nombre de contraintes ayant un second membre négatif  
+        # Compter le nombre de contraintes ayant un second membre négatif
         negativeRHS = 0
 
         for i in range(self.m):
@@ -468,7 +467,7 @@ class Tableau:
 
         isInfeasible = False
 
-        # Si le vecteur 0 n'est pas une solution réalisable  
+        # Si le vecteur 0 n'est pas une solution réalisable
         if negativeRHS > 0:
 
             tPhase1 = self.tableauPhase1(negativeRHS)
@@ -478,7 +477,7 @@ class Tableau:
                 tPhase1.display()
 
             while tPhase1.pivot():
-                pass # Instruction qui ne fait rien
+                pass  # Instruction qui ne fait rien
 
             if self.DISPLAY_SIMPLEX_LOGS:
                 print("Final array")
@@ -502,7 +501,7 @@ class Tableau:
                 # Mettre à jour la base de tSlack
                 tSlack.basis = tPhase1.basis
 
-                # Tester si toutes les variables de la base sont des variables de tSlack (et pas des variables ajoutées en phase 1) 
+                # Tester si toutes les variables de la base sont des variables de tSlack (et pas des variables ajoutées en phase 1)
                 for i in range(tSlack.m):
 
                     # Si base[i] n'est pas une variable de tSlack
@@ -536,14 +535,14 @@ class Tableau:
                 toDisplay = "Base: "
 
                 for i in range(tSlack.m):
-                    toDisplay += str(tSlack.basis[i]+1) + ", "
+                    toDisplay += str(tSlack.basis[i] + 1) + ", "
                 print(toDisplay)
 
             tSlack.applySimplex()
             self.setSolution(tSlack)
 
 
-def isFractional(d): 
+def isFractional(d):
     return abs(round(d) - d) > 1E-6
 
 
@@ -557,11 +556,12 @@ def ex1():
     * non standard matrix will always be as "equation <= value" form
     """
 
-    A = np.array([[1, -1], [0, 1], [8, 5]], dtype = float)
-    b = np.array([4, 8, 56], dtype = float)
-    c = np.array([2, 1], dtype = float)
+    A = np.array([[1, -1], [0, 1], [8, 5]], dtype=float)
+    b = np.array([4, 8, 56], dtype=float)
+    c = np.array([2, 1], dtype=float)
 
     return Tableau(A, b, c, False, False)
+
 
 def ex2():
     """
@@ -571,11 +571,14 @@ def ex2():
         +2x +0y +1z +2a +0b +1c <= 7
     """
 
-    A = np.array([[1, -2, 1, -1, 0, 0], [0, 1, 3, 0, 1, 0], [2, 0, 1, 2, 0, 1]], dtype = float)
-    b = np.array([4, 6, 7], dtype = float)
-    c = np.array([2, -3, 5, 0, 0, 0], dtype = float)
+    A = np.array(
+        [[1, -2, 1, -1, 0, 0], [0, 1, 3, 0, 1, 0], [2, 0, 1, 2, 0, 1]],
+        dtype=float)
+    b = np.array([4, 6, 7], dtype=float)
+    c = np.array([2, -3, 5, 0, 0, 0], dtype=float)
 
     return Tableau(A, b, c, True, True)
+
 
 def ex0():
     """
@@ -585,30 +588,45 @@ def ex0():
         -1x +2y <= 2
     """
 
-    A = np.array([[1, -1], [1, 2], [-1, 2]], dtype = float)
-    b = np.array([3, 6, 2], dtype = float)
-    c = np.array([2, 1], dtype = float)
+    A = np.array([[1, -1], [1, 2], [-1, 2]], dtype=float)
+    b = np.array([3, 6, 2], dtype=float)
+    c = np.array([2, 1], dtype=float)
 
     return Tableau(A, b, c, False, False)
 
+
+def examen():
+    """
+    max +2x +1y
+        -1x +1y <= 3
+        +1x +2y <= 9
+        +7x +2y <= 21
+    """
+
+    A = np.array([[-1, +1], [+1, +2], [+7, +2]], dtype=float)
+    b = np.array([3, 9, 21], dtype=float)
+    c = np.array([2, 1], dtype=float)
+
+    return Tableau(A, b, c, False, False)
+
+
 def main():
-    normalForm = True
+    normalForm = False
 
     if normalForm:
-        #** 1er cas - PL Ax = b et une base est fournie (aucune variable d'écart n'est ajoutée au problème) 
+        #** 1er cas - PL Ax = b et une base est fournie (aucune variable d'écart n'est ajoutée au problème)
         t1 = ex2()
         t1.basis = np.array([0, 2, 5])
         t1.applySimplex()
 
     else:
         #** 2ème cas - PL Ax <= b, ajouter des variables d'écart et les utiliser comme base
+        t2 = examen()
         # t2 = ex2()
-        t2 = ex1()
+        # t2 = ex1()
         # t2 = ex0()
         t2.addSlackAndSolve()
         t2.displaySolution()
-
-
 
 
 if __name__ == '__main__':
