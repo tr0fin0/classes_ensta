@@ -2,7 +2,7 @@
 
 \begin{document}
 \section{Partie 3 - Contrôleur}
-\subsection{Question 11}
+\subsection{Question 11}\label{Q11}
 \begin{exercise}
     Le linéarisé tangent est-il commandable? Vérifier le rang de la matrice de commandabilité avec MATLAB. On pourra également s'assurer que la matrice de commandabilité est bien conditionnée.
 \end{exercise}
@@ -33,16 +33,16 @@ COM =
             0   50.0000         0         0
       50.0000         0         0         0
 
-cond(COM, 1) =
+cond(COM) =
     5.4500
         \end{lstlisting}
     \end{scriptsize}
     Le système est défini avec 4 états et, comme on peut voir avec le résultat du code, le rank de la matrice de commandabilité est aussi 4, car elle a quatre 4 colognes linéairement indépendants, donc le système est commandable.\\
 
-    On note aussi que \texttt{cond(COM, 1) = 5.45} qui est proche de 1 et donc indique une matrice bien conditionnée. 
+    On note aussi que \texttt{cond(COM) = 5.45} qui est proche de 1 et donc indique une matrice bien conditionnée. 
     
     \begin{remark}
-        Le \texttt{cond(COM, 1)} dépendra de la norme utilise comme donne par la définition: \texttt{cond(X, P) = NORM(X,P) * NORM(INV(X),P)}. Dans ce cas, la norme 1 a était considère.
+        Le \texttt{cond(COM)} dépendra de la norme utilise comme donne par la définition: \texttt{cond(X, P) = NORM(X,P) * NORM(INV(X),P)}.
     \end{remark}
 \end{resolution}
 
@@ -67,7 +67,23 @@ K =
   -29.4300   -9.3009    8.0098    0.6328
         \end{lstlisting}
     \end{scriptsize}
-    Après avoir fait la verification les valeurs propres sont en effet en boucle fermée.
+    Après on peut confirmer les valeurs propres sont en effet en boucle fermée avec l'équation suivante:
+    \begin{equation}
+        \det (A - B K - \lambda) = 0
+    \end{equation}
+    Comme on considère le système boucle fermée, c'est-à dire une système avec feedback, donc le $K$ n'est pas nulle, l'équation précédemment avec MATLAB on a:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Matlab]
+>>> eig(A - B*K)
+
+ans =
+ -12.6569 + 0.0000i
+  -6.3284 + 6.3284i
+  -6.3284 - 6.3284i
+  -6.3284 + 0.0000i
+        \end{lstlisting}
+    \end{scriptsize}
+    Comme $\omega = 6.3284$ et on a défini les valeurs propres comme $-\omega$, $-2\omega$, $-\omega\pm 1 i \omega$ le placement de pôles a bien marche.
 \end{resolution}
 
 \newpage
@@ -99,7 +115,7 @@ Vérifier que le retour d'état permet bien de stabiliser la balle sur la positi
         \end{subfigure}
         \caption{Simulation Retour d'État, Gain Voulue}
     \end{figure}
-    On note que, proche des valeurs d'équilibre, le système converge à zéro.
+    On note que, proche des valeurs d'équilibre, le système converge à $r_{\text{ref}} = 0$.
 \end{resolution}
 
 \newpage
@@ -134,7 +150,37 @@ On cherche maintenant à réaliser un bouclage d'état $\delta u(t) = -K \cdot X
             \underbrace{\delta u(t)}_{1\times 1}
         )
     \end{equation*}
-    On note que la seule façon d'avoir $\delta u^2(t)$ c'est si $Q_{1\times 1} = 1$ et, par consequence, la seule façon d'avoir $\delta x^2_1(t) + \delta x^2_2(t) + \delta x^2_3(t) + \delta x^2_4(t)$ c'est si $R_{4\times 4} = I_{4\times 4}$.
+    On note que la seule façon d'avoir $\delta u^2(t)$ c'est si $Q_{1\times 1} = 1$ et, par consequence, la seule façon d'avoir $\delta x^2_1(t) + \delta x^2_2(t) + \delta x^2_3(t) + \delta x^2_4(t)$ c'est si $R_{4\times 4} = I_{4\times 4}$.\\
+
+    Ce système admet une solution si les hypothèses suivantes sont vérifiées:
+    \begin{enumerate}[rightmargin = \leftmargin]
+        \item \textbf{vrai}, $(A, B)$ est Commandable: prove sur \ref{Q11} Question 11;
+        
+        \item \textbf{vrai}, $R$ est Symétrique Positive: une Identité est symétrique et ;
+        \begin{definition}
+            une matrice est Symétrique Positive si, et seulement si...
+        \end{definition}
+        \begin{proof}
+            ...
+        \end{proof}
+
+        \item \textbf{vrai}, $Q$ est Symétrique Définie Positive: ;
+        \begin{definition}
+            une matrice est Symétrique Définie Positive si, et seulement si...
+        \end{definition}
+        \begin{proof}
+            ...
+        \end{proof}
+
+        \item \textbf{vrai}, $R$ est Symétrique Définie Positive: on note que $\det(R)$...;
+        \begin{proof}
+            ...
+        \end{proof}
+        \begin{remark}
+            Il existe une racine de $R$ telle que $(A, \sqrt{R})$ est Observable, aussi valide;
+        \end{remark}
+    \end{enumerate}
+
     % TODO search definition of LQ
     % TODO do calculation
 \end{resolution}
@@ -190,6 +236,7 @@ K =
         \end{subfigure}
         \caption{Simulation Retour d'État, Gain Optimale}
     \end{figure}
+    % todo update figures
 \end{resolution}
 
 \newpage

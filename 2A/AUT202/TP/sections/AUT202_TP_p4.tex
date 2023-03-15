@@ -86,6 +86,9 @@ On s'intéresse toujours à l'équilibre associé à $r_{\text{ref}}$, Balle sta
 \end{exercise}
 \begin{resolution}
     % TODO copy Q9
+    on peut voir dans la question 9 qui le resultat 
+    pour C on peut voir que:
+    peut etre tres bete que ça va
 \end{resolution}
 
 \newpage
@@ -121,6 +124,10 @@ OBS =
 
     1.0000         0         0         0
          0         0    1.0000         0
+         0    1.0000         0         0
+         0         0         0    1.0000
+         0         0   -5.4500         0
+ -294.3000         0         0         0
          0         0         0   -5.4500
          0 -294.3000         0         0
         \end{lstlisting}
@@ -136,6 +143,8 @@ OBS =
 \begin{resolution}
     On considère l'équation suivante:
     % TODO search detailed prove
+    ajouter des conclusions sur la implementation matlab en explicant pourquoi cest possible de utiliser ses variables
+    expliqer la definition generale pour une observateur
     \begin{equation}
         \dot{\hat{X}}(t) = A \cdot \hat{X}(t) + B \cdot u(t) + L \cdot (Y(t) - C \cdot \hat{X}(t))
     \end{equation}

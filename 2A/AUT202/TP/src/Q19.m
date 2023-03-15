@@ -1,7 +1,7 @@
 function OBS = Q19(A, C)
-    OBS = C;
-    for i = 1:size(A, 1)-1
-        OBS = [C; C * (A^i)];
+    OBS = [];
+    for i = 0:size(A, 1)-1
+        OBS = [OBS; (C * (A^i))];
     end
     
     if rank(OBS) ~= 4
