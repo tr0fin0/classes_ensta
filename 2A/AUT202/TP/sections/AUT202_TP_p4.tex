@@ -85,10 +85,27 @@ On s'intéresse toujours à l'équilibre associé à $r_{\text{ref}}$, Balle sta
     \end{equation}
 \end{exercise}
 \begin{resolution}
-    % TODO copy Q9
-    on peut voir dans la question 9 qui le resultat 
-    pour C on peut voir que:
-    peut etre tres bete que ça va
+    On considère la résolution faite sur (\ref{Q9}) Question 9 qui donne la première équation du système linéarise. Après on peut voir que avec la définition des états présenter sur (\ref{eq:def_states}) on a l'équation suivante:
+    \begin{equation}
+        \underbrace{
+            \begin{bmatrix}
+                y_1(t)\\
+                y_2(t)\\
+            \end{bmatrix}}_{Y(t)}
+            =
+            \underbrace{
+            \begin{bmatrix}
+                1 & 0 & 0 & 0\\
+                0 & 0 & 1 & 0\\
+            \end{bmatrix}}_{C}
+            \underbrace{
+            \begin{bmatrix}
+                x_{1}(t)\\
+                x_{2}(t)\\
+                x_{3}(t)\\
+                x_{4}(t)\\
+            \end{bmatrix}}_{X(t)}
+    \end{equation}
 \end{resolution}
 
 \newpage
@@ -142,12 +159,16 @@ OBS =
 \end{exercise}
 \begin{resolution}
     On considère l'équation suivante:
-    % TODO search detailed prove
-    ajouter des conclusions sur la implementation matlab en explicant pourquoi cest possible de utiliser ses variables
-    expliqer la definition generale pour une observateur
     \begin{equation}
         \dot{\hat{X}}(t) = A \cdot \hat{X}(t) + B \cdot u(t) + L \cdot (Y(t) - C \cdot \hat{X}(t))
     \end{equation}
+    qui peut être implémente sur MATLAB avec le diagramme que suive:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.75\textwidth]{../images/system_simulink_40.png}
+        \caption{Système D'Intérêt Simulink, Observateur}
+    \end{figure}
+    On note que l'Observateur est représente avec des blocs basiques du Simulink. Un representation avec un bloc \texttt{function} sera une alternative valable mais l'équation serait différent.
 \end{resolution}
 
 \newpage
@@ -157,7 +178,40 @@ On cherche à placer les valeurs de l'observateur en $-\omega$, $-3\omega$ et $-
     Calculer dans MATLAB le gain $L$ qui place les valeurs propres en boucle fermée sur les valeurs propres voulues. On pourra utiliser la fonction \href{https://www.mathworks.com/help/control/ref/place.html}{\texttt{place}}. Vérifier numériquement les valeurs propres de l'observateur avec MATLAB.
 \end{exercise}
 \begin{resolution}
-    % TODO add explanation as Q12
+    En utilisant le code suivant on boucle les valeurs propres sur les valeurs voulues:
+    \begin{scriptsize}\mycode
+        \lstinputlisting[language=Matlab]{../src/Q21.m}
+    \end{scriptsize}
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Matlab]
+>>>
+success: closed-loop pole assignment
+
+L =
+
+   23.9504    0.5651
+  129.2383   22.7820
+   -3.5660   26.6772
+ -272.1502  190.9987
+        \end{lstlisting}
+    \end{scriptsize}
+    Après on peut confirmer les valeurs propres sont en effet en boucle fermée avec l'équation suivante:
+    \begin{equation}
+        \det (A - L C - \lambda) = 0
+    \end{equation}
+    Comme on considère le système boucle fermée, c'est-à dire une système avec feedback, donc le $K$ n'est pas nulle, l'équation précédemment avec MATLAB on a:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Matlab]
+>>> eig(A - L*C)
+
+ans =
+ -18.9853 + 0.0000i
+  -6.3284 + 0.0000i
+ -12.6569 + 6.3284i
+ -12.6569 - 6.3284i
+        \end{lstlisting}
+    \end{scriptsize}
+    Comme $\omega = 6.3284$ et on a défini les valeurs propres comme $-\omega$, $-3\omega$, $-2\omega\pm 1 i \omega$ le placement de pôles a bien marche.
 \end{resolution}
 
 \newpage
@@ -166,28 +220,27 @@ On cherche à placer les valeurs de l'observateur en $-\omega$, $-3\omega$ et $-
     Implémenter l'observateur dans le modèle Simulink. Vérifier qu'il permet bien d'estimer l'état au voisinage de la position $r_{\text{ref}} = 0$ avec un état suffisamment proche de l'équilibre pour que le linéarisé tangent reste une approximation valable.
 \end{exercise}
 \begin{resolution}
+    L'Observateur complet peut être implémente avec le diagramme Simulink suivant:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\textwidth]{../images/system_simulink_4.png}
-        \caption{}
+        \includegraphics[width=0.75\textwidth]{../images/system_simulink_4.png}
+        \caption{Système d'Intérêt Simulink, Observateur Complet}
     \end{figure}
+    Qui donne les résultats suivants:
     \begin{figure}[H]
         \centering
-        \begin{subfigure}[b]{0.475\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{../images/simulink_scope5_0_1_02.png}
-            \caption{}
+            \includegraphics[width=\textwidth]{../images/m4_r0_s0.6_o0.4.png}
+            \caption{$x_1(0) = x_2(0) = 0.6$}
         \end{subfigure}
-        \begin{subfigure}[b]{0.475\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{../images/simulink_scope5_0_01_02.png}
-            \caption{}
+            \includegraphics[width=\textwidth]{../images/m4_r0_s0.06_o0.4.png}
+            \caption{$x_1(0) = x_2(0) = 0.06$}
         \end{subfigure}
-        \caption{}
+        \caption{Simulation Observateur, autour de $r_{\text{ref}} = 0$}
     \end{figure}
-    % TODO add pictures of the system
-    % TODO explain the system, add explanation on the system design on simulink
-    % TODO try different values in the surrounds
-    % TODO explain oscillatory movement, try to stabilize but it is outside of the linearization region so it tries but it misses 
+    On considère $x_3(0) = x_4(0) = 0.2$, $\hat{x}_1(0) = \hat{x}_2(0) = 0.4$ et $\hat{x}_3(0) = \hat{x}_4(0) = 0.5$.
 \end{resolution}
 \end{document}
