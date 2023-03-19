@@ -1,4 +1,4 @@
-function [I1, I2, A, B, C, K, L] = P5(x10, x20, x30, x40, x10h, x20h, x30h, x40h, optimalKL)
+function [I1, I2, A, B, C, K, L] = P5(x10, x20, x30, x40, x10h, x20h, x30h, x40h, w)
     % initial variables
     I1 = [x10, x20, x30, x40];
     I2 = [x10h, x20h, x30h, x40h];
@@ -25,8 +25,7 @@ function [I1, I2, A, B, C, K, L] = P5(x10, x20, x30, x40, x10h, x20h, x30h, x40h
     ];
 
     
-    w = 1;
-    if optimalKL == true
+    if w == inf
         Q = eye(4); 
         R = 1;
         [K, S, CLP] = Q15(A, B, Q, R);
