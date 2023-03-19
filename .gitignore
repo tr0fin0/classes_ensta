@@ -33,7 +33,6 @@ tblank.*
 *.exe
 *.ppt
 *.xlsx
-*.ipynb
 *.npz
 *.csv
 *.txt
