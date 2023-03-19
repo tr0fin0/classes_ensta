@@ -154,32 +154,36 @@ On cherche maintenant à réaliser un bouclage d'état $\delta u(t) = -K \cdot X
 
     Ce système admet une solution si les hypothèses suivantes sont vérifiées:
     \begin{enumerate}[rightmargin = \leftmargin]
-        \item \textbf{vrai}, $(A, B)$ est Commandable: prove sur \ref{Q11} Question 11;
+        \item \textbf{vrai}, $(A, B)$ est Commandable: prove sur (\ref{Q11}) Question 11;
         
-        \item \textbf{vrai}, $R$ est Symétrique Positive: une Identité est symétrique et ;
-        \begin{definition}
-            une matrice est Symétrique Positive si, et seulement si...
-        \end{definition}
+        \item \textbf{vrai}, $R$ est Symétrique Positive: si elle est carré et tous ses valeurs propres sont positives;
         \begin{proof}
-            ...
+            On note que $\det(R - \lambda \; I ) \implies \lambda = 1$ donc $R$ est Symétrique Positive.
         \end{proof}
 
-        \item \textbf{vrai}, $Q$ est Symétrique Définie Positive: ;
-        \begin{definition}
-            une matrice est Symétrique Définie Positive si, et seulement si...
-        \end{definition}
+        \item \textbf{vrai}, $Q$ est Symétrique Définie Positive: si, en plus d'être Symétrique Positive, elle est symétrique;
         \begin{proof}
-            ...
+            On note que $Q = 1 = Q^T$ donc $Q$ est Symétrique Définie Positive. 
         \end{proof}
 
-        \item \textbf{vrai}, $R$ est Symétrique Définie Positive: on note que $\det(R)$...;
+        \item \textbf{vrai}, $R$ est Symétrique Définie Positive:
         \begin{proof}
-            ...
+            On note que $R = I_{n\times n} = R^T$ donc $R$ est Symétrique Définie Positive. 
         \end{proof}
         \begin{remark}
             Il existe une racine de $R$ telle que $(A, \sqrt{R})$ est Observable, aussi valide;
         \end{remark}
     \end{enumerate}
+    Comme tous le conditions sont attendus le problème de commande optimale propose est optimale e donc le Gain Optimale $K_o$ sera donne pour:
+    \begin{equation}
+        \boxed{
+            K_o = Q^{-1} \; B^T \; S
+        }
+    \end{equation}
+    Où S est l'unique solution symétrique définie positive de l'équation de Riccati algébrique suivante:
+    \begin{equation}
+        S \; A + A^T \; S - S \; B \; Q \; B^T \; S + R = 0 
+    \end{equation}
 
     % TODO search definition of LQ
     % TODO do calculation
@@ -202,6 +206,14 @@ On cherche maintenant à réaliser un bouclage d'état $\delta u(t) = -K \cdot X
 K =
 
   -11.8563   -4.0213    6.9244    1.1300
+
+
+eig(A - B*K) =
+
+  -50.0029 + 0.0000i
+   -1.7369 + 2.7820i
+   -1.7369 - 2.7820i
+   -3.0249 + 0.0000i
         \end{lstlisting}
     \end{scriptsize}
     \begin{remark}
@@ -226,17 +238,16 @@ K =
         \centering
         \begin{subfigure}[b]{0.475\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{../images/simulink_scope3_0_01_1.png}
+            \includegraphics[width=\textwidth]{../images/m3_r0_s0.01_o0_o.png}
             \caption{$x_1(0) = x_2(0) = 0.01$ et $x_3(0) = x_4(0) = 0.1$}
         \end{subfigure}
         \begin{subfigure}[b]{0.475\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{../images/simulink_scope3_0_1_01.png}
+            \includegraphics[width=\textwidth]{../images/m3_r0_s0.1_o0_o.png}
             \caption{$x_1(0) = x_2(0) = 0.1$ et $x_3(0) = x_4(0) = 0.01$}
         \end{subfigure}
         \caption{Simulation Retour d'État, Gain Optimale}
     \end{figure}
-    % todo update figures
 \end{resolution}
 
 \newpage
@@ -248,27 +259,26 @@ K =
     Après avoir définit $K_{\omega}$, le gain voulue, $K_{o}$ le gain optimale, le système suivant a été mis en oeuvre sur Simulink:
     \begin{figure}[H]
         \centering
-        \includegraphics[width=0.8\textwidth]{../images/system_simulink_30.png}
+        \includegraphics[width=0.6\textwidth]{../images/system_simulink_30.png}
         \caption{Système d'Intérêt Simulink, Retour d'État}
     \end{figure}
     Qui donne les résultats suivants:
     \begin{figure}[H]
         \centering
-        \begin{subfigure}[b]{0.475\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{../images/simulink_scope30_0_6_02.png}
+            \includegraphics[width=\textwidth]{../images/m30_r0_s0.6_o0.png}
             \caption{$x_1(0) = x_2(0) = 0.6$ et $x_3(0) = x_4(0) = 0.02$}
         \end{subfigure}
-        \begin{subfigure}[b]{0.475\textwidth}
+        \begin{subfigure}[b]{0.45\textwidth}
             \centering
-            \includegraphics[width=\textwidth]{../images/simulink_scope30_0_02.png}
+            \includegraphics[width=\textwidth]{../images/m30_r0_s0.02_o0.png}
             \caption{$x_1(0) = x_2(0) = x_3(0) = x_4(0) = 0.02$}
         \end{subfigure}
         \caption{Simulation Retour d'État, Comparaison Gain}
     \end{figure}
-    On peut voir que les résultats sont..\\
-    % TODO compare results for different values
-    % TODO estimate different poles and after compare with the optimal ones
-    En tout cas, le méthode \href{https://www.mathworks.com/help/control/ref/lti.lqr.html}{\texttt{lqr}} permette de découvrir les poles plus facilement que le méthode de placement de pôle car le premier utilise d'une critère plus facile à comprendre, bénéficie ou pénaliser la variation des paramètres dans le système.
+    On peut voir que le Gain Optimale $K_o$ donne une curve plus stable, moins d'oscillations pour stabiliser, même que son amplitude soit plus importante pour les états $r(t)$ et $\theta(t)$ et moins importante pour les états $\dot{r}(t)$ et $\dot{\theta}(t)$.\\
+
+    En tout cas, le méthode \href{https://www.mathworks.com/help/control/ref/lti.lqr.html}{\texttt{lqr}} permette de découvrir les poles plus facilement que le méthode de placement de pôle car le premier utilise d'une critère plus facile à comprendre, bénéficier ou pénaliser la variation des paramètres dans le système.
 \end{resolution}
 \end{document}
