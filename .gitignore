@@ -33,9 +33,9 @@ tblank.*
 *.exe
 *.ppt
 *.xlsx
-*.ipynb
 *.npz
 *.csv
 *.txt
 *.pyc
 *.svg
+*.m4v
