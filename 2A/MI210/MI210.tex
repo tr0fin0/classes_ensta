@@ -1,0 +1,138 @@
+\documentclass{article}
+\usepackage{C:/Users/guitr/Documents/git_repositories/tpack/tpack}
+% \usepackage{C:/Users/Admin-PC/Documents/git_repository/tpack/tpack}
+% \usepackage{/home/tr0fin0/Documents/git_repositories/tpack/tpack}
+% \usepackage{/home/Documents/git_repositories/tpack/tpack}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
+
+\title{MI210 - Modèles Neuro-computationnels}
+\project{Résumé Théorique}
+\author{Guilherme Nunes Trofino}
+\authorRA{2022-2024}
+
+
+\makeatletter
+\begin{document}\selectlanguage{french}
+\maketitle
+\setlength{\parindent}{0pt}
+
+\newpage\tableofcontents
+
+\section{Introduction}
+\subfile{C:/Users/guitr/Documents/git_repositories/classes_ensta/intro.tex}
+% \subfile{C:/Users/Admin-PC/Documents/git_repository/classes_ensta/intro.tex}
+% \subfile{/home/tr0fin0/Documents/git_repositories/classes_ensta/intro.tex}
+% \subfile{/home/Documents/git_repositories/classes_ensta/intro.tex}
+
+\subsection{Information Matier}
+\paragraph{Référence}Dans cette matière le but sera de comprendre comment le système visuelle humaine.
+
+Minimal Square Error: MSE
+\begin{equation}
+    MSE = \frac{1}{2} \sum_{t}(f(t) - n(t))^2
+\end{equation}
+n(t) is stocastic values
+integration time needs to be well fitted
+composition with the repetitions and from response
+
+S.. T.. A..: STA
+\begin{equation}
+    STA(\tau) = \frac{1}{T} \sum n(t) \tilde{S}(t -\tau)
+\end{equation}
+
+biphasical with there is a curve over and one under the zero
+the integration is on the negative time
+it is notdesired that the start of the curve, in zero, is not in zero
+invert matrix takes $O(N^3)$
+multiple matrix takes $O(N^2)$
+solve the linear problem takes $O(N^2)$
+
+
+figure 5 figure 6
+analyse the neuron model and the actual data, is the data correcting fitting the phase values and the magnitude. magnitude is not correct, negative values are not correct because a neuron only see positive values
+
+to corrected the negative values you need to rectife the values with the relu = max(values, 0) unit that trucates the values
+
+the model does not fit the the lows after a pick. the model is slow to change with the actual model. to fix this more layers would be need to fix. the model is to smooth to work with the neurons
+
+figure 8
+it start closer to zero in the right so it is kind of better
+it end almost in the same value in the left
+it has a lot of zip zap because their is a error / noise in the model do not divide the noise data with noise data because the quantity of flutuation will be bigger and will disturb the data. the biology can not zig zag lik that
+there should be delay because the cells take time to react to the impulse and situmulus 
+the integration is almost zero  what is good
+
+it is kind of correlelated because the model predictis almost at the same point as the actual data
+
+
+how to improve the model: using the machine learning concept and test
+
+
+Linear-nonLinear Poisson Model: LNP
+before deep learning
+\begin{equation}
+    P_t(n) = \text{Poisson}(n|f(t)) = \frac{f^{n}(t)}{!n} e^{-f(t)}
+\end{equation}
+\begin{equation}
+    f(t) = NL (w * \tilde{S} + b) \to \exp(w*\tilde{S} + b)
+\end{equation}
+% where NL can be another nonlinear function. soft max function ln(1+e^x), rectifen function relu
+
+from the data the poisson distribuition does not fit the data but there is a normal observation
+
+how to find w and b to fit the model? can be solved by the log-likelihood maximisation:
+\begin{equation}
+    l(w, b) = \sum_{t} (n(t) \log f(t) - f(t))
+\end{equation}
+when use stocastic values: the problem is convexe, only one max point. find the maximum with calcules, derivative and equal to zero:
+\begin{equation}
+    \frac{\partial l(w, b)}{\partial w(t)} = \sum_{t} \left[ ( \frac{n(t)}{f(t)} - 1 ) \frac{\partial f(t)}{\partial w(t)} \right] = \sum_{t} [(n(t) - f(t))\tilde{S}(t - \tau)]
+    \qquad
+    \frac{\partial l(w, b)}{\partial b} = \sum_{t} [(n(t) - f(t))]
+\end{equation}
+compute the gradientent and compute the hessian
+
+can be solved by steppest gradient 
+
+
+figure 11
+LN Model fitting
+noise initialized with small noise close to zero, important for non stocastic models because this avoid local maximums
+how to determin the learning rate in the code?
+increase learning rate, reduce number of iterations
+decrease learning rate, increase number os iterations
+
+-- trace log-likelihood
+- trace log-likelihood test decreasing because of overfitting
+
+figure 12
+filter
+improves, the maximums it is better eventhough there are biiger than the original values, does not start at zero as demanded but it is a bit of the zero at the start
+
+figure 13
+there is an outlier on the picks, over 5 times bigger
+in general the curve is very similar at begin means it is an improved model
+performance is the coorelenation between the model output values with the original values
+
+
+
+LNP model + L2 - Regularisation model
+to have a somoot w, we shold minimise $(w(\tau) - w(\tau + 1))^2$
+with a laplacian matrice 
+
+figure 20
+the curve is much more smoother
+the performance is better eventhought the data does not match the pick values perfectly
+
+LN2P can be constructed with multiple LNP
+two layers can count with two variables, so it can predict the behavior of the cells caused by the estimulus, moving bar and the response from the others neurons. to compare the performance we can plot the performance agaist the distance of each variable
+
+if the distribution has differences from the original it means that the conditionnal value influence the beravior of the cells on the model that we are considering
+
+the nuerons has a inertia, it means it has a delay to change state
+to has a qunatitative value of the distribution we can use the mutual information between pos and spikes on the graph
+\begin{equation}
+    \mathcal{H} - <\mathcal{H}(x|\tau)> p(\tau) \geq 0
+\end{equation}
+markus meister TED talk
+\end{document}
