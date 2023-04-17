@@ -116,19 +116,22 @@ xlabel('\alpha, false positive')
 ylabel('\beta, true positive')
  
 
-%%%%%%%%%%                           TODO: compute area under curve
-% AUC = 
 
-%%%                                 TODO: compute error in 2AFC
-% p2AFC = 
+%%  Area Under Curve, AUC, and 2 Alternative Forced Choice, 2pAFC
+%   performance in 2 alternative forced choice experiment 
+%   ===========================================================================
 
-figure('Name', 'neuronal')
-% semilogx(100*coherence, AUC, '-o'); hold on
-% semilogx(100*coherence, p2AFC, 'r-o'); hold on
+figure('Name', 'neuronal AUC')
+hold on
+semilogx(100*coherence, AUC_array, '-o');
+semilogx(100*coherence, p2AFC_array, 'r-o');
+hold off
 xlabel('log coherence')
 ylabel('area under curve')
-leg = legend('area under curve', 'probability correct');
-set(leg, 'Location', 'SouthEast', 'Box', 'off', 'Fontsize', 12)
+grid on
+legend_str{end+1} = sprintf('p2AFC');
+legend(legend_str);
+
 
 
 %% compute entropy for binary stimulus
