@@ -25,10 +25,11 @@ spike_counts    = poissrnd(repmat(lambda, n_trials, 1));    % generate spikes
 %   ===========================================================================
 
 num_bins = 50;
-bin_edges = linspace(0, 50, num_bins+1);
+bin_edges = 0:1:num_bins;
 
 %   generate histogram of spike counts (0% coherence)
 bin_counts_0 = histograma(spike_counts_0, n_trials, num_bins, 0, 50);
+bin_counts_array = [];
 
 %   generate histogram of spike counts
 figure('Name', 'firing rate histograms')
@@ -41,34 +42,79 @@ for i = 1:n_stimulus
    
     ylabel('trials')
     title(sprintf('coherence = %.1f %%', coherence(i)*100));
+
+    bin_counts_array = [bin_counts_array, bin_counts];
 end
     
 xlabel('spike count')
 
 
-%% ROC curves
-z = 50:-1:0;                            % thresholds
-nz = numel(z);                          % number of thresholds
+%%  Receiver Operator Characteristic, ROC, curves
+%   ===========================================================================
 
-alpha = zeros(nz, 1);                   % false alarm rate
-beta = zeros(nz, nstim);                % hit rate
+%   according to chatGPT:
+%   The receiver operating characteristic (ROC) curve is a graphical 
+%   representation of the performance of a binary classifier as the 
+%   discrimination threshold is varied. The ROC curve plots the true positive 
+%   rate (TPR) against the false positive rate (FPR) for different threshold 
+%   values. 
 
-% loop over thresholds
-for i = 1:nz
-    %%%%%%%% alpha(i) =                TODO false alarm rate
-    %%%%%%%% beta(i)  =                TODO: compute hit rate
+%   The area under the ROC curve (AUC) is a commonly used metric for 
+%   quantifying the overall performance of the classifier, with an AUC of 1.0 
+%   indicating perfect classification and an AUC of 0.5 indicating random 
+%   classification.
+
+thresholds = num_bins-1:-1:0;
+num_threshold = numel(thresholds);
+
+% define counter arrays
+AUC_array = [];
+p2AFC_array = [];
+
+%   plot ROC curve
+figure('Name', 'ROC curve')
+hold on
+
+%   loop over thresholds
+for j = 1:n_stimulus
+    % define counter storage arrays
+    FP_rate = zeros(num_threshold, 1);          % FP, False  Positive rate, alpha
+    TP_rate = zeros(num_threshold, n_stimulus); % TP, True   Positive rate, beta
+
+    % define counters
+    FP_count = 0;
+    TP_count = 0;
+
+    % calculate FP and TP rates
+    for i = 1:num_threshold
+        if bin_counts_array(i, j) >= thresholds(i)
+            TP_count = TP_count + 1;
+        else
+            FP_count = FP_count + 1;
+        end
+        
+        FP_rate(i)   = FP_count / num_bins;
+        TP_rate(i, j) = TP_count / num_bins;
+    end
+
+    % calculate AUC
+    AUC_array = [AUC_array; trapz(FP_rate, TP_rate)];
+
+    % calculate 2pAFC
+    p2AFC_array = [p2AFC_array, TP_rate(find(FP_rate>=0.5, 1, 'first'), j)];
+
+
+    plot(FP_rate, TP_rate(:,j), 'o-')
+    legend_str{j} = sprintf('coherence = %.1f %%', coherence(j)*100);
 end
 
-% plot ROC curve
-figure('Name', 'ROC curve')
-%%% plot( ... , 'o-')                   % TODO plot ROC curve
 plot([0 1], [0 1], 'k--'); hold off
-xlabel('alpha')
-ylabel('beta')
+grid on
+axis square
+legend(legend_str)
+xlabel('\alpha, false positive')
+ylabel('\beta, true positive')
  
-
-
-%% area under curve and performance in 2 alternative forced choice experiment 
 
 %%%%%%%%%%                           TODO: compute area under curve
 % AUC = 
