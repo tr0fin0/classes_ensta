@@ -157,9 +157,10 @@ ylabel('H')
 
 
 
-%% compute mutual information between stimulus and response
+%%  compute mutual information between stimulus and response
+%   ===========================================================================
 % log p(x)
-% logpx = -repmat(??, 1, nstim);                TODO compute log p(x)
+% logpx = -repmat(??, 1, n_stimulus);                TODO compute log p(x)
 
 % maximum firing rate
 rmax = 100;
@@ -192,8 +193,3 @@ end
 
 
 %% bonus question: vary firing rate, or background, or stim. distribution
-
-
-
-
-
