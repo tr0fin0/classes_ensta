@@ -133,16 +133,27 @@ legend_str{end+1} = sprintf('p2AFC');
 legend(legend_str);
 
 
+%%  compute entropy for binary stimulus
+%   ===========================================================================
 
-%% compute entropy for binary stimulus
+%   compute probability (that x=1) and entropy
 
-% compute probability (that x=1) and entropy
+%   defining array of probabilities
+p = 0:0.001:1;
+H = -p .* log2(p) - (1-p) .* log2(1-p);
 
 figure('Name', 'entropy of a binary stimulus')
-% plot(p, H)
+plot(p, H)
+grid on
+axis square
+legend('H(X)')
 xlabel('p') 
 ylabel('H')
+%   we can notice that the probability of p(x=1) gives H(X=x)=0 which is
+%   expected.
 
+%   if we know the value of x from the start there is no uncertainty so
+%   the entropy, randomness of the data, is zero.
 
 
 
