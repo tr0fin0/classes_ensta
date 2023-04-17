@@ -1,34 +1,50 @@
-%% creat fake data
+%%  2023_04_11 TP 2
+%   MI210 - Neurocomputational Models
+%   ===========================================================================
 
-% range of stimulus coherences
+clear
+clc
+close all
+
+
+%%  data create (fake)
+%   ===========================================================================
+
+%   range of stimulus coherences
 coherence = [0.025 0.05 0.1 0.2 0.3 0.5 0.7];
-nstim = numel(coherence);                       % number of stimuli
+n_stimulus= numel(coherence);                   % number of stimulus
 
-r0 = 10;                                        % background mean spike count
-lambda = r0+30*coherence;                       % mean spike count 
-ntr = 1e3;                                      % number of trials
-r0 = poissrnd(repmat(r0, ntr, 1));              % generate spikes (0% coherence)
-r = poissrnd(repmat(lambda, ntr, 1));           % generate spikes
+mean    = 10;                                   % mean spike count background 
+lambda  = mean + 30*coherence;                  % mean spike count 
+n_trials= 1e3;                                  % number of trials
+spike_counts_0  = poissrnd(repmat(mean, n_trials, 1));      % generate spikes (0% coherence)
+spike_counts    = poissrnd(repmat(lambda, n_trials, 1));    % generate spikes
 
 
-%% plot histograms
+%%  plot histograms
+%   ===========================================================================
 
-x = 0:50;                  % different spike counts for histogram
-edges =  [x-0.5,x(end)+1]; % bin edges for histogram
+num_bins = 50;
+bin_edges = linspace(0, 50, num_bins+1);
 
-%%%%                       % TODO generate histogram of spike counts (0% coherence)
+%   generate histogram of spike counts (0% coherence)
+bin_counts_0 = histograma(spike_counts_0, n_trials, num_bins, 0, 50);
 
+%   generate histogram of spike counts
 figure('Name', 'firing rate histograms')
-for i = 1:nstim
-    %%%%                    % TODO generate histogram of spike counts
+for i = 1:n_stimulus
+    data = spike_counts(:,i);
+    bin_counts = histograma(data, n_trials, num_bins, 0, 50);
+
+    subplot(n_stimulus, 1, i) 
+    bar(bin_edges(1:end-1), [bin_counts_0, bin_counts], 'hist')
    
-    subplot(nstim, 1, i) 
-    bar(x, [n0; n])
     ylabel('trials')
     title(sprintf('coherence = %.1f %%', coherence(i)*100));
-    
 end
+    
 xlabel('spike count')
+
 
 %% ROC curves
 z = 50:-1:0;                            % thresholds
