@@ -29,35 +29,48 @@ end
 %   set of data.
 
 
+%%  Exercise 2: 
+%   ===========================================================================
 
 load('data.mat')
 
+% WZ: decorrelating filters
+% WI: ICA filters, need for Exercice 4
+
 % x: 16000 image patches of size 12 x 12 = 144
 % X: 1 full image 
-% 
-% WZ: decorrelating filters
-% WI: ICA filters
 
-%% Exercise 2
+%   compute the covariance of x
+%   cov_x = x * x' / size(x,2) - mean(x)
+%   another way of computing the covariance matrix is defined above.
 
-% compute the covariance of x
-% C = ...
+%   in this case the mean is zero and therefore it is not considered
+cov_x = cov(x');
+%   MATLAB considers observations on each row and variables on each collumn
+%   but in the dataset it is the opposity, so transpose is needed
 
-% compute z = WZ*x, and its covariance
-% z = ...
-% Czz = ...
+%   compute z = WZ*x, and its covariance
+z = WZ * x; 
+cov_z = cov(z');
 
 figure('Name', 'covariance')
+
 subplot(1, 2, 1)
-imagesc(C(1:12, 1:12)); 
+imagesc(cov_x(1:12, 1:12)); 
+grid on
+axis square
 colormap('gray')
-title('stimulus covariance')
+title('covariance of stimulus')
+
 subplot(1, 2, 2)
-imagesc(Czz(1:12, 1:12)); 
+imagesc(cov_z(1:12, 1:12)); 
+grid on
+axis square
 colormap('gray')
 title('covariance of Z')
+%   white means high correlation and black means low correlation. values in
+%   between should follow the same scale.
 
-%% Exercise 3
 
 % reshape 1 filter
 w = reshape(WZ(78, :), 12, 12);
