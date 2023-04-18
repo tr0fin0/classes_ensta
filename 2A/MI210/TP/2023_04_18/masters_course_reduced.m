@@ -127,14 +127,47 @@ colormap('gray') % comment for colorfull image
 %       uneven speaker response.
 
 
-    % Wn = 
+%%  Exercise 4: denoising filter
+%   ===========================================================================
 
-    % Wcombined = 
+%   in order to continue using the white filter a denoise filter can be
+%   applied before appling the white filter.
 
+%   examples of possible approches:
+%       smoothing;
+%       wavelet denoising;
+%       Principal Component Analysis, PCA;
+%       Independent Component Analysis, ICA;
+
+%   array of noises
+eta = [0.0 0.3 1.4]*std(x(:));
+
+figure('Name', 'denoising')
+
+%   analysis over different noise levels
+for i = 1:length(eta)
+
+    % where <...> is consider as average of values
+    %   <(x + eta)(x + eta)'>
+    %   <x x'> + 2<x eta'> + <eta eta'>
+    %   cov(x) + sigma2 * I
+    
+    Wn = (cov_x + eta(i)^2 * eye(length(cov_x))) \ cov_x;
+    % Wn = (<(x + eta)(x + eta)'>)^{-1} <x (x + eta)>
+    %   is prefereable to use the '\' operator instead of the inverse
+    %   operator for numerical reasons
+
+    % where the order of the multiplication with influence inthe result of the operation
+    % from right to left, first is needed to compute the denoising matrix
+    % to after compute the original white filter matrix
+    Wcombined = WZ * Wn;
+
+    % extracting a part of the matrix
     wcombined = reshape(Wcombined(:, 78), 12, 12);
     
     subplot(1, 3, i)
-    imagesc(wcombined); axis square; axis off;
+    imagesc(wcombined); axis square; axis on;
+    title(['eta(', num2str(i), ')'])
 end
 
 
