@@ -171,41 +171,80 @@ for i = 1:length(eta)
 end
 
 
-%% %% Exercise 5:
+%%  Exercise 5:
+%   ===========================================================================
+
+%   defintion noise
 eta = 0.7*std(x(:));
-% Wn =
 
-% Wcombined = WZ*Wn;
+%   computing denoising matrix
+Wn = (cov_x + eta^2 * eye(length(cov_x))) \ cov_x;
 
+%   combinning the filters
+Wcombined = WZ*Wn;
+
+%   extracting a part of the matrix
 w = reshape(Wcombined(78, :), 12, 12);
 
- Z = conv2(X, w, 'same');
+%   convolution of the noisyless image with a combined filter
+Z = conv2(X, w, 'same');
 
-% noisy version of stimulus
-% Xn = 
+%   adding noise to the original image
+noise = eta * randn(size(X));
+Xn = X + noise;
 
-% convolve w with Xn to get response
-% Zn = 
+%   convolution of the noisy image with a filter
+Zn = conv2(Xn, w, 'same');
 
-figure('Name', 'images')
+figure('Name', 'images with denoising')
 subplot(2, 2, 1)
 imagesc(X);
+title('orignal image')
+
 subplot(2, 2, 2)
 imagesc(Z);
+title('convolution of original image')
+
 subplot(2, 2, 3)
 imagesc(Xn);
+title('orignal image with noise')
+
 subplot(2, 2, 4)
 imagesc(Zn);
+title('convolution of original image with noise')
 colormap('gray')
 
-%% plot the ICA filters
+%%  plot the ICA filters
+%   ===========================================================================
+
+%   according to chatGPT:
+%       In signal processing, Independent Component Analysis (ICA) is a technique 
+%       used to separate a multivariate signal into independent, non-Gaussian 
+%       components. One application of ICA is to separate a mixed signal into its 
+%       original source signals.
+
+%       The ICA filter is a mathematical operation used to perform this separation. 
+%       It is essentially a matrix that is applied to the mixed signal to produce 
+%       a set of output signals that are as independent as possible. The ICA filter 
+%       is designed to maximize the non-Gaussianity of the output signals, which is 
+%       a measure of their statistical independence.
+
+%       The ICA filter is typically computed using an optimization algorithm that 
+%       seeks to find the set of filter coefficients that maximizes the non-Gaussianity 
+%       of the output signals. Once the filter is computed, it can be applied to the 
+%       mixed signal to produce the set of independent component signals. The ICA filter 
+%       is often used in applications such as blind source separation, where the goal 
+%       is to recover the original signals from a set of mixed signals without any prior 
+%       knowledge of the mixing process.
+
 figure('Name', 'ICA filters')
 for i = 1:25
     subplot(5, 5, i)
     imagesc(reshape(WI(i, :), 12, 12)); colormap('gray'); axis off; axis square
+    title(['ICA(', num2str(i), ')'])
 end
 
-%% Exercise 6: plot a histogram of Z and ZICA
+
 
 grd = -100:1:100; % grid for histogram
 
