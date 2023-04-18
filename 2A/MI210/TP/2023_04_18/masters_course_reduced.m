@@ -245,31 +245,92 @@ for i = 1:25
 end
 
 
+%%  Exercise 6: plot a histogram of Z and Z_ICA
+%   ===========================================================================
 
 grd = -100:1:100; % grid for histogram
 
-% Z = 
-% ZICA = 
+%   Z values
+Z = WZ * x;
 
-% pz = 
-% pr = 
+%   Z values of ICA analysis
+Z_ICA = WI * x;
+
+%   computing histogram
+pz = hist(Z(:), grd);
+pr = hist(Z_ICA(:), grd);
 
 figure('Name', 'responses')
 semilogy(grd, pz, 'k'); hold on
+title(['z histogram'])
 semilogy(grd, pr, 'r'); hold on
 legend('decorrelated', 'independent component')
+title(['ICA histogram'])
 
-%% plot conditional histogram of  
+%   note that the Z_ICA algorithm is heavy tailed, which means acoording to chatGPT:
+%       In probability theory and statistics, a heavy-tailed distribution is a 
+%       probability distribution that has a larger proportion of observations in 
+%       its tail than would be expected if the distribution were normal or Gaussian. 
 
-pz1z2 = hist3(ZICA([9, 10], :)', {grd' grd'});
+%       In other words, a heavy-tailed distribution has more extreme values or 
+%       outliers than a normal distribution.
 
-% TODO compute p(z_2)
-% pz2 = 
+%       The tail of a distribution refers to the region of the distribution that 
+%       contains the largest values or extreme observations. A heavy-tailed 
+%       distribution has a slower decay rate in the tail than a normal distribution, 
+%       which means that extreme values are more likely to occur. This can result 
+%       in a higher frequency of extreme events, such as stock market crashes or 
+%       natural disasters.
 
-% TODO compute p(z_1|z_2)
-% pz1_z2 = 
+%       Some examples of heavy-tailed distributions include the Cauchy distribution, 
+%       the Student's t-distribution, and the power-law distribution. Heavy-tailed 
+%       distributions are often used to model complex systems in which extreme events 
+%       are more common, such as in finance, climate science, and network analysis.
+
+
+%   also note that Z_ICA is sparsely code, in other words as defined by chatGPT:
+%       In neuroscience and machine learning, sparse coding is a method of representing 
+%       data in which each item is represented by a small number of active neurons or 
+%       features. In other words, a sparse code is a way of expressing information using 
+%       only a subset of the available features or variables.
+
+%       The idea behind sparse coding is that natural signals, such as images or sounds, 
+%       are often highly redundant and can be efficiently represented by a small number 
+%       of features. By selectively activating only a few neurons or features, a sparse 
+%       code can reduce the dimensionality of the data and simplify the processing 
+%       required to analyze it.
+
+%       Sparse coding has been observed in the brain, where neurons in the visual cortex 
+%       have been shown to respond selectively to specific features of visual stimuli. 
+%       In machine learning, sparse coding is often used as a feature selection or 
+%       dimensionality reduction technique, where the goal is to find a compact 
+%       representation of the data that preserves its essential structure.
+
+
+%%  plot conditional histogram of  
+%   ===========================================================================
+
+%   now independance of the variables is going to be evaluated to determine
+%   the behavior of the code 
+
+%   computing p(z1, z2)
+pz1z2 = hist3(Z_ICA([9, 10], :)', {grd' grd'});
+
+%   computing p(z2)
+pz2 = sum(pz1z2, 1);
+
+%   computing p(z1 | z2), conditional probability
+pz1_z2 = pz1z2 ./ (pz2 + 1e-5);
+%   note that 1e-5 as added to avoid infinite numbers by zero division
+%   during the calculus over the array.
 
 figure('Name', 'conditional histogram')
 imagesc(grd, grd, log(pz1_z2+0.01))
 set(gca, 'Xlim', [-10 10], 'Ylim', [-10 10])
+grid on; 
+axis square;
 colormap('gray')
+
+%   note that best linear filters are not independet as shown in the plot
+%   there is a bold like shape on the image, that means that they are not 
+%   independent.
