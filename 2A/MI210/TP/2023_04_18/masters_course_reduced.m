@@ -72,42 +72,60 @@ title('covariance of Z')
 %   between should follow the same scale.
 
 
-% reshape 1 filter
+%%  Exercise 3: 
+%   ===========================================================================
+
+%   reshape image with whitinning filter into a patch of data
 w = reshape(WZ(78, :), 12, 12);
 
+%   convolution of the image with a filter
 Z = conv2(X, w, 'same');
 
-figure('Name', 'images')
+%   showing original image for benchmark
+figure('Name', 'images without denoising')
 subplot(2, 2, 1)
 imagesc(X);
+title('original image')
+
 subplot(2, 2, 2)
 imagesc(Z, [-1 1]);
+title('convolution of original image')
 
+%   computing stardard deviation
+eta = 0.5*std(x(:));
 
-%%%%% TODO %%%%%%%%%%%%%%%%%
-eta = 0.7*std(x(:));
+%   adding noise to the original image
+noise = eta * randn(size(X));
+Xn = X + noise;
 
-%%%% add noise to X: 
-%%%% convolve with w to get Zn 
-% Xn = ...
-% w  = ....
+%   convolution of the noisy image with a filter
+Zn = conv2(Xn, w, 'same');
 
 subplot(2, 2, 3)
 imagesc(Xn);
+title('original image with noise')
+
 subplot(2, 2, 4)
 imagesc(Zn, [-1 1]);
-colormap('gray')
+title('convolution of original image with noise')
+colormap('gray') % comment for colorfull image
+%   amplify the noise and suppress the signal of the image
+%   even a small amount of the stimulus will destroy the image
 
-%% Exercise 4: denoising filter
+%   this filter is not robust agaist noise in this proposition
 
-%%% noise level
-eta = [0 0.3 1.4]*std(x(:));
+%   according to chatGPT:
+%       A white filter is a linear filter that passes all frequencies 
+%       equally, and does not alter the amplitude or phase of any 
+%       frequency component of the signal. In other words, it has a 
+%       flat frequency response across all frequencies.
 
-%%%% loop over different noise levels
-for i = 1:3
+%       In signal processing, a white filter is often used to filter 
+%       noise from a signal while preserving the signal's frequency 
+%       content. It can also be used to equalize the frequency response 
+%       of a system, for example in audio systems to compensate for 
+%       uneven speaker response.
 
-    %%%%%% TODO: compute noise filter, Wn
-    % Wn  = inv( <xn*xn> )*<xxn'>
 
     % Wn = 
 
