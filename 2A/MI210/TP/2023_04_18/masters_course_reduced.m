@@ -1,5 +1,10 @@
-%% Exercise 1: compute entropy of 2 neurons, with varying covariance matrices  %%%%%%%
+%%  2023_04_18 TP 3
+%   MI210 - Neurocomputational Models
+%   ===========================================================================
 
+clear
+clc
+close all
 
 
 %%  Load data
