@@ -7,7 +7,28 @@ clc
 close all
 
 
-%%  Load data
+%%  Exercise 1: entropy of 2 neurons, with varying covariance matrices
+%   ===========================================================================
+
+%   create an array of matrices
+sigmas = {[1 0.00; 0.00 1] [1 0.50; 0.50 1] [1 0.99; 0.99 1]};
+
+%   calculation of entropy H
+for i=1:length(sigmas)
+    % using the natural logarithme
+    H = 1/2 * log( 2*pi*exp(1) * det(sigmas{i}) )
+end
+
+%   as expected entropy is higher on more random sets of data and lower on
+%   less random sets of data.
+
+%   that makes sense, if the data is predictible it means that it does not 
+%   give much usefull information.
+
+%   note that the entropy can be negative, which indicates a predictible
+%   set of data.
+
+
 
 load('data.mat')
 
