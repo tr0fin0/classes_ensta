@@ -99,46 +99,50 @@ legend('', 'training', '', 'testing')
 %   of around 55. 
 
 
-rTr = mean(binnedOFF(:,timeTr),1);
-rTe = mean(binnedOFF(:,timeTe),1);
+%%  STIMULUS PRE-PROCESSING
+%   ============================================================================
 
-psthTr = rTr/dt;
-psthTe = rTe/dt;
+%   The pre-processing of a stimulus can involve several steps depending on the 
+%   nature of the stimulus and the goals of the experiment. However, some common 
+%   steps involved in stimulus pre-processing include:
+%       - filtering: low-pass filter, band-pass filter or high-pass filter;
+%       - scaling: normalize within a certain range;
+%       - sampling: ;
+%       - pre-processing: ;
 
+%   we will use scaling: aiming a mean of zero and standard deviation of one.
+stim_scaled = (stim' - mean(stim))/std(stim);
+time_range = number_bins : T;
+
+%   visualization
 fig=figure;
 
 subplot(2,1,1)
 hold on
-plot((1:T)*dt,stim,'k','LineWidth',2.0)
-xlabel('Time (s)')
-ylabel('Luminance')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+title('stimulus')
+plot((1:T)*dt, stim, 'k', 'LineWidth', 2.0)
+xlabel('Time [s]'); xlim([0,15]);
+ylabel('Luminance [?]')
+grid on
 
 subplot(2,1,2)
 hold on
-plot(timeTr*dt,psthTr,'LineWidth',2.0)
-plot(timeTe*dt,psthTe,'LineWidth',2.0)
-xlabel('Time (s)')
-ylabel('Spiking Rate (Hz)')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+title('stimulus scaled')
+plot((1:T)*dt, stim_scaled, 'k', 'LineWidth', 2.0)
+xlabel('Time [s]'); xlim([0,15]);
+ylabel('Luminance [?]')
+grid on
+
+%   as we can see the curve is the same but shifted in th y-axis so it's mean
+%   is on zero and is standar déviation in one as it's values are now between, 
+%   for the most part, -1 and +1.
 
 
-%%  LINEAR MODEL
-%%============================================================================
+stim_full = zeros([T number_bins]);
 
-% f(t) = \sum_tau w(tau) * ( x(t-tau) -mean(x) ) + b
-% We seek to minimize 1/2 * \sum_t (r(t) - f(t) ).^2
-%
-% r(t) -> rTilde(t) = r(t)-mean(r)
-% x(t) -> xTilde(t) = ( x(t)-mean(x) ) / std(x)
-%
-% autoCov(tau,tau') = \sum_t xTilde(t+tau) xTilde(t+tau')
-% STA(tau) = \sum_t rTilde(t) * xTilde(t-tau)
-% w(tau) =  STA * Inv(autoCov) 
-% 
-
+for tt = time_range
+    stim_full(tt, :) = stim_scaled((tt-number_bins+1) : tt);
+end
 
 
 %% STIMULUS PRE-PROCESSING
