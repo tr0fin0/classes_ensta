@@ -180,29 +180,32 @@ grid on
 % STA
 
 
-%% STA = Spike-Triggered Average, and LINEAR FILTER
-%%============================================================================
-% formula to calculated
-% STA(tau) = \sum_t rTilde(t) * xTilde(t-tau)
-% w(tau) =  STA * Inv(autoCov) 
-% b = mean( r(t) ) response
-%
+%%  STA, Spike-Triggered Average, and LINEAR FILTER
+%   ============================================================================
+%   The spike-triggered average (STA) is a commonly used method in neuroscience
+%   to characterize the relationship between the spiking activity of a neuron 
+%   and its input.
+
+%   It is a method for calculating the average stimulus that occurs before a
+%   neuron fires an action potential (spike).
+
 % But we will first ignore off diagonal elements in autoCorrelation
 %   input is normalized normaly
 %   output is not normalized normaly
 %
 
 
-%%%%%%%%%%%%
-b = mean(rTr);  % mean of rTr
-rTrTilde = rTr - b; % remove the mean to analyse the behavior of the curve in time
-STA = rTrTilde * fullStim(timeTr, :);
-%%%%%%%%%%%%
+%   remove the mean to analyse the behavior in time
+mean_training_data = mean(training_data);
+training_data_zero_mean = training_data - mean_training_data;
 
-wLin = STA * inv( diag(diag( stimAutoCorr ) ) ); % normalizy by the diagonal part of the 
-% ignore the fact the facct thtat the situmulous is corrected for the moment and continue with the calculation
-% in theory as the code is 
-% in exam a code would be given to be completed but the evaluation will take part as what is happennig with the code
+STA = training_data_zero_mean * stim_full(training_time, :);
+
+linear_filter = STA * inv( diag( diag( stim_autocorrelation ) ) );
+
+%   normalizy by the diagonal part of the 
+%   ignore the fact the facct thtat the situmulous is corrected for the moment and continue with the calculation
+
 % what are seeing:
     % it is biphasical, has a positive and a negative part
     % it is off, not logic gate behavior
@@ -213,12 +216,12 @@ wLin = STA * inv( diag(diag( stimAutoCorr ) ) ); % normalizy by the diagonal par
 
 fig=figure;
 hold on
-plot((1-integrationTime:0)*dt,wLin) % comment
-plot( [-dt*integrationTime 0],[0 0],'--k')
-xlabel('Past time (s)')
+title('linear filter')
+plot((1-number_bins:0)*dt, linear_filter) % comment
+plot( [-dt*number_bins 0], [0 0], '--k')
+xlabel('time [s]')
 ylabel('wLin')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+grid on
 
 
 %% LINEAR PREDICTION
