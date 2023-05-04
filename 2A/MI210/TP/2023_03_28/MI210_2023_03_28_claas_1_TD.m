@@ -24,16 +24,79 @@ number_bins = integration_time/dt;  % number of time bins that correspond to des
                                     % 0.5 seconds of integration time
 
 
-%% COMPUTE AND VISUALIZE PSTH AND STIMULUS
-%%============================================================================
-%
-% r = mean( n(t,r) , r )
-% psth = r/dt
-%
-timeTr = integrationTime:floor(0.66*T);
-timeTe = ceil(0.66*T):T;
-TTr = numel(timeTr);
-TTe = numel(timeTe);
+%%  COMPUTE AND VISUALIZE STIMULUS PSTH
+%   Peri-Stimulus Time Histogram
+%   ============================================================================
+
+%   PSTH stands for "Peri-Stimulus Time Histogram", which is a graphical 
+%   representation of the firing rate of a neuron or a population of neurons 
+%   over time in response to a specific stimulus or event.
+
+%   The PSTH  in response to a stimulus is created by:
+%       - dividing a period of time into small bins;
+%       - counting the number of spikes that occur within each bin;
+
+%   The resulting counts are then normalized by the bin width and the number
+%   of trials to obtain an estimate of the average firing rate over time.
+
+%   Normalized count is called the Spike Density Function also known from it's
+%   accronym.
+
+%   separated data from machine learning
+training_time = number_bins : floor(0.66*T);    % training time bins, 2/3
+testing_time  = ceil(0.66*T) : T;               % testing  time bins, 1/3
+size_training = numel(training_time);
+size_testing  = numel(testing_time);
+
+%   select dataset:
+if true
+    %   studying OFF cells
+    training_data = mean(binnedOFF(:,training_time), 1);
+    testing_data  = mean(binnedOFF(:,testing_time),  1);
+    
+else
+    %   studying ON  cells
+    training_data = mean(binnedON(:,training_time), 1);
+    testing_data  = mean(binnedON(:,testing_time),  1);
+
+end
+
+% normalization of bins
+psth_training = training_data/dt;
+psth_testing  = testing_data/dt;
+
+
+fig=figure;
+
+subplot(2,1,1)
+hold on
+title('stimulus')
+plot((1:T)*dt, stim, 'k', 'LineWidth', 2.0)
+xlabel('Time [s]'); xlim([0,15]);
+ylabel('Luminance [?]')
+grid on
+
+subplot(2,1,2)
+hold on
+title('PSTH')
+bar(training_time*dt, psth_training)
+plot(training_time*dt, psth_training,'LineWidth', 2.0)
+bar(testing_time*dt,  psth_testing)
+plot(testing_time*dt,  psth_testing, 'LineWidth', 2.0)
+xlabel('Time [s]'); xlim([0,15]);
+ylabel('Spiking Rate [Hz]')
+grid on
+legend('', 'training', '', 'testing')
+
+%   what we can notice:
+%       - y-axis has is typical unit: Spikes per Second, [Hz] 
+%           also know as Normalized Firing Rate;
+%       - integration_time is respected: PSTH only start after the
+%           0.5s were gone
+% 
+%   we can notice that the PSTH is sligthly right shifted dude to the integration
+%   time chosen with spiking rate higher when the luminance is low, with a threshold
+%   of around 55. 
 
 
 rTr = mean(binnedOFF(:,timeTr),1);
