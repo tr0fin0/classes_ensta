@@ -81,6 +81,7 @@ set(gca,'box','off')
 timeRange = integrationTime:T;
 
 %%%%%%%%%%%%    represents codes to be changed
+% different, transpose of stimilus
 stimTilde = (stim - mean(stim))/std(stim);  % remove mean and normalize over the standard deviation
 %%%%%%%%%%%%
 
@@ -97,6 +98,7 @@ end
 % simplify calculation from the correlation calcules
 % using the linear mode to calcule the matrix
 %%%%%%%%%%%%
+% different
 stimAutoCorr = fullStim' * fullStim;        % compute autocorrelation of fullStim over training times
 %%%%%%%%%%%%
 
@@ -206,12 +208,14 @@ set(gca,'box','off')
 % implement non-linearity, very common in the brain, in the eyes and in machine learning. it is need to add some non linearity to aproximate the system
 
 fReLU = max(fLin, 0);
+% different
 % perfReLU = ???
 %%%%%%%%%%%%
 
 fig=figure;
 hold on
 %%%%%%%%%%%%
+% different
 % plot( ??? , ??? ,'LineWidth',2.0)
 % plot( ??? ,psthTe,'LineWidth',1.0)
 %%%%%%%%%%%%
@@ -232,6 +236,7 @@ set(gca,'box','off')
 %
 
 %%%%%%%%%%%%
+% different
 % wLinAC = STA * ????
 %%%%%%%%%%%%
 
@@ -246,9 +251,12 @@ set(gca,'Fontsize',16);
 set(gca,'box','off')
 
 %%%%%%%%%%%%
+% different
 % fLinAC = ???
 %%%%%%%%%%%%
 
+% different >---------------------------------------------------------------<
+% fReLUAC 
 perfLinAC = corr(psthTe', fLinAC')
 
 fig=figure;
