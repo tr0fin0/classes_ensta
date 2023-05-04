@@ -145,39 +145,36 @@ for tt = time_range
 end
 
 
-%% STIMULUS PRE-PROCESSING
-%%============================================================================
-timeRange = integrationTime:T;
+%%  STIMULUS AUTOCORRELATION
+%   ============================================================================
+%   Stimulus autocorrelation refers to the degree to which a stimulus is correlated
+%   with itself over time. 
 
-%%%%%%%%%%%%    represents codes to be changed
-% different, transpose of stimilus
-stimTilde = (stim - mean(stim))/std(stim);  % remove mean and normalize over the standard deviation
-%%%%%%%%%%%%
+%   Autocorrelation can be described as the degree to which a signal is correlated 
+%   with a delayed version of itself.
 
-fullStim = zeros([T integrationTime]);
-
-for tt=timeRange
-    fullStim(tt,:) = stimTilde((tt-integrationTime+1) :tt);
-end
+%   In the context of stimulus processing, the autocorrelation of a stimulus is often
+%   used to quantify its temporal structure.
 
 
-%% STIMULUS AUTOCORRELATION
-%%============================================================================
-% luminance of time is related with the luminance from the previous and next time
-% simplify calculation from the correlation calcules
-% using the linear mode to calcule the matrix
-%%%%%%%%%%%%
-% different
-stimAutoCorr = fullStim' * fullStim;        % compute autocorrelation of fullStim over training times
-%%%%%%%%%%%%
+%   luminance of time is related with the luminance from the previous and next time
+%   simplify calculation from the correlation calcules
+%   using the linear mode to calcule the matrix
+
+%   compute autocorrelation of stim_full over training times
+stim_autocorrelation = stim_full' * stim_full;
 
 fig=figure;
 hold on
-plot( 0:integrationTime-1,stimAutoCorr(1,:)/TTr )
-xlabel('Time (s)')
-ylabel('Auto correlation')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+plot( 0:number_bins-1, stim_autocorrelation(1,:)/size_training )
+title('stimulus autocorrelation')
+xlabel('Time [s]')
+ylabel('autocorrelation'); ylim([0 1]);
+grid on
+
+%   we can see that the autocorrelation is decreasing as time passed with means that
+%   the stimulus is less correlated as time passes but it seems that it will stabilise
+%   at around 0.4.
 % expected that the data is decreesing, overtime the correlation is getting slower
 % STA, the average of the data slide 13 of TD2
 % STA
