@@ -1,5 +1,6 @@
-%%                    Main Code
-%%============================================================================
+%%  2023_04_11 TP 1
+%   MI210 - Neurocomputational Models
+%   ===========================================================================
 
 clc
 clear all   % ctrl+r:   comment
@@ -7,19 +8,20 @@ close all   % ctrl+t: uncomment
 
 RA = 217276;
 
-%%============================================================================
 whos -file dataENSTA_Lect_1.mat % sees  data
-% Name             Size              Bytes  Class     Attributes
+%   Name             Size              Bytes  Class     Attributes
 
-% binnedOFF      100x599            479200  double              
-% binnedON       100x599            479200  double              
-% dt               1x1                   8  double              
-% stim           599x1                4792  double              
+%   binnedOFF      100x599            479200  double              
+%   binnedON       100x599            479200  double              
+%   dt               1x1                   8  double    sampling time          
+%   stim           599x1                4792  double    stimulus
 
-load dataENSTA_Lect_1.mat       % loads data
+load dataENSTA_Lect_1.mat   % loads data
 
-[R T] = size(binnedOFF);
-integrationTime = 0.5/dt;
+[R, T] = size(binnedOFF);
+integration_time = 0.5;
+number_bins = integration_time/dt;  % number of time bins that correspond to desired
+                                    % 0.5 seconds of integration time
 
 
 %% COMPUTE AND VISUALIZE PSTH AND STIMULUS
