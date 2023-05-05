@@ -19,6 +19,10 @@ whos -file dataENSTA_Lect_1.mat % sees  data
 load dataENSTA_Lect_1.mat   % loads data
 
 [R, T] = size(binnedOFF);
+%   where:
+%       - R: repetitions;
+%       - T: measures in time;
+
 integration_time = 0.5;
 number_bins = integration_time/dt;  % number of time bins that correspond to desired
                                     % 0.5 seconds of integration time
@@ -140,6 +144,8 @@ grid on
 
 stim_full = zeros([T number_bins]);
 
+%   each column will have an itegration window
+
 for tt = time_range
     stim_full(tt, :) = stim_scaled((tt-number_bins+1) : tt);
 end
@@ -166,21 +172,26 @@ stim_autocorrelation = stim_full' * stim_full;
 
 fig=figure;
 hold on
-plot( 0:number_bins-1, stim_autocorrelation(1,:)/size_training )
+%   notice that the time delay can be modify:
+time_delay = 1;
+%   this is possible because the autocorrelation varies with time delay
+plot( 0:number_bins-1, stim_autocorrelation(time_delay,:)/size_training )
 title('stimulus autocorrelation')
 xlabel('Time [s]')
-ylabel('autocorrelation'); ylim([0 1]);
+ylabel('autocorrelation');
+% ylim([0 1]);
 grid on
 
 %   we can see that the autocorrelation is decreasing as time passed with means that
 %   the stimulus is less correlated as time passes but it seems that it will stabilise
 %   at around 0.4.
+
 % expected that the data is decreesing, overtime the correlation is getting slower
 % STA, the average of the data slide 13 of TD2
 % STA
 
 
-%%  STA, Spike-Triggered Average, and LINEAR FILTER
+%%  STA, Spike-Triggered Average
 %   ============================================================================
 %   The spike-triggered average (STA) is a commonly used method in neuroscience
 %   to characterize the relationship between the spiking activity of a neuron 
@@ -189,19 +200,32 @@ grid on
 %   It is a method for calculating the average stimulus that occurs before a
 %   neuron fires an action potential (spike).
 
-% But we will first ignore off diagonal elements in autoCorrelation
-%   input is normalized normaly
-%   output is not normalized normaly
-%
-
-
 %   remove the mean to analyse the behavior in time
 mean_training_data = mean(training_data);
 training_data_zero_mean = training_data - mean_training_data;
 
 STA = training_data_zero_mean * stim_full(training_time, :);
 
-linear_filter = STA * inv( diag( diag( stim_autocorrelation ) ) );
+filter_linear_simple = STA * inv( diag( diag( stim_autocorrelation ) ) );
+%   where only the main diagonal autocorrelation values were consider because
+%   they are most relevant ones.
+
+%   by the way it reduces the computation effort and therefore increases performance
+
+%   visualization
+fig=figure;
+hold on
+title('linear filter')
+plot((1-number_bins:0)*dt, filter_linear_simple) % comment
+plot( [-dt*number_bins 0], [0 0], '--k')
+xlabel('time [s]')
+ylabel('wLin')
+grid on
+
+%   interpretation chatGPT:
+%       wLin positive: an increase in the stimulus increase the firing probability
+%       wLin negative: an increase in the stimulus reduce   the firing probability
+
 
 %   normalizy by the diagonal part of the 
 %   ignore the fact the facct thtat the situmulous is corrected for the moment and continue with the calculation
@@ -213,15 +237,7 @@ linear_filter = STA * inv( diag( diag( stim_autocorrelation ) ) );
     % as the values has autocorrelation 
     % as long as we ignore the autocorrelation the graph will have this behavior
     % biologicaly the plot it does not sense
-
-fig=figure;
-hold on
-title('linear filter')
-plot((1-number_bins:0)*dt, linear_filter) % comment
-plot( [-dt*number_bins 0], [0 0], '--k')
-xlabel('time [s]')
-ylabel('wLin')
-grid on
+    
 
 
 %% LINEAR PREDICTION
