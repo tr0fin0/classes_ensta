@@ -513,53 +513,51 @@ grid on
 
 
 
-%% LAMBDA OPTIMIZATION
+%%  Lamba Optimization
+%   ============================================================================
 
-lambdaRange = logspace(-2,4,30);
-nLambda = numel(lambdaRange);
-perfLambda = zeros([nLambda 1]);
+lambda_values = logspace(-4,6,100);
+size_lambda_values = numel(lambda_values);
+performance_lambda = zeros([size_lambda_values 1]);
 
-for ll = 1:nLambda
-    lambda=lambdaRange(ll);
-    wLinReg = STA * inv( stimAutoCorr + lambda * lapl );
-    fLinReg = wLinReg * fullStim(timeTe,:)' + b; % comment
+for ll = 1:size_lambda_values
+    lambda  = lambda_values(ll);
+    filter_linear_lambda = STA * inv( stim_autocorrelation + lambda * laplacian );
+    prediction_linear_lambda = filter_linear_lambda * stim_full(testing_time,:)' + mean_training_data;
 
-    perfLambda(ll) =  corr(psthTe', fLinReg');
+    performance_lambda(ll) =  corr(psth_testing', prediction_linear_lambda');
 end
 
 
 fig=figure;
 hold on
-plot(lambdaRange,perfLambda,'LineWidth',2.0)
+title('prediction linear regularization')
+plot(lambda_values, performance_lambda)
 set(gca,'XScale','log')
 xlabel('Regularization strenght')
 ylabel('Performance')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+grid on
 
 %% COMPUTE OPTIMAL W and ADD ReLU
 
-[~,llBest] = max(perfLambda);
+[~,llBest] = max(performance_lambda);
 
-lambda = lambdaRange(llBest);
-wLinReg = STA * inv( stimAutoCorr + lambda * lapl );
-fLinReg = wLinReg * fullStim(timeTe,:)' + b; % comment
+lambda = lambda_values(llBest);
+filter_linear_lambda = STA * inv( stim_autocorrelation + lambda * laplacian );
+prediction_linear_regularization = filter_linear_lambda * stim_full(testing_time,:)' + mean_training_data;
 
-perfLinReg = corr(psthTe', fLinReg')
+performance_prediction_linear_optimization = corr(psth_testing', prediction_linear_regularization')
 
-perfReLUReg = corr(psthTe', max(fLinReg,0)')
+perforamnce_prediction_ReLU_optimization = corr(psth_testing', max(prediction_linear_regularization,0)')
 
 fig=figure;
 hold on
-plot((1-integrationTime:0)*dt,wLin,'LineWidth',2.0) % comment
-plot((1-integrationTime:0)*dt,wLinAC,'LineWidth',2.0) % comment
-plot((1-integrationTime:0)*dt,wLinReg,'LineWidth',2.0) % comment
-plot( [-dt*integrationTime 0],[0 0],'--k')
-xlabel('Past time (s)')
-ylabel('wLin')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
-
-
-
-
+title('linear filter')
+plot((1-number_bins:0)*dt,filter_linear_simple)
+plot((1-number_bins:0)*dt,filter_linear_full)
+plot((1-number_bins:0)*dt,filter_linear_regularization)
+plot((1-number_bins:0)*dt,filter_linear_lambda)
+plot( [-dt*number_bins 0],[0 0],'--k')
+legend('simple', 'full', 'regularization', 'lambda')
+xlabel('Past time [s]')
+ylabel('filter')
