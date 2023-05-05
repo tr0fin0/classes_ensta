@@ -240,54 +240,61 @@ grid on
     
 
 
-%% LINEAR PREDICTION
-%%============================================================================
+%%  Linear Prediction
+%   ============================================================================
 %
-% f(t) = \sum_tau w(tau) * ( x(t-tau) -mean(x) ) + b
+% f(t) = \sum_tau w(tau) * ( x(t-tau) -mean(x) ) + mean_training_data
 % missing the normal deviation of the sitimula
 %
 
+%   where we will try to predict the spikes of neurons with a linear model
+%   given by the following:
+prediction_linear_simple =  filter_linear_simple * stim_full(testing_time, :)' + mean_training_data;
+% slide 1 page 13
+%   where * is, in this case, a convolution of the linear filter with the stimulus
 
-%%%%%%%%%%%%
-fLin =  wLin * fullStim(timeTe, :)' + b; % compute prediction for testing times
-% makes the matrix multiplication or the convolution cod
-%%%%%%%%%%%%
+%   is worth meantioning that the testing time shall be used.
 
-% perfLinReg = corr(psthTe', fLin')
+%   normalizing bins
+psth_prediction_linear_simple = prediction_linear_simple/dt;
 
+%   visualization
 fig=figure;
 hold on
-plot(timeTe*dt,fLin/dt,'LineWidth',2.0)
-plot(timeTe*dt,psthTe,'LineWidth',1.0)
-xlim([10 15])
-xlabel('Time (s)')
-ylabel('Spiking Rate (Hz)')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+title('PSTH: linear model')
+plot(testing_time*dt, psth_testing,'LineWidth', 1.0)
+plot(testing_time*dt, psth_prediction_linear_simple,'LineWidth', 2.0)
+xlabel('Time [s]');         xlim([10 15])
+ylabel('Spiking Rate (Hz)');
+legend('data', 'linear')
+grid on
 
-%% WHAT IS HAPPENING ??
-%
-% Do a scatter plot of psth against prediction
-%
-% average number of spakes so it should be always positive
-% trunquate when the values are negative to remove the problems discovered from the output result
+%   as we can see on the graph there are negative spiking rate which has no
+%   physical meaning and therefore indicate problems with this estimator.
 
+%   in order to improve this prediction we could trunquate it's values to
+%   remove the negative part.
+
+%   as an estimator we can see that it's spikes are in phase with the data
+%   but it's magnitude is far from coherent, peaks and valleys are not well
+%   fitted.
+
+%   compute the performance of the linear prediction with the 
+performance_prediction_linear_simple = corr(psth_testing', prediction_linear_simple')
+
+%   visualization
 fig=figure;
 hold on
-%%%%%%%%%%%%
-% plot( ??? , ??? , '.','MarkerSize',12)
-%%%%%%%%%%%%
-plot([-100 100],[-100 100],'--k')
+title('scatter plot')
+scatter(psth_testing, psth_prediction_linear_simple)
+plot([-150 150],[-150 150],'--k')
 xlabel('PSTH')
-ylabel('PREDICTION')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+ylabel('prediction linear')
+axis square;
+grid on;
 
 
-%% ReLU TRUNCATION
-%
-% ReLU(x) = max(x,0)
-%
+
 
 %%%%%%%%%%%%
 % implement non-linearity, very common in the brain, in the eyes and in machine learning. it is need to add some non linearity to aproximate the system
