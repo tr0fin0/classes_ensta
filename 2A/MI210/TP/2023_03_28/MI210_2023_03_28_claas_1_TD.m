@@ -410,58 +410,108 @@ grid on
 
 
 
+%%  Smoothness Regularization
+%   ============================================================================
+% f(t) = \sum_tau w(tau) * ( x(t-tau) -mean(x) ) + mean_training_data
 % We seek to minimize 1/2 * \sum_t (r(t) - f(t) ).^2 + lambda/2 * w * Laplacian * w
 %
 % w * Laplacian * w = sum_tau (w(tau) - w(tau+1)).^2
 %
 
-
-lapl = 4*eye(integrationTime);
-lapl = lapl - diag( ones([integrationTime-1 1]),1);
-lapl = lapl - diag( ones([integrationTime-1 1]),-1);
-lapl(1,1) = 2;
-lapl(end,end) = 2;
+%   defining a Laplacian matrix:
+laplacian = 4 * eye(number_bins);
+laplacian = laplacian - diag( ones([number_bins-1 1]), +1);    % upper diagonal
+laplacian = laplacian - diag( ones([number_bins-1 1]), -1);    % lower diagonal
+laplacian(1,1) = 2;
+laplacian(end,end) = 2;
 
 fig=figure;
-imagesc(lapl);
+title('laplacian matrix')
+imagesc(laplacian);
 colorbar;
 
-%% Let's try with an example regularization strength 
+%   define regularization strenght value
+lambda = 0.015; % value chosen to optimized validation set
 
-lambda = 10;
+%   initialise parameters of linear regularization
+w = 1e-9 * randn(1, number_bins);
+b = 0;
 
-%%%%%%%%%%%%
-% wLinReg = ??? 
-%%%%%%%%%%%%
+%   initialise parameters of gradient descent
+n_interations = 500;
+eta = 1e-1; % step size
+
+%   computing gradient descent
+log_training = zeros(1, n_interations); % log likelihood training
+log_testing  = zeros(1, n_interations); % log likelihood testing
+for i = 1:n_interations
+    % firing rate prediction
+    firing_rate_training = exp(  w * stim_full(training_time,:)' + b );
+    firing_rate_testing  = exp(  w * stim_full(testing_time,:)' + b );
+    
+    % log-likelihood training
+    ll = log(firing_rate_training) .* training_data - firing_rate_training ;
+    log_training(i) = mean(ll)  - 0.5 * lambda * w * laplacian * w';
+
+    % log-likelihood testing
+    ll = log(firing_rate_testing ) .* testing_data - firing_rate_testing ;
+    log_testing(i) = mean(ll);
+
+    % derivative of log likelihood
+    dL_w =    (training_data - firing_rate_training) * stim_full(training_time,:)/size_training;
+    dL_b = sum(training_data - firing_rate_training)/size_training;
+
+    % update parameters 
+    w = w + eta * dL_w - lambda * w * laplacian; 
+    b = b + eta * dL_b;
+end
+
+%   renaming variable
+filter_linear_regularization = w;
 
 fig=figure;
 hold on
-plot((1-integrationTime:0)*dt,wLin,'LineWidth',2.0) % comment
-plot((1-integrationTime:0)*dt,wLinAC,'LineWidth',2.0) % comment
-plot((1-integrationTime:0)*dt,wLinReg,'LineWidth',2.0) % comment
-plot( [-dt*integrationTime 0],[0 0],'--k')
-xlabel('Past time (s)')
-ylabel('wLin')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+title('linear filter')
+plot((1-number_bins:0)*dt, filter_linear_simple)
+plot((1-number_bins:0)*dt, filter_linear_full)
+plot((1-number_bins:0)*dt, filter_linear_regularization)
+plot( [-dt*number_bins 0],[0 0],'--k')
+xlabel('Past time [s]')
+ylabel('filter')
+legend('simple', 'full', 'regularization')
+grid on
 
-%%%%%%%%%%%%
-% fLinReg = ???
-%%%%%%%%%%%%
 
-perfLinReg = corr(psthTe', fLinReg')
+%   normalizing bins
+psth_prediction_linear_regularization = firing_rate_testing/dt;
+
+%   computing the performance
+performance_prediction_linear_regularization = corr(psth_testing', psth_prediction_linear_regularization')
+
+
+%   applying ReLU truncation
+prediction_ReLU_full = max(firing_rate_testing, 0);
+
+%   normalizing bins
+psth_prediction_ReLU_regularization = prediction_ReLU_full/dt;
+
+%   computing the performance
+performance_prediction_ReLU_regularization = corr(psth_testing', psth_prediction_ReLU_regularization')
+
 
 fig=figure;
 hold on
-plot(timeTe*dt,fLin/dt,'LineWidth',2.0)
-plot(timeTe*dt,psthTe,'LineWidth',1.0)
-plot(timeTe*dt,fLinAC/dt,'LineWidth',1.0)
-plot(timeTe*dt,fLinReg/dt,'LineWidth',1.0)
-xlim([10 15])
-xlabel('Time (s)')
-ylabel('Spiking Rate (Hz)')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+title('PSTH: linear full')
+plot(testing_time*dt,psth_testing)
+plot(testing_time*dt,psth_prediction_ReLU_simple)
+plot(testing_time*dt,psth_prediction_ReLU_full)
+plot(testing_time*dt,psth_prediction_ReLU_regularization)
+xlabel('Time [s]');         xlim([10 15])
+ylabel('Spiking Rate [Hz]');
+legend('data', 'ReLU simple', 'ReLU full', 'ReLU regularization')
+grid on
+
+
 
 %% LAMBDA OPTIMIZATION
 
