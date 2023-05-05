@@ -295,30 +295,55 @@ grid on;
 
 
 
+%%  ReLU Truncation
+%   ============================================================================
+%   
+%   ReLU (Rectified Linear Unit) truncation is a non-linear activation function
+%   that is commonly used in neural networks. It works by setting all negative
+%   input values to zero and passing through positive input values.
 
-%%%%%%%%%%%%
-% implement non-linearity, very common in the brain, in the eyes and in machine learning. it is need to add some non linearity to aproximate the system
+%   The term "truncation" refers to the fact that the function is essentially
+%   "cut off" at zero, meaning that it does not allow negative values to pass through.
 
-fReLU = max(fLin, 0);
-% different
-% perfReLU = ???
-%%%%%%%%%%%%
+%   implement non-linearity, very common in the brain, in the eyes and in machine learning.
+%   it is need to add some non linearity to aproximate the system
+
+prediction_ReLU_simple = max(prediction_linear_simple, 0);
+
+%   normalizing bins
+psth_prediction_ReLU_simple = prediction_ReLU_simple/dt;
 
 fig=figure;
 hold on
-%%%%%%%%%%%%
-% different
-% plot( ??? , ??? ,'LineWidth',2.0)
-% plot( ??? ,psthTe,'LineWidth',1.0)
-%%%%%%%%%%%%
+title('PSTH: ReLU')
+plot(testing_time*dt, psth_testing)
+plot(testing_time*dt, psth_prediction_linear_simple)
+plot(testing_time*dt, psth_prediction_ReLU_simple, 'LineWidth', 2.0)
+xlabel('Time [s]');         xlim([10 15])
+ylabel('Spiking Rate [Hz]');
+legend('data', 'linear', 'ReLU')
+grid on
 
-xlim([10 15])
-xlabel('Time (s)')
-ylabel('Spiking Rate (Hz)')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+%   compute the performance of the ReLU with respect of the original data
+performance_prediction_ReLU = corr(psth_testing', prediction_ReLU_simple')
 
-%% INCLUDING FULL AUTOCOVARIANCE 
+%   visualization
+fig=figure;
+hold on
+title('scatter plot')
+scatter(psth_testing, psth_prediction_ReLU_simple)
+plot([-150 150],[-150 150],'--k')
+xlabel('PSTH')
+ylabel('ReLU')
+axis square;
+grid on;
+
+%   as we can by the increase of the correlation between the ReLU prediction
+%   the ReLU truncation improves the estimation and correct the biological
+%   incosistence.
+
+
+
 % 
 % STA(tau) = \sum_t rTilde(t) * xTilde(t-tau)
 % w(tau) =  STA * Inv(autoCov)
