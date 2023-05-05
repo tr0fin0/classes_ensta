@@ -344,54 +344,72 @@ grid on;
 
 
 
+%%  Full Autocovariance 
+%   ============================================================================
 % 
 % STA(tau) = \sum_t rTilde(t) * xTilde(t-tau)
 % w(tau) =  STA * Inv(autoCov)
-% b = mean( r(t) )
-%
-% And now with the full autoCorrelation
+% mean_training_data = mean( r(t) )
 %
 
-%%%%%%%%%%%%
-% different
-% wLinAC = STA * ????
-%%%%%%%%%%%%
+filter_linear_full = STA * inv( stim_autocorrelation );
+%   when we consider all the autocorrelation values we can see that the
+%   variance on the graph increases because the system is more sensible
+%   to other values.
 
+%   visualization
 fig=figure;
 hold on
-plot((1-integrationTime:0)*dt,wLin,'LineWidth',2.0) % comment
-plot((1-integrationTime:0)*dt,wLinAC,'LineWidth',2.0) % comment
-plot( [-dt*integrationTime 0],[0 0],'--k')
-xlabel('Past time (s)')
+title('linear filter')
+plot((1-number_bins:0)*dt, filter_linear_simple)
+plot((1-number_bins:0)*dt, filter_linear_full)
+plot( [-dt*number_bins 0],[0 0],'--k')
+xlabel('Past time [s]')
 ylabel('wLin')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+grid on
 
-%%%%%%%%%%%%
-% different
-% fLinAC = ???
-%%%%%%%%%%%%
+prediction_linear_full =  filter_linear_full * stim_full(testing_time, :)' + mean_training_data;
 
-% different >---------------------------------------------------------------<
-% fReLUAC 
-perfLinAC = corr(psthTe', fLinAC')
+%   normalizing bins
+psth_prediction_linear_full = prediction_linear_full/dt;
 
+%   compute the performance
+performance_prediction_linear_full = corr(psth_testing', prediction_linear_full')
+
+
+%   applying ReLU truncation
+prediction_ReLU_full = max(prediction_linear_full, 0);
+
+%   normalizing bins
+psth_prediction_ReLU_full = prediction_ReLU_full/dt;
+
+%   compute the performance
+performance_prediction_ReLU_full = corr(psth_testing', prediction_ReLU_full')
+
+
+
+%   visualization
 fig=figure;
 hold on
-plot(timeTe*dt,fLin/dt,'LineWidth',2.0)
-plot(timeTe*dt,psthTe,'LineWidth',1.0)
-plot(timeTe*dt,fLinAC/dt,'LineWidth',1.0)
-xlim([10 15]);
-xlabel('Time (s)')
-ylabel('Spiking Rate (Hz)')
-set(gca,'Fontsize',16);
-set(gca,'box','off')
+title('PSTH: linear full')
+plot(testing_time*dt, psth_testing)
+plot(testing_time*dt, psth_prediction_linear_simple)
+plot(testing_time*dt, psth_prediction_ReLU_simple)
+plot(testing_time*dt, psth_prediction_linear_full)
+plot(testing_time*dt, psth_prediction_ReLU_full)
+xlabel('Time [s]');         xlim([10 15]);
+ylabel('Spiking Rate [Hz]');
+legend('data', 'linear simple', 'ReLU simple', 'linear full', 'ReLU full')
+grid on
+
+%   as we can see with the correlation value considering all the autocorrelation
+%   improved the prediction overall but it is still far from great.
+
+%   it seems that the prediction is smooter than the others and therefore it does
+%   not have a lot of negative values but it can neither show the peaks correctly.
 
 
-%% SMOOTHNESS REGULARIZATION
-% teacher version will have the response: it will be shared. run the teacher code and the read the code of the teacher and after we willl discuss the plot to try to understand the code and comment as it will be demaned for the examen
-% work with the student code and then work with the teacher version
-% f(t) = \sum_tau w(tau) * ( x(t-tau) -mean(x) ) + b
+
 % We seek to minimize 1/2 * \sum_t (r(t) - f(t) ).^2 + lambda/2 * w * Laplacian * w
 %
 % w * Laplacian * w = sum_tau (w(tau) - w(tau+1)).^2
