@@ -95,10 +95,54 @@ hold on
 plot(false_positive, true_positive, 'o-')
 plot([0 1], [0 1], 'k--')
 hold off
-xlabel('false positive')
-ylabel('true positive') 
+xlabel('false positive ratio')    % 1 - specificity
+ylabel('true positive ratio')     % sensitivity
+%     sensitivity = TPR = TP / (TP + FN)
+%   1-specificity = FPR = FP / (FP + TN)
+
+%   TP: true positives
+%   TN: true negatives
+%   FN: false negatives
+%   FP: false positives
+
 legend('2.5%', '5.0%', '10.0%', '20.0%', '30.0%', '50.0%', '70.0%')
 grid on
+axis square
+
+%   question:
+%       threshold is represented with the dots on the graph and as it increases,
+%       true positive and false positive also increase.
+
+%       increasing the threshold means that a "larger" stimulus, in this case
+%       a more coherent stimulus, is necessary to be consider as a real stimulus.
+
+%       therefore the TPR will increase because, on average, every TP has a minimal
+%       value of stimulus distinguishable from background noise so when the threshold
+%       increases is more likely that if a signal passed that mark it is a stimulus.
+
+%       but if the threshold keeps growning it gets extremely difficult, even for a true
+%       stimulus, to a signal to match and therefore the FPR will increase.
+
+%   question:
+%       as cohrence increases the overall performance of the estimator also increases,
+%       in other words, as TPR increases FPR does not increases as much and smaller
+%       threshold values can be selected.
+
+%       in general the ROC curve is very close from what was expected.
+
+%   curves closer to the left upper corner are consider more accuracy, goal
+%   is to increase the area below the curve as the AUC performance method sugests
+
+%   corners caracteristics:
+%       lower left:
+%           - sensitivity:   0%
+%           - specificity: 100%
+%       upper right:
+%           - sensitivity: 100%
+%           - specificity:   0%
+
+%   reference: https://www.youtube.com/watch?v=muTQ8lsTqbA
+
 
 
 %%  Area Under Curve, AUC, and 2 Alternative Forced Choice, 2pAFC
@@ -136,6 +180,7 @@ semilogx(100*coherence, AUC, '-o'); hold on
 semilogx(100*coherence, p2AFC, 'r-o'); hold on
 xlabel('log coherence')
 ylabel('area under curve')
+grid on
 leg = legend('area under curve', 'probability correct');
 set(leg, 'Location', 'SouthEast', 'Box', 'off', 'Fontsize', 12)
 
@@ -250,7 +295,21 @@ mutual_info = HR - HR_X;
 
 fprintf('\n neuron encodes %.3f nats\n', mutual_info)
 
-%% vary stimulus distribution
+%   question:
+%       mutual information may increase with the increase of the rmax value
+%       because the resolution of the response probability distribution would
+%       also increase.
+
+%       if neurons are more sensitive to high coherences, making more high coherences
+%       more likely would increase the mutual information because the change in
+%       the probability distribution.
+%       it depends on how the conditional entropy of the response is given.
+
+
+
+
+%%  vary stimulus distribution
+%   ===========================================================================
 gain = [5 30 80 200 300 450 600];
 
 mutual_info = zeros(numel(gain), 1);
