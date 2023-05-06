@@ -30,27 +30,37 @@ spikes  = poissrnd(repmat(lambda, n_trials, 1));            % generate spikes
 
 
 
+%%  plot histograms
+%   ===========================================================================
 
 x = 0:50;                  % different spike counts for histogram
-edges =  [x-0.5,x(end)+1]; % bin edges for histogram
+edges = [x-0.5,x(end)+1]; % bin edges for histogram
 
-%%%%                       % TODO generate histogram of spike counts (0% coherence)
+hist_0 = histcounts(spikes_0, edges);            % histogram of spike counts (0% coherence)
 
-figure('Name', 'firing rate histograms')
-for i = 1:nstim
-    %%%%                    % TODO generate histogram of spike counts
+figure('Name', 'Firing Rate Histogram')
+for i = 1:n_stimulus
+    hist_i = histcounts(spikes(:, i), edges);   % histogram of spike counts
    
-    subplot(nstim, 1, i) 
-    bar(x, [n0; n])
+    subplot(n_stimulus, 1, i) 
+    hold on
+    bar(x, hist_0)
+    bar(x, hist_i)
+    grid on
     ylabel('trials')
     title(sprintf('coherence = %.1f %%', coherence(i)*100));
-    
 end
 xlabel('spike count')
 
-%% ROC curves
-z = 50:-1:0;                            % thresholds
-nz = numel(z);                          % number of thresholds
+%   we can see that the total of stimulus are the same but more spread between 
+%   multiple spike counts.
+
+%   more coherence means data closer to a true stimulus so spike count would increase.
+
+%   as consequence the standard deviation of the stimulus would also increase because...
+
+
+
 
 alpha = zeros(nz, 1);                   % false alarm rate
 beta = zeros(nz, nstim);                % hit rate
