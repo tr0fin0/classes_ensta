@@ -1,17 +1,35 @@
-%% creat fake data
+%%  2023_04_11 TP 3
+%   MI210 - Neurocomputational Models
+%   ===========================================================================
 
-% range of stimulus coherences
+clc
+clear all
+close all
+
+
+%%  creat data
+%   ===========================================================================
+
+%   stimulus coherences
 coherence = [0.025 0.05 0.1 0.2 0.3 0.5 0.7];
-nstim = numel(coherence);                       % number of stimuli
+%   coherence refers to the strength or degree of similarity between the stimuli
+%   presented to the neuron:
+%       - coherence of 0 indicates that the stimuli are completely dissimilar;
+%       - coherence of 1 indicates that the stimuli are identical;
 
-r0 = 10;                                        % background mean spike count
-lambda = r0+30*coherence;                       % mean spike count 
-ntr = 1e3;                                      % number of trials
-r0 = poissrnd(repmat(r0, ntr, 1));              % generate spikes (0% coherence)
-r = poissrnd(repmat(lambda, ntr, 1));           % generate spikes
+n_stimulus = numel(coherence);          % number of stimuli
+
+mean_background = 10;                   % background mean spike count
+lambda = mean_background+30*coherence;  % mean spike count 
+n_trials = 1e3;                         % number of trials
+
+spikes_0 = poissrnd(repmat(mean_background, n_trials, 1));  % generate spikes (0% coherence)
+spikes  = poissrnd(repmat(lambda, n_trials, 1));            % generate spikes
+
+%   as spikes_0 has 0% coherence data no spike should be produced by this stimulus
 
 
-%% plot histograms
+
 
 x = 0:50;                  % different spike counts for histogram
 edges =  [x-0.5,x(end)+1]; % bin edges for histogram
