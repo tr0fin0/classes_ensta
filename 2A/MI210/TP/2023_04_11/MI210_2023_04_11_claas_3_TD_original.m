@@ -61,23 +61,46 @@ xlabel('spike count')
 
 
 
+%%  Receiver Operator Characteristic, ROC, curves
+%   ===========================================================================
 
-alpha = zeros(nz, 1);                   % false alarm rate
-beta = zeros(nz, nstim);                % hit rate
+%   according to chatGPT:
+%   The receiver operating characteristic (ROC) curve is a graphical 
+%   representation of the performance of a binary classifier as the 
+%   discrimination threshold is varied. The ROC curve plots the true positive 
+%   rate (TPR) against the false positive rate (FPR) for different threshold 
+%   values. 
+
+%   The area under the ROC curve (AUC) is a commonly used metric for 
+%   quantifying the overall performance of the classifier, with an AUC of 1.0 
+%   indicating perfect classification and an AUC of 0.5 indicating random 
+%   classification.
+
+z = 50:-1:0;                                        % thresholds
+n_thresholds = numel(z);                            % number of thresholds
+
+false_positive = zeros(n_thresholds, 1);            % false positive rate
+true_positive  = zeros(n_thresholds, n_stimulus);   % hit rate
 
 % loop over thresholds
-for i = 1:nz
-    %%%%%%%% alpha(i) =                TODO false alarm rate
-    %%%%%%%% beta(i)  =                TODO: compute hit rate
+for i = 1:n_thresholds
+    false_positive(i)   = mean(spikes_0 > z(i));    % false positive rate
+    true_positive(i, :) = mean(spikes  >= z(i));    % hit rate
+    % this is a vetorial operation
 end
 
-% plot ROC curve
-figure('Name', 'ROC curve')
-%%% plot( ... , 'o-')                   % TODO plot ROC curve
-plot([0 1], [0 1], 'k--'); hold off
-xlabel('alpha')
-ylabel('beta')
- 
+%   plot ROC curve
+figure('Name', 'Receiver Operator Characteristic')
+hold on
+plot(false_positive, true_positive, 'o-')
+plot([0 1], [0 1], 'k--')
+hold off
+xlabel('false positive')
+ylabel('true positive') 
+legend('2.5%', '5.0%', '10.0%', '20.0%', '30.0%', '50.0%', '70.0%')
+grid on
+
+
 
 
 %% area under curve and performance in 2 alternative forced choice experiment 
