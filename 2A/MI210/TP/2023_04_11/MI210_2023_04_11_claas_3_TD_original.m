@@ -197,42 +197,98 @@ ylabel('H')
 grid on
 
 
+%%  compute mutual information between stimulus and response
+%   ===========================================================================
 
+%   Mutual information is a measure of the amount of information that is shared
+%   between two variables. In the context of data analysis, mutual information
+%   can be used to measure the degree of dependence between two variables. It is
+%   defined as the reduction in uncertainty of one variable when the value of
+%   the other variable is known.
 
+%   Formally, let X and Y be two random variables with probability distributions
+%   p(x) and p(y), respectively. The mutual information I(X;Y) between X and Y
+%   is defined as:
 
+%   I(X;Y) = ∑<sub>x,y</sub> p(x,y) log<sub>2</sub> [p(x,y) / (p(x) * p(y))]
 
-%% compute mutual information between stimulus and response
-% log p(x)
-% logpx = -repmat(??, 1, nstim);                TODO compute log p(x)
+%   where the summation is taken over all possible values of X and Y. The mutual
+%   information measures the amount of information that X and Y share in common.
+%   A higher mutual information value indicates a stronger dependence between
+%   the two variables.
 
-% maximum firing rate
+%   In the context of data analysis, mutual information can be used to identify
+%   patterns and relationships between variables, and to determine which
+%   variables are most informative for predicting the value of another variable.
+
+%   log p(x)
+logpx = -repmat(log(n_stimulus), 1, n_stimulus);
+
+%   maximum firing rate
 rmax = 100;
 
-% log p(r|x)
+%   log p(spikes|x)
 logpr_x = zeros(rmax+1, numel(coherence));
-for k = 0:100
-    % logpr_x(k+1, :) =                         TODO compute log p(r|x)
-                                                % tip: use Gamma(k+1) =
-                                                % gammaln(k+1)
+for k = 0:rmax
+    logpr_x(k+1, :) = k*log(lambda) - lambda - gammaln(1+k);
 end
 
-% compute p(r, x)
-% prx =                                         TODO compute p(r,x)
+%   compute p(spikes, x)
+prx = exp(logpr_x+logpx);
 
-% compute p(r)
-% pr =                                         TODO compute  p(r)
+%   compute p(spikes)
+pr = sum(prx, 2);
 
 % compute HR
-% HR =                                          TODO compute H(R)
+HR = - pr(:)'*log(pr(:));
 
 % compute HR_X
-% HR =                                          TODO compute H(R|X)
+HR_X = - prx(:)'*logpr_x(:);
 
-% compute Info
-% Inf =                                          TODO compute I(R; X)
+% compute mutual information
+mutual_info = HR - HR_X;
+
+fprintf('\n neuron encodes %.3f nats\n', mutual_info)
+
+%% vary stimulus distribution
+gain = [5 30 80 200 300 450 600];
+
+mutual_info = zeros(numel(gain), 1);
+for i = 1:numel(gain)
+    % mean spike count 
+    lambda_new = mean_background+gain(i)*coherence;
+
+    % maximum firing rate
+    rmax = max(2*(gain(i)+10), 100);
+
+    % log p(spikes|x)
+    logpr_x = zeros(rmax+1, numel(coherence));
+    for k = 0:rmax
+        logpr_x(k+1, :) = k*log(lambda_new) - lambda_new - gammaln(1+k);
+    end
+
+    % compute p(spikes, x)
+    prx = exp(logpr_x+logpx);
+
+    % compute p(spikes)
+    pr = sum(prx, 2);
+
+    % compute HR
+    HR = - pr(:)'*log(pr(:));
+    HX = - exp(logpx(:))'*logpx(:);
+
+    % compute HR_X
+    HR_X = - prx(:)'*logpr_x(:);
+
+    % compute Info
+    mutual_info(i) = HR - HR_X;
+   
+end
 
 
-% fprintf('\n neuron encodes %.3f bits\n', Inf)
-
-
-%% bonus question: vary firing rate, or background, or stim. distribution
+figure('Name', 'mutual information versus sigma(x)')
+plot(gain+10, mutual_info, '-o');   hold on
+plot([0, max(gain+10)], HX*[1 1]);  hold off
+xlabel('maximum spike count')
+ylabel('information [nats]')
+grid on
