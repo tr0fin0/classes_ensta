@@ -165,15 +165,38 @@ set(leg, 'Location', 'SouthEast', 'Box', 'off', 'Fontsize', 12)
 %   negatives is equal, which may not be the case in all situations.
 
 
+%%  compute entropy for binary stimulus
+%   ===========================================================================
 
-%% compute entropy for binary stimulus
+%   In information theory, entropy is a measure of the uncertainty or randomness
+%   in a random variable. In the context of data, entropy is a measure of the
+%   amount of information contained in the data or the degree of randomness in
+%   the data.
 
-% compute probability (that x=1) and entropy
+%   Mathematically, the entropy of a discrete random variable X with possible
+%   values {x1, x2, ..., xn} and probability mass function P(X) is defined as:
+
+%       H(X) = -Σ P(xi) log2 P(xi)
+
+%   where log2 is the base-2 logarithm, and the summation is taken over all
+%   possible values of X.
+
+%   The entropy is maximized when all possible values of X are equally likely
+%   (i.e., a uniform distribution) and minimized when the distribution is
+%   deterministic (i.e., all probability mass is concentrated on a single value
+%   of X). The entropy is always non-negative and is measured in bits, nats, or
+%   other units depending on the choice of the logarithm base.
+
+p = linspace(0, 1, 100);                 % probability that x = 1
+H =  -p.*log(p) - (1-p).*log(1-p);       % entropy
 
 figure('Name', 'entropy of a binary stimulus')
-% plot(p, H)
+plot(p, H)
 xlabel('p') 
 ylabel('H')
+grid on
+
+
 
 
 
