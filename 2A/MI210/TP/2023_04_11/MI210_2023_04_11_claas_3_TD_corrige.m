@@ -5,7 +5,7 @@ coherence = [0.025 0.05 0.1 0.2 0.3 0.5 0.7];
 nstim = numel(coherence);                       % number of stimuli
 
 r0 = 10;                                        % background mean spike count
-lambda = lambda0+30*coherence;                       % mean spike count 
+lambda = r0+30*coherence;                       % mean spike count 
 ntr = 1e3;                                      % number of trials
 r0 = poissrnd(repmat(r0, ntr, 1));          % generate spikes (0% coherence)
 r = poissrnd(repmat(lambda, ntr, 1));           % generate spikes
@@ -23,7 +23,9 @@ for i = 1:nstim
     n = histcounts(r(:, i), edges);   % histogram of spike counts
    
     subplot(nstim, 1, i) 
-    bar(x, [n0; n])
+    hold on
+    bar(x, n0)
+    bar(x, n)
     ylabel('trials')
     title(sprintf('coherence = %.1f %%', coherence(i)*100));
     
