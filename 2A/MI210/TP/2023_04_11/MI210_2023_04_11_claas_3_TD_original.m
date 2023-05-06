@@ -101,23 +101,69 @@ legend('2.5%', '5.0%', '10.0%', '20.0%', '30.0%', '50.0%', '70.0%')
 grid on
 
 
+%%  Area Under Curve, AUC, and 2 Alternative Forced Choice, 2pAFC
+%   performance in 2 alternative forced choice experiment 
+%   ===========================================================================
 
+%   The AUC provides an aggregate measure of performance across all possible
+%   stimulus intensities. The AUC is computed by approximating the integral
+%   under the ROC curve using a finite sum.
 
-%% area under curve and performance in 2 alternative forced choice experiment 
+%   The second measure computed is the probability of correct response in the
+%   2AFC experiment (p2AFC). This is simply the proportion of trials where the
+%   subject responded correctly.
 
-%%%%%%%%%%                           TODO: compute area under curve
-% AUC = 
+%   compute area under curve
+dalpha = false_positive(2:end)-false_positive(1:end-1);
+AUC = dalpha'*true_positive(1:end-1,:);
 
-%%%                                 TODO: compute error in 2AFC
-% p2AFC = 
+%   compute error in p2AFC
+p2AFC = mean(spikes >= spikes_0);
+
+%   we want to calculate both metrics in order to compare them and see if
+%   them correctly represent a good approximation for the data.
+
+%   where MATLAB does a vectorial operation comparing each colun with the
+%   spikes_0 column that, in this case, would return boolean values if true or
+%   not.
+
+%   calculating the mean would return values between 0 and 1 that represent, 
+%   in average, how good this estimator fits our data.
+
 
 figure('Name', 'neuronal')
-% semilogx(100*coherence, AUC, '-o'); hold on
-% semilogx(100*coherence, p2AFC, 'r-o'); hold on
+semilogx(100*coherence, AUC, '-o'); hold on
+semilogx(100*coherence, p2AFC, 'r-o'); hold on
 xlabel('log coherence')
 ylabel('area under curve')
 leg = legend('area under curve', 'probability correct');
 set(leg, 'Location', 'SouthEast', 'Box', 'off', 'Fontsize', 12)
+
+%   The strength of AUC is that it provides a measure of overall performance,
+%   taking into account both sensitivity and specificity, and is not affected by
+%   changes in the criterion. Moreover, AUC is a continuous measure, which makes
+%   it possible to compare performance across different tasks and experimental
+%   conditions.
+
+%   On the other hand, AUC has some limitations. First, it does not provide
+%   information about the optimal criterion level or the signal-to-noise ratio
+%   of the system. Second, it assumes that the cost of false positives and false
+%   negatives is equal, which may not be the case in all situations. Finally,
+%   AUC requires a large number of trials to estimate accurately, which can be
+%   time-consuming and resource-intensive.
+
+%   The strength of 2AFC is that it provides a measure of sensitivity and
+%   specificity separately, which can be useful for understanding the underlying
+%   mechanisms of the system. 2AFC also has the advantage of being easy to
+%   compute and interpret.
+
+%   However, 2AFC also has some limitations. First, it requires the experimenter
+%   to choose a criterion level, which can affect the outcome of the analysis.
+%   Second, it can be affected by changes in the criterion level, which makes it
+%   difficult to compare performance across different tasks and experimental
+%   conditions. Finally, 2AFC assumes that the cost of false positives and false
+%   negatives is equal, which may not be the case in all situations.
+
 
 
 %% compute entropy for binary stimulus
