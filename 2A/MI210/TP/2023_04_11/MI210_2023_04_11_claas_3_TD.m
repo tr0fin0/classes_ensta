@@ -1,9 +1,9 @@
-%%  2023_04_11 TP 2
+%%  2023_04_11 TP 3
 %   MI210 - Neurocomputational Models
 %   ===========================================================================
 
-clear
 clc
+clear all
 close all
 
 
@@ -40,6 +40,7 @@ for i = 1:n_stimulus
     subplot(n_stimulus, 1, i) 
     bar(bin_edges(1:end-1), [bin_counts_0, bin_counts], 'hist')
    
+    legend('0% coherence', sprintf('%.1f %% coherence', coherence(i)*100))
     ylabel('trials')
     title(sprintf('coherence = %.1f %%', coherence(i)*100));
 
