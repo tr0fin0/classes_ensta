@@ -44,6 +44,44 @@ load('data.mat')
 %   cov_x = x * x' / size(x,2) - mean(x)
 %   another way of computing the covariance matrix is defined above.
 
+%   according to chatGPT:
+%       covariance is a statistical measure that describes how two variables
+%       are related to each other. More specifically, it measures the degree
+%       to which two variables vary together. If the two variables tend to
+%       increase or decrease together, then the covariance is positive. 
+
+%       If one variable tends to increase as the other decreases, then the
+%       covariance is negative. If there is no relationship between the two
+%       variables, then the covariance is zero.
+
+%       Mathematically, the covariance between two random variables X and Y
+%       with means μX and μY, respectively, is given by:
+
+%           Cov(X, Y) = E[(X - μX) (Y - μY)]
+
+%       where E is the expected value operator.
+
+
+%   according to chatGPT:
+%       A decorrelating matrix is a matrix that transforms a set of variables
+%       into a new set of variables that are uncorrelated with each other.
+
+%       It is often used in signal processing and data analysis to reduce the
+%       correlation between variables and to simplify the analysis of data.
+
+%       The decorrelating matrix is calculated from the covariance matrix of 
+%       the original variables, and its columns form a new basis that is
+%       orthonormal, i.e., the columns are perpendicular to each other and have
+%       unit length.
+
+%       When the original variables are multiplied by the decorrelating matrix,
+%       the resulting variables have zero correlation with each other, and their
+%       variances are maximally spread out along the new axes.
+
+%       The decorrelating matrix is also known as the whitening matrix because
+%       it transforms the data into a white noise signal that has equal power at
+%       all frequencies.
+
 %   in this case the mean is zero and therefore it is not considered
 cov_x = cov(x');
 %   MATLAB considers observations on each row and variables on each collumn
