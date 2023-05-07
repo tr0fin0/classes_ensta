@@ -195,9 +195,9 @@ for i = 1:length(eta)
     %   is prefereable to use the '\' operator instead of the inverse
     %   operator for numerical reasons
 
-    % where the order of the multiplication with influence inthe result of the operation
-    % from right to left, first is needed to compute the denoising matrix
-    % to after compute the original white filter matrix
+    % where the order of the multiplication with influence inthe result of
+    % the operation from right to left, first is needed to compute the 
+    % de-noising matrix to after compute the original white filter matrix
     Wcombined = WZ * Wn;
 
     % extracting a part of the matrix
@@ -207,6 +207,13 @@ for i = 1:length(eta)
     imagesc(wcombined); axis square; axis on;
     title(['eta(', num2str(i), ')'])
 end
+
+%   where we are studying how different de-noising filters can remove noise
+%   added to the original image and their visual representation.
+
+%   de-noising will be more efficient if the value of de-noise and noise match
+%   therefore the filter will be able to correctly identify and correct.
+
 
 
 %%  Exercise 5:
