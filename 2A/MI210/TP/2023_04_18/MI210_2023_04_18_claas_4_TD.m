@@ -293,22 +293,26 @@ end
 %%  Exercise 6: plot a histogram of Z and Z_ICA
 %   ===========================================================================
 
-grd = -100:1:100; % grid for histogram
+hist_values = -100:1:100; % grid for histogram
 
-%   Z values
-Z = WZ * x;
+%   Z values decorrelated
+Z_DEC = WZ * x; % covolution with filter
 
 %   Z values of ICA analysis
-Z_ICA = WI * x;
+Z_ICA = WI * x; % covolution with filter
 
 %   computing histogram
-pz = hist(Z(:), grd);
-pr = hist(Z_ICA(:), grd);
+hist_DEC = hist(Z_DEC(:), hist_values);
+hist_ICA = hist(Z_ICA(:), hist_values);
 
-figure('Name', 'responses')
-semilogy(grd, pz, 'k'); hold on
-title(['z histogram'])
-semilogy(grd, pr, 'r'); hold on
+figure('Name', 'ICA histograms')
+bar(hist_values, [hist_DEC; hist_ICA]'); hold on
+plot(hist_values, hist_DEC, 'b'); hold on
+plot(hist_values, hist_ICA, 'r'); hold on
+set(gca, 'YScale', 'log')
+xlim([-100 100])
+grid on
+axis square
 legend('decorrelated', 'independent component')
 title(['ICA histogram'])
 
