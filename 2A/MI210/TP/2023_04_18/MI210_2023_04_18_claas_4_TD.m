@@ -356,6 +356,18 @@ title(['ICA histogram'])
 %       representation of the data that preserves its essential structure.
 
 
+%   looking to the graph we can see, with the help of chatGPT, that:
+%       Alternatively, you can plot a histogram of the amplitude values of all
+%       the ICs together to get an overall view of the data distribution.
+
+%       The histogram bars show how many ICs have amplitudes in a particular
+%       range of values. The overall shape of the histogram can provide insights
+%       into the structure of the data, such as the presence of outliers or
+%       whether the data is normally distributed. The histogram can also help
+%       identify the most prominent ICs by looking at the peaks in the
+%       distribution.
+
+
 %%  plot conditional histogram of  
 %   ===========================================================================
 
