@@ -91,6 +91,7 @@ cov_x = cov(x');
 z = WZ * x; 
 cov_z = cov(z');
 
+%   visualization
 figure('Name', 'covariance')
 
 subplot(1, 2, 1)
@@ -120,7 +121,7 @@ w = reshape(WZ(78, :), 12, 12);
 Z = conv2(X, w, 'same');
 
 %   showing original image for benchmark
-figure('Name', 'images without denoising')
+figure('Name', 'images without de-noising')
 subplot(2, 2, 1)
 imagesc(X);
 title('original image')
@@ -165,7 +166,7 @@ colormap('gray') % comment for colorfull image
 %       uneven speaker response.
 
 
-%%  Exercise 4: denoising filter
+%%  Exercise 4: de-noising filter
 %   ===========================================================================
 
 %   in order to continue using the white filter a denoise filter can be
@@ -173,14 +174,14 @@ colormap('gray') % comment for colorfull image
 
 %   examples of possible approches:
 %       smoothing;
-%       wavelet denoising;
+%       wavelet de-noising;
 %       Principal Component Analysis, PCA;
 %       Independent Component Analysis, ICA;
 
 %   array of noises
 eta = [0.0 0.3 1.4]*std(x(:));
 
-figure('Name', 'denoising')
+figure('Name', 'de-noising')
 
 %   analysis over different noise levels
 for i = 1:length(eta)
@@ -222,7 +223,7 @@ end
 %   defintion noise
 eta = 0.7*std(x(:));
 
-%   computing denoising matrix
+%   computing de-noising matrix
 Wn = (cov_x + eta^2 * eye(length(cov_x))) \ cov_x;
 
 %   combinning the filters
@@ -241,7 +242,7 @@ Xn = X + noise;
 %   convolution of the noisy image with a filter
 Zn = conv2(Xn, w, 'same');
 
-figure('Name', 'images with denoising')
+figure('Name', 'images with de-noising')
 subplot(2, 2, 1)
 imagesc(X);
 title('orignal image')
@@ -259,7 +260,7 @@ imagesc(Zn);
 title('convolution of original image with noise')
 colormap('gray')
 
-%%  plot the ICA filters
+%%  plot the ICA, Independent Component Analysis, filters
 %   ===========================================================================
 
 %   according to chatGPT:
@@ -375,7 +376,7 @@ title(['ICA histogram'])
 %   the behavior of the code 
 
 %   computing p(z1, z2)
-pz1z2 = hist3(Z_ICA([9, 10], :)', {grd' grd'});
+pz1z2 = hist3(Z_ICA([9, 10], :)', {hist_values' hist_values'});
 
 %   computing p(z2)
 pz2 = sum(pz1z2, 1);
@@ -386,7 +387,7 @@ pz1_z2 = pz1z2 ./ (pz2 + 1e-5);
 %   during the calculus over the array.
 
 figure('Name', 'conditional histogram')
-imagesc(grd, grd, log(pz1_z2+0.01))
+imagesc(hist_values, hist_values, log(pz1_z2+0.01))
 set(gca, 'Xlim', [-10 10], 'Ylim', [-10 10])
 grid on; 
 axis square;
