@@ -144,11 +144,13 @@ grid on
 
 stim_full = zeros([T number_bins]);
 
-%   each column will have an itegration window
+%   each column will have an integration window
 
 for tt = time_range
     stim_full(tt, :) = stim_scaled((tt-number_bins+1) : tt);
 end
+
+%   expanding the stimulus by adding columns by shifting the data
 
 
 %%  STIMULUS AUTOCORRELATION
@@ -168,7 +170,7 @@ end
 %   using the linear mode to calcule the matrix
 
 %   compute autocorrelation of stim_full over training times
-stim_autocorrelation = stim_full' * stim_full;
+stim_autocorrelation = stim_full(training_time,:)' * stim_full(training_time,:);
 
 fig=figure;
 hold on
@@ -179,7 +181,7 @@ plot( 0:number_bins-1, stim_autocorrelation(time_delay,:)/size_training )
 title('stimulus autocorrelation')
 xlabel('Time [s]')
 ylabel('autocorrelation');
-% ylim([0 1]);
+ylim([0 1]);
 grid on
 
 %   we can see that the autocorrelation is decreasing as time passed with means that
@@ -209,6 +211,8 @@ STA = training_data_zero_mean * stim_full(training_time, :);
 filter_linear_simple = STA * inv( diag( diag( stim_autocorrelation ) ) );
 %   where only the main diagonal autocorrelation values were consider because
 %   they are most relevant ones.
+
+%   this are the weights considered for each stimulus in pass for our estimator.
 
 %   by the way it reduces the computation effort and therefore increases performance
 
