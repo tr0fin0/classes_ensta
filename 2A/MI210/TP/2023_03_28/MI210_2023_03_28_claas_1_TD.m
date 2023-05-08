@@ -188,6 +188,17 @@ grid on
 %   the stimulus is less correlated as time passes but it seems that it will stabilise
 %   at around 0.4.
 
+%   If the autocorrelation matrix is decreasing over time, it means that the correlation
+%   between the elements of the time series and their delayed versions is decreasing as
+%   the time lag increases. In other words, the degree of similarity between the values
+%   of the time series and their past values is decreasing as we look further back in time.
+
+%   This can happen in various contexts depending on the application. For example, in a
+%   financial time series, decreasing autocorrelation may indicate a shift in market
+%   conditions or a change in underlying dynamics. In a physical system, it may indicate
+%   a relaxation of the system towards equilibrium. In general, it suggests that past values
+%   of the time series are becoming less relevant for predicting future values.
+
 % expected that the data is decreesing, overtime the correlation is getting slower
 % STA, the average of the data slide 13 of TD2
 % STA
@@ -210,11 +221,23 @@ STA = training_data_zero_mean * stim_full(training_time, :);
 
 filter_linear_simple = STA * inv( diag( diag( stim_autocorrelation ) ) );
 %   where only the main diagonal autocorrelation values were consider because
-%   they are most relevant ones.
+%   they are most relevant ones. by the way it reduces the computation 
+%   effort and therefore increases performance
 
-%   this are the weights considered for each stimulus in pass for our estimator.
 
-%   by the way it reduces the computation effort and therefore increases performance
+%   this are the weights considered for each stimulus in pass for our
+%   estimator, in other words, how each previous time influences the
+%   present. in our case we are considering a integration time of 0.5s
+%   so only -0.5s on the past was considered
+
+%   the shape of the curve will determine how the neurons will respond to
+%   the stimulus given. in our case we have two types of responses
+%   available: binnedOFF, activation by low values, and binnedON,
+%   activation by high values.
+
+%   the weight values are similar to the what signal would be like, for the
+%   binnedOFF it detects the descendant value and for the binnedON it
+%   detects the ascending value.
 
 %   visualization
 fig=figure;
