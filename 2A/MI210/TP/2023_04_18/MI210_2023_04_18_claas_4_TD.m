@@ -15,8 +15,9 @@ sigmas = {[1 0.00; 0.00 1] [1 0.50; 0.50 1] [1 0.99; 0.99 1]};
 
 %   calculation of entropy H
 for i=1:length(sigmas)
-    % using the natural logarithme
-    H = 1/2 * log( 2*pi*exp(1) * det(sigmas{i}) )
+    % using the natural logarithme: nats units
+    % using the log2: bits
+    H = 1/2 * log2( 2*pi*exp(1) * det(sigmas{i}) )^2
 end
 
 %   as expected entropy is higher on more random sets of data and lower on
@@ -26,7 +27,7 @@ end
 %   give much usefull information.
 
 %   note that the entropy can be negative, which indicates a predictible
-%   set of data.
+%   set of data.     
 
 
 %%  Exercise 2: 
@@ -41,7 +42,8 @@ load('data.mat')
 % X: 1 full image 
 
 %   compute the covariance of x
-%   cov_x = x * x' / size(x,2) - mean(x)
+%   cov_x = x * x' / size(x,2) - mean(x*x')
+%   cov_x = x * x' / size(x,2)              <- this
 %   another way of computing the covariance matrix is defined above.
 
 %   according to chatGPT:
@@ -91,6 +93,10 @@ cov_x = cov(x');
 z = WZ * x; 
 cov_z = cov(z');
 
+%   x:  photons that arrive
+%   z:  response of the retina
+%   WZ: retina filters
+
 %   visualization
 figure('Name', 'covariance')
 
@@ -109,6 +115,9 @@ colormap('gray')
 title('covariance of Z')
 %   white means high correlation and black means low correlation. values in
 %   between should follow the same scale.
+
+%   this filter decorrelates the variables because the intermediate values were
+%   taken to the nearest extremes
 
 
 %%  Exercise 3: 
@@ -131,7 +140,7 @@ imagesc(Z, [-1 1]);
 title('convolution of original image')
 
 %   computing stardard deviation
-eta = 0.5*std(x(:));
+eta = 0.7*std(x(:));
 
 %   adding noise to the original image
 noise = eta * randn(size(X));
@@ -139,6 +148,9 @@ Xn = X + noise;
 
 %   convolution of the noisy image with a filter
 Zn = conv2(Xn, w, 'same');
+
+%   as we can see in the image, the noise is apmplified because it is an
+%   high-pass filter and therefore the image is changed.
 
 subplot(2, 2, 3)
 imagesc(Xn);
@@ -216,6 +228,12 @@ end
 %   therefore the filter will be able to correctly identify and correct.
 
 
+%   there are three different filters shown in this figure, the first represents
+%   the original filter wn provided for the problem and the others are filters
+%   that smooth the results of the convolutions because they consider more values
+%   to perform the calculations, a larger mask that will weight more values and
+%   therefore use more pixels and will be less sensitive to local variations
+
 
 %%  Exercise 5:
 %   ===========================================================================
@@ -259,6 +277,16 @@ subplot(2, 2, 4)
 imagesc(Zn);
 title('convolution of original image with noise')
 colormap('gray')
+
+%   we notice that the combination of a filter that increases the contrast,
+%   and consequently the noise of the image, and the filter that softens
+%   the image, and consequently decreases the contrast of the image, makes
+%   that we have an image that follows with noise but is possible to
+%   identify the image.
+
+%   moreover we notice that the image presents a lower contrast than the
+%   first one
+
 
 %%  plot the ICA, Independent Component Analysis, filters
 %   ===========================================================================
@@ -367,6 +395,14 @@ title(['ICA histogram'])
 %       whether the data is normally distributed. The histogram can also help
 %       identify the most prominent ICs by looking at the peaks in the
 %       distribution.
+
+%   independent components considers more components for the analysis and therefore
+%   will be more sensible for information and would get a big picture of the image.
+
+%   in the case of the decorrelated filter, it over simplifies the image by 
+%   homogenising of the image.  
+
+
 
 
 %%  plot conditional histogram of  

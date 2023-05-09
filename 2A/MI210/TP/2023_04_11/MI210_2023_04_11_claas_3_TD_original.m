@@ -11,16 +11,18 @@ close all
 %   ===========================================================================
 
 %   stimulus coherences
-coherence = [0.025 0.05 0.1 0.2 0.3 0.5 0.7];
+coherence = [0.025 0.05 0.1 0.2 0.3 0.5 0.75];
 %   coherence refers to the strength or degree of similarity between the stimuli
 %   presented to the neuron:
 %       - coherence of 0 indicates that the stimuli are completely dissimilar;
 %       - coherence of 1 indicates that the stimuli are identical;
 
+%   coherence increases with the synchronisation of the stimulus.
+
 n_stimulus = numel(coherence);          % number of stimuli
 
 mean_background = 10;                   % background mean spike count
-lambda = mean_background+30*coherence;  % mean spike count 
+lambda = mean_background + 30*coherence;% mean spike count 
 n_trials = 1e3;                         % number of trials
 
 spikes_0 = poissrnd(repmat(mean_background, n_trials, 1));  % generate spikes (0% coherence)
@@ -33,8 +35,8 @@ spikes  = poissrnd(repmat(lambda, n_trials, 1));            % generate spikes
 %%  plot histograms
 %   ===========================================================================
 
-x = 0:50;                  % different spike counts for histogram
-edges = [x-0.5,x(end)+1]; % bin edges for histogram
+x = 0:50;                   % different spike counts for histogram
+edges = [x-0.5,x(end)+1];   % bin edges for histogram
 
 hist_0 = histcounts(spikes_0, edges);            % histogram of spike counts (0% coherence)
 
@@ -44,8 +46,7 @@ for i = 1:n_stimulus
    
     subplot(n_stimulus, 1, i) 
     hold on
-    bar(x, hist_0)
-    bar(x, hist_i)
+    bar(x, [hist_0; hist_i]')
     grid on
     ylabel('trials')
     title(sprintf('coherence = %.1f %%', coherence(i)*100));
@@ -95,17 +96,35 @@ hold on
 plot(false_positive, true_positive, 'o-')
 plot([0 1], [0 1], 'k--')
 hold off
-xlabel('false positive ratio')    % 1 - specificity
-ylabel('true positive ratio')     % sensitivity
+xlabel('FPR: 1 - specifcity')   % False Positive Rate: 1 - specificity
+ylabel('TPR: sensitivity')      % True  Positive Rate: sensitivity
 %     sensitivity = TPR = TP / (TP + FN)
 %   1-specificity = FPR = FP / (FP + TN)
+
+
+%   Sensitivity and specificity are measures of the performance of a binary
+%   classification test.
+% 
+%   Sensitivity is the proportion of true positive results (i.e., the
+%   proportion of actual positives that are correctly identified as such)
+%   in relation to all actual positives. In other words, sensitivity measures
+%   how well the test identifies individuals who have the condition being tested for.
+% 
+%   Specificity, on the other hand, is the proportion of true negative results
+%   (i.e., the proportion of actual negatives that are correctly identified as such)
+%   in relation to all actual negatives. Specificity measures how well the test
+%   identifies individuals who do not have the condition being tested for.
+% 
+%   Both sensitivity and specificity are usually expressed as percentages,
+%   with higher values indicating better test performance.
+
 
 %   TP: true positives
 %   TN: true negatives
 %   FN: false negatives
 %   FP: false positives
 
-legend('2.5%', '5.0%', '10.0%', '20.0%', '30.0%', '50.0%', '70.0%')
+legend('2.5%', '5.0%', '10.0%', '20.0%', '30.0%', '50.0%', '75.0%')
 grid on
 axis square
 
@@ -180,9 +199,9 @@ semilogx(100*coherence, AUC, '-o'); hold on
 semilogx(100*coherence, p2AFC, 'r-o'); hold on
 xlabel('log coherence')
 ylabel('area under curve')
+legend('area under curve', 'probability correct')
 grid on
-leg = legend('area under curve', 'probability correct');
-set(leg, 'Location', 'SouthEast', 'Box', 'off', 'Fontsize', 12)
+
 
 %   The strength of AUC is that it provides a measure of overall performance,
 %   taking into account both sensitivity and specificity, and is not affected by
@@ -232,8 +251,8 @@ set(leg, 'Location', 'SouthEast', 'Box', 'off', 'Fontsize', 12)
 %   of X). The entropy is always non-negative and is measured in bits, nats, or
 %   other units depending on the choice of the logarithm base.
 
-p = linspace(0, 1, 100);                 % probability that x = 1
-H =  -p.*log(p) - (1-p).*log(1-p);       % entropy
+p = linspace(0, 1, 1000);                 % probability that x = 1
+H =  -p.*log2(p) - (1-p).*log2(1-p);       % entropy
 
 figure('Name', 'entropy of a binary stimulus')
 plot(p, H)
@@ -294,6 +313,17 @@ HR_X = - prx(:)'*logpr_x(:);
 mutual_info = HR - HR_X;
 
 fprintf('\n neuron encodes %.3f nats\n', mutual_info)
+
+%   In information theory, a nat is a unit of information or entropy, based
+%   on the natural logarithm e (approximately 2.71828). It is equivalent to
+%   one bit of information entropy if the logarithm is taken to base 2.
+
+%   Specifically, if an event has probability p of occurring, then the
+%   information content of that event in nats is -ln(1-p), where ln denotes
+%   the natural logarithm. Nats are used as a unit of information in some
+%   branches of information theory, especially in the analysis of continuous
+%   random variables.
+
 
 %   question:
 %       mutual information may increase with the increase of the rmax value
