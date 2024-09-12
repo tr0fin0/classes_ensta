@@ -1,3 +1,6 @@
+def speedUp(f: float, s: float) -> float:
+    return 1/((1-f) + f/s)
+
 def main():
     processors = ['A7', 'A15']
     algorithms = ['Dijkstra', 'BlowFish']
