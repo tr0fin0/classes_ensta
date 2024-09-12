@@ -1,0 +1,24 @@
+[submodule "2A/MA201/MA201_project"]
+	path = 2A/MA201/MA201_project
+	url = https://github.com/tr0fin0/ensta_MA201_project.git
+[submodule "2A/OS202/OS202_exam"]
+	path = 2A/OS202/OS202_exam
+	url = https://github.com/tr0fin0/ensta_OS202_exam.git
+[submodule "2A/OS202/OS202_project"]
+	path = 2A/OS202/OS202_project
+	url = https://github.com/tr0fin0/ensta_OS202_project.git
+[submodule "2A/ROB201/ROB201_project"]
+	path = 2A/ROB201/ROB201_project
+	url = https://github.com/tr0fin0/ensta_ROB201_project.git
+[submodule "3A/CSC_5RO06_TA/CSC_5RO06_TA"]
+	path = 3A/CSC_5RO06_TA/CSC_5RO06_TA_project
+	url = https://github.com/tr0fin0/ensta_CSC_5RO06_TA_project.git
+[submodule "3A/CSC_5RO17_TA/CSC_5RO17_TA_TP1"]
+	path = 3A/CSC_5RO17_TA/CSC_5RO17_TA_TP1
+	url = https://github.com/tr0fin0/ensta_CSC_5RO17_TA_TP1.git
+[submodule "3A/CSC_5RO17_TA/CSC_5RO17_TA_TP2"]
+	path = 3A/CSC_5RO17_TA/CSC_5RO17_TA_TP2
+	url = https://github.com/tr0fin0/ensta_CSC_5RO17_TA_TP2.git
+[submodule "3A/CSC_5RO17_TA/CSC_5RO17_TA_TP3"]
+	path = 3A/CSC_5RO17_TA/CSC_5RO17_TA_TP3
+	url = https://github.com/tr0fin0/ensta_CSC_5RO17_TA_TP3.git
