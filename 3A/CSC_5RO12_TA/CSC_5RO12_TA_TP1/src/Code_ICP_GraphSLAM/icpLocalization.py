@@ -83,7 +83,7 @@ def main():
     for scan_index in range(MIN_SCAN, MAX_SCAN, STEP):
         scan1 = scan_list[scan_index]
         scan2 = scan_list[scan_index + STEP]
-        
+
         # Perform ICP
         try:
             rotation_matrix, translation_vector, error, iterations = icp.icp(scan1, scan2, 200, 1e-7)

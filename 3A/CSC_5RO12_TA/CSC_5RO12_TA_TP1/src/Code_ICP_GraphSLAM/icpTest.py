@@ -101,7 +101,7 @@ def main():
     logging.info(f"Mean (var) rotation error: {mean_rotation_error:.3e} ({var_rotation_error:.3e})")
     logging.info(f"Mean computation time: {mean_time:.4f} seconds")
     logging.info("Press Q in figure to finish...")
-    
+
     plt.show()
 
     return mean_translation_error,var_translation_error,mean_rotation_error,var_rotation_error,mean_time

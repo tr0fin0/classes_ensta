@@ -83,7 +83,7 @@ def icp(reference_scan, scan_to_align, max_iterations, thres):
 
         # ----- Find nearest Neighbors for each point, using kd-trees for speed
         tree = KDTree(ref_points.T)
-        distance, index = tree.query(filtered_scan_points.T) # index gives the closest reference point for each scan point 
+        distance, index = tree.query(filtered_scan_points.T) # index gives the closest reference point for each scan point
         meandist = np.mean(distance)
 
         # ----------------------- TODO ------------------------

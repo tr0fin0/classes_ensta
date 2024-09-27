@@ -77,7 +77,7 @@ def update_scan_pose(scan, new_pose):
         "y": new_pose[1] + np.multiply(scan["ranges"], np.sin(scan["angles"] + new_pose[2])),
     }
     return new_scan
-    
+
 
 def find_closest_scan(map, scan):
     """
@@ -103,7 +103,7 @@ def find_closest_scan(map, scan):
         # The following is to prevent matching scans with too large rotation
         # differences
         if abs(icp.angle_wrap(scan1["pose"][2]-scan2["pose"][2])) > np.pi/3:
-            dist = dist * 2          
+            dist = dist * 2
         return dist
 
     distances = np.array([distance(scan, previous_scan) for previous_scan in map])
