@@ -1,8 +1,40 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 4}
-
-Faire varier le bruit de dynamique du filtre (matrice QEst) qu'observe-t-on ? Expliquer.
-
+\section{Question 4}
+% Faire varier le bruit de dynamique du filtre (matrice QEst) qu'observe-t-on ? Expliquer.
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le bruit dynamique du filtre:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_10_1_1_False_False_False.png}
+        \caption{\texttt{Q\_constant = 10}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_25_1_1_False_False_False.png}
+        \caption{\texttt{Q\_constant = 25}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_100_1_1_False_False_False.png}
+        \caption{\texttt{Q\_constant = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_250_1_1_False_False_False.png}
+        \caption{\texttt{Q\_constant = 250}}
+        \label{}
+    \end{subfigure}
+    \caption{Variance du bruit dynamique \texttt{Q\_constant}}
+    \label{}
+\end{figure}
+\noindent Il est à noter qu'à mesure que le bruit dynamique augmente, l'instabilité des résultats s'accroît. Cela indique que l'erreur de calcul du filtre de Kalman n'augmente pas de manière significative, mais que les résultats deviennent plus bruyants entre chaque itération, entraînant des courbes moins lisses.\\
+\begin{remark}
+    Le parcours effectué par le robot demeure satisfaisant, bien que l'ellipse de covariance augmente plus rapidement qu'auparavant.
+\end{remark}
 \end{document}

@@ -1,8 +1,46 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 3}
-
-Modifier la fréquence des mesures en utilisant la variable dt\_mesure, qu'observe-t-on ? Expliquer.
-
+\section{Question 3}
+% Modifier la fréquence des mesures en utilisant la variable dt\_mesure, qu'observe-t-on ? Expliquer.
+\noindent Ci-dessous, sont présentées quelques interactions résultant de la variation de la fréquence de mesure:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_10_1_30_1_1_1_False_False_False.png}
+        \caption{\texttt{dt\_measurement = 10}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_25_1_30_1_1_1_False_False_False.png}
+        \caption{\texttt{dt\_measurement = 25}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_100_1_30_1_1_1_False_False_False.png}
+        \caption{\texttt{dt\_measurement = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_250_1_30_1_1_1_False_False_False.png}
+        \caption{\texttt{dt\_measurement = 250}}
+        \label{}
+    \end{subfigure}
+    \caption{Variation de la fréquence de mesure \texttt{dt\_measurement}}
+    \label{}
+\end{figure}
+\noindent Il est à noter qu'une augmentation de l'intervalle de mesure entraîne une détérioration significative de la trajectoire, ce qui indique une perte de précision dans le calcul du filtre de Kalman. Ce phénomène se manifeste par plusieurs indicateurs: 
+\begin{enumerate}[noitemsep]
+    \item l'augmentation de l'erreur sur les états du système;
+    \item l'accroissement de l'écart-type;
+    \item l'élargissement de l'ellipse de covariance;
+\end{enumerate}
+\noindent Ce phénomène peut être expliqué par le fait qu'un élargissement de l'intervalle de mesure entraîne un nombre accru d'itérations entre deux mesures, ce qui conduit à une accumulation d'erreurs entre les états du filtre de Kalman et à un résultat dégradé.
+\begin{remark}
+    Malgré cette dégradation, il convient de souligner que le filtre de Kalman continue de fournir des résultats acceptables, même lorsque l'intervalle de mesure a été multiplié par 250 pour atteindre ce niveau de dégradation.
+\end{remark}
 \end{document}

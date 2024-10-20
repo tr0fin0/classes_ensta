@@ -1,8 +1,28 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 6}
-
-Simuler un trou de mesures entre t = 2500 s et t = 3500 s en utilisant la variable notValidCondition et expliquer les résultats.
-
+\section{Question 6}
+% Simuler un trou de mesures entre t = 2500 s et t = 3500 s en utilisant la variable notValidCondition et expliquer les résultats.
+\noindent Ci-dessous, un trou de mesures simulé entre 2500 et 3500 secondes:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_1_1_False_False_False.png}
+        \caption{\texttt{black\_out = False}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_1_1_True_False_False.png}
+        \caption{\texttt{black\_out = True}}
+        \label{}
+    \end{subfigure}
+    \caption{Simulation d'un trou \texttt{black\_out}}
+    \label{}
+\end{figure}
+\noindent Il est évident que durant la coupure de mesures entre 2500 et 3000 secondes, l'erreur et la covariance augmentent, car aucune correction n'est effectuée par le filtre de Kalman. En revanche, une fois les mesures rétablies, le filtre de Kalman parvient à corriger le problème et à revenir à un état relativement proche de celui observé dans la version complète en quelques itérations.
+\begin{remark}
+    Cela démontre que le filtre de Kalman est robuste face à la perte d'informations, même pendant de longues périodes, se corrigeant rapidement après quelques itérations.
+\end{remark}
 \end{document}

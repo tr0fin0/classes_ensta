@@ -1,8 +1,40 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 5}
-
-Faire varier le bruit de mesure du filtre (matrice REst), qu'observe-t-on ? Expliquer.
-
+\section{Question 5}
+% Faire varier le bruit de mesure du filtre (matrice REst), qu'observe-t-on ? Expliquer.
+\noindent Ci-dessous quelques interactions ont été faits en variant le bruit de mesure du filtre:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_10_1_False_False_False.png}
+        \caption{\texttt{R\_constant = 10}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_25_1_False_False_False.png}
+        \caption{\texttt{R\_constant = 25}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_100_1_False_False_False.png}
+        \caption{\texttt{R\_constant = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_250_1_False_False_False.png}
+        \caption{\texttt{R\_constant = 250}}
+        \label{}
+    \end{subfigure}
+    \caption{Variation du bruit de mesure \texttt{R\_constant}}
+    \label{}
+\end{figure}
+\noindent Il est à noter qu'à mesure que le bruit de mesure augmente, la variance des mesures s'accroît, bien que l'erreur ne montre pas de changement significatif. Il est également observable que la covariance de la position augmente, ce qui se traduit par un agrandissement de l'ellipse, tandis que la trajectoire demeure relativement inaltérée.
+\begin{remark}
+    Cela indique que lorsque le bruit des mesures augmente, le filtre de Kalman accorde moins de confiance aux mesures et fait davantage confiance aux estimations, ce qui explique le maintien de sa trajectoire pratiquement inchangée, malgré l'erreur pratiquement constante, tandis que sa covariance augmente.
+\end{remark}
 \end{document}
