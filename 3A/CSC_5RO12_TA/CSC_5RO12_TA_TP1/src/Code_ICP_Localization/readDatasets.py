@@ -179,12 +179,6 @@ def read_u2is(num_scans):
     print(os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset')))
 
 
-
-    # U2IS_LASER_FILE = 'dataset/U2IS/laser_filt.txt'
-    # U2IS_ODOM_FILE = 'dataset/U2IS/odom_filt.txt'
-
-
-
     U2IS_LASER_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset/U2IS/laser_filt.txt'))
     U2IS_ODOM_FILE = os.path.abspath(os.path.join(os.path.dirname(__file__), 'dataset/U2IS/odom_filt.txt'))
 
