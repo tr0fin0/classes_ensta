@@ -18,6 +18,165 @@ except:
 
 
 
+@dataclass
+class PF:
+    """Particle Filter methods."""
+
+    def motion_model_prediction(
+            x: np.ndarray[float], u: np.ndarray[float], dt: float, Q_estimation: np.ndarray[float]
+        ) -> np.ndarray[float]:
+        """
+        Return motion model of agent.
+
+        Args:
+            x (np.ndarray[float]) : system state at instant k-1.
+            u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+            dt (float) : simulation time step in seconds.
+            Q_estimation (np.ndarray[float]) : process noise covariance matrix Q estimation.
+        """
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+        vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
+
+        w = np.random.multivariate_normal([0, 0, 0], Q)
+        w_vx, w_vy, w_omega = w[0], w[1], w[2]
+
+        x_prediction = np.array([
+            [x + ((vx + w_vx) * np.cos(theta) - (vy + w_vy) * np.sin(theta)) * dt],
+            [y + ((vx + w_vx) * np.sin(theta) + (vy + w_vy) * np.cos(theta)) * dt],
+            [theta + (omega + w_omega) * dt]
+        ])
+        x_prediction[2, 0] = Utils.wrap_angle(x_prediction[2, 0])
+
+        return x_prediction
+
+
+    def observation_model_prediction(
+            x: np.ndarray[float], i: int, landmarks: np.ndarray[float]
+        ) -> np.ndarray[float]:
+        """
+        Returns observation model prediction as np.ndarray[float] of system command y at instant k.
+
+        Args:
+            x (np.ndarray[float]) : system state at instant k-1.
+            i (int) : observed landmark index.
+            landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
+        """
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+        x_i, y_i = landmarks[0, i], landmarks[1, i]
+
+        h = np.array([
+            [np.sqrt((x_i - x)**2 + (y_i - y)**2)],
+            [np.arctan2((y_i - y), (x_i - x)) - theta],
+        ])
+        h[1, 0] = Utils.wrap_angle(h[1, 0])
+
+        return h
+
+
+    def resample_particles(
+            particle_states: np.ndarray[float], particle_weights: np.ndarray[float], n: int
+        ) -> np.ndarray[float]:
+        """
+        Return low-variance resampled particles based on their weights.
+
+        Args:
+            particle_states (np.ndarray[float]): particles states: x, y, theta.
+            particle_weights (np.ndarray[float]): particle weights.
+            n (int): number of particles.
+        """
+        base_indices = np.arange(0.0, 1.0, 1 / n)
+        random_offset = np.random.uniform(0, 1 / n)
+        resampling_indices = base_indices + random_offset
+
+        cumulative_weights = np.cumsum(particle_weights)
+        cumulative_index = 0
+
+        resampled_indices = []
+        for i in range(n):
+            while resampling_indices[i] > cumulative_weights[cumulative_index]:
+                cumulative_index += 1
+
+            resampled_indices.append(cumulative_index)
+
+        resampled_particles = particle_states[:, resampled_indices]
+        resampled_weights = np.ones(n) / n
+
+        return resampled_particles, resampled_weights
+
+
+    def P(x_estimation: np.ndarray[float], particles: np.ndarray[float]) -> np.ndarray[float]:
+        """
+        Returns particle filter covariance matrix P estimation as np.ndarray[float].
+
+        Args:
+            x_estimation (np.array) : The mean/estimated state of the particles (3x1).
+            particles (np.array): An array of shape (3, N_particles) containing the state of all particles (x, y, theta).
+        """
+        n = particles.shape[1]
+
+        P_estimation = np.zeros((3, 3))
+        for i in range(n):
+            deviation = (particles[:, i:i+1] - x_estimation).reshape(-1, 1)
+            deviation[2] = Utils.wrap_angle(deviation[2])
+
+            P_estimation += deviation @ deviation.T
+        P_estimation /= n
+
+        return P_estimation
+
+
+@dataclass
+class Utils:
+    def wrap_angle(angle: float) -> float:
+        """
+        Return wraped randian angle to the range [-pi, pi].
+
+        Args:
+            angle (float): angle in radians.
+        """
+        if (angle > np.pi):
+            angle = angle - 2 * pi
+        elif (angle < -np.pi):
+            angle = angle + 2 * pi
+        return angle
+
+
+    def compute_motion(x: np.ndarray[float], u: np.ndarray[float], dt: float) -> np.ndarray[float]:
+        """
+        Compute system motion based on motion equation as np.ndarray.
+
+        Args:
+            x (np.ndarray[float]) : system state at instant k-1.
+            u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+            dt (float) : simulation time step in seconds.
+        """
+        assert x.ndim == 2
+        assert u.ndim == 2
+
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+        vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
+
+        x_compute = np.array([
+            [x + (vx * np.cos(theta) - vy * np.sin(theta)) * dt],
+            [y + (vx * np.sin(theta) + vy * np.cos(theta)) * dt],
+            [theta + omega * dt],
+        ])
+        x_compute[2, 0] = Utils.wrap_angle(x_compute[2, 0])
+
+        return x_compute
+
+
+    def compute_rms_error(arr: np.ndarray[float]) -> float:
+        """
+        Return RMS error of an np.ndarray as a float.
+
+        Args:
+            arr (np.ndarray) : array to analyze.
+        """
+        return np.sqrt(np.mean(arr**2))
+
+
+
 class Simulation:
     def __init__(
             self,
@@ -57,53 +216,6 @@ class Simulation:
         self.history_time = [0]
 
 
-    def get_robot_control(self, k: int) -> np.ndarray[float]:
-        """
-        Return robot true control command at instant k as np.ndarray.
-
-        Note: by default a sinousal trajectory is generated.
-
-        Args:
-            k (int) : interation step.
-        """
-        u = np.array([[0, 0.025,  0.1*np.pi / 180 * sin(3*np.pi * k / self.n_steps)]]).T
-
-        return u
-
-
-    def simulate_world(self, k: int) -> None:
-        """
-        Simulate system at instant k.
-
-        Args:
-            k (int) : interation step.
-        """
-        self.x_true = Utils.compute_motion(
-            self.x_true, self.get_robot_control(k), self.dt_prediction
-        )
-        self.x_true[2, 0] = Utils.wrap_angle(self.x_true[2, 0])
-
-
-    def get_odometry(self, k: int) -> list[np.ndarray]:
-        """
-        Return a noisy odometry and command measurements at instant k as np.ndarrays.
-
-        Args:
-            k (int) : interation step.
-        """
-        np.random.seed(seed*2 + k)  # Ensuring random repexility for k
-
-        u_noise = np.sqrt(self.Q_true) @ np.random.randn(3)
-        u_noise = np.array([u_noise]).T
-        u = self.get_robot_control(k) + self.dt_prediction * u_noise
-
-        x = Utils.compute_motion(self.x_odometry, self.get_robot_control(k), self.dt_prediction)
-        x = Utils.compute_motion(x, u_noise, self.dt_prediction)
-        self.x_odometry = x
-
-        return x, u
-
-
     def get_observation(self, k):
         """
         Return a noisy observation of a random landmark at instant k.
@@ -132,29 +244,38 @@ class Simulation:
         return None, None
 
 
-    def update_history(
-            self, k: int, x_estimation: np.ndarray[float], P_estimation: np.ndarray[float]
-        ) -> None:
+    def get_odometry(self, k: int) -> list[np.ndarray]:
         """
-        Update simulation history.
+        Return a noisy odometry and command measurements at instant k as np.ndarrays.
 
         Args:
-            k (int) : simulation instant.
-            x_estimation (np.ndarray[float]) : system state estimation at instant k.
-            P_estimation (np.ndarray[float]) : estimation covariance at instant k.
+            k (int) : interation step.
         """
-        self.history_x_true = np.hstack((self.history_x_true, self.x_true))
-        self.history_x_odometry = np.hstack((self.history_x_odometry, self.x_odometry))
-        self.history_x_estimation = np.hstack((self.history_x_estimation, x_estimation))
+        np.random.seed(seed*2 + k)  # Ensuring random repexility for k
 
-        error = x_estimation - self.x_true
-        error[2, 0] = Utils.wrap_angle(error[2, 0])
+        u_noise = np.sqrt(self.Q_true) @ np.random.randn(3)
+        u_noise = np.array([u_noise]).T
+        u = self.get_robot_control(k) + self.dt_prediction * u_noise
 
-        self.history_x_error = np.hstack((self.history_x_error, error))
-        self.history_x_covariance = np.hstack((
-            self.history_x_covariance, np.sqrt(np.diag(P_estimation).reshape(3, 1))
-        ))
-        self.history_time.append(k*self.dt_prediction)
+        x = Utils.compute_motion(self.x_odometry, self.get_robot_control(k), self.dt_prediction)
+        x = Utils.compute_motion(x, u_noise, self.dt_prediction)
+        self.x_odometry = x
+
+        return x, u
+
+
+    def get_robot_control(self, k: int) -> np.ndarray[float]:
+        """
+        Return robot true control command at instant k as np.ndarray.
+
+        Note: by default a sinousal trajectory is generated.
+
+        Args:
+            k (int) : interation step.
+        """
+        u = np.array([[0, 0.025,  0.1*np.pi / 180 * sin(3*np.pi * k / self.n_steps)]]).T
+
+        return u
 
 
     def plot(
@@ -305,163 +426,42 @@ class Simulation:
         if show: plt.show()
 
 
-
-@dataclass
-class PF:
-    """Particle Filter equations."""
-
-    def motion_model_prediction(
-            x: np.ndarray[float], u: np.ndarray[float], dt: float, Q_estimation: np.ndarray[float]
-        ) -> np.ndarray[float]:
+    def simulate_world(self, k: int) -> None:
         """
-        Return motion model of agent.
+        Simulate system at instant k.
 
         Args:
-            x (np.ndarray[float]) : system state at instant k-1.
-            u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
-            dt (float) : simulation time step in seconds.
-            Q_estimation (np.ndarray[float]) : .
+            k (int) : interation step.
         """
-        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
-        vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
-
-        w = np.random.multivariate_normal([0, 0, 0], Q_estimation)
-        w_vx, w_vy, w_omega = w[0], w[1], w[2]
-
-        x_prediction = np.array([
-            [x + ((vx + w_vx) * np.cos(theta) - (vy + w_vy) * np.sin(theta)) * dt],
-            [y + ((vx + w_vx) * np.sin(theta) + (vy + w_vy) * np.cos(theta)) * dt],
-            [theta + (omega + w_omega) * dt]
-        ])
-        x_prediction[2, 0] = Utils.wrap_angle(x_prediction[2, 0])
-
-        return x_prediction
+        self.x_true = Utils.compute_motion(
+            self.x_true, self.get_robot_control(k), self.dt_prediction
+        )
+        self.x_true[2, 0] = Utils.wrap_angle(self.x_true[2, 0])
 
 
-    def observation_model_prediction(
-            x: np.ndarray[float], i: int, landmarks: np.ndarray[float]
-        ) -> np.ndarray[float]:
+    def update_history(
+            self, k: int, x_estimation: np.ndarray[float], P_estimation: np.ndarray[float]
+        ) -> None:
         """
-        Returns observation model prediction as np.ndarray[float] of system command y at instant k.
+        Update simulation history.
 
         Args:
-            x (np.ndarray[float]) : system state at instant k-1.
-            i (int) : observed landmark index.
-            landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
+            k (int) : simulation instant.
+            x_estimation (np.ndarray[float]) : system state estimation at instant k.
+            P_estimation (np.ndarray[float]) : estimation covariance at instant k.
         """
-        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
-        x_i, y_i = landmarks[0, i], landmarks[1, i]
+        self.history_x_true = np.hstack((self.history_x_true, self.x_true))
+        self.history_x_odometry = np.hstack((self.history_x_odometry, self.x_odometry))
+        self.history_x_estimation = np.hstack((self.history_x_estimation, x_estimation))
 
-        h = np.array([
-            [np.sqrt((x_i - x_k)**2 + (y_i - y_k)**2)],
-            [np.arctan2((y_i - y_k), (x_i - x_k)) - theta_k],
-        ])
-        h[1, 0] = Utils.wrap_angle(h[1, 0])
+        error = x_estimation - self.x_true
+        error[2, 0] = Utils.wrap_angle(error[2, 0])
 
-        return h
-
-
-    def resample_particles(
-            particle_states: np.ndarray[float], particle_weights: np.ndarray[float], n: int
-        ) -> np.ndarray[float]:
-        """
-        Return low-variance resampled particles based on their weights.
-
-        Args:
-            particle_states (np.ndarray[float]): particles states: x, y, theta.
-            particle_weights (np.ndarray[float]): particle weights.
-            n (int): number of particles.
-        """
-        base_indices = np.arange(0.0, 1.0, 1 / n)
-        random_offset = np.random.uniform(0, 1 / n)
-        resampling_indices = base_indices + random_offset
-
-        cumulative_weights = np.cumsum(particle_weights)
-        cumulative_index = 0
-
-        resampled_indices = []
-        for i in range(n):
-            while resampling_indices[i] > cumulative_weights[cumulative_index]:
-                cumulative_index += 1
-
-            resampled_indices.append(cumulative_index)
-
-        resampled_particles = particle_states[:, resampled_indices]
-        resampled_weights = np.ones(n) / n
-
-        return resampled_particles, resampled_weights
-
-
-    def P(x_estimation: np.ndarray[float], particles: np.ndarray[float]) -> np.ndarray[float]:
-        """
-        Returns particle filter covariance matrix P estimation as np.ndarray[float].
-
-        Args:
-            x_estimation (np.array) : The mean/estimated state of the particles (3x1).
-            particles (np.array): An array of shape (3, N_particles) containing the state of all particles (x, y, theta).
-        """
-        n = particles.shape[1]
-
-        P_estimation = np.zeros((3, 3))
-        for i in range(n):
-            deviation = (particles[:, i:i+1] - x_estimation).reshape(-1, 1)
-            deviation[2] = Utils.wrap_angle(deviation[2])
-
-            P_estimation += deviation @ deviation.T
-        P_estimation /= n
-
-        return P_estimation
-
-
-@dataclass
-class Utils:
-    def wrap_angle(angle: float) -> float:
-        """
-        Return wraped randian angle to the range [-pi, pi].
-
-        Args:
-            angle (float): angle in radians.
-        """
-        if (angle > np.pi):
-            angle = angle - 2 * pi
-        elif (angle < -np.pi):
-            angle = angle + 2 * pi
-        return angle
-
-
-    def compute_motion(x: np.ndarray[float], u: np.ndarray[float], dt: float) -> np.ndarray[float]:
-        """
-        Compute system motion based on motion equation as np.ndarray.
-
-        Args:
-            x (np.ndarray[float]) : system state at instant k-1.
-            u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
-            dt (float) : simulation time step in seconds.
-        """
-        assert x.ndim == 2
-        assert u.ndim == 2
-
-        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
-        vx_k, vy_k, w_k = u[0, 0], u[1, 0], u[2, 0]
-
-        x_compute = np.array([
-            [x_k + (vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
-            [y_k + (vx_k * np.sin(theta_k) + vy_k * np.cos(theta_k)) * dt],
-            [theta_k + dt * w_k],
-        ])
-        x_compute[2, 0] = Utils.wrap_angle(x_compute[2, 0])
-
-        return x_compute
-
-
-    def compute_rms_error(arr: np.ndarray[float]) -> float:
-        """
-        Return RMS error of an np.ndarray as a float.
-
-        Args:
-            arr (np.ndarray) : array to analyze.
-        """
-        return np.sqrt(np.mean(arr**2))
+        self.history_x_error = np.hstack((self.history_x_error, error))
+        self.history_x_covariance = np.hstack((
+            self.history_x_covariance, np.sqrt(np.diag(P_estimation).reshape(3, 1))
+        ))
+        self.history_time.append(k*self.dt_prediction)
 
 
 
