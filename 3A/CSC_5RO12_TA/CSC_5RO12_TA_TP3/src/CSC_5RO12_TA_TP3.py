@@ -29,7 +29,7 @@ class Simulation:
             x_estimation,
             x_odometry,
             x_true,
-            x_STD,
+            P_estimation,
             Q_true,
             R_true,
         ):
@@ -54,7 +54,7 @@ class Simulation:
         error[2, 0] = Utils.wrap_angle(error[2, 0])
 
         self.history_x_error = error
-        self.history_x_covariance = x_STD
+        self.history_x_covariance = P_estimation
         self.history_time = [0]
 
     # return true control at step k
@@ -104,7 +104,7 @@ class Simulation:
                 landmark_index = np.random.randint(0, self.landmarks.shape[1] - 1)
                 zNoise = np.sqrt(self.R_true) @ np.random.randn(2)
                 zNoise = np.array([zNoise]).T
-                z = PF.observation_model(self.x_true, landmark_index, self.landmarks) + zNoise
+                z = PF.observation_model_prediction(self.x_true, landmark_index, self.landmarks) + zNoise
                 z[1, 0] = Utils.wrap_angle(z[1, 0])
         else:
             z = None
@@ -113,7 +113,7 @@ class Simulation:
     
 
     def update_history(
-            self, k: int, x_estimation: np.ndarray[float], x_STD: np.ndarray[float]
+            self, k: int, x_estimation: np.ndarray[float], P_estimation: np.ndarray[float]
         ) -> None:
         """
         Update simulation history.
@@ -121,7 +121,7 @@ class Simulation:
         Args:
             k (int) :simulation instant.
             x_estimation (np.ndarray[float]) : system state estimation at instant k.
-            x_STD (np.ndarray[float]) : estimation covariance at instant k.
+            P_estimation (np.ndarray[float]) : estimation covariance at instant k.
         """
         self.history_x_true = np.hstack((self.history_x_true, self.x_true))
         self.history_x_odometry = np.hstack((self.history_x_odometry, self.x_odometry))
@@ -131,7 +131,9 @@ class Simulation:
         error[2, 0] = Utils.wrap_angle(error[2, 0])
 
         self.history_x_error = np.hstack((self.history_x_error, error))
-        self.history_x_covariance = np.hstack((self.history_x_covariance, x_STD))
+        self.history_x_covariance = np.hstack((
+            self.history_x_covariance, np.sqrt(np.diag(P_estimation).reshape(3, 1))
+        ))
         self.history_time.append(k*self.dt_prediction)
 
 
@@ -199,10 +201,14 @@ class Simulation:
             ax1.arrow(x_particles[0, i], x_particles[1, i], 5*np.cos(x_particles[2, i]+np.pi/2), 5*np.sin(x_particles[2, i]+np.pi/2), color = 'orange')
 
         ax1.grid(True)
-        ax1.axis([-100, 100, -100, 100])
+        axis_max = 60
+        ticks = [i for i in range(-axis_max, +axis_max+1, 10)]
+        ax1.axis([-axis_max, +axis_max, -axis_max, +axis_max])
         ax1.set_title('Cartesian Coordinates')
         ax1.set_ylabel('y [m]')
         ax1.set_xlabel('x [m]')
+        ax1.set_xticks(ticks)
+        ax1.set_yticks(ticks)
         ax1.legend(loc='upper left')
 
         # add common error markers
@@ -274,96 +280,136 @@ class Simulation:
 
 @dataclass
 class PF:
-    """Particle Filter questions."""
-    # evolution model (f)
-    def motion_model(x: np.ndarray[float, float], u_tilde: np.ndarray[float, float], dt: int, Q_estimation: np.ndarray[float, float]) -> np.ndarray[float, float]:
+    """Particle Filter equations."""
+
+    def motion_model_prediction(
+            x: np.ndarray[float],
+            u_tilde: np.ndarray[float],
+            dt: int,
+            Q_estimation: np.ndarray[float]
+        ) -> np.ndarray[float]:
         """
         Return motion model of agent.
 
         Note: based on CoursPF_Merlinge, slide 33.
 
         Args:
-            x (np.ndarray[float, float]) : agent state at instant k from ground reference. (x, y, theta)
-            u_tilde (np.ndarray[float, float]) : agent noisy odometry at instant k from robot reference. (vx, vy, omega)
+            x (np.ndarray[float]) : agent state at instant k from ground reference. (x, y, theta)
+            u_tilde (np.ndarray[float]) : agent noisy odometry at instant k from robot reference. (vx, vy, omega)
             dt (int) : discrete time interval.
-            Q_estimation (np.ndarray[float, float]) : .... estimation
+            Q_estimation (np.ndarray[float]) : .
         """
         x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
         vx_k, vy_k, omega_k = u_tilde[0, 0], u_tilde[1, 0], u_tilde[2, 0]
 
-        w_vx_k, w_vy_k, w_omega_k = 0, 0, 0 # TODO define function from Q_estimation
-        e_vx_k, e_vy_k, e_omega_k = vx_k + w_vx_k, vy_k + w_vy_k, omega_k + w_omega_k
+        w_k = np.random.multivariate_normal([0, 0, 0], Q_estimation)
+        w_vx_k, w_vy_k, w_omega_k = w_k[0], w_k[1], w_k[2]
 
-        x_prediction = np.zeros_like(x)
-        x_prediction[0, 0] = x_k + (e_vx_k * np.cos(theta_k) - e_vy_k * np.sin(theta_k)) * dt
-        x_prediction[1, 0] = y_k + (e_vx_k * np.sin(theta_k) + e_vy_k * np.cos(theta_k)) * dt
-        x_prediction[2, 0] = theta_k + e_omega_k * dt
-
-        # chatGPT advice below
-        # x_prediction = x + dt_prediction * u_tilde  # Simple linear model
-        # x_prediction += np.sqrt(Q_estimation) @ np.random.randn(3)  # Add noise
+        x_prediction = np.array([
+            [x_k + ((vx_k + w_vx_k) * np.cos(theta_k) - (vy_k + w_vy_k) * np.sin(theta_k)) * dt],
+            [y_k + ((vx_k + w_vx_k) * np.sin(theta_k) + (vy_k + w_vy_k) * np.cos(theta_k)) * dt],
+            [theta_k + (omega_k + w_omega_k) * dt]
+        ])
+        x_prediction[2, 0] = Utils.wrap_angle(x_prediction[2, 0])
 
         return x_prediction
 
 
-    # observation model (h)
-    def observation_model(xVeh, landmark_index, landmarks):
-        # xVeh: vecule state
-        # landmark_index: observed amer index
-        # landmarks: map of all amers
-        # slide 33
+    def observation_model_prediction(
+            x: np.ndarray[float], i: int, landmarks: np.ndarray[float]
+        ) -> np.ndarray[float]:
+        """
+        Returns observation model prediction as np.ndarray[float] of system command y at instant k.
 
-        # Landmark position
-        landmark = landmarks[:, landmark_index]
+        Args:
+            x (np.ndarray[float]) : system state at instant k-1.
+            i (int) : observed landmark index.
+            landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
+        """
+        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
+        x_i, y_i = landmarks[0, i], landmarks[1, i]
 
-        # Compute the expected observation (range and bearing to the landmark)
-        dx = landmark[0] - xVeh[0]
-        dy = landmark[1] - xVeh[1]
-        expected_range = np.sqrt(dx**2 + dy**2)
-        expected_bearing = atan2(dy, dx) - xVeh[2]
+        h = np.array([
+            [np.sqrt((x_i - x_k)**2 + (y_i - y_k)**2)],
+            [np.arctan2((y_i - y_k), (x_i - x_k)) - theta_k],
+        ])
+        h[1, 0] = Utils.wrap_angle(h[1, 0])
 
-        # Return the expected observation
-        return np.array([[expected_range], [expected_bearing]])
+        return h
 
 
-    # ---- particle filter implementation ----
-
-    # Particle filter resampling
-    def re_sampling(px, pw, n_particles):
+    def resample_particles(x_particles: np.ndarray[float], weights_particles: np.ndarray[float], n_particles: int) -> np.ndarray[float]:
         """
         low variance re-sampling
         """
-        # slide 25
-
-        w_cum = np.cumsum(pw)
+        weights_cumulative_sum = np.cumsum(weights_particles)
         base = np.arange(0.0, 1.0, 1 / n_particles)
-        re_sample_id = base + np.random.uniform(0, 1 / n_particles)
+
+        resample_index = base + np.random.uniform(0, 1 / n_particles)
         indexes = []
         ind = 0
+
         for ip in range(n_particles):
-            while re_sample_id[ip] > w_cum[ind]:
+            while resample_index[ip] > weights_cumulative_sum[ind]:
                 ind += 1
             indexes.append(ind)
 
-        px = px[:, indexes]
-    #    pw = pw[indexes]
+        x_particles = x_particles[:, indexes]
 
         # Normalization
-        pw = np.ones(pw.shape)
-        pw = pw / np.sum(pw)
+        weights_particles = np.ones(weights_particles.shape)
+        weights_particles = weights_particles / np.sum(weights_particles)
 
-        return px, pw
+        return x_particles, weights_particles
+
+    def update_P_estimation(particles, x_estimation):
+        """
+        Updates the covariance matrix (P_estimation) of the particle filter based on the spread of particles.
+
+        Parameters:
+        particles (np.array): An array of shape (3, N_particles) containing the state of all particles (x, y, theta).
+        x_estimation (np.array): The mean/estimated state of the particles (3x1).
+
+        Returns:
+        P_estimation (np.array): The updated 3x3 covariance matrix.
+        """
+        
+        # Number of particles
+        N_particles = particles.shape[1]
+        
+        # Initialize the covariance matrix P_estimation
+        P_estimation = np.zeros((3, 3))
+        
+        # Compute the deviations of each particle from the mean state
+        for i in range(N_particles):
+            deviation = (particles[:, i:i+1] - x_estimation).reshape(-1, 1)
+            
+            # Wrap angles if dealing with orientation (theta)
+            deviation[2] = Utils.wrap_angle(deviation[2])
+            
+            # Add the outer product of the deviation to the covariance matrix
+            P_estimation += deviation @ deviation.T
+        
+        # Normalize by the number of particles
+        P_estimation /= N_particles
+        
+        return P_estimation
 
 
 @dataclass
 class Utils:
-    # fit angle between -pi and pi
-    def wrap_angle(a):
-        if (a > np.pi):
-            a = a - 2 * pi
-        elif (a < -np.pi):
-            a = a + 2 * pi
-        return a
+    def wrap_angle(angle: float) -> float:
+        """
+        Return wraped randian angle to the range [-pi, pi].
+
+        Args:
+            angle (float): angle in radians.
+        """
+        if (angle > np.pi):
+            angle = angle - 2 * pi
+        elif (angle < -np.pi):
+            angle = angle + 2 * pi
+        return angle
 
 
     # composes two transformations
@@ -437,8 +483,8 @@ def execution(
 
     x_estimation = np.average(x_particles, axis=1, weights=weights_particles)
     x_estimation = np.expand_dims(x_estimation, axis=1)
-    x_STD = np.sqrt(np.average((x_particles-x_estimation)*(x_particles-x_estimation), axis=1, weights=weights_particles))
-    x_STD = np.expand_dims(x_STD, axis=1)
+    P_estimation = np.sqrt(np.average((x_particles-x_estimation)*(x_particles-x_estimation), axis=1, weights=weights_particles))
+    P_estimation = np.expand_dims(P_estimation, axis=1)
 
     # Simulation environment
     simulation = Simulation(
@@ -450,7 +496,7 @@ def execution(
         x_estimation,
         x_odometry,
         x_true,
-        x_STD,
+        P_estimation,
         Q_true,
         R_true,
     )
@@ -460,67 +506,47 @@ def execution(
     for k in range(1, simulation.n_steps):
         simulation.simulate_world(k)    # Simulate robot motion
         x_odometry, u_tilde = simulation.get_odometry(k)
+        z, landmark_index = simulation.get_observation(k)
 
-        # do prediction
-        # for each particle we add control vector AND noise
+        # Particle Filter Prediction
+        for p in range(simulation.n_particles):
+            x_particles[:, p:p+1] = PF.motion_model_prediction(x_particles[:, p:p+1], u_tilde, simulation.dt_prediction, Q_estimation)
 
-        # slide 25
-        # TODO
-        x_tmp = PF.motion_model(x_odometry, u_tilde, dt_prediction, Q_estimation)
-
-        # ...................
-
-        # observe a random feature
-        [z, landmark_index] = simulation.get_observation(k)
-
+        # Particle Filter Correction
         if z is not None:
             for p in range(n_particles):
-                # Predict observation from the particle position
-        # slide 25
-        # TODO
-                z_prediction = 0
+                h = PF.observation_model_prediction(x_particles[:, p:p+1], landmark_index, simulation.landmarks)
 
-                # Innovation : perception error
-        # slide 25
-        # TODO
-                innovation = np.array([0, 0, 0])
+                innovation = z - h
                 innovation[1] = Utils.wrap_angle(innovation[1])
 
+                exponent = -0.5 * innovation.T @ np.linalg.inv(R_estimation) @ innovation
+                normalizer = np.sqrt(np.linalg.det(2 * pi * R_estimation))
+
                 # Compute particle weight using gaussian model
-        # slide 25
-        # TODO
-                weights_particles[p] = 0
+                weights_particles[p] = np.exp(exponent) / normalizer
+
         # Normalization
-        # TODO
-        weights_particles = np.ones((n_particles))/n_particles
+        weights_particles /= np.sum(weights_particles)
 
-
-        # slide 25
         # Compute position as weighted mean of particles
-        # TODO
-        x_estimation = np.vstack([0, 0, 0])
+        x_estimation = np.mean(x_particles, axis=1)
+        x_estimation = x_estimation.reshape(3,1)
 
-        # slide 25
         # Compute particles std deviation
-        # TODO
-        P_estimation = 0 # Empirical covariance matrix
-        x_STD = np.vstack([0, 0, 0]) # Column vector of standard deviations (sqrt of diagonal of P_estimation)
+        P_estimation = PF.update_P_estimation(x_particles, x_estimation) # Column vector of standard deviations (sqrt of diagonal of P_estimation)
 
-
-        # Reampling
+        # Particle Filter Resampling
         theta_eff = 0.1
         Nth = n_particles * theta_eff
         Neff = 0
+
         if Neff < Nth:
-        # TODO
-            pass
-        # slide 25
-            # Particle resampling
-            # x_particles, weights_particles = np.array([0, 0, 0])
+            x_particles, weights_particles = PF.resample_particles(x_particles, weights_particles, simulation.n_particles)
 
 
         # Update data history
-        simulation.update_history(k, x_estimation, x_STD)
+        simulation.update_history(k, x_estimation, P_estimation)
 
     file_name = f'PF_{dt_measurement}_{dt_prediction}_'
     file_name += f'{n_landmarks}_'
