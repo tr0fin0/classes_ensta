@@ -45,7 +45,6 @@ class Simulation:
         self.Q_true = Q_true
         self.R_true = R_true
 
-        # Init history matrixes
         self.history_x_estimation = x_estimation
         self.history_x_odometry = x_odometry
         self.history_x_true = x_true
@@ -57,60 +56,81 @@ class Simulation:
         self.history_x_covariance = P_estimation
         self.history_time = [0]
 
-    # return true control at step k
-    def get_robot_control(self, k):
-        # generate  sin trajectory
+
+    def get_robot_control(self, k: int) -> np.ndarray[float]:
+        """
+        Return robot true control command at instant k as np.ndarray.
+
+        Note: by default a sinousal trajectory is generated.
+
+        Args:
+            k (int) : interation step.
+        """
         u = np.array([[0, 0.025,  0.1*np.pi / 180 * sin(3*np.pi * k / self.n_steps)]]).T
+
         return u
 
 
-    # simulate new true robot position
-    def simulate_world(self, k):
-        dt_prediction = self.dt_prediction
-        u = self.get_robot_control(k)
-        self.x_true = Utils.compute_motion(self.x_true, u, dt_prediction)
+    def simulate_world(self, k: int) -> None:
+        """
+        Simulate system at instant k.
+
+        Args:
+            k (int) : interation step.
+        """
+        self.x_true = Utils.compute_motion(
+            self.x_true, self.get_robot_control(k), self.dt_prediction
+        )
         self.x_true[2, 0] = Utils.wrap_angle(self.x_true[2, 0])
 
 
-    # computes and returns noisy odometry
-    def get_odometry(self, k):
-        # Ensuring random repetability for given k
-        np.random.seed(seed*2 + k)
+    def get_odometry(self, k: int) -> list[np.ndarray]:
+        """
+        Return a noisy odometry and command measurements at instant k as np.ndarrays.
 
-        # Model
-        dt_prediction = self.dt_prediction
-        u = self.get_robot_control(k)
-        xnow = Utils.compute_motion(self.x_odometry, u, dt_prediction)
-        uNoise = np.sqrt(self.Q_true) @ np.random.randn(3)
-        uNoise = np.array([uNoise]).T
-        xnow = Utils.compute_motion(xnow, uNoise, dt_prediction)
-        self.x_odometry = xnow
-        u_tilde = u + dt_prediction*uNoise
-        return xnow, u_tilde
+        Args:
+            k (int) : interation step.
+        """
+        np.random.seed(seed*2 + k)  # Ensuring random repexility for k
+
+        u_noise = np.sqrt(self.Q_true) @ np.random.randn(3)
+        u_noise = np.array([u_noise]).T
+        u = self.get_robot_control(k) + self.dt_prediction * u_noise
+
+        x = Utils.compute_motion(self.x_odometry, self.get_robot_control(k), self.dt_prediction)
+        x = Utils.compute_motion(x, u_noise, self.dt_prediction)
+        self.x_odometry = x
+
+        return x, u
 
 
-    # generate a noisy observation of a random feature
     def get_observation(self, k):
-        # Ensuring random repetability for given k
-        np.random.seed(seed*3 + k)
+        """
+        Return a noisy observation of a random landmark at instant k.
 
-        # Model
-        if k*self.dt_prediction % self.dt_measurement == 0:
-            notValidCondition = False # False: measurement valid / True: measurement not valid
+        Args:
+            k (int) : interation step.
+        """
+        np.random.seed(seed*3 + k)  # Ensuring random repexility for k
+
+        if k * self.dt_prediction % self.dt_measurement == 0:
+            notValidCondition = False
+
             if notValidCondition:
-                z = None
-                landmark_index = None
+                return None, None
             else:
                 landmark_index = np.random.randint(0, self.landmarks.shape[1] - 1)
-                zNoise = np.sqrt(self.R_true) @ np.random.randn(2)
-                zNoise = np.array([zNoise]).T
-                z = PF.observation_model_prediction(self.x_true, landmark_index, self.landmarks) + zNoise
+                z_noise = np.sqrt(self.R_true) @ np.random.randn(2)
+                z_noise = np.array([z_noise]).T
+
+                z = PF.observation_model_prediction(self.x_true, landmark_index, self.landmarks)
+                z += z_noise
                 z[1, 0] = Utils.wrap_angle(z[1, 0])
-        else:
-            z = None
-            landmark_index = None
-        return [z, landmark_index]
-    
+
+                return z, landmark_index
+
+        return None, None
+
 
     def update_history(
             self, k: int, x_estimation: np.ndarray[float], P_estimation: np.ndarray[float]
@@ -119,7 +139,7 @@ class Simulation:
         Update simulation history.
 
         Args:
-            k (int) :simulation instant.
+            k (int) : simulation instant.
             x_estimation (np.ndarray[float]) : system state estimation at instant k.
             P_estimation (np.ndarray[float]) : estimation covariance at instant k.
         """
@@ -152,8 +172,11 @@ class Simulation:
 
         Args:
             file_name (str) : output image name.
+            file_name (str) : output image name.
+            landmark_index (int) : reference landmark index.
             x_estimation (np.ndarray[float]) : system state estimation at instant k.
-            P_estimation (np.ndarray[float]) : estimation covariance at instant k.
+            x_particles (np.ndarray[float]) : particles coordinates at instant k.
+            weights_particles (np.ndarray[float]) : weights of particles at instant k.
             save (bool) : save result? Default value is True.
             show (bool) : show result? Default value is True.
         """
@@ -191,14 +214,19 @@ class Simulation:
         ax1.plot(
             self.history_x_estimation[0, :],
             self.history_x_estimation[1, :],
-            "-r",
+            "-y",
             label="Particle Filter"
         )
         ax1.plot(x_estimation[0], x_estimation[1], ".r")
-        # TODO ? make utils function
         ax1.scatter(x_particles[0, :], x_particles[1, :], s=weights_particles*10)
         for i in range(self.n_particles):
-            ax1.arrow(x_particles[0, i], x_particles[1, i], 5*np.cos(x_particles[2, i]+np.pi/2), 5*np.sin(x_particles[2, i]+np.pi/2), color = 'orange')
+            ax1.arrow(
+                x_particles[0, i],
+                x_particles[1, i],
+                5 * np.cos(x_particles[2, i] + np.pi / 2),
+                5 * np.sin(x_particles[2, i] + np.pi / 2),
+                color = 'orange'
+            )
 
         ax1.grid(True)
         axis_max = 60
@@ -283,32 +311,27 @@ class PF:
     """Particle Filter equations."""
 
     def motion_model_prediction(
-            x: np.ndarray[float],
-            u_tilde: np.ndarray[float],
-            dt: int,
-            Q_estimation: np.ndarray[float]
+            x: np.ndarray[float], u: np.ndarray[float], dt: float, Q_estimation: np.ndarray[float]
         ) -> np.ndarray[float]:
         """
         Return motion model of agent.
 
-        Note: based on CoursPF_Merlinge, slide 33.
-
         Args:
-            x (np.ndarray[float]) : agent state at instant k from ground reference. (x, y, theta)
-            u_tilde (np.ndarray[float]) : agent noisy odometry at instant k from robot reference. (vx, vy, omega)
-            dt (int) : discrete time interval.
+            x (np.ndarray[float]) : system state at instant k-1.
+            u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+            dt (float) : simulation time step in seconds.
             Q_estimation (np.ndarray[float]) : .
         """
-        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
-        vx_k, vy_k, omega_k = u_tilde[0, 0], u_tilde[1, 0], u_tilde[2, 0]
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+        vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
 
-        w_k = np.random.multivariate_normal([0, 0, 0], Q_estimation)
-        w_vx_k, w_vy_k, w_omega_k = w_k[0], w_k[1], w_k[2]
+        w = np.random.multivariate_normal([0, 0, 0], Q_estimation)
+        w_vx, w_vy, w_omega = w[0], w[1], w[2]
 
         x_prediction = np.array([
-            [x_k + ((vx_k + w_vx_k) * np.cos(theta_k) - (vy_k + w_vy_k) * np.sin(theta_k)) * dt],
-            [y_k + ((vx_k + w_vx_k) * np.sin(theta_k) + (vy_k + w_vy_k) * np.cos(theta_k)) * dt],
-            [theta_k + (omega_k + w_omega_k) * dt]
+            [x + ((vx + w_vx) * np.cos(theta) - (vy + w_vy) * np.sin(theta)) * dt],
+            [y + ((vx + w_vx) * np.sin(theta) + (vy + w_vy) * np.cos(theta)) * dt],
+            [theta + (omega + w_omega) * dt]
         ])
         x_prediction[2, 0] = Utils.wrap_angle(x_prediction[2, 0])
 
@@ -338,61 +361,55 @@ class PF:
         return h
 
 
-    def resample_particles(x_particles: np.ndarray[float], weights_particles: np.ndarray[float], n_particles: int) -> np.ndarray[float]:
+    def resample_particles(
+            particle_states: np.ndarray[float], particle_weights: np.ndarray[float], n: int
+        ) -> np.ndarray[float]:
         """
-        low variance re-sampling
+        Return low-variance resampled particles based on their weights.
+
+        Args:
+            particle_states (np.ndarray[float]): particles states: x, y, theta.
+            particle_weights (np.ndarray[float]): particle weights.
+            n (int): number of particles.
         """
-        weights_cumulative_sum = np.cumsum(weights_particles)
-        base = np.arange(0.0, 1.0, 1 / n_particles)
+        base_indices = np.arange(0.0, 1.0, 1 / n)
+        random_offset = np.random.uniform(0, 1 / n)
+        resampling_indices = base_indices + random_offset
 
-        resample_index = base + np.random.uniform(0, 1 / n_particles)
-        indexes = []
-        ind = 0
+        cumulative_weights = np.cumsum(particle_weights)
+        cumulative_index = 0
 
-        for ip in range(n_particles):
-            while resample_index[ip] > weights_cumulative_sum[ind]:
-                ind += 1
-            indexes.append(ind)
+        resampled_indices = []
+        for i in range(n):
+            while resampling_indices[i] > cumulative_weights[cumulative_index]:
+                cumulative_index += 1
 
-        x_particles = x_particles[:, indexes]
+            resampled_indices.append(cumulative_index)
 
-        # Normalization
-        weights_particles = np.ones(weights_particles.shape)
-        weights_particles = weights_particles / np.sum(weights_particles)
+        resampled_particles = particle_states[:, resampled_indices]
+        resampled_weights = np.ones(n) / n
 
-        return x_particles, weights_particles
+        return resampled_particles, resampled_weights
 
-    def update_P_estimation(particles, x_estimation):
+
+    def P(x_estimation: np.ndarray[float], particles: np.ndarray[float]) -> np.ndarray[float]:
         """
-        Updates the covariance matrix (P_estimation) of the particle filter based on the spread of particles.
+        Returns particle filter covariance matrix P estimation as np.ndarray[float].
 
-        Parameters:
-        particles (np.array): An array of shape (3, N_particles) containing the state of all particles (x, y, theta).
-        x_estimation (np.array): The mean/estimated state of the particles (3x1).
-
-        Returns:
-        P_estimation (np.array): The updated 3x3 covariance matrix.
+        Args:
+            x_estimation (np.array) : The mean/estimated state of the particles (3x1).
+            particles (np.array): An array of shape (3, N_particles) containing the state of all particles (x, y, theta).
         """
-        
-        # Number of particles
-        N_particles = particles.shape[1]
-        
-        # Initialize the covariance matrix P_estimation
+        n = particles.shape[1]
+
         P_estimation = np.zeros((3, 3))
-        
-        # Compute the deviations of each particle from the mean state
-        for i in range(N_particles):
+        for i in range(n):
             deviation = (particles[:, i:i+1] - x_estimation).reshape(-1, 1)
-            
-            # Wrap angles if dealing with orientation (theta)
             deviation[2] = Utils.wrap_angle(deviation[2])
-            
-            # Add the outer product of the deviation to the covariance matrix
+
             P_estimation += deviation @ deviation.T
-        
-        # Normalize by the number of particles
-        P_estimation /= N_particles
-        
+        P_estimation /= n
+
         return P_estimation
 
 
@@ -412,21 +429,29 @@ class Utils:
         return angle
 
 
-    # composes two transformations
-    def compute_motion(tab, tbc, dt):
-        assert tab.ndim == 2 # eg: robot state [x, y, heading]
-        assert tbc.ndim == 2 # eg: robot control [Vx, Vy, angle rate]
-        #dt : time-step (s)
+    def compute_motion(x: np.ndarray[float], u: np.ndarray[float], dt: float) -> np.ndarray[float]:
+        """
+        Compute system motion based on motion equation as np.ndarray.
 
-        angle = tab[2, 0] + dt * tbc[2, 0] # angular integration by Euler
+        Args:
+            x (np.ndarray[float]) : system state at instant k-1.
+            u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+            dt (float) : simulation time step in seconds.
+        """
+        assert x.ndim == 2
+        assert u.ndim == 2
 
-        angle = Utils.wrap_angle(angle)
-        s = sin(tab[2, 0])
-        c = cos(tab[2, 0])
-        position = tab[0:2] + dt * np.array([[c, -s], [s, c]]) @ tbc[0:2] # position integration by Euler
-        out = np.vstack((position, angle))
+        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
+        vx_k, vy_k, w_k = u[0, 0], u[1, 0], u[2, 0]
 
-        return out
+        x_compute = np.array([
+            [x_k + (vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
+            [y_k + (vx_k * np.sin(theta_k) + vy_k * np.cos(theta_k)) * dt],
+            [theta_k + dt * w_k],
+        ])
+        x_compute[2, 0] = Utils.wrap_angle(x_compute[2, 0])
+
+        return x_compute
 
 
     def compute_rms_error(arr: np.ndarray[float]) -> float:
@@ -534,7 +559,7 @@ def execution(
         x_estimation = x_estimation.reshape(3,1)
 
         # Compute particles std deviation
-        P_estimation = PF.update_P_estimation(x_particles, x_estimation) # Column vector of standard deviations (sqrt of diagonal of P_estimation)
+        P_estimation = PF.P(x_estimation, x_particles) # Column vector of standard deviations (sqrt of diagonal of P_estimation)
 
         # Particle Filter Resampling
         theta_eff = 0.1
