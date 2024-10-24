@@ -3,4 +3,51 @@
 \begin{document}
 \section{Question 4}
 % Faire varier le bruit de mesure du filtre (matrice REst), qu’observe-t-on ? Expliquer
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le bruit de mesure du filtre:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_0-01_False.png}
+        \caption{\texttt{R\_constant = 0.01}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_0-1_False.png}
+        \caption{\texttt{R\_constant = 0.1}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_10_False.png}
+        \caption{\texttt{R\_constant = 10}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_25_False.png}
+        \caption{\texttt{R\_constant = 25}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_100_False.png}
+        \caption{\texttt{R\_constant = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_250_False.png}
+        \caption{\texttt{R\_constant = 250}}
+        \label{}
+    \end{subfigure}
+    \caption{Variance du bruit de mesure \texttt{R\_constant}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque la constante \texttt{R\_constant} est petite ($\approx \bf{R}_{k} < 1$) ou trop grande ($\approx \bf{R}_{k} > 5$), le résultat du filtre particulaire se dégradent. Dans le premier cas, il n'y a pas assez de variabilité entre les particules pour éxplorer différents configurations, tandis que dans le deuxième cas, une variabilité excessive conduit à une estimation instable, car le filtre prend plus de temps pour procéder au rééchantillonnage et, par conséquent, pour corriger ses estimations.\\
+
+\begin{remark}
+    Lorsque le bruit augmente, le filtre perd son efficacité, car il ne corrige pas son estimation et suit simplement l'odométrie.
+\end{remark}
 \end{document}
