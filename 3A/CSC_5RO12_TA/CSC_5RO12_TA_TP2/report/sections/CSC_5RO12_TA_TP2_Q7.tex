@@ -1,8 +1,44 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 7}
+\section{Question 7}
+% Faire varier le nombre d'amers et étudier les performances du filtre en fonction du nombre d'amers. Régler le filtre pour obtenir les meilleures performances possibles et expliquer les résultats.
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le nombre d'amers sur la carte:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_5_1_1_1_False_False_False.png}
+        \caption{\texttt{n\_landmarks = 5}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_30_1_1_1_False_False_False.png}
+        \caption{\texttt{n\_landmarks = 30}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_100_1_1_1_False_False_False.png}
+        \caption{\texttt{n\_landmarks = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_150_1_1_1_False_False_False.png}
+        \caption{\texttt{n\_landmarks = 150}}
+        \label{}
+    \end{subfigure}
+    \caption{Variation du nombre d'amers \texttt{n\_landmarks}}
+    \label{}
+\end{figure}
+\noindent On remarque qu'en augmentant le nombre de références dans l'environnement de simulation, le résultat du filtre de Kalman s'améliore légèrement, car l'erreur, la covariance et l'aire de l'ellipse diminuent, indiquant que plus il y a de références, mieux fonctionne l'algorithme.\\
 
-Faire varier le nombre d'amers et étudier les performances du filtre en fonction du nombre d'amers. Régler le filtre pour obtenir les meilleures performances possibles et expliquer les résultats.
+\noindent Cela se produit probablement parce qu'en augmentant le nombre de références, on augmente la chance que l'algorithme sélectionne une référence ni trop éloignée ni trop proche, ce qui apporte un bon équilibre entre les erreurs de distance et d'angle. En effet, à grande distance, l'erreur d'angle est plus significative, tandis qu'à courte distance, l'erreur de distance l'est davantage.
+\begin{remark}
+    Cependant, il est à noter que dans cette implémentation, le filtre de Kalman connaît exactement la référence utilisée dans ses calculs.\\
 
+    \noindent Dans une application réelle, il y aurait une incertitude quant au choix des références, ce qui, dans un environnement avec un nombre élevé de références, pourrait augmenter la probabilité d'une correspondance erronée, entraînant ainsi une augmentation de l'erreur du filtre de Kalman et, par conséquent, un résultat dégradé dans ce scénario.
+\end{remark}
 \end{document}

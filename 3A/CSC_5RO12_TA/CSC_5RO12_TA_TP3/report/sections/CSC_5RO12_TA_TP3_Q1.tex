@@ -1,0 +1,96 @@
+\documentclass[../CSC_5RO12_TA_TP3.tex]{subfiles}
+
+\begin{document}
+\section{Question 1}
+% Prendre en main la structure du code et repérer les différents paramètres du filtre. Expliquer comment s’agencent les grandes parties du code (simulation du véhicule, des capteurs, de l’odométrie, du Filtre Particulaire...)
+\begin{remark}
+    Des modifications ont été faites par rapport à l'algorithme original, notamment avec la création de différentes classes et la définition d'une fonction \texttt{main}.
+\end{remark}
+
+\subsection{Structure du Code}
+\noindent L'algorithme utilisé dans ce projet suit la structure suivante:
+\begin{enumerate}
+    \item \texttt{PF}: Particle Filter sous forme de dataclass, qui contient les méthodes suivantes:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{motion\_model\_prediction()};
+        \item \texttt{observation\_model\_prediction()};
+        \item \texttt{resample\_particles()};
+        \item \texttt{low\_variance\_resample()};
+        \item \texttt{multinomial\_resample()};
+        \item \texttt{P()};
+    \end{enumerate}
+    \item \texttt{Simulation}: classe pour la création du environnement de simulation du robot;
+    \begin{enumerate}[noitemsep]
+        \item \texttt{get\_observation()}: retourne une mesure bruitée d'une amère aléatoire;
+        \item \texttt{get\_odometry()}: retourne une mesure bruitée de l'odométrie et de la commande du robot;
+        \item \texttt{get\_robot\_control()}: retourne la véritable commande du robot;
+        \item \texttt{simulate\_world()}: simule le système à l'instant \texttt{k};
+    \end{enumerate}
+    \item \texttt{Utils}: classe pour stocker des fonctions d'assistance pour l'exécution de l'algorithme;
+    \begin{enumerate}[noitemsep]
+        \item \texttt{compute\_motion()}: calcule le mouvement du robot selon son équation de mouvement;
+        \item \texttt{convert\_angle()}: rappelle un angle entre $[-\pi, +\pi]$;
+    \end{enumerate}
+\end{enumerate}
+Les méthodes de \texttt{PF} seront précisées dans la Question 2.
+\begin{remark}
+    Des commentaires et de la documentation ont été ajoutés à l'algorithme pour faciliter sa compréhension et ne seront pas répétés ici.
+\end{remark}
+\begin{remark}
+    Entre chaque exécution, seule une variable a été variée tandis que les autres sont restées inchangées, garantissant ainsi que l'analyse se concentre uniquement sur la variable en question.
+\end{remark}
+\begin{remark}
+    L'application de la fonction \texttt{Utils.convert\_angle()} a été appliquée à tous les angles calculés dans l'algorithme pour garantir que les résultats affichés sur le graphique soient contenus dans $[-\pi, +\pi]$.
+\end{remark}
+\begin{remark}
+    Un vecteur $\widetilde{\mathbf{a}}$ contient des données bruitées.
+\end{remark}
+\begin{remark}
+    Un vecteur $\hat{\mathbf{a}}$ est une prédiction.
+\end{remark}
+
+\newpage
+\subsection{Execution Initiale}
+\noindent Après l'implementation des fonctions et variables qui manque au code source, quelques modifications sur le graphique ont été fait et le résultat initiale, utilisé comme benchmark, est donnée par l'image ci-dessous:
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_2_False.png}
+	\caption{Résultats Initiales}
+	\label{}
+\end{figure}
+\begin{remark}
+    Dans ce projet, chaque image aura sur son titre les informations sur l'exécution: \texttt{PF\_i\_j\_k\_l\_m\_n\_o\_p.png} où:
+    \begin{enumerate}[noitemsep]
+        \item \texttt{i}: \texttt{dt\_measurement}: intervalle entre deux mesures consécutives en secondes;
+        \item \texttt{j}: \texttt{dt\_prediction}: intervalle entre deux prédictions consécutives en secondes;
+        \item \texttt{k}: \texttt{n\_landmarks}: nombre de références sur la simulation;
+        \item \texttt{l}: \texttt{n\_particles}: nombre de particles sur le filtre;
+        \item \texttt{m}: \texttt{resample\_method}: méthode de rééchantillonnage;
+        \item \texttt{n}: \texttt{Q\_constant}: constant de la matrice de covariance du bruit du processus $\bf{Q}_{k}$;
+        \item \texttt{o}: \texttt{R\_constant}: constant de la matrice de covariance du bruit de mesure $\bf{R}_{k}$;
+        \item \texttt{p}: \texttt{black\_out}: absence de mesures entre 250 et 300 secondes?;
+    \end{enumerate}
+\end{remark}
+
+\subsubsection{Utilization}
+\noindent Pour répondre aux questions, l'algorithme suivant a été utilisé:
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[language=Python]
+def execution(...) -> None:
+    ...
+
+    plt.suptitle(file_name)
+    if save_result: plt.savefig(file_path, dpi=300)
+    if show_result: plt.show()
+
+def main():
+    arr = [...]
+
+    for var in arr:
+        execution(var, show_result=True, save_result=False)
+
+if __name__ == "__main__":
+    main()
+	\end{lstlisting}
+\end{scriptsize}
+\end{document}

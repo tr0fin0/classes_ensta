@@ -1,8 +1,215 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 2}
+\section{Question 2}
+% Compléter le code avec les équations du filtre EKF (slide 19), le modèle dynamique (motion\_model), le modèle de mesure (observation\_model), les matrices jacobiennes (get\_obs\_jac, A, B) et commenter les résultats; (remarque: on pourra s'aider des fonctions utilitaires, par exemple tcomp)
+\subsection{\texttt{EKF}}
+\noindent Pour calculer l'Extended Kalman Filter, une dataclass a été utilisée, car la classe ne contient que des méthodes, qui sont expliquées ci-dessous.
 
-Compléter le code avec les équations du filtre EKF (slide 19), le modèle dynamique (motion\_model), le modèle de mesure (observation\_model), les matrices jacobiennes (get\_obs\_jac, A, B) et commenter les résultats; (remarque: on pourra s'aider des fonctions utilitaires, par exemple tcomp)
+\subsubsection{\texttt{motion\_model\_prediction()}}
+\begin{definition}
+    La prédiction du modèle de mouvement est donnée par l'équation suivante:
+    \begin{equation}
+        \hat{\bf{x}}_{k|k-1} = f(\hat{\bf{x}}_{k-1}, \widetilde{\bf{u}}_{k}) = \begin{bmatrix}
+            x_{k-1} + (\widetilde{v}^{x}_{k} \cos(\theta_{k-1}) - \widetilde{v}^{y}_{k} \sin(\theta_{k-1}) \cdot \Delta t )\\
+            y_{k-1} + (\widetilde{v}^{x}_{k} \sin(\theta_{k-1}) + \widetilde{v}^{y}_{k} \cos(\theta_{k-1}) \cdot \Delta t )\\
+            \theta_{k-1} + \widetilde{\omega}_{k} \Delta t\\
+        \end{bmatrix}
+    \end{equation}
+    Où:
+    \begin{enumerate}[noitemsep]
+        \item \textbf{Robot State}: $\bf{x}_{k} = \begin{bmatrix} x_{k} & y_{k} & \theta_{k} \end{bmatrix}^{\intercal}$ à l'instant $k$, relative à l'origine du plan cartésien.
+        \item \textbf{Noised Odometry}: $\widetilde{\bf{u}}_{k} = \begin{bmatrix} \widetilde{v}^{x}_{k} & \widetilde{v}^{y}_{k} & \widetilde{\omega}_{k} \end{bmatrix}^{\intercal} \sim \mathcal{N}(\bf{u}_{k}, \bf{Q}_{k})$ à l'instant $k$, relative au robot:
+        \begin{enumerate}[noitemsep]
+            \item \textbf{Robot Control}: $\bf{u}_{k} = \begin{bmatrix} v^{x}_{k} & v^{y}_{k} & \omega_{k} \end{bmatrix}^{\intercal}$ à l'instant $k$, relative au robot.
+            \item \textbf{Process Noise Covariance}: $\bf{Q}_{k}$ covariance du bruit Gaussian du processus.
+        \end{enumerate}
+    \end{enumerate}
+    La fonction \texttt{motion\_model\_prediction()} implémente la prédiction du modèle de mouvement:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{motion\_model\_prediction()}]
+def motion_model_prediction(
+        x: np.ndarray[float], u: np.ndarray[float], dt: float
+    ) -> np.ndarray[float]:
+    """
+    Returns motion model prediction as np.ndarray[float] of system state x at instant k.
 
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+        dt (float) : simulation time step.
+    """
+    x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
+    vx_k, vy_k, w_k = u[0, 0], u[1, 0], u[2, 0]
+
+    x_prediction = np.array([
+        [x_k + (vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
+        [y_k + (vx_k * np.sin(theta_k) + vy_k * np.cos(theta_k)) * dt],
+        [theta_k + w_k * dt],
+    ])
+    x_prediction[2, 0] = Utils.convert_angle(x_prediction[2, 0])
+
+    return x_prediction
+        \end{lstlisting}
+    \end{scriptsize}
+    \begin{remark}
+        Ça definition correspond à la fonction \texttt{Utils.compute\_motion()}.
+    \end{remark}
+\end{definition}
+
+\subsubsection{\texttt{observation\_model\_prediction()}}
+\begin{definition}
+    La prédiction du modèle d'observation est donnée par l'équation suivante:
+    \begin{equation}
+        \hat{\bf{y}}_{k} = h(\hat{\bf{x}}_{k}) = \begin{bmatrix}
+            \sqrt{(x^{p}_{k} - x_{k})^{2} + (y^{p}_{k} - y_{k})^{2}}\\
+            \arctan{\left(\frac{y^{p}_{k} - y_{k}}{x^{p}_{k} - x_{k}}\right)} - \theta_{k}
+        \end{bmatrix}
+    \end{equation}
+    La fonction \texttt{observation\_model\_prediction()} implémente la prédiction du modèle d'observation:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{observation\_model\_prediction()}]
+def observation_model_prediction(
+        x: np.ndarray[float], i: int, landmarks: np.ndarray[float]
+    ) -> np.ndarray[float]:
+    """
+    Returns observation model prediction as np.ndarray[float] of system command y at instant k.
+
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        i (int) : observed landmark index.
+        landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
+    """
+    x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
+    x_i, y_i = landmarks[0, i], landmarks[1, i]
+
+    h = np.array([
+        [np.sqrt((x_i - x_k)**2 + (y_i - y_k)**2)],
+        [np.arctan2((y_i - y_k), (x_i - x_k)) - theta_k],
+    ])
+    h[1, 0] = Utils.convert_angle(h[1, 0])
+
+    return h
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
+\subsubsection{\texttt{F()}}
+\begin{definition}
+    Le jacobien du modèle de prédiction de mouvement, dans le cadre d'un filtre de Kalman étendu (EKF), est utilisé pour linéariser la fonction de mouvement autour de l'état actuel. Ce jacobien est noté $\bf{F}_{k}$ et est calculé à partir de la dérivée partielle de la fonction de mouvement par rapport à l'état $\bf{x}_{k}$.\\
+
+    \noindent L'équation générale du jacobien pour la prédiction de mouvement est donnée par:
+    \begin{equation}
+        \bf{F}_{k} = \frac{\partial\;f(\hat{\bf{x}}_{k-1}, \widetilde{\bf{u}}_{k})}{\partial\;\hat{\bf{x}}_{k}} = \begin{bmatrix}
+            1 & 0 & (-v^{x}_{k} \cdot \sin(\theta_{k}) - v^{y}_{k} \cdot \cos(\theta_{k})) \cdot \Delta t\\
+            0 & 1 & (+v^{x}_{k} \cdot \cos(\theta_{k}) - v^{y}_{k} \cdot \sin(\theta_{k})) \cdot \Delta t\\
+            0 & 0 & 1\\
+        \end{bmatrix}
+    \end{equation}
+    La fonction \texttt{F()} implémente le jacobian du modèle de prédiction de mouvement:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{F()}]
+def F(x: np.ndarray[float], u: np.ndarray[float], dt: float) -> np.ndarray[float]:
+    """
+    Return motion model state jacobian matrix F(x) as np.ndarray[float].
+
+    Note: jacobian with respect of system state.
+
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+        dt (float) : simulation time step.
+    """
+    _, _, theta_k = x[0, 0], x[1, 0], x[2, 0]
+    vx_k, vy_k, _ = u[0, 0], u[1, 0], u[2, 0]
+
+    F = np.array([
+        [1, 0, (-vx_k * np.sin(theta_k) - vy_k * np.cos(theta_k)) * dt],
+        [0, 1, (+vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
+        [0, 0, 1]
+    ])
+
+    return F
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
+\subsubsection{\texttt{G()}}
+\begin{definition}
+    Le jacobien du modèle de prédiction de contrôle, utilisé dans un filtre de Kalman étendu (EKF), est également une matrice qui exprime la relation entre les variations des commandes de contrôle $\bf{u}_{k}$ et les changements dans l'état $\bf{x}_{k}$ du système.\\
+
+    \noindent L'équation générale pour le jacobien du modèle de prédiction de contrôle $\bf{G}_{k}$ est donnée par:
+    \begin{equation}
+        \bf{G}_{k} = \frac{\partial\;f(\hat{\bf{x}}_{k-1}, \widetilde{\bf{u}}_{k})}{\partial\;\bf{w}} = \frac{\partial\;f(\hat{\bf{x}}_{k-1}, \widetilde{\bf{u}}_{k})}{\partial\;\widetilde{\bf{u}}} = \begin{bmatrix}
+            +\cos(\theta_{k}) \cdot \Delta t & -\sin(\theta_{k}) \cdot \Delta t & 0\\
+            +\sin(\theta_{k}) \cdot \Delta t & +\cos(\theta_{k}) \cdot \Delta t & 0\\
+            0 & 0 & \Delta t\\
+        \end{bmatrix}
+    \end{equation}
+    La fonction \texttt{G()} implémente le jacobian du modèle de prédiction de contrôle:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{G()}]
+def G(x: np.ndarray[float], u: np.ndarray[float], dt: float) -> np.ndarray[float]:
+    """
+    Return motion model control jacobian matrix G(x) as np.ndarray[float].
+
+    Note: jacobian with respect of noised odometry.
+
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+        dt (float) : simulation time step.
+    """
+    _, _, theta_k = x[0, 0], x[1, 0], x[2, 0]
+
+    G = np.array([
+        [np.cos(theta_k) * dt, -np.sin(theta_k) * dt, 0],
+        [np.sin(theta_k) * dt, +np.cos(theta_k) * dt, 0],
+        [0, 0, dt]
+    ])
+
+    return G
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
+\subsubsection{\texttt{H()}}
+\begin{definition}
+    Le jacobien du modèle de prédiction de l'observation, dans le cadre d'un filtre de Kalman étendu (EKF), est une matrice qui exprime la relation entre l'état du système $\bf{x}_{k}$ et les observations $\bf{y}_{k}$ à l'instant $k$. Ce jacobien est crucial pour linéariser le modèle d'observation dans un EKF.\\
+
+    \noindent L'équation générale pour le jacobien du modèle d'observation $\bf{H}_{k}$ est donnée par:
+    \begin{equation}
+        \bf{H}_{k} = \frac{\partial h}{\partial \bf{x}} = \begin{bmatrix}
+            -\frac{x^{p}_{k} - x_{k}}{\sqrt{(x^{p}_{k} - x_{k})^{2} + (y^{p}_{k} - y_{k})^{2}}} & -\frac{y^{p}_{k} - y_{k}}{\sqrt{(x^{p}_{k} - x_{k})^{2} + (y^{p}_{k} - y_{k})^{2}}} & +0\\
+            +\frac{y^{p}_{k} - y_{k}}{(x^{p}_{k} - x_{k})^{2} + (y^{p}_{k} - y_{k})^{2}} & -\frac{x^{p}_{k} - x_{k}}{(x^{p}_{k} - x_{k})^{2} + (y^{p}_{k} - y_{k})^{2}} & -1\\
+        \end{bmatrix}
+    \end{equation}
+    La fonction \texttt{H()} implémente le jacobian du modèle de prédiction de l'observattion:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{H()}]
+def H(x: np.ndarray[float], i: int, landmarks: np.ndarray[float]) -> np.ndarray[float]:
+    """
+    Return observation model jacobian matrix H(x) as np.ndarray[float].
+
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        i (int) : observed landmark index.
+        landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
+    """
+    x_k, y_k = x[0, 0], x[1, 0]
+    x_p, y_p = landmarks[0, i], landmarks[1, i]
+
+    delta_x = x_p - x_k
+    delta_y = y_p - y_k
+    distance = np.sqrt(delta_x**2 + delta_y**2)
+
+    H = np.array([
+        [-delta_x/distance, -delta_y/distance, 0],
+        [+delta_y/distance**2, -delta_x/distance**2, -1]
+    ])
+
+    return H
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
 \end{document}

@@ -58,8 +58,8 @@ class Simulation:
         uNoise = np.array([uNoise]).T
         xnow = tcomp(xnow, uNoise, dt_pred)
         self.xOdom = xnow
-        u_tilda = u + dt_pred*uNoise
-        return xnow, u_tilda
+        u_tilde = u + dt_pred*uNoise
+        return xnow, u_tilde
 
 
     # generate a noisy observation of a random feature
@@ -90,13 +90,34 @@ class Simulation:
 
 
 # evolution model (f)
-def motion_model(x, u_tilda, dt_pred, QEst):
-    # x: estimated state (x, y, heading)
-    # u_tilda: noised control input (Vx, Vy, angular rate)
+def motion_model(x: np.ndarray[float, float], u_tilde: np.ndarray[float, float], dt: int, Q_estimation: np.ndarray[float, float]) -> np.ndarray[float, float]:
+    """
+    Return motion model of agent.
 
-    # ...................
+    Note: based on CoursPF_Merlinge, slide 33.
 
-    return xPred
+    Args:
+        x (np.ndarray[float, float]) : agent state at instant k from ground reference. (x, y, theta)
+        u_tilde (np.ndarray[float, float]) : agent noisy odometry at instant k from robot reference. (vx, vy, omega)
+        dt (int) : discrete time interval.
+        Q_estimation (np.ndarray[float, float]) : .... estimation
+    """
+    x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
+    vx_k, vy_k, omega_k = u_tilde[0, 0], u_tilde[1, 0], u_tilde[2, 0]
+
+    w_vx_k, w_vy_k, w_omega_k = 0, 0, 0 # TODO define function from Q_estimation
+    e_vx_k, e_vy_k, e_omega_k = vx_k + w_vx_k, vy_k + w_vy_k, omega_k + w_omega_k
+
+    x_prediction = np.zeros_like(x)
+    x_prediction[0, 0] = x_k + (e_vx_k * np.cos(theta_k) - e_vy_k * np.sin(theta_k)) * dt
+    x_prediction[1, 0] = y_k + (e_vx_k * np.sin(theta_k) + e_vy_k * np.cos(theta_k)) * dt
+    x_prediction[2, 0] = theta_k + e_omega_k * dt
+
+    # chatGPT advice below
+    # x_prediction = x + dt_pred * u_tilde  # Simple linear model
+    # x_prediction += np.sqrt(Q_estimation) @ np.random.randn(3)  # Add noise
+
+    return x_prediction
 
 
 # observation model (h)
@@ -104,10 +125,19 @@ def observation_model(xVeh, iFeature, Map):
     # xVeh: vecule state
     # iFeature: observed amer index
     # Map: map of all amers
+    # slide 33
 
-    # ...................
+    # Landmark position
+    landmark = Map[:, iFeature]
 
-    return z
+    # Compute the expected observation (range and bearing to the landmark)
+    dx = landmark[0] - xVeh[0]
+    dy = landmark[1] - xVeh[1]
+    expected_range = np.sqrt(dx**2 + dy**2)
+    expected_bearing = atan2(dy, dx) - xVeh[2]
+
+    # Return the expected observation
+    return np.array([[expected_range], [expected_bearing]])
 
 
 # ---- particle filter implementation ----
@@ -117,6 +147,7 @@ def re_sampling(px, pw):
     """
     low variance re-sampling
     """
+    # slide 25
 
     w_cum = np.cumsum(pw)
     base = np.arange(0.0, 1.0, 1 / nParticles)
@@ -207,32 +238,34 @@ def plotParticles(simulation, k, iFeature, hxTrue, hxOdom, hxEst, hxError, hxSTD
     for i in range(nParticles):
         ax1.arrow(xParticles[0, i], xParticles[1, i], 5*np.cos(xParticles[2, i]+np.pi/2), 5*np.sin(xParticles[2, i]+np.pi/2), color = 'orange')
 
-    ax1.axis([-60, 60, -60, 60])
+    ax1.axis([-70, 70, -70, 70])
+    ax1.set_ylabel('y [m]')
+    ax1.set_xlabel('x [m]')
     ax1.grid(True)
     ax1.legend()
+
+    ax2.set_xticks([])
 
     # plot errors curves
     ax3.plot(times, hxError[0, :], 'b')
     ax3.plot(times,  3.0 * hxSTD[0, :], 'r')
     ax3.plot(times, - 3.0 * hxSTD[0, :], 'r')
     ax3.grid(True)
-    ax3.set_ylabel('x (m)')
-    ax3.set_xlabel('time (s)')
-    ax3.set_title('Real error (blue) and 3 $\sigma$ covariances (red)')
+    ax3.set_ylabel('x [m]')
+    ax3.set_title('error [blue] and 3 $\sigma$ covariances [red]')
 
     ax4.plot(times, hxError[1, :], 'b')
     ax4.plot(times, 3.0 * hxSTD[1, :], 'r')
     ax4.plot(times, -3.0 * hxSTD[1, :], 'r')
     ax4.grid(True)
-    ax4.set_ylabel('y (m)')
-    ax5.set_xlabel('time (s)')
+    ax4.set_ylabel('y [m]')
 
     ax5.plot(times, hxError[2, :], 'b')
     ax5.plot(times, 3.0 * hxSTD[2, :], 'r')
     ax5.plot(times, -3.0 * hxSTD[2, :], 'r')
     ax5.grid(True)
-    ax5.set_ylabel(r"$\theta$ (rad)")
-    ax5.set_xlabel('time (s)')
+    ax5.set_ylabel(r"$\theta$ [rad]")
+    ax5.set_xlabel('time [s]')
 
     if save: plt.savefig(r'outputs/SRL' + str(k) + '.png')
 #        plt.pause(0.01)
@@ -262,7 +295,7 @@ QTrue = np.diag([0.02, 0.02, 1*pi/180]) ** 2
 RTrue = np.diag([0.5, 1*pi/180]) ** 2
 
 # Modeled errors used in the Particle filter process
-QEst = 2 * np.eye(3, 3) @ QTrue
+Q_estimation = 2 * np.eye(3, 3) @ QTrue
 REst = 2 * np.eye(2, 2) @ RTrue
 
 # initial conditions
@@ -310,10 +343,14 @@ for k in range(1, simulation.nSteps):
     simulation.simulate_world(k)
 
     # Get odometry measurements
-    xOdom, u_tilda = simulation.get_odometry(k)
+    xOdom, u_tilde = simulation.get_odometry(k)
 
     # do prediction
     # for each particle we add control vector AND noise
+
+    # slide 25
+    # TODO
+    x_tmp = motion_model(xOdom, u_tilde, dt_pred, Q_estimation)
 
     # ...................
 
@@ -323,33 +360,47 @@ for k in range(1, simulation.nSteps):
     if z is not None:
         for p in range(nParticles):
             # Predict observation from the particle position
-            zPred = # ...................
+    # slide 25
+    # TODO
+            zPred = 0
 
             # Innovation : perception error
-            Innov = # ...................
+    # slide 25
+    # TODO
+            Innov = np.array([0, 0, 0])
             Innov[1] = angle_wrap(Innov[1])
 
             # Compute particle weight using gaussian model
-            wp[p] = # ...................
+    # slide 25
+    # TODO
+            wp[p] = 0
     # Normalization
-    wp = # ...................
+    # TODO
+    wp = np.ones((nParticles))/nParticles
 
 
+    # slide 25
     # Compute position as weighted mean of particles
-    xEst = # ...................
+    # TODO
+    xEst = np.vstack([0, 0, 0])
 
+    # slide 25
     # Compute particles std deviation
-    PEst = # ................... # Empirical covariance matrix
-    xSTD = # ................... # Column vector of standard deviations (sqrt of diagonal of PEst)
+    # TODO
+    PEst = 0 # Empirical covariance matrix
+    xSTD = np.vstack([0, 0, 0]) # Column vector of standard deviations (sqrt of diagonal of PEst)
 
 
     # Reampling
     theta_eff = 0.1
     Nth = nParticles * theta_eff
-    Neff = # ...................
+    Neff = 0
     if Neff < Nth:
+    # TODO
+        pass
+    # slide 25
         # Particle resampling
-        xParticles, wp = # ...................
+        # xParticles, wp = np.array([0, 0, 0])
 
 
     # store data history

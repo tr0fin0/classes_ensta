@@ -40,7 +40,7 @@ def mean_angle(angle_list):
     return math.atan2(mean_sine, mean_cos)
 
 
-def icp(reference_scan, scan_to_align, max_iterations, thres):
+def icp(reference_scan, scan_to_align, max_iterations, thres, min_resolution, match_rate):
     """
     ICP (iterative closest point) algorithm
     Simple ICP implementation for teaching purpose
@@ -49,6 +49,8 @@ def icp(reference_scan, scan_to_align, max_iterations, thres):
         scan_to_align : scan to align on the model
         maxIter : maximum number of ICP iterations
         thres : threshold to stop ICP when correction is smaller
+        min_resolution : minimal distance
+        match_rate : match rate
     Returns:
         R : rotation matrix
         t : translation vector
@@ -72,7 +74,12 @@ def icp(reference_scan, scan_to_align, max_iterations, thres):
     # ----------------------- TODO ------------------------
     # Filter data points too close to each other
     # Put the result in filtered_scan_points
-    filtered_scan_points = scan_points
+    filtered_scan_points = [scan_points[:, 0]]
+
+    for pt in scan_points.T[1:]:
+        if np.linalg.norm(filtered_scan_points[-1] - pt) > min_resolution:
+            filtered_scan_points.append(pt)
+    filtered_scan_points = np.stack(filtered_scan_points, axis=1)
 
     # Initialize transformation to identity
     R = np.eye(2)
@@ -91,11 +98,21 @@ def icp(reference_scan, scan_to_align, max_iterations, thres):
         # you have to modify :
         # - 'matched_scan_points' with the points that are kept
         # - 'index' with the entries of the points that are kept
-        matched_scan_points = filtered_scan_points
-        index = index
+        sorted_dist = np.sort(distance)
+        threshold = sorted_dist[int(match_rate*(len(sorted_dist)-1))]
+        valid = distance <= threshold
+
+        matched_scan_points = filtered_scan_points[:, valid]
+        index = index[valid]
 
 
         # ----- Compute transform
+        # valid = [True]
+        # for i in range(len(index) - 1):
+        #     dscan = np.linalg.norm(filtered_scan_points[:,i]-filtered_scan_points[:,i+1])
+        #     dref = np.linalg.norm(ref_points[:,index[i]])
+        # TODO
+
 
         # Compute point mean
         mdat = np.mean(matched_scan_points, 1)

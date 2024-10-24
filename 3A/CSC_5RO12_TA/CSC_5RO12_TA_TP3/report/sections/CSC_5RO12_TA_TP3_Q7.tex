@@ -1,0 +1,41 @@
+\documentclass[../CSC_5RO12_TA_TP3.tex]{subfiles}
+
+\begin{document}
+\section{Question 7}
+% Modifier la fréquence des mesures (passer à 0.1 Hz) en utilisant la variable dt_meas et expliquer les résultats.
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varieer le nombre d'amers sur la carte:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_0-1_1_005_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{dt\_measurement = 0.1}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{dt\_measurement = 1}}
+        \label{}
+    \end{subfigure}
+    % \begin{subfigure}[b]{0.475\textwidth}
+    %     \centering
+    %     \includegraphics[width=\linewidth]{../../outputs/PF_2_1_005_300_low-variance_0-1_2_2_False.png}
+    %     \caption{\texttt{dt\_measurement = 2}}
+    %     \label{}
+    % \end{subfigure}\hfill
+    % \begin{subfigure}[b]{0.475\textwidth}
+    %     \centering
+    %     \includegraphics[width=\linewidth]{../../outputs/PF_20_1_005_300_low-variance_0-1_2_2_False.png}
+    %     \caption{\texttt{dt\_measurement = 20}}
+    %     \label{}
+    % \end{subfigure}
+    \caption{Variance du bruit de mesure \texttt{dt\_measurement}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque la frequênce de mesure augmente, c'est-à-dire lorsque \texttt{dt\_measurement} se réduit, le filtre particulaire diverge, car les covariances augmentent de manière constante pendant l'exécution de l'algorithme, tandis que les particules s'éloignent. Ce comportement est attendu, car la fréquence de mesure est supérieure à la frequênce de prédiction, ce qui empêche le filtre d'être appliqué efficacement.
+
+\begin{remark}
+    Lorsque le bruit augmente, le filtre perd son efficacité, car il ne corrige pas son estimation et suit simplement l'odométrie.
+\end{remark}
+\end{document}

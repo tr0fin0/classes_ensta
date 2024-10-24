@@ -1,8 +1,42 @@
 \documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
 
 \begin{document}
-\subsection{Question 9}
+\section{Question 9}
+% Simuler le cas où seulement les mesures de direction sont disponibles (angles only ): modifier le code, régler le filtre (matrices de covariances QEst et REst) et expliquer les résultats. On pourra au besoin jouer sur le nombre d'amers
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le nombre d'amers sur la carte quand seulement les mesures d'angle sont disponibles:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_5_1_1_1_False_False_True.png}
+        \caption{\texttt{n\_landmarks = 5}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_10_1_1_1_False_False_True.png}
+        \caption{\texttt{n\_landmarks = 10}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_100_1_1_1_False_False_True.png}
+        \caption{\texttt{n\_landmarks = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_150_1_1_1_False_False_True.png}
+        \caption{\texttt{n\_landmarks = 150}}
+        \label{}
+    \end{subfigure}
+    \caption{Variation du nombre d'amers \texttt{n\_landmarks} quand \texttt{angle\_only = True}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque seules les mesures d'angle sont disponibles pour le calcul du filtre de Kalman, les résultats restent relativement stables, comme l'indique la trajectoire calculée, même si la confiance dans l'estimation a diminué en raison de l'augmentation de la variance.\\
 
-Simuler le cas où seulement les mesures de direction sont disponibles (angles only ): modifier le code, régler le filtre (matrices de covariances QEst et REst) et expliquer les résultats. On pourra au besoin jouer sur le nombre d'amers
-
+\noindent Dans ce cas, contrairement à la situation précédente, l'ajout de références supplémentaires dans la simulation améliore significativement l'estimation de la trajectoire. Cela indique que les angles sont plus sensibles à la présence ou à l'absence de références au cours d'une simulation.
+\begin{remark}
+    Cela suggère que les angles sont plus sensibles à l'estimation du filtre de Kalman, ce qui est logique, car une petite erreur dans un angle peut entraîner une propagation d'erreur significative dans la position de référence et, par conséquent, affecter la qualité de l'estimation de la trajectoire.
+\end{remark}
 \end{document}

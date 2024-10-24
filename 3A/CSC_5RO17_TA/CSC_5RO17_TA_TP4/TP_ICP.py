@@ -39,7 +39,7 @@ def write_data_ply(data,path):
     '''
     write_ply(path, data.T, ['x', 'y', 'z'])
 
-def show3D(data):
+def show_cloud_points(data):
     '''
     Visualisation de nuages de points avec MatplotLib'
     Input :
@@ -55,7 +55,7 @@ def show3D(data):
     plt.show()
 
 
-def decimate(data,k_ech):
+def decimate(points: np.ndarray[float], k: int, method: str = 'for') -> np.ndarray[float]:
     '''
     D�cimation
     # ----------
@@ -65,13 +65,17 @@ def decimate(data,k_ech):
     Output :
         decimated = matrice (3 x (n/k_ech))
     '''
+    decimated = []
 
-    if True:    
-        # 1�re m�thode : boucle for
-        n = data.shape[1]
-        n_ech=int(n/k_ech)
-        
-        decimated = np.vstack(data[:, 0])
+    if method == 'for':
+        for i, point in enumerate(points):
+            if i % k == 0:
+                decimated.append(point)
+        # # 1�re m�thode : boucle for
+        # n = data.shape[1]
+        # n_ech=int(n/k_ech)
+
+        # decimated = np.vstack(data[:, 0])
             # compl�ter par une boucle for i in range
             # Xi = vecteur du rang k_ech*i (utiliser np.vstack)
             # concat�ner Xi � decimated en utilisant np.hstack
@@ -79,8 +83,8 @@ def decimate(data,k_ech):
     #else:
         # 2e m�thode : fonction de Numpy array
         #decimated = sous-tableau des colonnes espac�es de k_ech
-        
-    return(decimated)
+
+    return np.array(decimated)
 
 
 
@@ -100,7 +104,7 @@ def best_rigid_transform(data, ref):
     # TODO
     # Barycenters
     # d�finir les baycentres ref_center et data_center
-    
+
     # Centered clouds
     # calculer les nuages de points centr�s ref_c et data_c
 
@@ -131,7 +135,6 @@ def icp_point_to_point(data, ref, max_iter, RMS_threshold):
         R = (d x d) rotation matrix aligning data on ref
         T = (d x 1) translation vector aligning data on ref
         data_aligned = data aligned on ref
-           
     '''
 
     # Variable for aligned data
@@ -199,43 +202,43 @@ if __name__ == '__main__':
 
     # TODO
     # Visualisation du fichier d'origine
-    if False:
-        show3D(bunny_o)
+    if True:
+        show_cloud_points(bunny_o)
 
     # Transformations : d�cimation, rotation, translation, �chelle
     # ------------------------------------------------------------
-    if False:
-        # D�cimation        
+    if True:
+        # D�cimation
         k_ech=10
         decimated = decimate(bunny_o,k_ech)
-        
+
         # Visualisation sous Python et par �criture de fichier
-        show3D(decimated)
-        
+        show_cloud_points(decimated)
+
         # Visualisation sous CloudCompare apr�s �criture de fichier
         write_data_ply(decimated,bunny_r_path)
         # Puis ouvrir le fichier sous CloudCompare pour le visualiser
 
     if False:
-        show3D(NDC_o)
+        show_cloud_points(NDC_o)
         decimated = decimate(NDC_o,1000)
-        show3D(decimated)
+        show_cloud_points(decimated)
         write_data_ply(decimated,NDC_r_path)
 
     if False:        
         # Translation
         # translation = d�finir vecteur [0, -0.1, 0.1] avec np.array et reshape
         points=bunny_o + translation
-        show3D(points)
+        show_cloud_points(points)
         
         # Find the centroid of the cloud and center it
         #centroid = barycentre - utiliser np.mean(points, axis=1) et reshape
         points = points - centroid
-        show3D(points)
+        show_cloud_points(points)
         
         # Echelle
         # points = points divis�s par 2
-        show3D(points)
+        show_cloud_points(points)
         
         # Define the rotation matrix (rotation of angle around z-axis)
         # angle de pi/3,
@@ -246,14 +249,14 @@ if __name__ == '__main__':
         # centrer le nuage de points        
         # appliquer la rotation - utiliser la fonction .dot
         # appliquer la translation oppos�e
-        show3D(points)
+        show_cloud_points(points)
 
 
     # Meilleure transformation rigide (R,Tr) entre nuages de points
     # -------------------------------------------------------------
     if False:
 
-        show3D(bunny_p)
+        show_cloud_points(bunny_p)
         
         # Find the best transformation
         R, Tr = best_rigid_transform(bunny_p, bunny_o)
@@ -264,7 +267,7 @@ if __name__ == '__main__':
         bunny_r_opt = opt
         
         # Show and save cloud
-        show3D(bunny_r_opt)
+        show_cloud_points(bunny_r_opt)
         write_data_ply(bunny_r_opt,bunny_r_path)
         
         

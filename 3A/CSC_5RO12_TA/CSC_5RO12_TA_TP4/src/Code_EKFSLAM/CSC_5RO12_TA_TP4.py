@@ -40,7 +40,7 @@ trueLandmarkId =[]
 
 # Init displays
 show_animation = True
-f, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(14, 7))
+f, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(16, 8))
 ax3 = plt.subplot(3, 2, 2)
 ax4 = plt.subplot(3, 2, 4)
 ax5 = plt.subplot(3, 2, 6)
@@ -138,7 +138,7 @@ def motion_model(x, u):
     """
     Compute future robot position from current position and control
     """
-    
+
     xp = np.array([[x[0,0] + u[0,0]*DT * math.cos(x[2,0])],
                   [x[1,0] + u[0,0]*DT * math.sin(x[2,0])],
                   [x[2,0] + u[1,0]*DT]])
@@ -154,7 +154,7 @@ def jacob_motion(x, u):
 
     # Jacobian of f(X,u) wrt X
     A = np.array([[1.0, 0.0, float(-DT * u[0,0] * math.sin(x[2, 0]))],
-                  [0.0, 1.0, float(DT * u[0,0] * math.cos(x[2, 0]))],
+                  [0.0, 1.0, float(+DT * u[0,0] * math.cos(x[2, 0]))],
                   [0.0, 0.0, 1.0]])
 
     # Jacobian of f(X,u) wrt u
@@ -195,7 +195,7 @@ def observation(xTrue, xd, uTrue, Landmarks):
         uTrue[1, 0] + np.random.randn() * Q_sim[1, 1] ** 0.5]]).T
 
     xd = motion_model(xd, u)
-    
+
     return xTrue, y, xd, u
 
 
@@ -211,7 +211,7 @@ def search_correspond_landmark_id(xEst, PEst, yi):
     for i in range(nLM):
         innov, S, H = calc_innovation(xEst, PEst, yi, i)
         min_dist.append(innov.T @ np.linalg.inv(S) @ innov)
-        
+
 
     min_dist.append(M_DIST_TH)  # new landmark
 
@@ -246,12 +246,12 @@ def jacob_augment(x, y):
     """
     Compute the jacobians for extending covariance matrix
     """
-    
+
     Jr = np.array([[1.0, 0.0, -y[0] * math.sin(x[2,0] + y[1])],
                    [0.0, 1.0, y[0] * math.cos(x[2,0] + y[1])]])
 
     Jy = np.array([[math.cos(x[2,0] + y[1]), -y[0] * math.sin(x[2,0] + y[1])],
-                   [math.sin(x[2,0] + y[1]), y[0] * math.cos(x[2,0] + y[1])]])
+                   [math.sin(x[2,0] + y[1]), +y[0] * math.cos(x[2,0] + y[1])]])
 
     return Jr, Jy
 
@@ -277,7 +277,7 @@ def calc_innovation(xEst, PEst, y, LMid):
     # compute matrixes for Kalman Gain
     H = jacob_h(q, delta, xEst, LMid)
     S = H @ PEst @ H.T + Py
-    
+
     return innov, S, H
 
 
@@ -285,9 +285,9 @@ def ekf_slam(xEst, PEst, u, y):
     """
     Apply one step of EKF predict/correct cycle
     """
-    
+
     S = STATE_SIZE
-    
+
     # Predict
     A, B = jacob_motion(xEst[0:S], u)
 
@@ -298,11 +298,11 @@ def ekf_slam(xEst, PEst, u, y):
     PEst[S:,0:S] = PEst[0:S,S:].T
 
     PEst = (PEst + PEst.T) / 2.0  # ensure symetry
-    
+
     # Update
     for iy in range(len(y[:, 0])):  # for each observation
         nLM = calc_n_lm(xEst)
-        
+
         if KNOWN_DATA_ASSOCIATION:
             try:
                 min_id = trueLandmarkId.index(y[iy, 2])
@@ -316,7 +316,7 @@ def ekf_slam(xEst, PEst, u, y):
         # Extend map if required
         if min_id == nLM:
             print("New LM")
-            
+
             # Extend state and covariance matrix
             xEst = np.vstack((xEst, calc_landmark_position(xEst, y[iy, :])))
 
@@ -331,12 +331,12 @@ def ekf_slam(xEst, PEst, u, y):
             # Perform Kalman update
             innov, S, H = calc_innovation(xEst, PEst, y[iy, 0:2], min_id)
             K = (PEst @ H.T) @ np.linalg.inv(S)
-            
+
             xEst = xEst + (K @ innov)
-                        
+
             PEst = (np.eye(len(xEst)) - K @ H) @ PEst
             PEst = 0.5 * (PEst + PEst.T)  # Ensure symetry
-        
+
     xEst[2] = pi_2_pi(xEst[2])
 
     return xEst, PEst
@@ -350,10 +350,10 @@ def main():
     time = 0.0
 
     # Define landmark positions [x, y]
-    Landmarks = np.array([[0.0, 5.0],
-                          [11.0, 1.0],
-                          [3.0, 15.0],
-                          [-5.0, 20.0]])
+    Landmarks = np.array([[+00.0, +05.0],
+                          [+11.0, +01.0],
+                          [+03.0, +15.0],
+                          [-05.0, +20.0]])
 
     # Init state vector [x y yaw]' and covariance for Kalman
     xEst = np.zeros((STATE_SIZE, 1))
@@ -400,9 +400,9 @@ def main():
             # for stopping simulation with the esc key.
             plt.gcf().canvas.mpl_connect('key_release_event',
                     lambda event: [exit(0) if event.key == 'escape' else None])
-            
+
             ax1.cla()
-            
+
             # Plot true landmark and trajectory
             ax1.plot(Landmarks[:, 0], Landmarks[:, 1], "*k")
             ax1.plot(hxTrue[0, :], hxTrue[1, :], "-k", label="True")
@@ -427,21 +427,21 @@ def main():
             ax1.axis([-12, 12, -2, 22])
             ax1.grid(True)
             ax1.legend()
-            
+
             # plot errors curves
             ax3.plot(hxError[0, :],'b')
-            ax3.plot(3.0 * hxVar[0, :],'r')
+            ax3.plot(+3.0 * hxVar[0, :],'r')
             ax3.plot(-3.0 * hxVar[0, :],'r')
             ax3.set_ylabel('x')
             ax3.set_title('Real error (blue) and 3 $\sigma$ covariances (red)')
-            
+
             ax4.plot(hxError[1, :],'b')
-            ax4.plot(3.0 * hxVar[1, :],'r')
+            ax4.plot(+3.0 * hxVar[1, :],'r')
             ax4.plot(-3.0 * hxVar[1, :],'r')
             ax4.set_ylabel('y')
 
             ax5.plot(hxError[2, :],'b')
-            ax5.plot(3.0 * hxVar[2, :],'r')
+            ax5.plot(+3.0 * hxVar[2, :],'r')
             ax5.plot(-3.0 * hxVar[2, :],'r')
             ax5.set_ylabel(r"$\theta$")
 
