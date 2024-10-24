@@ -3,4 +3,41 @@
 \begin{document}
 \section{Question 8}
 % Faire varier le nombre d’amers (variable nLandmarks) et étudier les performances du filtre en fonction du nombre d’amers. Régler le filtre pour obtenir les meilleures performances possibles et expliquer les résultats.
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varieer le nombre d'amers sur la carte:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{n\_landmarks = 5}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_010_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{n\_landmarks = 10}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_075_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{n\_landmarks = 75}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_150_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{n\_landmarks = 150}}
+        \label{}
+    \end{subfigure}
+    \caption{\texttt{n\_landmarks}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque la quantité de références augmente il n'a pas beaucoup d'influence sur le resultat du filtre particulaire car l'erreur, la covariance et la trajectoire ne présentent pas des changements significatives.\\
+
+\noindent Tant que les particules sont bien réparties et que le modèle de capteur relie avec précision les mesures aux amers, le filtre peut fonctionner efficacement avec un nombre réduit d'amers en se concentrant sur les mises à jour probabilistes, plutôt que sur un grand ensemble de points de référence.
+
+\begin{remark}
+    Si le nombre d'amers est limité, le filtre ajuste les poids des particules en conséquence, conservant ainsi une performance efficace sans nécessiter un grand nombre de points de référence. Toutefois, un nombre accru d'amers peut améliorer la précision en réduisant l'incertitude de l'estimation, mais l'algorithme reste robuste avec peu d'amers grâce à sa nature probabiliste.
+\end{remark}
 \end{document}
