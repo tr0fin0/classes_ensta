@@ -3,4 +3,51 @@
 \begin{document}
 \section{Question 5}
 % Faire varier le seuil de ré-échantillonnage theta_eff entre 0 et 1, tracer des histogrammes des poids en fonction de theta_eff et identifier le phénomène de dégénérescence et l’impact du ré-échantillonnage.
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le seuil de ré-échantillonnage des poids en fonction de $\theta_{\text{eff}}$ du filtre:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/hist_1_1_005_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{theta\_eff = 0.1}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/hist_1_1_005_300_low-variance_0-2_2_2_False.png}
+        \caption{\texttt{theta\_eff = 0.2}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/hist_1_1_005_300_low-variance_0-4_2_2_False.png}
+        \caption{\texttt{theta\_eff = 0.4}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/hist_1_1_005_300_low-variance_0-6_2_2_False.png}
+        \caption{\texttt{theta\_eff = 0.6}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/hist_1_1_005_300_low-variance_0-8_2_2_False.png}
+        \caption{\texttt{theta\_eff = 0.8}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/hist_1_1_005_300_low-variance_0-9_2_2_False.png}
+        \caption{\texttt{theta\_eff = 0.9}}
+        \label{}
+    \end{subfigure}
+    \caption{Variance du seuil de ré-échantillonnage \texttt{theta\_eff}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque $\theta_{\text{eff}}$ est trop petit ($\approx \theta_{\text{eff}} < 0.5$), la distribution totale des poids est assez uniforme, comme on un peut l'observer avec la ligne rouge presque horizontale, car les rééchantillonnages sont plus probables. En revanche, lorsque $\theta_{\text{eff}}$ est trop grand ($\approx \theta_{\text{eff}} > 0.5$), la distribution totale des poids devient non uniforme, comme on peut voir avec la ligne rouge croissante, car les rééchantillonnages sont moins probables et entraînant ainsi un phénomène de dégénérescence.
+
+\begin{remark}
+    Lorsque $\theta_{\text{eff}}$ est trop grand ($\approx \theta_{\text{eff}} > 0.5$) le rééchantillonnage n'a pas lieu, ce qui laisse la dégénérescence intacte. Les occurrances se maintiennent entre 0.00250 et 0.00375, car le poid de chaque particle est initialisé à $1/300 \approx 0.0033$.
+\end{remark}
 \end{document}
