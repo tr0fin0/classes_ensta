@@ -3,4 +3,234 @@
 \begin{document}
 \section{Question 2}
 % Compléter le code avec les équations du filtre PF (prédiction, correction, ré-échantillonnage slide 25), le modèle dynamique (motion_model), le modèle de mesure (observation_model) décrits dans la slide 33 et commenter les résultats.
+\subsection{\texttt{PF}}
+\noindent Pour calculer le Filtre de Particules, une dataclass a été utilisée, car la classe ne contient que des méthodes, qui sont expliquées ci-dessous.
+
+\subsubsection{\texttt{motion\_model\_prediction()}}
+\begin{definition}
+    La prédiction du modèle de mouvement est donnée par l'équation suivante:
+    \begin{equation}
+        \hat{\bf{x}}_{k|k-1} = f(\hat{\bf{x}}_{k-1}, \widetilde{\bf{u}}_{k}, \bf{w}_{k}) = \begin{bmatrix}
+            x_{k-1} + ((\widetilde{v}^{x}_{k} + w^{v_{x}}_{k}) \cos(\theta_{k-1}) - (\widetilde{v}^{y}_{k} + w^{v_{y}}_{k}) \sin(\theta_{k-1}) \cdot \Delta t )\\
+            y_{k-1} + ((\widetilde{v}^{x}_{k} + w^{v_{x}}_{k}) \sin(\theta_{k-1}) + (\widetilde{v}^{y}_{k} + w^{v_{y}}_{k}) \cos(\theta_{k-1}) \cdot \Delta t )\\
+            \theta_{k-1} + (\widetilde{\omega}_{k} + w^{\omega}_{k}) \Delta t\\
+        \end{bmatrix}
+    \end{equation}
+    Où:
+    \begin{enumerate}[noitemsep]
+        \item \textbf{Robot State}: $\bf{x}_{k} = \begin{bmatrix} x_{k} & y_{k} & \theta_{k} \end{bmatrix}^{\intercal}$ à l'instant $k$, relative à l'origine du plan cartésien.
+        \item \textbf{Noised Odometry}: $\widetilde{\bf{u}}_{k} = \begin{bmatrix} \widetilde{v}^{x}_{k} & \widetilde{v}^{y}_{k} & \widetilde{\omega}_{k} \end{bmatrix}^{\intercal} \sim \mathcal{N}(\bf{u}_{k}, \bf{Q}_{k})$ à l'instant $k$, relative au robot:
+        \begin{enumerate}[noitemsep]
+            \item \textbf{Robot Control}: $\bf{u}_{k} = \begin{bmatrix} v^{x}_{k} & v^{y}_{k} & \omega_{k} \end{bmatrix}^{\intercal}$ à l'instant $k$, relative au robot.
+            \item \textbf{Process Noise}: $\bf{w}_{k} = \begin{bmatrix} w^{v_{x}}_{k} & w^{v_{y}}_{k} & w^{\omega}_{k} \end{bmatrix}^{\intercal} \sim \mathcal{N}(\bf{0}, \bf{Q}_{k})$.
+            \item \textbf{Process Noise Covariance}: $\bf{Q}_{k}$ covariance du bruit Gaussian du processus.
+        \end{enumerate}
+    \end{enumerate}
+    La fonction \texttt{motion\_model\_prediction()} implémente la prédiction du modèle de mouvement:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{motion\_model\_prediction()}]
+def motion_model_prediction(
+        x: np.ndarray[float], u: np.ndarray[float], dt: float, Q_estimation: np.ndarray[float]
+    ) -> np.ndarray[float]:
+    """
+    Return motion model of agent.
+
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
+        dt (float) : simulation time step in seconds.
+        Q_estimation (np.ndarray[float]) : process noise covariance matrix Q estimation.
+    """
+    x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+    vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
+
+    w = np.random.multivariate_normal([0, 0, 0], Q_estimation)
+    w_vx, w_vy, w_omega = w[0], w[1], w[2]
+
+    x_prediction = np.array([
+        [x + ((vx + w_vx) * np.cos(theta) - (vy + w_vy) * np.sin(theta)) * dt],
+        [y + ((vx + w_vx) * np.sin(theta) + (vy + w_vy) * np.cos(theta)) * dt],
+        [theta + (omega + w_omega) * dt]
+    ])
+    x_prediction[2, 0] = Utils.convert_angle(x_prediction[2, 0])
+
+    return x_prediction
+        \end{lstlisting}
+    \end{scriptsize}
+    \begin{remark}
+        Ça definition correspond à la fonction \texttt{Utils.compute\_motion()}.
+    \end{remark}
+\end{definition}
+
+\subsubsection{\texttt{observation\_model\_prediction()}}
+\begin{definition}
+    La prédiction du modèle d'observation est donnée par l'équation suivante:
+    \begin{equation}
+        \hat{\bf{y}}_{k} = h(\hat{\bf{x}}_{k}) = \begin{bmatrix}
+            \sqrt{(x^{p}_{k} - x_{k})^{2} + (y^{p}_{k} - y_{k})^{2}}\\
+            \arctan{\left(\frac{y^{p}_{k} - y_{k}}{x^{p}_{k} - x_{k}}\right)} - \theta_{k}
+        \end{bmatrix}
+    \end{equation}
+    La fonction \texttt{observation\_model\_prediction()} implémente la prédiction du modèle d'observation:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{observation\_model\_prediction()}]
+def observation_model_prediction(
+        x: np.ndarray[float], i: int, landmarks: np.ndarray[float]
+    ) -> np.ndarray[float]:
+    """
+    Returns observation model prediction as np.ndarray[float] of system command y at instant k.
+
+    Args:
+        x (np.ndarray[float]) : system state at instant k-1.
+        i (int) : observed landmark index.
+        landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
+    """
+    x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+    x_i, y_i = landmarks[0, i], landmarks[1, i]
+
+    h = np.array([
+        [np.sqrt((x_i - x)**2 + (y_i - y)**2)],
+        [np.arctan2((y_i - y), (x_i - x)) - theta],
+    ])
+    h[1, 0] = Utils.convert_angle(h[1, 0])
+
+    return h
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
+\subsubsection{\texttt{resample\_particles()}}
+\begin{definition}
+    Le \textbf{rééchantillonnage à faible variance} sélectionne les particules les plus représentatives de l'état réel. Cela permet de mieux préserver les particules avec des poids élevés, réduisant ainsi la perte de diversité tout en minimisant la répétition excessive de certaines particules.\\
+
+    \noindent La fonction \texttt{resample\_particles()} implémente le jacobian du modèle de prédiction de mouvement:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{resample\_particles()}]
+def resample_particles(
+        particles: np.ndarray[float], weights: np.ndarray[float], n: int, method: str = 'low-variance'
+    ) -> np.ndarray[float]:
+    """
+    Return resampled particles as np.ndarray[float] based on method
+
+    Args:
+        particles (np.ndarray[float]): particles states: x, y, theta.
+        weights_particles (np.ndarray[float]): particle weights.
+        n (int): number of particles.
+        method (str) : resample method. Default is 'low-variance'.
+    """
+    match method.upper():
+        case 'LOW-VARIANCE':
+            return PF.low_variance_resample(particles, weights, n)
+
+        case 'MULTINOMIAL':
+                return PF.multinomial_resample(particles, weights, n)
+
+        case _:
+            return None
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
+\subsubsection{\texttt{low\_variance\_resample()}}
+\begin{definition}
+    La méthode de rééchantillonnage à faible variance consiste à sélectionner des particules de manière plus uniforme en fonction de leurs poids, en répartissant les rééchantillons avec un espacement régulier, ce qui permet de minimiser le risque de dupliquer excessivement certaines particules tout en éliminant celles avec un faible poids.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{low\_variance\_resample()}]
+def low_variance_resample(
+        particles: np.ndarray[float], weights: np.ndarray[float], n: int
+    ) -> np.ndarray[float]:
+    """
+    Return low-variance resampled particles based on their weights.
+
+    Args:
+        particles (np.ndarray[float]): particles states: x, y, theta.
+        weights_particles (np.ndarray[float]): particle weights.
+        n (int): number of particles.
+    """
+    base_indices = np.arange(0.0, 1.0, 1 / n)
+    random_offset = np.random.uniform(0, 1 / n)
+    resampling_indices = base_indices + random_offset
+
+    cumulative_weights = np.cumsum(weights)
+    cumulative_index = 0
+
+    resampled_indices = []
+    for i in range(n):
+        while resampling_indices[i] > cumulative_weights[cumulative_index]:
+            cumulative_index += 1
+
+        resampled_indices.append(cumulative_index)
+
+    resampled_particles = particles[:, resampled_indices]
+    resampled_weights = np.ones(n) / n
+
+    return resampled_particles, resampled_weights
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
+
+\subsubsection{\texttt{multinomial\_resample()}}
+\begin{definition}
+    Le rééchantillonnage multinomial est une méthode utilisée dans les filtres particulaires pour sélectionner des particules en fonction de leurs poids. Chaque particule est tirée aléatoirement avec une probabilité proportionnelle à son poids, ce qui permet de privilégier les particules les plus représentatives de l'état actuel.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{multinomial\_resample()}]
+def multinomial_resample(
+        particles: np.ndarray[float], weights: np.ndarray[float], n: int
+    ) -> np.ndarray[float]:
+    """
+    Return multinomial resampled particles based on their weights.
+
+    Args:
+        particles (np.ndarray[float]): particles states: x, y, theta.
+        weights (np.ndarray[float]): particle weights.
+        n (int): number of particles.
+    """
+    indices = np.random.choice(np.arange(n), size=n, p=weights)
+
+    resampled_particles = particles[:, indices]
+    resampled_weights = np.ones(n) / n
+
+    return resampled_particles, resampled_weights
+        \end{lstlisting}
+    \end{scriptsize}
+    \begin{remark}
+        Cependant, cette méthode peut entraîner une "impoverishment" des particules, où certaines sont sélectionnées plusieurs fois, réduisant ainsi la diversité de l'ensemble de particules.
+    \end{remark}
+\end{definition}
+
+\subsubsection{\texttt{P()}}
+\begin{definition}
+    La matrice de covariance, dans le cadre d'un filtre Particulaire (PF), est noté $\bf{P}$ et est estimée à partir de la distribution des particles et de leurs poids.\\
+
+    \noindent L'estimation de la matrice de covariance est donnée par l'équation suivante:
+    \begin{equation}
+        \hat{\bf{P}}_{k} = \sum^{N}_{i=1} w^{i}_{k} \left(\bf{x}^{i}_{k} - \hat{\bf{x}}_{k}\right) \left(\bf{x}^{i}_{k} - \hat{\bf{x}}_{k}\right)^{\intercal}
+    \end{equation}
+    La fonction \texttt{P()} implémente l'estimation de la mtrice de covariance:
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[language=Python, caption=\texttt{P()}]
+def P(x_estimation: np.ndarray[float], particles: np.ndarray[float]) -> np.ndarray[float]:
+    """
+    Returns particle filter covariance matrix P estimation as np.ndarray[float].
+
+    Args:
+        x_estimation (np.array) : The mean/estimated state of the particles (3x1).
+        particles (np.array): An array of shape (3, N_particles) containing the state of all particles (x, y, theta).
+    """
+    n = particles.shape[1]
+
+    P_estimation = np.zeros((3, 3))
+    for i in range(n):
+        deviation = (particles[:, i:i+1] - x_estimation).reshape(-1, 1)
+        deviation[2] = Utils.convert_angle(deviation[2])
+
+        P_estimation += deviation @ deviation.T
+    P_estimation /= n
+
+    return P_estimation
+        \end{lstlisting}
+    \end{scriptsize}
+\end{definition}
 \end{document}
