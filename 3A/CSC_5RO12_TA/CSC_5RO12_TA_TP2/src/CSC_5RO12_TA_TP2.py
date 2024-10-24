@@ -19,7 +19,7 @@ except:
 
 @dataclass
 class EKF:
-    """"Extended Kalman Filter equations."""
+    """"Extended Kalman Filter methods."""
 
     def motion_model_prediction(
             x: np.ndarray[float], u: np.ndarray[float], dt: float
@@ -32,15 +32,15 @@ class EKF:
             u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
             dt (float) : simulation time step in seconds.
         """
-        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
-        vx_k, vy_k, w_k = u[0, 0], u[1, 0], u[2, 0]
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+        vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
 
         x_prediction = np.array([
-            [x_k + (vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
-            [y_k + (vx_k * np.sin(theta_k) + vy_k * np.cos(theta_k)) * dt],
-            [theta_k + w_k * dt],
+            [x + (vx * np.cos(theta) - vy * np.sin(theta)) * dt],
+            [y + (vx * np.sin(theta) + vy * np.cos(theta)) * dt],
+            [theta + omega * dt],
         ])
-        x_prediction[2, 0] = Utils.convert_angle(x_prediction[2, 0])
+        x_prediction[2, 0] = Utils.wrap_angle(x_prediction[2, 0])
 
         return x_prediction
 
@@ -56,14 +56,14 @@ class EKF:
             i (int) : observed landmark index.
             landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
         """
-        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
         x_i, y_i = landmarks[0, i], landmarks[1, i]
 
         h = np.array([
-            [np.sqrt((x_i - x_k)**2 + (y_i - y_k)**2)],
-            [np.arctan2((y_i - y_k), (x_i - x_k)) - theta_k],
+            [np.sqrt((x_i - x)**2 + (y_i - y)**2)],
+            [np.arctan2((y_i - y), (x_i - x)) - theta],
         ])
-        h[1, 0] = Utils.convert_angle(h[1, 0])
+        h[1, 0] = Utils.wrap_angle(h[1, 0])
 
         return h
 
@@ -79,12 +79,12 @@ class EKF:
             u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
             dt (float) : simulation time step in seconds.
         """
-        _, _, theta_k = x[0, 0], x[1, 0], x[2, 0]
-        vx_k, vy_k, _ = u[0, 0], u[1, 0], u[2, 0]
+        _, _, theta = x[0, 0], x[1, 0], x[2, 0]
+        vx, vy, _ = u[0, 0], u[1, 0], u[2, 0]
 
         F = np.array([
-            [1, 0, (-vx_k * np.sin(theta_k) - vy_k * np.cos(theta_k)) * dt],
-            [0, 1, (+vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
+            [1, 0, (-vx * np.sin(theta) - vy * np.cos(theta)) * dt],
+            [0, 1, (+vx * np.cos(theta) - vy * np.sin(theta)) * dt],
             [0, 0, 1]
         ])
 
@@ -102,11 +102,11 @@ class EKF:
             u (np.ndarray[float]) : control input, or odometry measurement, at instant k.
             dt (float) : simulation time step in seconds.
         """
-        _, _, theta_k = x[0, 0], x[1, 0], x[2, 0]
+        _, _, theta = x[0, 0], x[1, 0], x[2, 0]
 
         G = np.array([
-            [np.cos(theta_k) * dt, -np.sin(theta_k) * dt, 0],
-            [np.sin(theta_k) * dt, +np.cos(theta_k) * dt, 0],
+            [np.cos(theta) * dt, -np.sin(theta) * dt, 0],
+            [np.sin(theta) * dt, +np.cos(theta) * dt, 0],
             [0, 0, dt]
         ])
 
@@ -122,11 +122,11 @@ class EKF:
             i (int) : observed landmark index.
             landmarks (np.ndarray[float]) : coordinates x and y of all landmarks.
         """
-        x_k, y_k = x[0, 0], x[1, 0]
-        x_p, y_p = landmarks[0, i], landmarks[1, i]
+        x, y = x[0, 0], x[1, 0]
+        x_i, y_i = landmarks[0, i], landmarks[1, i]
 
-        delta_x = x_p - x_k
-        delta_y = y_p - y_k
+        delta_x = x_i - x
+        delta_y = y_i - y
         distance = np.sqrt(delta_x**2 + delta_y**2)
 
         H = np.array([
@@ -197,17 +197,17 @@ class Utils:
         assert x.ndim == 2
         assert u.ndim == 2
 
-        x_k, y_k, theta_k = x[0, 0], x[1, 0], x[2, 0]
-        vx_k, vy_k, w_k = u[0, 0], u[1, 0], u[2, 0]
+        x, y, theta = x[0, 0], x[1, 0], x[2, 0]
+        vx, vy, omega = u[0, 0], u[1, 0], u[2, 0]
 
-        x_calculated = np.array([
-            [x_k + (vx_k * np.cos(theta_k) - vy_k * np.sin(theta_k)) * dt],
-            [y_k + (vx_k * np.sin(theta_k) + vy_k * np.cos(theta_k)) * dt],
-            [theta_k + dt * w_k],
+        x_compute = np.array([
+            [x + (vx * np.cos(theta) - vy * np.sin(theta)) * dt],
+            [y + (vx * np.sin(theta) + vy * np.cos(theta)) * dt],
+            [theta + omega * dt],
         ])
-        x_calculated[2, 0] = Utils.convert_angle(x_calculated[2, 0])
+        x_compute[2, 0] = Utils.wrap_angle(x_compute[2, 0])
 
-        return x_calculated
+        return x_compute
 
 
     def compute_rms_error(arr: np.ndarray[float]) -> float:
@@ -220,9 +220,9 @@ class Utils:
         return np.sqrt(np.mean(arr**2))
 
 
-    def convert_angle(angle: float) -> float:
+    def wrap_angle(angle: float) -> float:
         """
-        Return converted randian angle to the range [-pi, pi].
+        Return wraped randian angle to the range [-pi, pi].
 
         Args:
             angle (float): angle in radians.
@@ -264,8 +264,8 @@ class Simulation:
         self.history_x_odometry = x_odometry
         self.history_x_true = x_true
 
-        self.history_x_error = np.abs(x_estimation - x_true)  # pose error
-        self.history_x_variance = np.sqrt(np.diag(P_estimation).reshape(3, 1))  # state std dev
+        self.history_x_error = np.abs(x_estimation - x_true)
+        self.history_x_covariance = np.sqrt(np.diag(P_estimation).reshape(3, 1))
         self.history_time = [0]
 
 
@@ -277,6 +277,7 @@ class Simulation:
 
         Args:
             k (int) : interation step.
+            black_out (bool) : has data black-out? Default value is False.
         """
         np.random.seed(seed*3 + k)  # Ensuring random repexility for k
 
@@ -294,8 +295,8 @@ class Simulation:
                 z_noise = np.array([z_noise]).T
 
                 z = EKF.observation_model_prediction(self.x_true, landmark_index, self.landmarks)
-                z = z + z_noise
-                z[1, 0] = Utils.convert_angle(z[1, 0])
+                z += z_noise
+                z[1, 0] = Utils.wrap_angle(z[1, 0])
 
                 return z, landmark_index
 
@@ -309,7 +310,7 @@ class Simulation:
         Args:
             k (int) : interation step.
         """
-        np.random.seed(seed*2 + k) # Ensuring random repexility
+        np.random.seed(seed*2 + k) # Ensuring random repexility for k
 
         u_noise = np.sqrt(self.Q_true) @ np.random.randn(3)
         u_noise = np.array([u_noise]).T
@@ -322,16 +323,37 @@ class Simulation:
         return x, u
 
 
+    def get_robot_control(self, k: int) -> np.ndarray[float]:
+        """
+        Return robot true control command at instant k as np.ndarray.
+
+        Note: by default a sinousal trajectory is generated.
+
+        Args:
+            k (int) : interation step.
+        """
+        u = np.array([[0, 0.025,  0.1*np.pi / 180 * sin(3*np.pi * k / self.n_steps)]]).T
+
+        return u
+
+
     def plot(
             self,
             file_name: str,
-            x_estimation: np.ndarray,
-            P_estimation: np.ndarray,
+            x_estimation: np.ndarray[float],
+            P_estimation: np.ndarray[float],
+            save: bool = False,
             show: bool = True,
-            save: bool = False
         ) -> None:
         """"
         Plot simulation results.
+
+        Args:
+            file_name (str) : output image name.
+            x_estimation (np.ndarray[float]) : system state estimation at instant k.
+            P_estimation (np.ndarray[float]) : estimation covariance at instant k.
+            save (bool) : save result? Default value is True.
+            show (bool) : show result? Default value is True.
         """
         _, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(16, 8))
         ax3 = plt.subplot(3, 2, 2)
@@ -369,7 +391,9 @@ class Simulation:
         Utils.plot_covariance_ellipse(x_estimation, P_estimation,  "--r", ax1)
 
         ax1.grid(True)
-        ax1.axis([-100, 100, -100, 100])
+        axis_max = 100
+        ticks = [i for i in range(-axis_max, +axis_max+1, 10)]
+        ax1.axis([-axis_max, +axis_max, -axis_max, +axis_max])
         ax1.set_title('Cartesian Coordinates')
         ax1.set_ylabel('y [m]')
         ax1.set_xlabel('x [m]')
@@ -379,15 +403,15 @@ class Simulation:
         ax2.set_xticks([])
 
         # plot errors curves
-        x_ticks = [i for i in range(0, 6001, 500)]
+        x_ticks = [i for i in range(0, self.simulation_duration+1, 500)]
 
         rms_x_err = Utils.compute_rms_error(self.history_x_error[0, :])
         rms_y_err = Utils.compute_rms_error(self.history_x_error[1, :])
         rms_theta_err = Utils.compute_rms_error(self.history_x_error[2, :])
 
-        rms_x_cov = Utils.compute_rms_error(3*self.history_x_variance[0, :])
-        rms_y_cov = Utils.compute_rms_error(3*self.history_x_variance[1, :])
-        rms_theta_cov = Utils.compute_rms_error(3*self.history_x_variance[2, :])
+        rms_x_cov = Utils.compute_rms_error(3*self.history_x_covariance[0, :])
+        rms_y_cov = Utils.compute_rms_error(3*self.history_x_covariance[1, :])
+        rms_theta_cov = Utils.compute_rms_error(3*self.history_x_covariance[2, :])
 
         label_x_err = f'{rms_x_err:2.4f} error'
         label_y_err = f'{rms_y_err:2.4f} error'
@@ -398,35 +422,35 @@ class Simulation:
         label_theta_cov = f'{rms_theta_cov:2.4f} 3$\sigma$ covariance'
 
         ax3.plot(times, self.history_x_error[0, :], 'b', label=label_x_err)
-        ax3.plot(times, +3.0 * self.history_x_variance[0, :], 'r', label=label_x_cov)
-        ax3.plot(times, -3.0 * self.history_x_variance[0, :], 'r')
+        ax3.plot(times, +3.0 * self.history_x_covariance[0, :], 'r', label=label_x_cov)
+        ax3.plot(times, -3.0 * self.history_x_covariance[0, :], 'r')
         ax3.set_title('Extended Kalman Filter')
         ax3.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
         ax3.set_ylabel('x [m]')
-        ax3.set_xlim(0, 6000)
+        ax3.set_xlim(0, self.simulation_duration)
         ax3.set_xticks(x_ticks)
         ax3.set_xticklabels(['' for _ in x_ticks])
         ax3.legend(loc='upper right')
         ax3.grid(True)
 
         ax4.plot(times, self.history_x_error[1, :], 'b', label=label_y_err)
-        ax4.plot(times, +3.0 * self.history_x_variance[1, :], 'r', label=label_y_cov)
-        ax4.plot(times, -3.0 * self.history_x_variance[1, :], 'r')
+        ax4.plot(times, +3.0 * self.history_x_covariance[1, :], 'r', label=label_y_cov)
+        ax4.plot(times, -3.0 * self.history_x_covariance[1, :], 'r')
         ax4.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
         ax4.set_ylabel('y [m]')
-        ax4.set_xlim(0, 6000)
+        ax4.set_xlim(0, self.simulation_duration)
         ax4.set_xticks(x_ticks)
         ax4.set_xticklabels(['' for _ in x_ticks])
         ax4.legend(loc='upper right')
         ax4.grid(True)
 
         ax5.plot(times, self.history_x_error[2, :], 'b', label=label_theta_err)
-        ax5.plot(times, +3.0 * self.history_x_variance[2, :], 'r', label=label_theta_cov)
-        ax5.plot(times, -3.0 * self.history_x_variance[2, :], 'r')
+        ax5.plot(times, +3.0 * self.history_x_covariance[2, :], 'r', label=label_theta_cov)
+        ax5.plot(times, -3.0 * self.history_x_covariance[2, :], 'r')
         ax5.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
         ax5.set_ylabel(r"$\theta$ [rad]")
         ax5.set_xlabel('time [s]')
-        ax5.set_xlim(0, 6000)
+        ax5.set_xlim(0, self.simulation_duration)
         ax5.set_xticks(x_ticks)
         ax5.legend(loc='upper right')
         ax5.grid(True)
@@ -439,20 +463,6 @@ class Simulation:
         if show: plt.show()
 
 
-    def get_robot_control(self, k: int) -> np.ndarray[float]:
-        """
-        Return robot true control command at instant k as np.ndarray.
-
-        Note: by default a sinousal trajectory is generated.
-
-        Args:
-            k (int) : interation step.
-        """
-        u = np.array([[0, 0.025,  0.1*np.pi / 180 * sin(3*np.pi * k / self.n_steps)]]).T
-
-        return u
-
-
     def simulate_world(self, k: int) -> None:
         """
         Simulate system at instant k.
@@ -463,7 +473,7 @@ class Simulation:
         self.x_true = Utils.compute_motion(
             self.x_true, self.get_robot_control(k), self.dt_prediction
         )
-        self.x_true[2, 0] = Utils.convert_angle(self.x_true[2, 0])
+        self.x_true[2, 0] = Utils.wrap_angle(self.x_true[2, 0])
 
 
     def update_history(
@@ -473,6 +483,7 @@ class Simulation:
         Update simulation history.
 
         Args:
+            k (int) : simulation instant.
             x_estimation (np.ndarray[float]) : system state estimation at instant k.
             P_estimation (np.ndarray[float]) : estimation covariance at instant k.
         """
@@ -481,28 +492,28 @@ class Simulation:
         self.history_x_estimation = np.hstack((self.history_x_estimation, x_estimation))
 
         error = x_estimation - self.x_true
-        error[2, 0] = Utils.convert_angle(error[2, 0])
+        error[2, 0] = Utils.wrap_angle(error[2, 0])
 
         self.history_x_error = np.hstack((self.history_x_error, error))
-        self.history_x_variance = np.hstack((
-            self.history_x_variance, np.sqrt(np.diag(P_estimation).reshape(3, 1))
+        self.history_x_covariance = np.hstack((
+            self.history_x_covariance, np.sqrt(np.diag(P_estimation).reshape(3, 1))
         ))
         self.history_time.append(k*self.dt_prediction)
 
 
 
 def execution(
-    dt_measurement: int = 1,
-    dt_prediction: int = 1,
-    n_landmarks: int = 30,
-    P_constant: int = 1,
-    Q_constant: int = 1,
-    R_constant: int = 1,
-    black_out: bool = False,
-    range_only: bool = False,
-    angle_only: bool = False,
-    show_result: bool = True,
-    save_result: bool = True
+        dt_measurement: int = 1,
+        dt_prediction: int = 1,
+        n_landmarks: int = 30,
+        P_constant: int = 1,
+        Q_constant: int = 1,
+        R_constant: int = 1,
+        black_out: bool = False,
+        range_only: bool = False,
+        angle_only: bool = False,
+        save_result: bool = True,
+        show_result: bool = True,
     ) -> None:
     """
     Execute an Extended Kalman Filter simulation.
@@ -517,8 +528,8 @@ def execution(
         black_out (bool) : no measures between 2500 s and 3000s? Default values is False.
         range_only (bool) : only range measures available? Default values is False.
         angle_only (bool) : only angle measures available? Default values is False.
-        show_result (bool) : show result? Default value is True.
         save_result (bool) : save result? Default value is True.
+        show_result (bool) : show result? Default value is True.
     """
     # Define Kalman covariance errors robot movements
     P_true = np.diag([1, 1, (1*pi/180)**2])
@@ -575,7 +586,7 @@ def execution(
             h = EKF.observation_model_prediction(x_prediction, landmark_index, simulation.landmarks)
 
             innovation = z - h
-            innovation[1, 0] = Utils.convert_angle(innovation[1, 0])
+            innovation[1, 0] = Utils.wrap_angle(innovation[1, 0])
             if range_only: innovation = innovation[0:1, :]  # exclude angle measurement
             if angle_only: innovation = innovation[1:, :]   # exclude range measurement
 
@@ -589,7 +600,7 @@ def execution(
 
             # Kalman Update
             x_estimation = x_prediction + K @ innovation
-            x_estimation[2, 0] = Utils.convert_angle(x_estimation[2, 0])
+            x_estimation[2, 0] = Utils.wrap_angle(x_estimation[2, 0])
 
             P_estimation = (np.eye(K.shape[0]) - K @ H) @ P_prediction
             P_estimation = 0.5 * (P_estimation + P_estimation.T)  # symetry matrix
@@ -611,12 +622,12 @@ def execution(
 
 
 def main():
-    # arr = [1]
-    arr = [5, 10, 100, 150]
+    arr = [1]
+    # arr = [5, 10, 100, 150]
     # arr = [10, 25, 100, 250]
 
     for var in arr:
-        execution(n_landmarks=var, angle_only=True, show_result=False, save_result=True)
+        execution(show_result=True, save_result=False)
 
 
 
