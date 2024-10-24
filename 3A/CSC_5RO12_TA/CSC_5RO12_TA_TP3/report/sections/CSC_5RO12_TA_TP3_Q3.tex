@@ -3,4 +3,53 @@
 \begin{document}
 \section{Question 3}
 % Faire varier le bruit de dynamique du filtre (matrice QEst) qu’observe-t-on ? Explique
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le bruit dynamique du filtre:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_0-01_2_False.png}
+        \caption{\texttt{Q\_constant = 0.01}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_0-1_2_False.png}
+        \caption{\texttt{Q\_constant = 0.1}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_10_2_False.png}
+        \caption{\texttt{Q\_constant = 10}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_25_2_False.png}
+        \caption{\texttt{Q\_constant = 25}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_100_2_False.png}
+        \caption{\texttt{Q\_constant = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_250_2_False.png}
+        \caption{\texttt{Q\_constant = 250}}
+        \label{}
+    \end{subfigure}
+    \caption{Variance du bruit dynamique \texttt{Q\_constant}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque la constante \texttt{Q\_constant} est petite ($\approx \bf{Q}{k} < 1$) ou trop grande ($\approx \bf{Q}{k} > 5$), les résultats du filtre particulaire se dégradent. Dans le premier cas, le filtre souffre d'overfitting, car l'aire de la covariance ne prend pas en compte l'erreur. Dans le deuxième cas, un bruit excessif conduit à une estimation instable, même si celle-ci reste possible.\\
+
+\noindent Cela montre à quel point l'efficacité du filtre particulaire, et la qualité de sa prédiction de trajectoire, dépendent du bruit.
+
+\begin{remark}
+    Par ailleurs, il est notable que l'erreur et la covariance sont plus "instables" dans le filtre particulaire, en raison d'une plus grande variance entre les mesures consécutives. Ce comportement est attendu, car les particules ont des distributions indépendantes.
+\end{remark}
 \end{document}
