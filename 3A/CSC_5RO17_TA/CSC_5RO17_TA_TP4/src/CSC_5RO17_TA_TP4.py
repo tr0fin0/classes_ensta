@@ -1,95 +1,85 @@
-# TP MAREVA Nuages de Points et Mod�lisation 3D - Python - FG 24/09/2020
-# coding=utf8
+"""CSC_5RO17_TA_TP4 ICP Cloud Points"""
 
-# Import Numpy
-import numpy as np
-
-# Import library to plot in python
 from matplotlib import pyplot as plt
 from matplotlib import collections as mc
 from mpl_toolkits.mplot3d import Axes3D
-
-# Import functions from scikit-learn : KDTree
 from sklearn.neighbors import KDTree
-
-# Import functions to read and write ply files
 from ply import write_ply, read_ply
-# utils.ply est le chemin relatif utils/ply.py
+
+import numpy as np
 
 
-def read_data_ply(path):
-# Lecture de nuage de points sous format ply
-    '''
-    Lecture de nuage de points sous format ply
-    Inputs :
-        path = chemin d'acc�s au fichier
-    Output :
-        data = matrice (3 x n)
-    '''
+
+def read_cloud(path: str) -> np.ndarray[float]:
+    """
+    Return cloud points from file path.
+
+    Args:
+        path (str) : file path.
+    """
     data_ply = read_ply(path)
-    data = np.vstack((data_ply['x'], data_ply['y'], data_ply['z']))
-    return(data)
 
-def write_data_ply(data,path):
-    '''
-    Ecriture de nuage de points sous format ply
-    Inputs :
-        data = matrice (3 x n)
-        path = chemin d'acc�s au fichier
-    '''
-    write_ply(path, data.T, ['x', 'y', 'z'])
+    return np.vstack((data_ply['x'], data_ply['y'], data_ply['z']))
 
-def show_cloud_points(data):
-    '''
-    Visualisation de nuages de points avec MatplotLib'
-    Input :
-        data = matrice (3 x n)
-    '''
+def write_cloud(points: np.ndarray[float], path: str) -> None:
+    """
+    Save cloud of points as ply file.
+
+    Args:
+        points (np.ndarray[float]) : cloud of points.
+        path (str) : file path.
+    """
+    write_ply(path, points.T, ['x', 'y', 'z'])
+
+def show_cloud(points: np.ndarray[float]) -> None:
+    """
+    Show cloud of points as matplotlib plot diagram.
+
+    Args:
+        points (np.ndarray[float]) : cloud of points.
+    """
     #plt.cla()
     # Aide en ligne : help(plt)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot(data[0], data[1], data[2], '.')
+    ax.plot(points[0], points[1], points[2], '.')
     #ax.plot(data_aligned[0], data_aligned[1], data_aligned[2], '.')
     #plt.axis('equal')
+    plt.tight_layout()
     plt.show()
 
 
 def decimate(points: np.ndarray[float], k: int, method: str = 'for') -> np.ndarray[float]:
-    '''
-    D�cimation
-    # ----------
-    Inputs :
-        data = matrice (3 x n)
-        k_ech : facteur de d�cimation
-    Output :
-        decimated = matrice (3 x (n/k_ech))
-    '''
+    """
+    Return resampled by k factor cloud of points as np.ndarray with different methods.
+
+    Args:
+        points (np.ndarray[float]) : cloud of points.
+        k (int) sample factor.
+        method (str) : sample method.
+    """
     decimated = []
 
-    if method == 'for':
-        for i, point in enumerate(points):
-            if i % k == 0:
-                decimated.append(point)
-        # # 1�re m�thode : boucle for
-        # n = data.shape[1]
-        # n_ech=int(n/k_ech)
+    match method.upper():
+        case 'FOR':
+            for i, point in enumerate(points):
+                if i % k == 0:
+                    decimated.append(point)
 
-        # decimated = np.vstack(data[:, 0])
-            # compl�ter par une boucle for i in range
-            # Xi = vecteur du rang k_ech*i (utiliser np.vstack)
-            # concat�ner Xi � decimated en utilisant np.hstack
+            return np.array(decimated)
 
-    #else:
-        # 2e m�thode : fonction de Numpy array
-        #decimated = sous-tableau des colonnes espac�es de k_ech
+        case 'NP':
+            pass
 
-    return np.array(decimated)
+            return np.array(decimated)
+
+        case _:
+            return None
 
 
-
-
-def best_rigid_transform(data, ref):
+def best_rigid_transform(
+        points: np.ndarray[float], ref: np.ndarray[float]
+    ) -> list[np.ndarray[float], np.ndarray[float]]:
     '''
     Computes the least-squares best-fit transform that maps corresponding points data to ref.
     Inputs :
@@ -196,14 +186,14 @@ if __name__ == '__main__':
     NDC_r_path = 'data/Notre_Dame_Des_Champs_returned.ply'
 
     # Lecture des fichiers
-    bunny_o=read_data_ply(bunny_o_path)                    
-    bunny_p=read_data_ply(bunny_p_path)
-    NDC_o=read_data_ply(NDC_o_path)
+    bunny_o=read_cloud(bunny_o_path)                    
+    bunny_p=read_cloud(bunny_p_path)
+    NDC_o=read_cloud(NDC_o_path)
 
     # TODO
     # Visualisation du fichier d'origine
     if True:
-        show_cloud_points(bunny_o)
+        show_cloud(bunny_o)
 
     # Transformations : d�cimation, rotation, translation, �chelle
     # ------------------------------------------------------------
@@ -213,32 +203,32 @@ if __name__ == '__main__':
         decimated = decimate(bunny_o,k_ech)
 
         # Visualisation sous Python et par �criture de fichier
-        show_cloud_points(decimated)
+        show_cloud(decimated)
 
         # Visualisation sous CloudCompare apr�s �criture de fichier
-        write_data_ply(decimated,bunny_r_path)
+        write_cloud(decimated,bunny_r_path)
         # Puis ouvrir le fichier sous CloudCompare pour le visualiser
 
     if False:
-        show_cloud_points(NDC_o)
+        show_cloud(NDC_o)
         decimated = decimate(NDC_o,1000)
-        show_cloud_points(decimated)
-        write_data_ply(decimated,NDC_r_path)
+        show_cloud(decimated)
+        write_cloud(decimated,NDC_r_path)
 
     if False:        
         # Translation
         # translation = d�finir vecteur [0, -0.1, 0.1] avec np.array et reshape
         points=bunny_o + translation
-        show_cloud_points(points)
+        show_cloud(points)
         
         # Find the centroid of the cloud and center it
         #centroid = barycentre - utiliser np.mean(points, axis=1) et reshape
         points = points - centroid
-        show_cloud_points(points)
+        show_cloud(points)
         
         # Echelle
         # points = points divis�s par 2
-        show_cloud_points(points)
+        show_cloud(points)
         
         # Define the rotation matrix (rotation of angle around z-axis)
         # angle de pi/3,
@@ -249,14 +239,14 @@ if __name__ == '__main__':
         # centrer le nuage de points        
         # appliquer la rotation - utiliser la fonction .dot
         # appliquer la translation oppos�e
-        show_cloud_points(points)
+        show_cloud(points)
 
 
     # Meilleure transformation rigide (R,Tr) entre nuages de points
     # -------------------------------------------------------------
     if False:
 
-        show_cloud_points(bunny_p)
+        show_cloud(bunny_p)
         
         # Find the best transformation
         R, Tr = best_rigid_transform(bunny_p, bunny_o)
@@ -267,8 +257,8 @@ if __name__ == '__main__':
         bunny_r_opt = opt
         
         # Show and save cloud
-        show_cloud_points(bunny_r_opt)
-        write_data_ply(bunny_r_opt,bunny_r_path)
+        show_cloud(bunny_r_opt)
+        write_cloud(bunny_r_opt,bunny_r_path)
         
         
         # Get average distances
@@ -289,8 +279,3 @@ if __name__ == '__main__':
         bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
         plt.plot(RMS_list)
         plt.show()
-
-
-
-
-
