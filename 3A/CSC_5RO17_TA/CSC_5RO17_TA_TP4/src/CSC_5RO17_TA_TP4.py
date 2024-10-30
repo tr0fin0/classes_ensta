@@ -7,6 +7,7 @@ from sklearn.neighbors import KDTree
 from ply import write_ply, read_ply
 
 import numpy as np
+import os
 
 
 
@@ -21,6 +22,7 @@ def read_cloud(path: str) -> np.ndarray[float]:
 
     return np.vstack((data_ply['x'], data_ply['y'], data_ply['z']))
 
+
 def write_cloud(points: np.ndarray[float], path: str) -> None:
     """
     Save cloud of points as ply file.
@@ -31,89 +33,46 @@ def write_cloud(points: np.ndarray[float], path: str) -> None:
     """
     write_ply(path, points.T, ['x', 'y', 'z'])
 
-def show_cloud(points: np.ndarray[float]) -> None:
+
+def show_cloud(
+        points: np.ndarray[float], title: str = 'Cloud of Points', save: bool = False
+    ) -> None:
     """
     Show cloud of points as matplotlib plot diagram.
 
     Args:
         points (np.ndarray[float]) : cloud of points.
+        title (str) : title of plot. Default is 'Cloud of Points'.
+        save (bool) : save plot? Default value is False.
     """
-    #plt.cla()
-    # Aide en ligne : help(plt)
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot(points[0], points[1], points[2], '.')
-    #ax.plot(data_aligned[0], data_aligned[1], data_aligned[2], '.')
-    #plt.axis('equal')
+
+    ax.plot(points[0], points[1], points[2], '.', label=f'{points.shape[1]} points')
+
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_zlabel('z')
+
+    # ax.set_xlim(-0.25, +0.25)
+    # ax.set_ylim(-0.25, +0.25)
+    # ax.set_zlim(-0.25, +0.25)
+
+    ax.set_title(f'{title}')
+    ax.legend()
+
     plt.tight_layout()
+
+    if save:
+        file_path = os.path.abspath(os.path.join(os.getcwd(), f'../outputs/{title}.png'))
+        plt.savefig(file_path, dpi=300)
+
     plt.show()
 
 
-def decimate(points: np.ndarray[float], k: int, method: str = 'for') -> np.ndarray[float]:
-    """
-    Return resampled by k factor cloud of points as np.ndarray with different methods.
-
-    Args:
-        points (np.ndarray[float]) : cloud of points.
-        k (int) sample factor.
-        method (str) : sample method.
-    """
-    decimated = []
-
-    match method.upper():
-        case 'FOR':
-            for i, point in enumerate(points):
-                if i % k == 0:
-                    decimated.append(point)
-
-            return np.array(decimated)
-
-        case 'NP':
-            pass
-
-            return np.array(decimated)
-
-        case _:
-            return None
 
 
-def best_rigid_transform(
-        points: np.ndarray[float], ref: np.ndarray[float]
-    ) -> list[np.ndarray[float], np.ndarray[float]]:
-    '''
-    Computes the least-squares best-fit transform that maps corresponding points data to ref.
-    Inputs :
-        data = (d x N) matrix where "N" is the number of point and "d" the dimension
-         ref = (d x N) matrix where "N" is the number of point and "d" the dimension
-    Returns :
-           R = (d x d) rotation matrix
-           T = (d x 1) translation vector
-           Such that R * data + T is aligned on ref
-    '''
-
-    # TODO
-    # Barycenters
-    # d�finir les baycentres ref_center et data_center
-
-    # Centered clouds
-    # calculer les nuages de points centr�s ref_c et data_c
-
-    # H matrix
-    # calculer la matrice H
-
-    # SVD on H
-    # calculer U, S, et Vt en utilisant np.linalg.svd
-
-    # Checking R determinant
-    # si le d�terminant de U est -1, prendre son oppos�
-
-    # Getting R and T
-    # calculer R et T
-
-    return R, T
-
-
-def icp_point_to_point(data, ref, max_iter, RMS_threshold):
+def compute_ICP(data, ref, max_iter, RMS_threshold):
     '''
     Iteratice closest point algorithm with a point to point strategy.
     Inputs :
@@ -152,130 +111,261 @@ def icp_point_to_point(data, ref, max_iter, RMS_threshold):
             break
 
         # Find best transform
-        R, T = best_rigid_transform(data, ref[:, indices.ravel()])
+        rotation, translation = compute_rigid_transformation(data, ref[:, indices.ravel()])
 
         # Update lists
-        R_list.append(R)
-        T_list.append(T)
+        R_list.append(rotation)
+        T_list.append(translation)
         neighbors_list.append(indices.ravel())
         RMS_list.append(RMS)
 
         # Aligned data
-        data_aligned = R.dot(data) + T
-
+        data_aligned = rotation.dot(data) + translation
 
     return data_aligned, R_list, T_list, neighbors_list, RMS_list
 
 
+def compute_rigid_transformation(
+        points: np.ndarray[float], ref: np.ndarray[float]
+    ) -> list[np.ndarray[float], np.ndarray[float]]:
+    '''
+    Computes the least-squares best-fit transform that maps corresponding points data to ref.
+    Inputs :
+        data = (d x N) matrix where "N" is the number of point and "d" the dimension
+         ref = (d x N) matrix where "N" is the number of point and "d" the dimension
+    Returns :
+           R = (d x d) rotation matrix
+           T = (d x 1) translation vector
+           Such that R * data + T is aligned on ref
+    '''
+    # centroides
+    centroid_ref = np.mean(ref, axis=1).reshape((3, 1))
+    centroid_points = np.mean(points, axis=1).reshape((3, 1))
+
+    # centering
+    ref = ref - centroid_ref
+    points = points - centroid_points
+
+    H = points.dot(ref.T)
+
+    U, S, V = np.linalg.svd(H)
+
+    R = V @ U.T
+    T = ref - R @ points
+
+    return R, T
+
+
+def decimate(points: np.ndarray[float], k: int = 10, method: str = 'for') -> np.ndarray[float]:
+    """
+    Return resampled by k factor cloud of points as np.ndarray with different methods.
+
+    Args:
+        points (np.ndarray[float]) : cloud of points.
+        k (int) sample factor. Default is 10.
+        method (str) : sample method. Default is 'for'.
+    """
+    decimated_for = []
+
+    match method.upper():
+        case 'FOR':
+            for i in range(0, points.shape[1], k):
+                decimated_for.append(points[:, i])
+
+        case 'NP':
+            return points[:, ::k]
+
+        case _:
+            return None
+
+    return np.column_stack(decimated_for)
+
+
+def get_paths(name: str = 'bunny') -> list[str]:
+    """
+    Return original_cloud, pertubed_cloud and returned cloud of points absolute path as a list of str.
+
+    Args:
+        name (str) : cloud of points name. Default value is 'bunny'.
+    """
+    match name.upper():
+        case 'BUNNY':
+            original = os.path.abspath(os.path.join(os.getcwd(), '../data/bunny_original.ply'))
+            pertubed = os.path.abspath(os.path.join(os.getcwd(), '../data/bunny_perturbed.ply'))
+            returned = os.path.abspath(os.path.join(os.getcwd(), '../data/bunny_returned.ply'))
+
+
+        case 'NOTRE_DAME_DES_CHAMPS_1':
+            original = os.path.abspath(os.path.join(os.getcwd(), '../data/Notre_Dame_Des_Champs_1.ply'))
+            pertubed = os.path.abspath(os.path.join(os.getcwd(), '../data/Notre_Dame_Des_Champs_1.ply'))
+            returned = os.path.abspath(os.path.join(os.getcwd(), '../data/Notre_Dame_Des_Champs_1.ply'))
+
+        case _:
+            return None, None, None
+
+    return original, pertubed, returned
+
+
+def RMS(points: np.ndarray[float], ref: np.ndarray[float]) -> float:
+    return np.sqrt(np.mean(np.sum(np.power(points - ref, 2), axis=0)))
+
+
+def rotation_matrix(theta: float) -> np.ndarray:
+    """"""
+    return np.array([
+        [+np.cos(theta), -np.sin(theta), 0],
+        [+np.sin(theta), +np.cos(theta), 0],
+        [0, 0, 1],
+    ])
+
+
+def Q1(cloud_name: str, save: bool) -> None:
+    """
+    Run Q1 algorithm.
+
+    Args:
+        cloud_name (str) : cloud of points analyzed.
+        save (bool) : save plot? Default value is False.
+    """
+    original_path, _, _ = get_paths(cloud_name)
+    original_cloud = read_cloud(original_path)
+
+    show_cloud(original_cloud, title=f'{cloud_name}_original', save=save)
+
+
+def Q2(cloud_name: str, save: bool) -> None:
+    """
+    Run Q2 algorithm.
+
+    Args:
+        cloud_name (str) : cloud of points analyzed.
+        save (bool) : save plot? Default value is False.
+    """
+    original_path, _, _ = get_paths(cloud_name)
+    original_cloud = read_cloud(original_path)
+
+    for method in ['for', 'np']:
+        for k in [10, 1000]:
+            decimated_cloud = decimate(original_cloud, k=k, method=method)
+
+            show_cloud(decimated_cloud, title=f'{cloud_name}_decimated_{method}_{k}', save=save)
+
+
+def Q3(cloud_name: str, save: bool) -> None:
+    """
+    Run Q3 algorithm.
+
+    Args:
+        cloud_name (str) : cloud of points analyzed.
+        save (bool) : save plot? Default value is False.
+    """
+    original_path, _, _ = get_paths(cloud_name)
+    original_cloud = read_cloud(original_path)
+
+    translation = np.array([0, -0.1, +0.1]).reshape((3, 1))
+    show_cloud(
+        original_cloud + translation,
+        title=f'{cloud_name}_translation',
+        save=save
+    )
+
+    centroid = np.mean(original_cloud, axis=1).reshape((3, 1))
+    show_cloud(
+        original_cloud - centroid,
+        title=f'{cloud_name}_centroid',
+        save=save
+    )
+
+    scale = 2
+    show_cloud(
+        original_cloud / scale,
+        title=f'{cloud_name}_rescale',
+        save=save
+    )
+
+    theta = np.pi/3
+    show_cloud(
+        rotation_matrix(theta).dot(original_cloud),
+        title=f'{cloud_name}_rotation_{theta}',
+        save=save
+    )
+
+
+def Q4(cloud_name: str, save: bool) -> None:
+    """
+    Run Q4 algorithm.
+
+    Args:
+        cloud_name (str) : cloud of points analyzed.
+        save (bool) : save plot? Default value is False.
+    """
+    original_path, pertubed_path, returned_path = get_paths(cloud_name)
+    original_cloud = read_cloud(original_path)
+
+    pertubed_cloud = read_cloud(pertubed_path)
+    show_cloud(pertubed_cloud, title=f'{cloud_name}_pertubed', save=save)
+
+    # extract transformation via rigid method
+    rotation, translation = compute_rigid_transformation(pertubed_cloud, original_cloud)
+    returned_cloud = rotation.dot(pertubed_cloud) + translation
+
+    show_cloud(returned_cloud, title=f'{cloud_name}_transformation', save=save)
+    write_cloud(returned_cloud, returned_path)
+
+    # print overall results
+    print('Average RMS between points :')
+    print(f'RMS pertubed = {RMS(pertubed_cloud, original_cloud):2.4f}')
+    print(f'RMS returned = {RMS(returned_cloud, original_cloud):2.4f}')
+
+
+def Q5(cloud_name: str, save: bool) -> None:
+    """
+    Run Q5 algorithm.
+
+    Args:
+        cloud_name (str) : cloud of points analyzed.
+        save (bool) : save plot? Default value is False.
+    """
+    original_path, _, returned_path = get_paths(cloud_name)
+    original_cloud = read_cloud(original_path)
+    returned_cloud = read_cloud(returned_path)
+
+    # extract transformation via ICP
+    transformation, rotations, translations, neighbors, RMSs = compute_ICP(
+        returned_cloud, original_cloud, 25, 1e-4
+    )
+
+    plt.plot(RMSs)
+    plt.show()
 
 
 
-#
-#           Main
-#       \**********/
-#
+def main():
+    """
+    Main function execution.
+
+    Note: execution should be done in folder this file is stored
+    """
+    cloud_name = 'BUNNY'
+    # cloud_name = 'NOTRE_DAME_DES_CHAMPS_1'
+
+    # execution variables
+    save = False
+    visualization = False
+    decimation = False
+    operations = False
+    transforms = False
+    ICP = False
+
+
+    # questions execution
+    if visualization: Q1(cloud_name, save)
+    if decimation: Q2(cloud_name, save)
+    if operations: Q3(cloud_name, save)
+    if transforms: Q4(cloud_name, save)
+    if ICP: Q5(cloud_name, save)
+
+
 
 if __name__ == '__main__':
-
-
-    # Fichiers de nuages de points
-    bunny_o_path = 'data/bunny_original.ply'
-    bunny_p_path = 'data/bunny_perturbed.ply'
-    bunny_r_path = 'data/bunny_returned.ply'
-    NDC_o_path = 'data/Notre_Dame_Des_Champs_1.ply'
-    NDC_r_path = 'data/Notre_Dame_Des_Champs_returned.ply'
-
-    # Lecture des fichiers
-    bunny_o=read_cloud(bunny_o_path)                    
-    bunny_p=read_cloud(bunny_p_path)
-    NDC_o=read_cloud(NDC_o_path)
-
-    # TODO
-    # Visualisation du fichier d'origine
-    if True:
-        show_cloud(bunny_o)
-
-    # Transformations : d�cimation, rotation, translation, �chelle
-    # ------------------------------------------------------------
-    if True:
-        # D�cimation
-        k_ech=10
-        decimated = decimate(bunny_o,k_ech)
-
-        # Visualisation sous Python et par �criture de fichier
-        show_cloud(decimated)
-
-        # Visualisation sous CloudCompare apr�s �criture de fichier
-        write_cloud(decimated,bunny_r_path)
-        # Puis ouvrir le fichier sous CloudCompare pour le visualiser
-
-    if False:
-        show_cloud(NDC_o)
-        decimated = decimate(NDC_o,1000)
-        show_cloud(decimated)
-        write_cloud(decimated,NDC_r_path)
-
-    if False:        
-        # Translation
-        # translation = d�finir vecteur [0, -0.1, 0.1] avec np.array et reshape
-        points=bunny_o + translation
-        show_cloud(points)
-        
-        # Find the centroid of the cloud and center it
-        #centroid = barycentre - utiliser np.mean(points, axis=1) et reshape
-        points = points - centroid
-        show_cloud(points)
-        
-        # Echelle
-        # points = points divis�s par 2
-        show_cloud(points)
-        
-        # Define the rotation matrix (rotation of angle around z-axis)
-        # angle de pi/3,
-        # d�finir R avec np.array et les cos et sin.
-        
-        # Apply the rotation
-        points=bunny_o
-        # centrer le nuage de points        
-        # appliquer la rotation - utiliser la fonction .dot
-        # appliquer la translation oppos�e
-        show_cloud(points)
-
-
-    # Meilleure transformation rigide (R,Tr) entre nuages de points
-    # -------------------------------------------------------------
-    if False:
-
-        show_cloud(bunny_p)
-        
-        # Find the best transformation
-        R, Tr = best_rigid_transform(bunny_p, bunny_o)
-        
-        
-        # Apply the tranformation
-        opt = R.dot(bunny_p) + Tr
-        bunny_r_opt = opt
-        
-        # Show and save cloud
-        show_cloud(bunny_r_opt)
-        write_cloud(bunny_r_opt,bunny_r_path)
-        
-        
-        # Get average distances
-        distances2_before = np.sum(np.power(bunny_p - bunny_o, 2), axis=0)
-        RMS_before = np.sqrt(np.mean(distances2_before))
-        distances2_after = np.sum(np.power(bunny_r_opt - bunny_o, 2), axis=0)
-        RMS_after = np.sqrt(np.mean(distances2_after))
-        
-        print('Average RMS between points :')
-        print('Before = {:.3f}'.format(RMS_before))
-        print(' After = {:.3f}'.format(RMS_after))
-    
-   
-    # Test ICP and visualize
-    # **********************
-    if False:
-
-        bunny_p_opt, R_list, T_list, neighbors_list, RMS_list = icp_point_to_point(bunny_p, bunny_o, 25, 1e-4)
-        plt.plot(RMS_list)
-        plt.show()
+    main()
