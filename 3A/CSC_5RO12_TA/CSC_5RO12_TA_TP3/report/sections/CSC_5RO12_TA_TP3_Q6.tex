@@ -1,0 +1,29 @@
+\documentclass[../CSC_5RO12_TA_TP3.tex]{subfiles}
+
+\begin{document}
+\section{Question 6}
+% Simuler un trou de mesures entre t = 250 s et t = 350 s en utilisant la variable notValidCondition et expliquer les résultats.
+\noindent Ci-dessous, un trou de mesures simulé entre 250 et 350 secondes:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_2_False.png}
+        \caption{\texttt{black\_out = False}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/PF_1_1_005_300_low-variance_0-1_2_2_True.png}
+        \caption{\texttt{black\_out = True}}
+        \label{}
+    \end{subfigure}
+    \caption{Simulation d'un trou \texttt{black\_out}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque il y a un trou de mesures entre 250 et 350 secondes peu de changements sur l'estimation peu être apperçu. Si, il y a une augmentation de l'erreur et de la covariance, plus notable à la covariance de $\theta$, mais ce manque de donnès n'a pas beaucoup impacté le résultat du filtre particulaire.\\
+
+\begin{remark}
+    Le filtre particulaire reste robuste face à une perte de mesures car il continue d'estimer l'état grâce au modèle prédictif et à la diversité des particules. Lorsque les mesures reviennent, le rééchantillonnage ajuste rapidement les particules, permettant une récupération efficace.
+\end{remark}
+\end{document}

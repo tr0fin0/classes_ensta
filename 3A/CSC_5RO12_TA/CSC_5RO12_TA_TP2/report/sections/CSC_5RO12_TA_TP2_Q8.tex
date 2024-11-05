@@ -1,0 +1,43 @@
+\documentclass[../CSC_5RO12_TA_TP2.tex]{subfiles}
+
+\begin{document}
+\section{Question 8}
+% Simuler le cas où seulement les mesures de distance sont disponibles (range only ): modifier le code, régler le filtre (matrices de covariances QEst et REst) et expliquer les résultats. On pourra au besoin jouer sur le nombre d'amers.
+% modifiquer l'étape de correction pour considerer qu'une partie des valeurs: soit la distance, soit l'angle. de cette façon les matrices seront changes qu'en correction et pas au reste.
+\noindent Ci-dessous, quelques interactions ont été réalisées en faisant varier le nombre d'amers sur la carte quand seulement les mesures de distance sont disponibles:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_5_1_1_1_False_True_False.png}
+        \caption{\texttt{n\_landmarks = 5}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_10_1_1_1_False_True_False.png}
+        \caption{\texttt{n\_landmarks = 10}}
+        \label{}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_100_1_1_1_False_True_False.png}
+        \caption{\texttt{n\_landmarks = 100}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../../outputs/EKF_1_1_150_1_1_1_False_True_False.png}
+        \caption{\texttt{n\_landmarks = 150}}
+        \label{}
+    \end{subfigure}
+    \caption{Variation du nombre d'amers \texttt{n\_landmarks} quand \texttt{range\_only = True}}
+    \label{}
+\end{figure}
+\noindent Il est à noter que lorsque seules les mesures de distance sont disponibles pour le calcul du filtre de Kalman, les résultats deviennent plus instables, la variance de tous les états étant plus élevée que dans le cas de référence. Ce comportement se manifeste également par une trajectoire moins fluide générée par le filtre.\\
+
+\noindent Malgré cela, le filtre demeure précis, l'aire de l'ellipse ne présentant pas de différences significatives par rapport à celle du cas de référence. Ainsi, la variation du nombre de références sur la carte n'entraîne pas de changements notables dans le fonctionnement du filtre de Kalman.
+\begin{remark}
+    Cela démontre la capacité du filtre de Kalman à estimer efficacement l'état du système, même lorsque seules certaines mesures sont disponibles, en s'appuyant davantage sur ses prévisions dans ce contexte.
+\end{remark}
+\end{document}

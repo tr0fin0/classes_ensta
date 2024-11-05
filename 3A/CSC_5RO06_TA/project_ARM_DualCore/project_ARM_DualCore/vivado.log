@@ -1,0 +1,140 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Fri Oct  4 17:34:11 2024
+# Process ID: 14368
+# Current directory: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent15812 C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.xpr
+# Log file: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/vivado.log
+# Journal file: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.xpr
+INFO: [Project 1-313] Project file moved from '/home/matsano/project_ARM_DualCore' since last save.
+Scanning sources...
+Finished scanning sources
+WARNING: [filemgmt 56-2] IPUserFilesDir: Could not find the directory 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.ip_user_files', nor could it be found using path 'C:/home/matsano/project_ARM_DualCore/project_ARM_DualCore.ip_user_files'.
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+open_project: Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 872.836 ; gain = 204.809
+update_compile_order -fileset sources_1
+INFO: [Vivado 12-4159] Implementation run is out of date. Exported hardware information may be inconsistent with respect to the current state of the design. It is recommended that you re-run implementation and re-generate bitstream before doing hardware export.
+file copy -force C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.sysdef C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+[Fri Oct  4 17:36:09 2024] Launched synth_1...
+Run output will be captured here: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/synth_1/runme.log
+[Fri Oct  4 17:36:09 2024] Launched impl_1...
+Run output will be captured here: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/runme.log
+open_run impl_1
+INFO: [Device 21-403] Loading part xc7z020clg484-1
+INFO: [Netlist 29-17] Analyzing 35 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2019.1
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Timing 38-478] Restoring timing data from binary archive.
+INFO: [Timing 38-479] Binary timing data restore complete.
+INFO: [Project 1-856] Restoring constraints from binary archive.
+INFO: [Project 1-853] Binary constraint restore complete.
+Reading XDEF placement.
+Reading placer database...
+Reading XDEF routing.
+Read XDEF File: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.415 . Memory (MB): peak = 1910.539 ; gain = 0.000
+Restored from archive | CPU: 0.000000 secs | Memory: 0.000000 MB |
+Finished XDEF File Restore: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.415 . Memory (MB): peak = 1910.539 ; gain = 0.000
+Generating merged BMM file for the design top 'design_1_wrapper'...
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 1910.539 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 26 instances were transformed.
+  RAM32M => RAM32M (RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMD32, RAMS32, RAMS32): 26 instances
+
+open_run: Time (s): cpu = 00:00:17 ; elapsed = 00:00:17 . Memory (MB): peak = 2056.512 ; gain = 821.680
+open_hw
+connect_hw_server
+INFO: [Labtools 27-2285] Connecting to hw_server url TCP:localhost:3121
+INFO: [Labtools 27-2222] Launching hw_server...
+INFO: [Labtools 27-2221] Launch Output:
+
+****** Xilinx hw_server v2019.1
+  **** Build date : May 24 2019 at 15:13:31
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+
+open_hw_target
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210248687027
+open_hw_target: Time (s): cpu = 00:00:03 ; elapsed = 00:00:05 . Memory (MB): peak = 3152.492 ; gain = 1094.066
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1435] Device xc7z020 (JTAG device index = 1) is not programmed (DONE status = 0).
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+INFO: [Vivado 12-4158] Exported Hardware file is out of date. Exported hardware information may be inconsistent with respect to the current state of the design. It is recommended that you re-export the design and launch SDK otherwise SDK is launched with out of date hardware system file.
+launch_sdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+INFO: [Vivado 12-393] Launching SDK...
+INFO: [Vivado 12-417] Running xsdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+INFO: [Vivado 12-3157] SDK launch initiated. Please check console for any further messages.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210248687027
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210248687027
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210248687027
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210248687027
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+[Fri Oct  4 18:01:51 2024] Launched impl_1...
+Run output will be captured here: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+INFO: [Vivado 12-4158] Exported Hardware file is out of date. Exported hardware information may be inconsistent with respect to the current state of the design. It is recommended that you re-export the design and launch SDK otherwise SDK is launched with out of date hardware system file.
+launch_sdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+INFO: [Vivado 12-393] Launching SDK...
+INFO: [Vivado 12-417] Running xsdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+INFO: [Vivado 12-3157] SDK launch initiated. Please check console for any further messages.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210248687027
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210248687027
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+INFO: [Labtools 27-1435] Device xc7z020 (JTAG device index = 1) is not programmed (DONE status = 0).
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210248687027
+INFO: [Labtoolstcl 44-466] Opening hw_target localhost:3121/xilinx_tcf/Digilent/210248687027
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+INFO: [Labtools 27-1435] Device xc7z020 (JTAG device index = 1) is not programmed (DONE status = 0).
+WARNING: [Labtoolstcl 44-129] No matching hw_ila_data was found.
+file copy -force C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.sysdef C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+[Fri Oct  4 18:16:35 2024] Launched impl_1...
+Run output will be captured here: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/runme.log
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+INFO: [Labtools 27-3164] End of startup status: HIGH
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+INFO: [Labtools 27-1434] Device xc7z020 (JTAG device index = 1) is programmed with a design that has no supported debug core(s) in it.
+launch_sdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+INFO: [Vivado 12-393] Launching SDK...
+INFO: [Vivado 12-417] Running xsdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+INFO: [Vivado 12-3157] SDK launch initiated. Please check console for any further messages.
+ERROR: [Labtoolstcl 44-513] HW Target shutdown. Closing target: localhost:3121/xilinx_tcf/Digilent/210248687027
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Oct  4 18:29:43 2024...

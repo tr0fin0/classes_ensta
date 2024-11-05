@@ -1,0 +1,37 @@
+\documentclass[../CSC_5RO12_TA_TP4.tex]{subfiles}
+
+\begin{document}
+\section{Question 1}
+% For this question, use the default parameters of the provided code. By default, the data association is assumed to be known, ie for each perceived landmark, the corresponding landmark in the map is identiﬁed without ambiguities. In particular, this makes it possible to properly manage loop closures, even when the error in the map is very severe.
+% Modify the number and position of landmarks and the robot trajectory and explain what you observe (on the map quality and the evolution of errors, in particular around the time when the loops are closed) in the following situations :
+% • a short loop and a dense map with many landmarks inside the robot perception radius
+% • a long loop and a dense map with many landmarks all along the loop
+% • a long loop and a sparse map with only few landmarks near the start position
+
+valeurs par default sur le code:
+% DT = 0.1  # time tick [s]
+% SIM_TIME = 80.0  # simulation time [s]
+% MAX_RANGE = 10.0  # maximum observation range
+% M_DIST_TH = 9.0  # Threshold of Mahalanobis distance for data association.
+% STATE_SIZE = 3  # State size [x,y,yaw]
+% LM_SIZE = 2  # LM state size [x,y]
+% KNOWN_DATA_ASSOCIATION = 1  # Whether we use the true landmarks id or not
+% # Simulation parameter
+% # noise on control input
+% Q_sim = (3 * np.diag([0.1, np.deg2rad(1)])) ** 2
+% # noise on measurement
+% Py_sim = (1 * np.diag([0.1, np.deg2rad(5)])) ** 2
+
+% # Kalman filter Parameters
+% # Estimated input noise for Kalman Filter
+% Q = 2 * Q_sim
+% # Estimated measurement noise for Kalman Filter
+% Py = 2 * Py_sim
+
+% # Initial estimate of pose covariance
+% initPEst = 0.01 * np.eye(STATE_SIZE)
+% initPEst[2,2] = 0.0001  # low orientation error
+
+% # True Landmark id for known data association
+% trueLandmarkId =[]
+\end{document}

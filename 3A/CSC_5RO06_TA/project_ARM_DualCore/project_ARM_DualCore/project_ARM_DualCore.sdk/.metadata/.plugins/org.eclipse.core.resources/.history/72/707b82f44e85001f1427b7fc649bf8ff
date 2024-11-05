@@ -1,0 +1,125 @@
+#include <stdio.h>
+#include "platform.h"
+#include "xil_io.h"
+#include "xparameters.h"
+#include "xil_printf.h"
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <errno.h>
+#include "xsdps.h"
+#include "ff.h"
+#include "xil_types.h"
+#include "xscutimer.h"
+#include <sys/time.h>
+#include "xtime_l.h"
+#include "xbram.h"
+
+#define SIZE 512
+
+
+//timer info
+#define TIMER_DEVICE_ID		XPAR_XSCUTIMER_0_DEVICE_ID
+#define INTC_DEVICE_ID		XPAR_SCUGIC_SINGLE_DEVICE_ID
+#define TIMER_IRPT_INTR		XPAR_SCUTIMER_INTR
+#define TIMER_LOAD_VALUE	0xFFFFFFFF
+
+XScuTimer	Timer;
+XBram Bram;	/* The Instance of the BRAM Driver */
+
+#define LOC_BRAM_SEMAPHORE 8
+#define FLAG_SEMAPHORE_START_READ 0x12345678
+#define FLAG_SEMAPHORE_STOP_READ 0x89ABCDEF
+#define FLAG_SEMAPHORE_STOP_MULT 0x11111111
+
+
+int A[SIZE][SIZE];
+int B[SIZE][SIZE];
+int C[SIZE][SIZE];
+
+
+
+
+void naiveMultiplication(const int A[SIZE][SIZE], const int B[SIZE][SIZE], int C[SIZE][SIZE]) {
+    for (int i = SIZE/2; i < SIZE; ++i)
+        for (int j = 0; j < SIZE; ++j)
+            for (int k = 0; k < SIZE; ++k)
+                C[i][j] += A[i][k] * B[k][j];
+}
+
+void naiveReorderedMultiplication(const int A[SIZE][SIZE], const int B[SIZE][SIZE], int C[SIZE][SIZE]) {
+    for (int i = SIZE/2; i < SIZE; ++i)
+        for (int k = 0; k < SIZE; ++k)
+            for (int j = 0; j < SIZE; ++j)
+                C[i][j] += A[i][k] * B[k][j];
+}
+
+void blockMultiplication(const int A[SIZE][SIZE], const int B[SIZE][SIZE], int C[SIZE][SIZE], int blockSize) {
+    for (int ii = 0; ii < SIZE/2; ii += blockSize)
+        for (int jj = 0; jj < SIZE; jj += blockSize)
+            for (int kk = 0; kk < SIZE; kk += blockSize)
+                for (int i = ii; i < ((ii + blockSize < SIZE) ? ii + blockSize : SIZE); ++i)
+                    for (int j = jj; j < ((jj + blockSize < SIZE) ? jj + blockSize : SIZE); ++j)
+                        for (int k = kk; k < ((kk + blockSize < SIZE) ? kk + blockSize : SIZE); ++k)
+                            C[i][j] += A[i][k] * B[k][j];
+}
+
+void blockReorderedMultiplication(const int A[SIZE][SIZE], const int B[SIZE][SIZE], int C[SIZE][SIZE], int blockSize) {
+    for (int ii = 0; ii < SIZE/2; ii += blockSize)
+        for (int kk = 0; kk < SIZE; kk += blockSize)
+            for (int jj = 0; jj < SIZE; jj += blockSize)
+                for (int i = ii; i < ((ii + blockSize < SIZE) ? ii + blockSize : SIZE); ++i)
+                    for (int k = kk; k < ((kk + blockSize < SIZE) ? kk + blockSize : SIZE); ++k)
+                        for (int j = jj; j < ((jj + blockSize < SIZE) ? jj + blockSize : SIZE); ++j)
+                            C[i][j] += A[i][k] * B[k][j];
+}
+
+
+
+
+void mat_mult_sw(){
+	int dBram;
+
+
+	// Wait the flag from proc0 to initialize the reading of the matrix from SD card
+	dBram = XBram_ReadReg(XPAR_BRAM_0_BASEADDR, LOC_BRAM_SEMAPHORE);
+	while(dBram != FLAG_SEMAPHORE_START_READ){
+		dBram = XBram_ReadReg(XPAR_BRAM_0_BASEADDR, LOC_BRAM_SEMAPHORE);
+	}
+
+    // Read matrices A and B from BRAM
+    memcpy(A, (int *)XPAR_BRAM_0_BASEADDR, SIZE * SIZE * sizeof(int));
+    memcpy(B, (int *)(XPAR_BRAM_0_BASEADDR + SIZE * SIZE * sizeof(int)), SIZE * SIZE * sizeof(int));
+
+	Xil_DCacheFlush();
+
+	// Initialize matrix C
+	for(int i = 0; i < SIZE; i++){
+		for(int j = 0; j < SIZE; j++){
+			C[i][j] = 0;
+		}
+	}
+
+	// Send flag to proc0 when proc1 finishes to read the matrix from BRAM
+	XBram_WriteReg(XPAR_BRAM_0_BASEADDR, LOC_BRAM_SEMAPHORE, FLAG_SEMAPHORE_STOP_READ);
+
+    // Wait the flag from proc0 to start the matrix multiplication.
+    // Calculate half of matrix multiplication
+	naiveMultiplication(A, B, C);
+
+	// Send flag to proc0 when proc1 finishes the its part of matrix multiplication
+	XBram_WriteReg(XPAR_BRAM_0_BASEADDR, LOC_BRAM_SEMAPHORE, FLAG_SEMAPHORE_STOP_MULT);
+
+	xil_printf("(ARM1) Finish matrix multiplication.\n");
+}
+
+
+
+int main()
+{
+
+	init_platform();
+    mat_mult_sw();
+    cleanup_platform();
+    return 0;
+}
