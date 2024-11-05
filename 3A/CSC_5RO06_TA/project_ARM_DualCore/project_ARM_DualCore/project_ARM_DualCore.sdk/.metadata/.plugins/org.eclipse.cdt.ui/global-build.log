@@ -1,0 +1,10 @@
+16:53:16 **** Incremental Build of configuration Debug for project ARM1 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.
+16:53:24 **** Incremental Build of configuration Debug for project ARM0 ****
+make pre-build main-build 
+a9-linaro-pre-build-step
+' '
+make: Nothing to be done for 'main-build'.

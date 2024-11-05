@@ -1,0 +1,1280 @@
+03:01:47 INFO  : Registering command handlers for SDK TCF services
+03:01:48 INFO  : Launching XSCT server: xsct -n -interactive /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/temp_xsdb_launch_script.tcl
+03:01:50 INFO  : XSCT server has started successfully.
+03:01:50 INFO  : Successfully done setting XSCT server connection channel  
+03:01:50 INFO  : Successfully done setting SDK workspace  
+03:01:50 INFO  : Processing command line option -hwspec /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+03:02:52 INFO  : Refreshed build settings on project ARM0
+03:03:13 INFO  : Refreshed build settings on project ARM1
+03:06:39 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:06:39 INFO  : 'fpga -state' command is executed.
+03:06:49 INFO  : Memory regions updated for context APU
+03:06:55 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:06:55 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:06:58 INFO  : FPGA configured successfully with bitstream "/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+03:07:05 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:07:05 INFO  : 'fpga -state' command is executed.
+03:07:05 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:07:05 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+03:07:05 INFO  : 'jtag frequency' command is executed.
+03:07:05 INFO  : Sourcing of '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+03:07:05 INFO  : Context for 'APU' is selected.
+03:07:05 INFO  : Hardware design information is loaded from '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+03:07:05 INFO  : 'configparams force-mem-access 1' command is executed.
+03:07:05 INFO  : Context for 'APU' is selected.
+03:07:05 INFO  : 'stop' command is executed.
+03:07:05 INFO  : 'ps7_init' command is executed.
+03:07:05 INFO  : 'ps7_post_config' command is executed.
+03:07:05 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:07:06 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+03:07:06 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:07:06 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+03:07:06 INFO  : 'configparams force-mem-access 0' command is executed.
+03:07:06 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+03:07:06 INFO  : Memory regions updated for context APU
+03:07:06 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:07:06 INFO  : 'con' command is executed.
+03:07:06 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+03:07:06 INFO  : Launch script is exported to file '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/.sdk/launch_scripts/xilinx_c-c++_application_(system_debugger)/system_debugger_using_debug_arm0.elf_on_local.tcl'
+03:07:15 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:07:15 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:07:18 INFO  : FPGA configured successfully with bitstream "/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+03:07:25 INFO  : Disconnected from the channel tcfchan#1.
+03:07:27 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:07:27 INFO  : 'fpga -state' command is executed.
+03:07:27 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:07:27 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+03:07:27 INFO  : 'jtag frequency' command is executed.
+03:07:27 INFO  : Sourcing of '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+03:07:27 INFO  : Context for 'APU' is selected.
+03:07:27 INFO  : Hardware design information is loaded from '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+03:07:27 INFO  : 'configparams force-mem-access 1' command is executed.
+03:07:27 INFO  : Context for 'APU' is selected.
+03:07:27 INFO  : 'stop' command is executed.
+03:07:28 INFO  : 'ps7_init' command is executed.
+03:07:28 INFO  : 'ps7_post_config' command is executed.
+03:07:28 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:07:28 INFO  : Processor reset is completed for 'ps7_cortexa9_1'.
+03:07:28 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:07:28 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf' is downloaded to processor 'ps7_cortexa9_1'.
+03:07:28 INFO  : 'configparams force-mem-access 0' command is executed.
+03:07:28 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+03:07:28 INFO  : Memory regions updated for context APU
+03:07:28 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:07:28 INFO  : 'con' command is executed.
+03:07:28 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+03:07:28 INFO  : Launch script is exported to file '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/.sdk/launch_scripts/xilinx_c-c++_application_(system_debugger)/system_debugger_using_debug_arm1.elf_on_local.tcl'
+03:08:21 INFO  : Disconnected from the channel tcfchan#2.
+03:08:22 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:08:22 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+03:08:22 INFO  : 'jtag frequency' command is executed.
+03:08:22 INFO  : Sourcing of '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+03:08:22 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:08:25 INFO  : FPGA configured successfully with bitstream "/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+03:08:25 INFO  : Context for 'APU' is selected.
+03:08:25 INFO  : Hardware design information is loaded from '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+03:08:25 INFO  : 'configparams force-mem-access 1' command is executed.
+03:08:25 INFO  : Context for 'APU' is selected.
+03:08:25 INFO  : 'stop' command is executed.
+03:08:26 INFO  : 'ps7_init' command is executed.
+03:08:26 INFO  : 'ps7_post_config' command is executed.
+03:08:26 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:08:26 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+03:08:26 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:08:26 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+03:08:26 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:08:26 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf' is downloaded to processor 'ps7_cortexa9_1'.
+03:08:26 INFO  : 'configparams force-mem-access 0' command is executed.
+03:08:26 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1
+fpga -file /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+03:08:26 INFO  : Memory regions updated for context APU
+03:08:26 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:08:26 INFO  : 'con' command is executed.
+03:08:26 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:08:26 INFO  : 'con' command is executed.
+03:08:26 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+03:08:26 INFO  : Launch script is exported to file '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/.sdk/launch_scripts/xilinx_c-c++_application_(system_debugger)/system_debugger_using_debug_arm1.elf_on_local.tcl'
+03:10:12 INFO  : Disconnected from the channel tcfchan#3.
+03:10:13 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:10:13 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+03:10:13 INFO  : 'jtag frequency' command is executed.
+03:10:13 INFO  : Sourcing of '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+03:10:13 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:10:15 INFO  : FPGA configured successfully with bitstream "/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+03:10:15 INFO  : Context for 'APU' is selected.
+03:10:16 INFO  : Hardware design information is loaded from '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+03:10:16 INFO  : 'configparams force-mem-access 1' command is executed.
+03:10:16 INFO  : Context for 'APU' is selected.
+03:10:16 INFO  : 'stop' command is executed.
+03:10:16 INFO  : 'ps7_init' command is executed.
+03:10:16 INFO  : 'ps7_post_config' command is executed.
+03:10:16 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:10:16 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+03:10:16 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:10:17 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+03:10:17 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:10:17 ERROR : Memory write error at 0x2005000. MMU section translation fault
+03:10:17 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1
+fpga -file /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+----------------End of Script----------------
+
+03:10:51 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+03:10:51 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+03:10:51 INFO  : 'jtag frequency' command is executed.
+03:10:51 INFO  : Sourcing of '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+03:10:51 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+03:10:53 INFO  : FPGA configured successfully with bitstream "/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+03:10:53 INFO  : Context for 'APU' is selected.
+03:10:53 INFO  : Hardware design information is loaded from '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+03:10:53 INFO  : 'configparams force-mem-access 1' command is executed.
+03:10:53 INFO  : Context for 'APU' is selected.
+03:10:53 INFO  : 'stop' command is executed.
+03:10:54 INFO  : 'ps7_init' command is executed.
+03:10:54 INFO  : 'ps7_post_config' command is executed.
+03:10:54 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:10:54 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+03:10:54 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:10:54 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+03:10:54 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:10:54 INFO  : The application '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf' is downloaded to processor 'ps7_cortexa9_1'.
+03:10:54 INFO  : 'configparams force-mem-access 0' command is executed.
+03:10:54 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1
+fpga -file /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow /home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+03:10:54 INFO  : Memory regions updated for context APU
+03:10:54 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+03:10:54 INFO  : 'con' command is executed.
+03:10:54 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+03:10:54 INFO  : 'con' command is executed.
+03:10:54 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+03:10:54 INFO  : Launch script is exported to file '/home/matsano/project_ARM_DualCore/project_ARM_DualCore.sdk/.sdk/launch_scripts/xilinx_c-c++_application_(system_debugger)/system_debugger_using_debug_arm1.elf_on_local.tcl'
+03:11:24 INFO  : Disconnected from the channel tcfchan#4.
+17:40:09 INFO  : Registering command handlers for SDK TCF services
+17:40:10 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+17:40:12 INFO  : XSCT server has started successfully.
+17:40:13 INFO  : Successfully done setting XSCT server connection channel  
+17:40:13 INFO  : Successfully done setting SDK workspace  
+17:40:13 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+17:51:57 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+17:51:57 INFO  : 'fpga -state' command is executed.
+17:51:58 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+17:51:58 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+17:51:58 INFO  : 'jtag frequency' command is executed.
+17:51:58 INFO  : Context for 'APU' is selected.
+17:51:58 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+17:51:58 INFO  : 'configparams force-mem-access 1' command is executed.
+17:51:58 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+17:51:58 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+17:51:58 INFO  : 'configparams force-mem-access 0' command is executed.
+17:51:58 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+17:51:58 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+17:51:58 INFO  : 'con' command is executed.
+17:51:58 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+17:51:58 INFO  : Disconnected from the channel tcfchan#1.
+17:58:33 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+17:58:33 INFO  : 'fpga -state' command is executed.
+17:58:33 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+17:58:33 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+17:58:33 INFO  : 'jtag frequency' command is executed.
+17:58:33 INFO  : Context for 'APU' is selected.
+17:58:35 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+17:58:35 INFO  : 'configparams force-mem-access 1' command is executed.
+17:58:35 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+17:58:35 ERROR : Cannot halt processor core, timeout
+17:58:35 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+17:59:10 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+17:59:10 INFO  : 'fpga -state' command is executed.
+17:59:10 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+17:59:10 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+17:59:11 INFO  : 'jtag frequency' command is executed.
+17:59:11 INFO  : Context for 'APU' is selected.
+17:59:11 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+17:59:11 INFO  : 'configparams force-mem-access 1' command is executed.
+17:59:11 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+17:59:11 ERROR : Cannot halt processor core, timeout
+17:59:11 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+18:00:03 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+18:00:03 INFO  : 'fpga -state' command is executed.
+18:00:03 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+18:00:03 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+18:00:03 INFO  : 'jtag frequency' command is executed.
+18:00:03 INFO  : Context for 'APU' is selected.
+18:00:03 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+18:00:03 INFO  : 'configparams force-mem-access 1' command is executed.
+18:00:03 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+18:00:04 ERROR : Cannot halt processor core, timeout
+18:00:04 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+18:03:37 INFO  : Registering command handlers for SDK TCF services
+18:03:37 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+18:03:39 INFO  : XSCT server has started successfully.
+18:03:39 INFO  : Successfully done setting XSCT server connection channel  
+18:03:39 INFO  : Successfully done setting SDK workspace  
+18:03:39 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+18:03:39 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+18:12:41 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+18:12:41 INFO  : 'fpga -state' command is executed.
+18:12:41 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+18:12:41 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+18:12:41 INFO  : 'jtag frequency' command is executed.
+18:12:42 INFO  : Context for 'APU' is selected.
+18:12:42 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+18:12:42 INFO  : 'configparams force-mem-access 1' command is executed.
+18:12:42 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+18:12:42 ERROR : Cannot halt processor core, timeout
+18:12:42 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+18:19:14 INFO  : Registering command handlers for SDK TCF services
+18:19:15 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+18:19:19 INFO  : XSCT server has started successfully.
+18:19:20 INFO  : Successfully done setting XSCT server connection channel  
+18:19:20 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+18:19:20 INFO  : Successfully done setting SDK workspace  
+18:19:20 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+18:19:29 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728057755574,  Project:1728055973370
+18:19:29 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+18:19:29 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+18:19:35 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+18:19:36 INFO  : Clearing existing target manager status.
+18:19:36 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+18:19:36 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+18:20:16 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+18:20:16 INFO  : 'fpga -state' command is executed.
+18:20:16 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+18:20:17 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+18:20:17 INFO  : 'jtag frequency' command is executed.
+18:20:17 INFO  : Context for 'APU' is selected.
+18:20:17 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+18:20:17 INFO  : 'configparams force-mem-access 1' command is executed.
+18:20:17 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+18:20:17 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+18:20:17 INFO  : 'configparams force-mem-access 0' command is executed.
+18:20:17 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+18:20:17 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+18:20:17 INFO  : 'con' command is executed.
+18:20:17 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+18:20:17 INFO  : Disconnected from the channel tcfchan#1.
+08:59:26 INFO  : Registering command handlers for SDK TCF services
+08:59:28 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+08:59:32 INFO  : XSCT server has started successfully.
+08:59:32 INFO  : Successfully done setting XSCT server connection channel  
+08:59:33 INFO  : Successfully done setting SDK workspace  
+08:59:33 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+08:59:33 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+09:47:20 INFO  : Registering command handlers for SDK TCF services
+09:47:21 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+09:47:25 INFO  : XSCT server has started successfully.
+09:47:25 INFO  : Successfully done setting XSCT server connection channel  
+09:47:26 INFO  : Successfully done setting SDK workspace  
+09:47:26 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+09:47:26 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+09:58:44 INFO  : Registering command handlers for SDK TCF services
+09:58:46 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+09:58:50 INFO  : XSCT server has started successfully.
+09:58:51 INFO  : Successfully done setting XSCT server connection channel  
+09:58:51 INFO  : Successfully done setting SDK workspace  
+09:58:51 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+09:58:51 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+09:59:00 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728058687526,  Project:1728057755574
+09:59:00 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+09:59:00 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+09:59:59 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+10:00:53 INFO  : Clearing existing target manager status.
+10:00:53 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+10:00:53 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+10:02:10 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+10:02:10 INFO  : 'fpga -state' command is executed.
+10:02:10 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:02:10 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+10:02:10 INFO  : 'jtag frequency' command is executed.
+10:02:10 INFO  : Context for 'APU' is selected.
+10:02:10 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+10:02:10 INFO  : 'configparams force-mem-access 1' command is executed.
+10:02:10 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:02:10 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:02:10 INFO  : 'configparams force-mem-access 0' command is executed.
+10:02:10 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:02:10 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:02:10 INFO  : 'con' command is executed.
+10:02:10 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+10:02:10 INFO  : Disconnected from the channel tcfchan#1.
+10:03:50 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+10:03:50 INFO  : 'fpga -state' command is executed.
+10:03:50 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:03:50 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+10:03:50 INFO  : 'jtag frequency' command is executed.
+10:03:50 INFO  : Context for 'APU' is selected.
+10:03:53 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+10:03:53 INFO  : 'configparams force-mem-access 1' command is executed.
+10:03:53 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:03:53 ERROR : Cannot halt processor core, timeout
+10:03:53 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+10:06:53 INFO  : Registering command handlers for SDK TCF services
+10:06:54 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+10:06:58 INFO  : XSCT server has started successfully.
+10:06:59 INFO  : Successfully done setting XSCT server connection channel  
+10:06:59 INFO  : Successfully done setting SDK workspace  
+10:06:59 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+10:06:59 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+10:07:08 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728374165973,  Project:1728058687526
+10:07:08 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+10:07:08 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+10:07:14 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+10:07:14 INFO  : Clearing existing target manager status.
+10:07:14 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+10:07:14 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+10:14:13 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+10:14:13 INFO  : 'fpga -state' command is executed.
+10:14:13 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:14:14 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+10:14:14 INFO  : 'jtag frequency' command is executed.
+10:14:14 INFO  : Context for 'APU' is selected.
+10:14:14 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+10:14:14 INFO  : 'configparams force-mem-access 1' command is executed.
+10:14:14 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:14:14 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+10:14:14 INFO  : 'configparams force-mem-access 0' command is executed.
+10:14:14 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+10:14:14 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:14:14 INFO  : 'con' command is executed.
+10:14:14 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+10:14:14 INFO  : Disconnected from the channel tcfchan#1.
+10:18:19 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+10:18:19 INFO  : 'fpga -state' command is executed.
+10:18:19 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:18:19 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+10:18:19 INFO  : 'jtag frequency' command is executed.
+10:18:19 INFO  : Context for 'APU' is selected.
+10:18:23 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+10:18:23 INFO  : 'configparams force-mem-access 1' command is executed.
+10:18:23 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:18:24 ERROR : Cannot halt processor core, timeout
+10:18:24 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+10:19:03 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+10:19:03 INFO  : 'fpga -state' command is executed.
+10:19:03 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+10:19:03 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+10:19:03 INFO  : 'jtag frequency' command is executed.
+10:19:03 INFO  : Context for 'APU' is selected.
+10:19:03 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+10:19:03 INFO  : 'configparams force-mem-access 1' command is executed.
+10:19:03 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+10:19:04 ERROR : Cannot halt processor core, timeout
+10:19:04 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+10:23:34 INFO  : Registering command handlers for SDK TCF services
+10:23:35 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+10:23:40 INFO  : XSCT server has started successfully.
+10:23:40 INFO  : Successfully done setting XSCT server connection channel  
+10:23:40 INFO  : Successfully done setting SDK workspace  
+10:23:40 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+10:23:40 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+11:42:54 INFO  : Registering command handlers for SDK TCF services
+11:42:55 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+11:42:57 INFO  : XSCT server has started successfully.
+11:42:57 INFO  : Successfully done setting XSCT server connection channel  
+11:42:57 INFO  : Successfully done setting SDK workspace  
+11:42:57 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+11:42:57 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+11:43:01 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728380026973,  Project:1728374165973
+11:43:01 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+11:43:01 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+11:43:03 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+11:43:03 INFO  : Clearing existing target manager status.
+11:43:03 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+11:43:03 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+11:47:28 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:47:28 INFO  : 'fpga -state' command is executed.
+11:47:28 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:47:28 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:47:28 INFO  : 'jtag frequency' command is executed.
+11:47:28 INFO  : Context for 'APU' is selected.
+11:47:28 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+11:47:28 INFO  : 'configparams force-mem-access 1' command is executed.
+11:47:28 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:47:28 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+11:47:28 INFO  : 'configparams force-mem-access 0' command is executed.
+11:47:28 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+11:47:28 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:47:28 INFO  : 'con' command is executed.
+11:47:28 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+11:47:28 INFO  : Disconnected from the channel tcfchan#1.
+11:47:50 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:47:50 INFO  : 'fpga -state' command is executed.
+11:47:50 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:47:50 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:47:50 INFO  : 'jtag frequency' command is executed.
+11:47:50 INFO  : Context for 'APU' is selected.
+11:47:51 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+11:47:51 INFO  : 'configparams force-mem-access 1' command is executed.
+11:47:51 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+11:47:51 ERROR : Memory write error at 0x2000000. Cannot access DDR: the controller is held in reset
+11:47:51 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+----------------End of Script----------------
+
+11:50:22 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:50:22 INFO  : 'fpga -state' command is executed.
+11:50:22 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:50:22 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:50:22 INFO  : 'jtag frequency' command is executed.
+11:50:22 INFO  : Context for 'APU' is selected.
+11:50:22 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+11:50:22 INFO  : 'configparams force-mem-access 1' command is executed.
+11:50:22 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:50:22 ERROR : Cannot halt processor core, timeout
+11:50:22 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+11:50:32 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:50:32 INFO  : 'fpga -state' command is executed.
+11:50:32 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:50:32 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:50:32 INFO  : 'jtag frequency' command is executed.
+11:50:32 INFO  : Context for 'APU' is selected.
+11:50:32 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_1/system.hdf'.
+11:50:32 INFO  : 'configparams force-mem-access 1' command is executed.
+11:50:32 INFO  : 'configparams force-mem-access 0' command is executed.
+11:50:32 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_1/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+configparams force-mem-access 0
+----------------End of Script----------------
+
+11:50:32 INFO  : Disconnected from the channel tcfchan#2.
+11:50:40 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:50:40 INFO  : 'fpga -state' command is executed.
+11:50:40 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:50:41 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:50:41 INFO  : 'jtag frequency' command is executed.
+11:50:41 INFO  : Context for 'APU' is selected.
+11:50:41 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+11:50:41 INFO  : 'configparams force-mem-access 1' command is executed.
+11:50:41 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:50:41 ERROR : Cannot halt processor core, timeout
+11:50:41 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+11:50:50 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:50:50 INFO  : 'fpga -state' command is executed.
+11:50:50 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:50:50 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:50:50 INFO  : 'jtag frequency' command is executed.
+11:50:50 INFO  : Context for 'APU' is selected.
+11:50:51 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_1/system.hdf'.
+11:50:51 INFO  : 'configparams force-mem-access 1' command is executed.
+11:50:51 INFO  : 'configparams force-mem-access 0' command is executed.
+11:50:51 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_1/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+configparams force-mem-access 0
+----------------End of Script----------------
+
+11:50:51 INFO  : Disconnected from the channel tcfchan#3.
+11:54:17 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:54:17 INFO  : 'fpga -state' command is executed.
+11:54:17 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:54:17 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:54:17 INFO  : 'jtag frequency' command is executed.
+11:54:17 INFO  : Context for 'APU' is selected.
+11:54:17 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+11:54:17 INFO  : 'configparams force-mem-access 1' command is executed.
+11:54:17 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+11:54:17 ERROR : Cannot halt processor core, timeout
+11:54:17 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+11:54:21 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+11:54:21 INFO  : 'fpga -state' command is executed.
+11:54:21 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+11:54:22 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+11:54:22 INFO  : 'jtag frequency' command is executed.
+11:54:22 INFO  : Context for 'APU' is selected.
+11:54:22 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_1/system.hdf'.
+11:54:22 INFO  : 'configparams force-mem-access 1' command is executed.
+11:54:22 INFO  : 'configparams force-mem-access 0' command is executed.
+11:54:22 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_1/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+configparams force-mem-access 0
+----------------End of Script----------------
+
+11:54:22 INFO  : Disconnected from the channel tcfchan#4.
+12:08:19 INFO  : Registering command handlers for SDK TCF services
+12:08:19 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+12:08:22 INFO  : XSCT server has started successfully.
+12:08:22 INFO  : Successfully done setting XSCT server connection channel  
+12:08:22 INFO  : Successfully done setting SDK workspace  
+12:08:22 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+12:08:22 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+12:08:25 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728382030971,  Project:1728380026973
+12:08:25 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+12:08:26 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+12:08:28 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+12:08:28 INFO  : Clearing existing target manager status.
+12:08:28 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+12:08:28 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+12:29:25 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:29:25 INFO  : 'fpga -state' command is executed.
+12:29:25 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:29:25 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:29:25 INFO  : 'jtag frequency' command is executed.
+12:29:25 INFO  : Context for 'APU' is selected.
+12:29:25 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:29:25 INFO  : 'configparams force-mem-access 1' command is executed.
+12:29:25 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:29:25 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:29:25 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:29:25 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+12:29:25 INFO  : 'configparams force-mem-access 0' command is executed.
+12:29:25 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+12:29:25 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:29:25 INFO  : 'con' command is executed.
+12:29:25 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+12:29:25 INFO  : Disconnected from the channel tcfchan#1.
+12:38:40 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:38:40 INFO  : 'fpga -state' command is executed.
+12:38:40 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:38:40 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:38:40 INFO  : 'jtag frequency' command is executed.
+12:38:40 INFO  : Context for 'APU' is selected.
+12:38:40 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:38:40 INFO  : 'configparams force-mem-access 1' command is executed.
+12:38:40 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:38:40 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:38:40 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:38:40 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+12:38:40 INFO  : 'configparams force-mem-access 0' command is executed.
+12:38:40 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+12:38:40 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:38:40 INFO  : 'con' command is executed.
+12:38:40 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+12:38:40 INFO  : Disconnected from the channel tcfchan#2.
+12:39:17 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:39:17 INFO  : 'fpga -state' command is executed.
+12:39:17 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:39:17 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:39:17 INFO  : 'jtag frequency' command is executed.
+12:39:17 INFO  : Context for 'APU' is selected.
+12:39:17 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:39:17 INFO  : 'configparams force-mem-access 1' command is executed.
+12:39:17 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:39:17 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:39:17 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:39:19 ERROR : Memory write error at 0x0. AP transaction timeout
+12:39:19 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+12:39:37 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:39:37 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:39:40 ERROR : fpga configuration failed. DONE PIN is not HIGH
+12:39:57 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:39:57 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:39:59 INFO  : FPGA configured successfully with bitstream "C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+12:40:10 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:40:10 INFO  : 'fpga -state' command is executed.
+12:40:10 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:40:10 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:40:10 INFO  : 'jtag frequency' command is executed.
+12:40:10 INFO  : Context for 'APU' is selected.
+12:40:10 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:40:10 INFO  : 'configparams force-mem-access 1' command is executed.
+12:40:10 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:40:10 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:40:10 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:40:10 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+12:40:10 INFO  : 'configparams force-mem-access 0' command is executed.
+12:40:10 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+12:40:10 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:40:10 INFO  : 'con' command is executed.
+12:40:10 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+12:40:10 INFO  : Disconnected from the channel tcfchan#3.
+12:40:59 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:40:59 INFO  : 'fpga -state' command is executed.
+12:40:59 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:40:59 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:40:59 INFO  : 'jtag frequency' command is executed.
+12:40:59 INFO  : Sourcing of 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+12:40:59 INFO  : Context for 'APU' is selected.
+12:40:59 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:40:59 INFO  : 'configparams force-mem-access 1' command is executed.
+12:40:59 INFO  : Context for 'APU' is selected.
+12:41:00 INFO  : 'stop' command is executed.
+12:41:01 INFO  : 'ps7_init' command is executed.
+12:41:01 INFO  : 'ps7_post_config' command is executed.
+12:41:01 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:41:01 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:41:01 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:41:02 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+12:41:02 INFO  : 'configparams force-mem-access 0' command is executed.
+12:41:02 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+12:41:02 INFO  : Memory regions updated for context APU
+12:41:02 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:41:02 INFO  : 'con' command is executed.
+12:41:02 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+12:41:02 INFO  : Launch script is exported to file 'C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\system_debugger_using_debug_arm0.elf_on_local.tcl'
+12:42:03 INFO  : No changes in MSS file content so not generating sources.
+12:42:25 INFO  : No changes in MSS file content so not generating sources.
+12:43:16 INFO  : Disconnected from the channel tcfchan#4.
+12:43:17 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:43:17 INFO  : 'fpga -state' command is executed.
+12:43:17 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:43:17 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:43:17 INFO  : 'jtag frequency' command is executed.
+12:43:17 INFO  : Sourcing of 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+12:43:17 INFO  : Context for 'APU' is selected.
+12:43:17 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:43:17 INFO  : 'configparams force-mem-access 1' command is executed.
+12:43:17 INFO  : Context for 'APU' is selected.
+12:43:17 INFO  : 'stop' command is executed.
+12:43:18 INFO  : 'ps7_init' command is executed.
+12:43:18 INFO  : 'ps7_post_config' command is executed.
+12:43:18 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:43:18 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:43:18 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:43:20 ERROR : Memory write error at 0x0. AP transaction timeout
+12:43:20 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+12:44:25 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:44:25 INFO  : 'fpga -state' command is executed.
+12:44:25 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:44:25 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:44:25 INFO  : 'jtag frequency' command is executed.
+12:44:25 INFO  : Sourcing of 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+12:44:25 INFO  : Context for 'APU' is selected.
+12:44:25 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:44:25 INFO  : 'configparams force-mem-access 1' command is executed.
+12:44:25 INFO  : Context for 'APU' is selected.
+12:44:26 INFO  : 'stop' command is executed.
+12:44:26 ERROR : AP transaction error, DAP status f0000021
+12:44:26 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+stop
+ps7_init
+----------------End of Script----------------
+
+12:44:42 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:44:43 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:44:45 INFO  : FPGA configured successfully with bitstream "C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+12:44:53 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:44:53 INFO  : 'fpga -state' command is executed.
+12:44:53 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:44:53 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:44:53 INFO  : 'jtag frequency' command is executed.
+12:44:53 INFO  : Sourcing of 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl' is done.
+12:44:53 INFO  : Context for 'APU' is selected.
+12:44:53 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:44:53 INFO  : 'configparams force-mem-access 1' command is executed.
+12:44:53 INFO  : Context for 'APU' is selected.
+12:44:54 INFO  : 'stop' command is executed.
+12:44:54 INFO  : 'ps7_init' command is executed.
+12:44:54 INFO  : 'ps7_post_config' command is executed.
+12:44:54 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:44:54 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:44:54 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:44:54 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+12:44:54 INFO  : 'configparams force-mem-access 0' command is executed.
+12:44:54 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+source C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/ps7_init.tcl
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+stop
+ps7_init
+ps7_post_config
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+12:44:54 INFO  : Memory regions updated for context APU
+12:44:54 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:44:54 INFO  : 'con' command is executed.
+12:44:54 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+12:44:54 INFO  : Launch script is exported to file 'C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\.sdk\launch_scripts\xilinx_c-c++_application_(system_debugger)\system_debugger_using_debug_arm0.elf_on_local.tcl'
+12:47:03 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248585516" && level==0} -index 1' command is executed.
+12:47:03 INFO  : 'fpga -state' command is executed.
+12:47:03 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+12:47:04 INFO  : Jtag cable 'Digilent Zed 210248585516' is selected.
+12:47:04 INFO  : 'jtag frequency' command is executed.
+12:47:04 INFO  : Context for 'APU' is selected.
+12:47:04 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+12:47:04 INFO  : 'configparams force-mem-access 1' command is executed.
+12:47:04 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:47:04 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+12:47:04 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:47:04 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+12:47:04 INFO  : 'configparams force-mem-access 0' command is executed.
+12:47:04 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+12:47:04 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+12:47:04 INFO  : 'con' command is executed.
+12:47:04 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248585516"} -index 0
+con
+----------------End of Script----------------
+
+12:47:04 INFO  : Disconnected from the channel tcfchan#5.
+12:52:05 WARN  : channel "tcfchan#5" closed
+16:50:20 INFO  : Registering command handlers for SDK TCF services
+16:50:20 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+16:50:23 INFO  : XSCT server has started successfully.
+16:50:23 INFO  : Successfully done setting XSCT server connection channel  
+16:50:23 INFO  : Successfully done setting SDK workspace  
+16:50:23 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+17:18:35 INFO  : Registering command handlers for SDK TCF services
+17:18:36 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+17:18:38 INFO  : XSCT server has started successfully.
+17:18:38 INFO  : Successfully done setting XSCT server connection channel  
+17:18:38 INFO  : Successfully done setting SDK workspace  
+17:18:38 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+17:18:38 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+17:18:43 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728573455322,  Project:1728571706418
+17:18:43 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+17:18:43 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+17:18:46 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+17:18:46 INFO  : Clearing existing target manager status.
+17:18:46 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+17:18:46 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+16:31:38 INFO  : Registering command handlers for SDK TCF services
+16:31:39 INFO  : Launching XSCT server: xsct.bat -interactive C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.sdk\temp_xsdb_launch_script.tcl
+16:31:43 INFO  : XSCT server has started successfully.
+16:31:43 INFO  : Successfully done setting XSCT server connection channel  
+16:31:44 INFO  : Successfully done setting SDK workspace  
+16:31:44 INFO  : Processing command line option -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+16:31:44 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_1.
+16:31:53 INFO  : SDK has detected change in the last modified timestamps for source hardware specification file Source:1728916214740,  Project:1728573455322
+16:31:53 INFO  : The hardware specification for project 'design_1_wrapper_hw_platform_1' is different from C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf.
+16:31:53 INFO  : Copied contents of C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf into \design_1_wrapper_hw_platform_1\system.hdf.
+16:31:59 INFO  : Synchronizing projects in the workspace with the hardware platform specification changes.
+16:31:59 INFO  : Clearing existing target manager status.
+16:31:59 INFO  : Workspace synchronized with the new hardware specification file. Cleaning dependent projects...
+16:31:59 WARN  : Linker script will not be updated automatically. Users need to update it manually.
+16:43:47 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:43:47 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:43:50 INFO  : FPGA configured successfully with bitstream "C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+16:45:49 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:45:49 INFO  : 'fpga -state' command is executed.
+16:45:49 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:45:49 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+16:45:49 INFO  : 'jtag frequency' command is executed.
+16:45:49 INFO  : Context for 'APU' is selected.
+16:45:49 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+16:45:49 INFO  : 'configparams force-mem-access 1' command is executed.
+16:45:49 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+16:45:49 ERROR : Memory write error at 0x2000000. Cannot access DDR: the controller is held in reset
+16:45:49 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+----------------End of Script----------------
+
+16:46:02 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:46:02 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:46:04 INFO  : FPGA configured successfully with bitstream "C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+16:46:19 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:46:19 INFO  : 'fpga -state' command is executed.
+16:46:19 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:46:20 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+16:46:20 INFO  : 'jtag frequency' command is executed.
+16:46:20 INFO  : Context for 'APU' is selected.
+16:46:20 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+16:46:20 INFO  : 'configparams force-mem-access 1' command is executed.
+16:46:20 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:46:20 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+16:46:20 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:46:20 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+16:46:20 INFO  : 'configparams force-mem-access 0' command is executed.
+16:46:20 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+16:46:20 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:46:20 INFO  : 'con' command is executed.
+16:46:20 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+16:46:20 INFO  : Disconnected from the channel tcfchan#1.
+16:47:02 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:47:02 INFO  : 'fpga -state' command is executed.
+16:47:02 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:47:02 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+16:47:02 INFO  : 'jtag frequency' command is executed.
+16:47:02 INFO  : Context for 'APU' is selected.
+16:47:05 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+16:47:05 INFO  : 'configparams force-mem-access 1' command is executed.
+16:47:05 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:47:05 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+16:47:05 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:47:06 INFO  : The application 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf' is downloaded to processor 'ps7_cortexa9_0'.
+16:47:06 INFO  : 'configparams force-mem-access 0' command is executed.
+16:47:06 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+configparams force-mem-access 0
+----------------End of Script----------------
+
+16:47:06 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:47:06 INFO  : 'con' command is executed.
+16:47:06 INFO  : ----------------XSDB Script (After Launch)----------------
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+con
+----------------End of Script----------------
+
+16:47:06 INFO  : Disconnected from the channel tcfchan#2.
+16:47:18 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:47:18 INFO  : 'fpga -state' command is executed.
+16:47:18 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:47:19 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+16:47:19 INFO  : 'jtag frequency' command is executed.
+16:47:19 INFO  : Context for 'APU' is selected.
+16:47:19 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+16:47:19 INFO  : 'configparams force-mem-access 1' command is executed.
+16:47:19 INFO  : Context for processor 'ps7_cortexa9_1' is selected.
+16:47:19 ERROR : Memory write error at 0x2000000. Cannot access DDR: the controller is held in reset
+16:47:19 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#1" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM1/Debug/ARM1.elf
+----------------End of Script----------------
+
+16:47:28 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:47:28 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:47:31 INFO  : FPGA configured successfully with bitstream "C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+16:47:49 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:47:49 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:47:51 INFO  : FPGA configured successfully with bitstream "C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/design_1_wrapper.bit"
+16:47:58 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:47:58 INFO  : 'fpga -state' command is executed.
+16:47:58 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:47:59 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+16:47:59 INFO  : 'jtag frequency' command is executed.
+16:47:59 INFO  : Context for 'APU' is selected.
+16:47:59 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+16:47:59 INFO  : 'configparams force-mem-access 1' command is executed.
+16:47:59 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:47:59 INFO  : Processor reset is completed for 'ps7_cortexa9_0'.
+16:47:59 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:48:01 ERROR : Memory write error at 0x0. AP transaction timeout
+16:48:01 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+dow C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/ARM0/Debug/ARM0.elf
+----------------End of Script----------------
+
+16:48:20 INFO  : No changes in MSS file content so not generating sources.
+16:49:43 INFO  : No changes in MSS file content so not generating sources.
+16:53:25 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:53:25 INFO  : 'fpga -state' command is executed.
+16:53:25 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:53:25 INFO  : Jtag cable 'Digilent Zed 210248687027' is selected.
+16:53:25 INFO  : 'jtag frequency' command is executed.
+16:53:25 INFO  : Context for 'APU' is selected.
+16:53:25 INFO  : Hardware design information is loaded from 'C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf'.
+16:53:25 INFO  : 'configparams force-mem-access 1' command is executed.
+16:53:25 INFO  : Context for processor 'ps7_cortexa9_0' is selected.
+16:53:25 ERROR : AP transaction error, DAP status f0000021
+16:53:25 INFO  : ----------------XSDB Script----------------
+connect -url tcp:127.0.0.1:3121
+targets -set -nocase -filter {name =~"APU*" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+loadhw -hw C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper_hw_platform_0/system.hdf -mem-ranges [list {0x40000000 0xbfffffff}]
+configparams force-mem-access 1
+targets -set -nocase -filter {name =~ "ARM*#0" && jtag_cable_name =~ "Digilent Zed 210248687027"} -index 0
+rst -processor
+----------------End of Script----------------
+
+16:53:37 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:53:37 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:53:40 ERROR : fpga configuration failed. DONE PIN is not HIGH
+16:53:54 INFO  : Connected to target on host '127.0.0.1' and port '3121'.
+16:53:54 INFO  : 'targets -set -filter {jtag_cable_name =~ "Digilent Zed 210248687027" && level==0} -index 1' command is executed.
+16:53:57 ERROR : fpga configuration failed. DONE PIN is not HIGH
