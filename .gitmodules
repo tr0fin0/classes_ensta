@@ -11,14 +11,20 @@
 	path = 2A/ROB201/ROB201_project
 	url = https://github.com/tr0fin0/ensta_ROB201_project.git
 [submodule "3A/CSC_5RO06_TA/CSC_5RO06_TA"]
-	path = 3A/CSC_5RO06_TA/CSC_5RO06_TA_project
+	path = 3A/CSC_5RO06_TA
 	url = https://github.com/tr0fin0/ensta_CSC_5RO06_TA_project.git
 [submodule "3A/CSC_5RO17_TA/CSC_5RO17_TA_TP1"]
 	path = 3A/CSC_5RO17_TA/CSC_5RO17_TA_TP1
 	url = https://github.com/tr0fin0/ensta_CSC_5RO17_TA_TP1.git
-[submodule "3A/CSC_5RO17_TA/CSC_5RO17_TA_TP2"]
-	path = 3A/CSC_5RO17_TA/CSC_5RO17_TA_TP2
-	url = https://github.com/tr0fin0/ensta_CSC_5RO17_TA_TP2.git
 [submodule "tpack"]
 	path = tpack
 	url = https://github.com/tr0fin0/tpack.git
+[submodule "3A/CSC_5RO17_TA/CSC_5RO17_TA_TP4"]
+	path = 3A/CSC_5RO17_TA/CSC_5RO17_TA_TP4
+	url = git@github.com:tr0fin0/ensta_CSC_5RO17_TA_TP4.git
+[submodule "3A/CSC_5RO07_TA"]
+	path = 3A/CSC_5RO07_TA
+	url = git@github.com:tr0fin0/ensta_CSC_5RO07_TA_project.git
+[submodule "3A/CSC_5RO11_TA"]
+	path = 3A/CSC_5RO11_TA
+	url = git@github.com:tr0fin0/ensta_CSC_5RO11_TA.git
