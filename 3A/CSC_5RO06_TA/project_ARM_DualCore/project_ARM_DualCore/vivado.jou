@@ -1,0 +1,52 @@
+#-----------------------------------------------------------
+# Vivado v2019.1 (64-bit)
+# SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+# IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+# Start of session at: Fri Oct  4 17:34:11 2024
+# Process ID: 14368
+# Current directory: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent15812 C:\Hardware-Accelerator-with-HLS-main\project_ARM_DualCore\project_ARM_DualCore.xpr
+# Log file: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/vivado.log
+# Journal file: C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore\vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.xpr
+update_compile_order -fileset sources_1
+file copy -force C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.sysdef C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1
+open_run impl_1
+open_hw
+connect_hw_server
+open_hw_target
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+current_hw_device [get_hw_devices xc7z020_1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices xc7z020_1] 0]
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+launch_sdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+launch_sdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+file copy -force C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.sysdef C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf
+
+reset_run impl_1 -prev_step 
+launch_runs impl_1 -to_step write_bitstream -jobs 8
+wait_on_run impl_1
+set_property PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property FULL_PROBES.FILE {} [get_hw_devices xc7z020_1]
+set_property PROGRAM.FILE {C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.runs/impl_1/design_1_wrapper.bit} [get_hw_devices xc7z020_1]
+program_hw_devices [get_hw_devices xc7z020_1]
+refresh_hw_device [lindex [get_hw_devices xc7z020_1] 0]
+launch_sdk -workspace C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk -hwspec C:/Hardware-Accelerator-with-HLS-main/project_ARM_DualCore/project_ARM_DualCore.sdk/design_1_wrapper.hdf

@@ -48,7 +48,7 @@ Py = 2 * Py_sim # Estimated measurement noise for Kalman Filter
 trueLandmarkId = []
 
 # Init displays
-show_animation = True
+# show_animation = True
 f, (ax1, ax2) = plt.subplots(1, 2, sharey=True, figsize=(16, 8))
 ax3 = plt.subplot(3, 2, 2)
 ax4 = plt.subplot(3, 2, 4)
@@ -427,7 +427,186 @@ class Utils:
 
 
 class Simulation:
-    pass
+    def __init__(
+            self,
+            simulation_duration,
+            dt_prediction,
+            landmarks,
+            x_estimation,
+            x_odometry,
+            x_true,
+            P_estimation,
+        ) -> None:
+        self.simulation_duration = simulation_duration
+        self.landmarks = landmarks
+        self.dt_prediction = dt_prediction
+
+        self.x_odometry = x_odometry
+        self.x_true = x_true
+
+        self.history_x_estimation = x_estimation
+        self.history_x_odometry = x_odometry
+        self.history_x_true = x_true
+
+        self.history_x_error = np.abs(x_estimation - x_true)
+        self.history_x_covariance = np.sqrt(
+            np.diag(P_estimation[0:STATE_SIZE, 0:STATE_SIZE]).reshape(3,1)
+        )
+        self.history_time = [0]
+
+
+    def plot(self, x_estimation, P_estimation, legend: bool) -> None:
+        ax1.cla()
+
+        # Plot true landmark and trajectory
+        ax1.plot(self.landmarks[:, 0], self.landmarks[:, 1], "*k")
+        ax1.plot(self.history_x_true[0, :], self.history_x_true[1, :], "-k", label="Trajectory")
+
+        # Plot odometry trajectory
+        ax1.plot(self.history_x_odometry[0, :], self.history_x_odometry[1, :], "-g", label="Odometry")
+
+        # Plot estimated trajectory, pose and landmarks
+        ax1.plot(self.history_x_estimation[0, :], self.history_x_estimation[1, :], "-y", label="EKF")
+        ax1.plot(x_estimation[0], x_estimation[1], ".r")
+        plot_covariance_ellipse(x_estimation[0: STATE_SIZE],
+                                P_estimation[0: STATE_SIZE, 0: STATE_SIZE], ax1, "--r")
+
+        for i in range(calc_n_lm(x_estimation)):
+            id = STATE_SIZE + i * 2
+            ax1.plot(x_estimation[id], x_estimation[id + 1], "xr")
+            plot_covariance_ellipse(x_estimation[id:id + 2],
+                                    P_estimation[id:id + 2, id:id + 2], ax1, "--r")
+
+
+
+
+        ax1.grid(True)
+        x_max, x_min = +25, -25
+        y_max, y_min = +35, -15
+        x_ticks = [i for i in range(x_min, x_max+1, 5)]
+        y_ticks = [i for i in range(y_min, y_max+1, 5)]
+        ax1.axis([x_min, x_max, y_min, y_max])
+        ax1.set_title('Cartesian Coordinates')
+        ax1.set_ylabel('y [m]')
+        ax1.set_xlabel('x [m]')
+        ax1.set_xticks(x_ticks)
+        ax1.set_yticks(y_ticks)
+        ax1.legend(loc='upper left')
+
+        ax2.set_xticks([])
+
+
+        x_ticks = [i for i in range(0, self.simulation_duration*10+1, 50)]
+
+        # rms_y_err = Utils.compute_rms_error(history_x_error[1, :])
+        # rms_theta_err = Utils.compute_rms_error(history_x_error[2, :])
+
+        # rms_y_cov = Utils.compute_rms_error(3*history_x_covariance[1, :])
+        # rms_theta_cov = Utils.compute_rms_error(3*history_x_covariance[2, :])
+
+        # label_y_err = f'{rms_y_err:2.4f} error'
+        # label_theta_err = f'{rms_theta_err:2.4f} error'
+
+        # label_y_cov = f'{rms_y_cov:2.4f} 3$\sigma$ covariance'
+        # label_theta_cov = f'{rms_theta_cov:2.4f} 3$\sigma$ covariance'
+
+
+        # plot errors curves
+        if legend:
+            rms_x_err = Utils.compute_rms_error(self.history_x_error[0, :])
+            rms_x_cov = Utils.compute_rms_error(3*self.history_x_covariance[0, :])
+            label_x_err = f'{rms_x_err:2.4f} error'
+            label_x_cov = f'{rms_x_cov:2.4f} 3$\sigma$ covariance'
+            ax3.plot(self.history_x_error[0, :],'b', label=label_x_err)
+            ax3.plot(+3.0 * self.history_x_covariance[0, :],'r', label=label_x_cov)
+        else:
+            ax3.plot(self.history_x_error[0, :],'b')
+            ax3.plot(+3.0 * self.history_x_covariance[0, :],'r')
+        ax3.plot(-3.0 * self.history_x_covariance[0, :],'r')
+        ax3.fill_between(
+            self.history_time,
+            +3.0 * self.history_x_covariance[0, :],
+            -3.0 * self.history_x_covariance[0, :],
+            color='gray',
+            alpha=0.75
+        )
+        ax3.set_title('Extended Kalman Filter SLAM')
+        ax3.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+        ax3.set_ylabel('x [m]')
+        ax3.set_xlim(0, simulation_duration)
+        ax3.set_xticks(x_ticks)
+        ax3.set_xticklabels(['' for _ in x_ticks])
+        if legend: ax3.legend(loc='upper right')
+        ax3.grid(True)
+
+        ax4.plot(self.history_x_error[1, :],'b')
+        ax4.plot(+3.0 * self.history_x_covariance[1, :],'r')
+        ax4.plot(-3.0 * self.history_x_covariance[1, :],'r')
+        ax4.fill_between(
+            self.history_time,
+            +3.0 * self.history_x_covariance[1, :],
+            -3.0 * self.history_x_covariance[1, :],
+            color='gray',
+            alpha=0.75
+        )
+        ax4.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+        ax4.set_ylabel('y [m]')
+        ax4.set_xlim(0, simulation_duration)
+        ax4.set_xticks(x_ticks)
+        ax4.set_xticklabels(['' for _ in x_ticks])
+        # ax4.legend(loc='upper right')
+        ax4.grid(True)
+
+        ax5.plot(self.history_x_error[2, :],'b')
+        ax5.plot(+3.0 * self.history_x_covariance[2, :],'r')
+        ax5.plot(-3.0 * self.history_x_covariance[2, :],'r')
+        ax5.fill_between(
+            self.history_time,
+            +3.0 * self.history_x_covariance[2, :],
+            -3.0 * self.history_x_covariance[2, :],
+            color='gray',
+            alpha=0.75
+        )
+        ax5.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
+        ax5.set_ylabel(r"$\theta$ [rad]")
+        ax5.set_xlabel('time [s]')
+        ax5.set_xlim(0, simulation_duration)
+        ax5.set_xticks(x_ticks)
+        # ax5.legend(loc='upper right')
+        ax5.grid(True)
+
+        plt.tight_layout()
+        plt.pause(0.001)
+
+        # ax3.set_label(label_x_err)
+
+
+
+    def update_history(
+            self, k: int, x_estimation: np.ndarray[float], P_estimation: np.ndarray[float]
+        ) -> None:
+        """
+        Update simulation history.
+
+        Args:
+            k (int) : simulation instant.
+            x_estimation (np.ndarray[float]) : system state estimation at instant k.
+            P_estimation (np.ndarray[float]) : estimation covariance at instant k.
+        """
+        self.history_x_true = np.hstack((self.history_x_true, self.x_true))
+        self.history_x_odometry = np.hstack((self.history_x_odometry, self.x_odometry))
+        self.history_x_estimation = np.hstack((self.history_x_estimation, x_estimation[0:STATE_SIZE]))
+
+        error = x_estimation[0:STATE_SIZE] - self.x_true
+        error[2, 0] = pi_2_pi(error[2, 0])
+
+        self.history_x_error = np.hstack((self.history_x_error, error))
+        self.history_x_covariance = np.hstack((
+            self.history_x_covariance, np.sqrt(
+                np.diag(P_estimation[0:STATE_SIZE, 0:STATE_SIZE]).reshape(3,1)
+            )
+        ))
+        self.history_time.append(k*10)
 
 
 
@@ -439,6 +618,8 @@ class Simulation:
 
 def execution(
         landmarks: np.ndarray[float],
+        dt_prediction: int = 1,
+        P_constant: int = 1,
         save: bool = False,
         show: bool = True,
     ) -> None:
@@ -450,190 +631,69 @@ def execution(
         show (bool) : show result? Default value is True.
     """
     # Simulation initial conditions
-    x_DR = np.zeros((STATE_SIZE, 1))# Init dead reckoning (sum of individual controls)
-    x_true = np.zeros((STATE_SIZE, 1))
-    x_estimation = np.zeros((STATE_SIZE, 1))
-    P_estimation = 0.01 * np.eye(STATE_SIZE)
-    P_estimation[2,2] = 0.0001
+    P_true = np.diag([0.01, 0.01, 0.0001])
+    P_estimation = P_constant * P_true
 
-    # Init history
-    history_x_estimation = x_estimation
-    history_x_true = x_true
-    history_x_DR = x_true
-    history_x_error = np.abs(x_estimation-x_true)  # pose error
-    history_x_covariance = np.sqrt(np.diag(P_estimation[0:STATE_SIZE,0:STATE_SIZE]).reshape(3,1))  #state std dev
+    x_true = np.zeros((STATE_SIZE, 1))
+    x_odometry = np.zeros((STATE_SIZE, 1))
+    x_estimation = np.zeros((STATE_SIZE, 1))
+
 
     simulation = Simulation(
-
+        simulation_duration,
+        dt_prediction,
+        landmarks,
+        x_estimation,
+        x_odometry,
+        x_true,
+        P_estimation,
     )
 
     # counter for plotting
     count = 0
     time = 0.0
-    times = [time]
+
+    # todo
+    #   remove global scoope
+    #   create classes
+    #   document EKF functions
+
+    # TODO create plot init function
+    #   include supname
+    #   include axis from global scope on local scope
 
     while  time <= simulation.simulation_duration:
+        # simulation.simulate_world(k)
         count = count + 1
         time += DT
-        times.append(time*10)
 
         # Simulate motion and generate u and y
+        # TODO update observation mode
         uTrue = calc_input()
-        x_true, y, x_DR, u = observation(x_true, x_DR, uTrue, landmarks)
-
+        x_true, y, x_odometry, u = observation(x_true, x_odometry, uTrue, landmarks)
         x_estimation, P_estimation = ekf_slam(x_estimation, P_estimation, u, y)
 
-        # store data history
-        history_x_estimation = np.hstack((history_x_estimation, x_estimation[0:STATE_SIZE]))
-        history_x_DR = np.hstack((history_x_DR, x_DR))
-        history_x_true = np.hstack((history_x_true, x_true))
-        err = x_estimation[0:STATE_SIZE]-x_true
-        err[2] = pi_2_pi(err[2])
-        history_x_error = np.hstack((history_x_error,err))
-        history_x_covariance = np.hstack((history_x_covariance,np.sqrt(np.diag(P_estimation[0:STATE_SIZE,0:STATE_SIZE]).reshape(3,1))))
+        simulation.x_true = x_true
+        simulation.x_odometry = x_odometry
 
+        simulation.update_history(time, x_estimation, P_estimation)
 
-        if show_animation and count%15==0:
-            # for stopping simulation with the esc key.
-            plt.gcf().canvas.mpl_connect('key_release_event',
-                    lambda event: [exit(0) if event.key == 'escape' else None])
+        if show and count%10==0:
+            simulation.plot(x_estimation, P_estimation, legend=False)
 
-            ax1.cla()
+    # todo modify legend variable name
+    #   use for to set plot.
+    simulation.plot(x_estimation, P_estimation, legend=True)
 
-            # Plot true landmark and trajectory
-            ax1.plot(landmarks[:, 0], landmarks[:, 1], "*k")
-            ax1.plot(history_x_true[0, :], history_x_true[1, :], "-k", label="Trajectory")
+    file_name = f'EKF_SLAM_{dt_prediction}_'
+    file_name += f'{landmarks.shape[0]}_'
+    file_name += f'{P_constant}.png'
+    file_path = os.path.join(os.path.abspath(os.getcwd()), '../outputs', file_name)
 
-            # Plot odometry trajectory
-            ax1.plot(history_x_DR[0, :], history_x_DR[1, :], "-g", label="Odometry")
+    plt.suptitle(file_name)
+    if save: plt.savefig(file_path, dpi=300)
+    if show: plt.show()
 
-            # Plot estimated trajectory, pose and landmarks
-            ax1.plot(history_x_estimation[0, :], history_x_estimation[1, :], "-y", label="EKF")
-            ax1.plot(x_estimation[0], x_estimation[1], ".r")
-            plot_covariance_ellipse(x_estimation[0: STATE_SIZE],
-                                    P_estimation[0: STATE_SIZE, 0: STATE_SIZE], ax1, "--r")
-
-            for i in range(calc_n_lm(x_estimation)):
-                id = STATE_SIZE + i * 2
-                ax1.plot(x_estimation[id], x_estimation[id + 1], "xr")
-                plot_covariance_ellipse(x_estimation[id:id + 2],
-                                        P_estimation[id:id + 2, id:id + 2], ax1, "--r")
-
-
-
-            ax1.grid(True)
-            x_max, x_min = +25, -25
-            y_max, y_min = +35, -15
-            x_ticks = [i for i in range(x_min, x_max+1, 5)]
-            y_ticks = [i for i in range(y_min, y_max+1, 5)]
-            ax1.axis([x_min, x_max, y_min, y_max])
-            ax1.set_title('Cartesian Coordinates')
-            ax1.set_ylabel('y [m]')
-            ax1.set_xlabel('x [m]')
-            ax1.set_xticks(x_ticks)
-            ax1.set_yticks(y_ticks)
-            ax1.legend(loc='upper left')
-
-            ax2.set_xticks([])
-
-
-            x_ticks = [i for i in range(0, simulation_duration*10+1, 50)]
-
-            rms_x_err = Utils.compute_rms_error(history_x_error[0, :])
-            rms_y_err = Utils.compute_rms_error(history_x_error[1, :])
-            rms_theta_err = Utils.compute_rms_error(history_x_error[2, :])
-
-            rms_x_cov = Utils.compute_rms_error(3*history_x_covariance[0, :])
-            rms_y_cov = Utils.compute_rms_error(3*history_x_covariance[1, :])
-            rms_theta_cov = Utils.compute_rms_error(3*history_x_covariance[2, :])
-
-            label_x_err = f'{rms_x_err:2.4f} error'
-            label_y_err = f'{rms_y_err:2.4f} error'
-            label_theta_err = f'{rms_theta_err:2.4f} error'
-
-            label_x_cov = f'{rms_x_cov:2.4f} 3$\sigma$ covariance'
-            label_y_cov = f'{rms_y_cov:2.4f} 3$\sigma$ covariance'
-            label_theta_cov = f'{rms_theta_cov:2.4f} 3$\sigma$ covariance'
-
-
-            # plot errors curves
-            ax3.plot(history_x_error[0, :],'b')
-            # if is_first:
-            #     is_first = False
-            #     line, = ax3.plot(history_x_error[0, :],'b', label=label_x_err)
-            # else:
-                # print(count)
-                # print(time)
-                # print(DT)
-                # line.set_ydata(history_x_error[0, :])
-                # line.set_label(label_x_err)
-            ax3.plot(+3.0 * history_x_covariance[0, :],'r')
-            ax3.plot(-3.0 * history_x_covariance[0, :],'r')
-            ax3.fill_between(
-                times,
-                +3.0 * history_x_covariance[0, :],
-                -3.0 * history_x_covariance[0, :],
-                color='gray',
-                alpha=0.75
-            )
-            ax3.set_title('Extended Kalman Filter SLAM')
-            ax3.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-            ax3.set_ylabel('x [m]')
-            ax3.set_xlim(0, simulation_duration)
-            ax3.set_xticks(x_ticks)
-            ax3.set_xticklabels(['' for _ in x_ticks])
-            # ax3.legend(loc='upper right')
-            ax3.grid(True)
-
-            ax4.plot(history_x_error[1, :],'b')
-            ax4.plot(+3.0 * history_x_covariance[1, :],'r')
-            ax4.plot(-3.0 * history_x_covariance[1, :],'r')
-            ax4.fill_between(
-                times,
-                +3.0 * history_x_covariance[1, :],
-                -3.0 * history_x_covariance[1, :],
-                color='gray',
-                alpha=0.75
-            )
-            ax4.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-            ax4.set_ylabel('y [m]')
-            ax4.set_xlim(0, simulation_duration)
-            ax4.set_xticks(x_ticks)
-            ax4.set_xticklabels(['' for _ in x_ticks])
-            # ax4.legend(loc='upper right')
-            ax4.grid(True)
-
-            ax5.plot(history_x_error[2, :],'b')
-            ax5.plot(+3.0 * history_x_covariance[2, :],'r')
-            ax5.plot(-3.0 * history_x_covariance[2, :],'r')
-            ax5.fill_between(
-                times,
-                +3.0 * history_x_covariance[2, :],
-                -3.0 * history_x_covariance[2, :],
-                color='gray',
-                alpha=0.75
-            )
-            ax5.yaxis.set_major_formatter(FormatStrFormatter('%.2f'))
-            ax5.set_ylabel(r"$\theta$ [rad]")
-            ax5.set_xlabel('time [s]')
-            ax5.set_xlim(0, simulation_duration)
-            ax5.set_xticks(x_ticks)
-            # ax5.legend(loc='upper right')
-            ax5.grid(True)
-
-            plt.tight_layout()
-            plt.pause(0.001)
-
-    ax3.set_label(label_x_err)
-
-    plt.savefig('EKFSLAM.png')
-
-    t_errors = np.sqrt(np.square(history_x_error[0, :]) + np.square(history_x_error[1, :]))
-    o_errors = np.sqrt(np.square(history_x_error[2, :]))
-    print("Mean (var) translation error : {:e} ({:e})".format(np.mean(t_errors), np.var(t_errors)))
-    print("Mean (var) rotation error : {:e} ({:e})".format(np.mean(o_errors), np.var(o_errors)))    # keep window open
-    print("Press Q in figure to finish...")
-    plt.show()
 
 
 def main():
@@ -644,7 +704,8 @@ def main():
         [-05.0, +20.0]
     ])
 
-    execution(landmarks=landmarks, save=False, show=True)
+    # remove 
+    execution(landmarks=landmarks, save=True, show=True)
 
 
 
