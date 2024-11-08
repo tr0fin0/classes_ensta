@@ -1,18 +1,14 @@
 """
-Extended Kalman Filter SLAM example
+[CSC_5RO12_TA_TP4] Navegation pour la Robotique, Extended Kalman Filter SLAM
 
 author: Atsushi Sakai (@Atsushi_twi)
-
-Modified : Goran Frehse, David Filliat
+modified : Goran Frehse, David Filliat
+modified : Guilherme Trofino
 """
+from dataclasses import dataclass
+from matplotlib.ticker import FormatStrFormatter
 
 import math
-
-from dataclasses import dataclass
-from math import sin, cos, atan2, pi
-from matplotlib.ticker import FormatStrFormatter
-from matplotlib.ticker import PercentFormatter
-
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -181,11 +177,11 @@ class EKF_SLAM:
             np.zeros((2, 2 * landmark_count - 2 * (landmark_index + 1)))
         ))
 
-    F = np.vstack((F1, F2))
+        F = np.vstack((F1, F2))
 
-    H = G @ F
+        H = G @ F
 
-    return H
+        return H
 
 
     def calc_innovation(
@@ -222,7 +218,7 @@ class EKF_SLAM:
         H = EKF_SLAM.H(distance, relative_position, x_estimation, landmark_index)
         S = H @ P_estimation @ H.T + R_estimation
 
-    return innovation, S, H
+        return innovation, S, H
 
 
     def compute_iteration(
@@ -280,40 +276,33 @@ class EKF_SLAM:
                 )
 
 
-        # Extend map if required
-        if min_id == nLM:
-            print("New LM")
+            # Extend map if required
+            if min_id == number_landmarks:
+                print("New LM")
 
-            # Extend state and covariance matrix
-            x_estimation = np.vstack((x_estimation, calc_landmark_position(x_estimation, y[iy, :])))
+                # Extend state and covariance matrix
+                x_estimation = np.vstack((x_estimation, Utils.get_landmark_position_absolute(x_estimation, y[iy, :])))
 
-            Jr, Jy = jacob_augment(x_estimation[0:3], y[iy, :])
-            bottomPart = np.hstack((Jr @ P_estimation[0:3, 0:3], Jr @ P_estimation[0:3, 3:]))
-            rightPart = bottomPart.T
-            P_estimation = np.vstack((np.hstack((P_estimation, rightPart)),
-                              np.hstack((bottomPart,
-                              Jr @ P_estimation[0:3, 0:3] @ Jr.T + Jy @ Py @ Jy.T))))
+                Jr, Jy = EKF_SLAM.jacob_augment(x_estimation[0:3], y[iy, :])
+                bottomPart = np.hstack((Jr @ P_estimation[0:3, 0:3], Jr @ P_estimation[0:3, 3:]))
+                rightPart = bottomPart.T
+                P_estimation = np.vstack((np.hstack((P_estimation, rightPart)),
+                                np.hstack((bottomPart,
+                                Jr @ P_estimation[0:3, 0:3] @ Jr.T + Jy @ R_estimation @ Jy.T))))
 
-        else:
-            # Perform Kalman update
-            innovation, S, H = calc_innovation(x_estimation, P_estimation, y[iy, 0:2], min_id)
-            K = (P_estimation @ H.T) @ np.linalg.inv(S)
+            else:
+                # Perform Kalman update
+                innovation, S, H = EKF_SLAM.calc_innovation(x_estimation, P_estimation, y[iy, 0:2], min_id, R_estimation)
+                K = (P_estimation @ H.T) @ np.linalg.inv(S)
 
-            x_estimation = x_estimation + (K @ innovation)
+                x_estimation = x_estimation + (K @ innovation)
 
                 P_estimation = (np.eye(len(x_estimation)) - K @ H) @ P_estimation
                 P_estimation = 0.5 * (P_estimation + P_estimation.T)    # symetry matrix
 
-    x_estimation[2] = pi_2_pi(x_estimation[2])
+        x_estimation[2] = Utils.convert_angle(x_estimation[2])
 
-    return x_estimation, P_estimation
-
-
-
-
-@dataclass
-class EKF_SLAM:
-    pass
+        return x_estimation, P_estimation
 
 
 
@@ -351,21 +340,7 @@ class Utils:
         Args:
             angle (float): angle in radians.
         """
-        if (angle > np.pi):
-            angle = angle - 2 * pi
-        elif (angle < -np.pi):
-            angle = angle + 2 * pi
-        return angle
-
-
-    def compute_ess(weights_particles: np.ndarray[float]) -> float:
-        """
-        Calculate the Effective Sample Size (ESS).
-
-        Args:
-            weights (np.ndarray): particles weights.
-        """
-        return 1 / np.sum(np.square(weights_particles))
+        return (angle + math.pi) % (2 * math.pi) - math.pi
 
 
     def compute_rms_error(arr: np.ndarray[float]) -> float:
@@ -542,6 +517,8 @@ class Simulation:
             x_odometry,
             x_estimation,
             P_estimation,
+            Q_true,
+            R_true,
         ) -> None:
         self.dt = dt
         self.landmarks = landmarks
@@ -695,8 +672,13 @@ class Simulation:
             label="Extended Kalman Filter Trajectory"
         )
         ax1.plot(x_estimation[0], x_estimation[1], ".r")
-        plot_covariance_ellipse(x_estimation[0: STATE_SIZE],
-                                P_estimation[0: STATE_SIZE, 0: STATE_SIZE], ax1, "--r")
+        Utils.plot_covariance_ellipse(
+            x_estimation[0: S_S],
+            P_estimation[0: S_S, 0: S_S], 
+            "--r",
+            ax1,
+            (0,0)
+        )
 
 
         # Covariance ellipses
@@ -841,12 +823,18 @@ def execution(
         save (bool) : save result? Default value is False.
         show (bool) : show result? Default value is True.
     """
-    # Simulation initial conditions
+    # Define Kalman covariance errors robot movements
     P_true = np.diag([0.01, 0.01, 0.0001])
     Q_true = np.diag([0.1, np.deg2rad(1)]) ** 2     # input noise
     R_true = np.diag([0.1, np.deg2rad(5)]) ** 2     # measurement noise
 
     P_estimation = P_constant * P_true
+    Q_estimation = Q_constant * Q_true  # estimated input noise
+    R_estimation = R_constant * R_true  # estimated measurement noise
+
+
+    # Simulation initial conditions
+    simulation_duration = 80    # simulation time [s]
 
     x_true = np.zeros((S_S, 1))
     x_initial = x_true
@@ -912,6 +900,7 @@ def execution(
     if show: plt.show()
 
 
+# KNOWN_DATA_ASSOCIATION = 0  # Whether we use the true landmarks id or not
 
 def main():
     # Utils.generate_landmarks((0, 0), 0, 10, 10)
