@@ -1,0 +1,86 @@
+\documentclass[journal]{IEEEtran}
+
+% package import
+\usepackage{subfiles}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{makecell}
+
+
+\renewcommand{\algorithmiccomment}[1]{\hfill\textcolor{gray}{\# #1}}
+
+\begin{document}
+\title{Accélérateurs matériels pour l'IA et la robotique}
+
+\author{Gianluca~BAGHINO,
+        Daniel~FRULANE,
+        Natalia~GALLEGO,
+        Diego~PINCER
+        et Guilherme~TROFINO% 
+}
+
+\markboth{CSC\_5RO06\_TA Project Groupe 3}{}
+
+\maketitle
+
+\begin{abstract}
+Étude de performance entre un accélérateur matériel sur un SoC FPGA et : un PC, un processeur ARM, ainsi qu'un circuit FPGA, pour l'opération de multiplication de matrices.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Accélération matérielle, FPGA, multiplication de matrices, Vivado HLS et Xilinx.
+\end{IEEEkeywords}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+
+Ce projet vise à évaluer les performances en termes de temps d'exécution et d'utilisation des ressources d'une fonction de multiplication de matrices d'entiers de 32 bits sur :
+\begin{enumerate}
+    \item processeur généraliste sur PC (x86\_64);
+    \item processeur embarquée ARM9 (Dual Core);
+    \item accélérateur matériel sur FPGA.
+\end{enumerate}
+
+L'objectif est de proposer une option d'accélérateur matériel pour les systèmes embarqués. Avec la popularisation des applications d'IA, ces systèmes nécessitent de plus en plus l'opération de multiplication de matrices, notamment pour des systèmes mobiles, comme les voitures autonomes, en privilégiant l'efficacité énergétique et le coût compétitif.
+
+\subsection{Division des Responsabilités}
+
+Pour accomplir cet objectif, le groupe a été réparti de la manière suivante
+\begin{enumerate}
+    \item \textbf{Ingénieur Logiciel}: Natalia GALLEGO;
+    \item \textbf{Ingénieur Logiciel Embarqué}: Gianluca BAGHINO;
+    \item \textbf{Ingénieur HLS / Optimisation}:
+    \begin{enumerate}
+        \item Daniel FRULANE;
+        \item Guilherme TROFINO;
+    \end{enumerate}
+    \item \textbf{Ingénieur Matériel}:
+    \begin{enumerate}
+        \item Diego PINCER;
+    \end{enumerate}
+\end{enumerate}
+
+Le \textbf{Ingénieur Logiciel} est le responsable de la conception des algorithmes pour le processeur sur PC. Le \textbf{Ingénieur Logiciel Embarqué} est responsable de la conception des algorithmes pour le processeur embarqué ARM9. Le \textbf{Ingénieur HLS / Optimisation} est responsable de la conception des algorithmes pour l'accélérateur matériel en Vivado HLS. Le \textbf{Ingénieur Matériel} est responsable de l'implémentation des algorithmes pour l'accélérateur matériel sur FPGA.
+
+
+\subfile{./sections/CSC_5RO06_TA_ALG.tex}
+
+    
+\section{Évaluation de Performances sur PC}
+\subfile{./sections/CSC_5RO06_TA_Q1.tex}
+\section{Évaluation de Performances sur Processeur Embarqué ARM9}
+\subfile{./sections/CSC_5RO06_TA_Q2.tex}
+\section{Estimation des Performances Accélérateur Matériel sur FPGA}
+\subfile{./sections/CSC_5RO06_TA_Q3.tex}
+\section{Mesures des Performances Accélérateur Matériel sur FPGA}
+\subfile{./sections/CSC_5RO06_TA_Q4.tex}
+\subfile{./sections/CSC_5RO06_TA_References.tex}
+
+
+\end{document}
