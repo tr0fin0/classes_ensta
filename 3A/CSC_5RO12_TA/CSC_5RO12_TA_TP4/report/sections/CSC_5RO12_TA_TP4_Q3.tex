@@ -4,4 +4,54 @@
 \section{Question 3}
 % For this question, keep the conﬁguration with unknown data association (KNOWN_DATA_ASSOCIATION = 0) and an environment with a large loop and a sparse map.
 % Change the estimated noise values Q and Py so that they are (1) smaller, (2) equal or (3) larger than the values used for simulation (Q_Sim and Py_Sim). What happens in each case for the ﬁlter performance, the ﬁlter consistency and the map quality? What seems to be the best conﬁguration ?
+\begin{definition}
+    a short loop and a dense map with many landmarks inside the robot perception radius
+\end{definition}
+\noindent Ci-dessous, sont présentées quelques interactions résultant de la configuration de \textbf{landmarks} du scenario en variant \texttt{Q\_constant} à la gauche et \texttt{R\_constant} à la droite:
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_10_10_1_3_2.png}
+        \caption{with \texttt{Q\_constant = 3}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_30_10_1_6_1.png}
+        \caption{with \texttt{R\_constant = 1}}
+        \label{}
+    \end{subfigure}\hfill
+    % \begin{subfigure}[b]{0.475\textwidth}
+    %     \centering
+    %     \includegraphics[width=\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_10_10_1_6_2.png}
+    %     \caption{with \texttt{Q\_constant = 6}}
+    %     \label{}
+    % \end{subfigure}\hfill
+    % \begin{subfigure}[b]{0.475\textwidth}
+    %     \centering
+    %     \includegraphics[width=\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_10_10_1_6_2.png}
+    %     \caption{with \texttt{R\_constant = 2}}
+    %     \label{}
+    % \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_30_10_1_12_2.png}
+        \caption{with \texttt{Q\_constant = 12}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_30_10_1_6_4.png}
+        \caption{with \texttt{R\_constant = 4}}
+        \label{}
+    \end{subfigure}
+    \caption{Scenario 1, with \texttt{landmarks\_know = False}}
+    \label{}
+\end{figure}
+\noindent Tout d'abord, le \texttt{Q\_constant} est analysé, représentant la constante de la matrice de covariance du bruit de processus. On constate que la qualité générale du filtre est inversement proportionnelle à cette constante. Cela signifie que plus la valeur de \texttt{Q\_constant} est faible, plus le résultat du filtre de Kalman est précis, car les erreurs et les covariances diminuent. Ce résultat est attendu, car plus le bruit de processus est important, plus il est difficile d'estimer correctement le véritable état du système.\\
+
+\noindent Ensuite, on analyse le \texttt{R\_constant}, la constante de la matrice de covariance du bruit de mesure. On observe que la qualité générale du filtre est plus sensible à cette valeur. Lorsqu'elle est faible (\texttt{R\_constant} = 1), le filtre manque de variabilité nécessaire pour explorer différents résultats, ce qui entraîne une détérioration visible, avec l'erreur dépassant la limite de 3 covariances.\\
+
+\noindent À l'inverse, lorsqu'elle est élevée (\texttt{R\_constant} = 4), le filtre présente une variabilité excessive, rendant les résultats trop dispersés pour permettre une estimation cohérente. Cela souligne l'importance d'un réglage précis et minutieux de cette variable.
 \end{document}

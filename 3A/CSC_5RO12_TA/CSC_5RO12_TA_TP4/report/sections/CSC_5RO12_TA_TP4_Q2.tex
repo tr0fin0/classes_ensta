@@ -3,4 +3,50 @@
 \begin{document}
 \section{Question 2}
 % Answer the same question when the data association is performed using the Mahalanobis distance (KNOWN_DATA_ASSOCIATION = 0). You may have to tune the M_DIST_TH parameter depending on your environment.
+\subsection{Scenario 1}
+\begin{definition}
+    a short loop and a dense map with many landmarks inside the robot perception radius
+\end{definition}
+\noindent Ci-dessous, sont présentées quelques interactions résultant de la configuration de \textbf{landmarks} du scenario:
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.65\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.2_False_25_10_1_6_2.png}
+	\caption{Execution Scenario 1, with \texttt{landmarks\_know = False}}
+	\label{}
+\end{figure}
+\noindent Dans ce cas, on observe que l'utilisation de références estimées, et non plus absolues, entraîne des erreurs et des covariances plus élevées. Cela est attendu, car les références ne garantissent plus leur exactitude, introduisant ainsi davantage d'incertitudes dans la simulation. Néanmoins, le comportement périodique des covariances demeure également dans ce cas.\\
+
+\noindent Il est à noter que, dans ce scénario, il y a plus de références estimées que de références réelles, soit 27 estimées contre 25 véritables. Cela s'explique par le fait que des références proches peuvent entraîner des faux positifs, provoquant une « confusion » du filtre, qui considère qu'il y a une référence là où il n'y en a pas.\\
+
+\noindent Cependant, le résultat global de l'estimation du SLAM par le filtre de Kalman reste d'une qualité acceptable et applicable à des situations pratiques.
+
+\subsection{Scenario 2}
+\begin{definition}
+    a long loop and a dense map with many landmarks all along the loop
+\end{definition}
+\noindent Ci-dessous, sont présentées quelques interactions résultant de la configuration de \textbf{landmarks} du scenario:
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.65\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_30_10_1_6_2.png}
+	\caption{Exécution Scenario 2, with \texttt{landmarks\_know = False}}
+	\label{}
+\end{figure}
+\noindent On remarque que, dans ce cas, le résultat global de l'estimation du SLAM par le filtre de Kalman présente une détérioration considérable, avec l'erreur de la coordonnée y dépassant la limite de 3 covariances. Cela peut être causé par la distribution des références qui, lorsqu'elles se regroupent dans une zone plus restreinte, augmentent la probabilité de "confusion" du filtre. Lors des estimations, on observe une plus grande instabilité, car il devient plus difficile de distinguer des points proches.\\
+
+\noindent Même avec la correction apportée par l'observation d'une référence entre 550 et 600 secondes, le filtre a nécessité davantage d'itérations pour corriger l'erreur accumulée. 
+
+\subsection{Scenario 3}
+\begin{definition}
+    long loop and a sparse map with only few landmarks near the start position
+\end{definition}
+\noindent Ci-dessous, sont présentées quelques interactions résultant de la configuration de \textbf{landmarks} du scenario:
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=0.65\linewidth]{../outputs/EKF_SLAM_0.1_1.5_0.1_False_10_10_1_6_2.png}
+	\caption{Exécution Scenario 3, with \texttt{landmarks\_know = False}}
+	\label{}
+\end{figure}
+\noindent Dans ce cas, le résultat global de l'estimation du SLAM par le filtre de Kalman reste d'une qualité acceptable et applicable à des situations pratiques, malgré une augmentation générale de l'erreur et de la covariance pour les différentes coordonnées.\\
+
+\noindent Dans les conditions de vitesse tangentielle et angulaire définies, l'odométrie a servi de référence adéquate. Cependant, d'autres valeurs pourraient modifier le résultat final, ce qui pourrait détériorer la performance du filtre..
 \end{document}

@@ -77,69 +77,6 @@ class EKF_SLAM:
         return G
 
 
-    def search_landmark_id(
-            yi: np.ndarray[float],
-            x_estimation: np.ndarray[float],
-            P_estimation: np.ndarray[float],
-            R_estimation: np.ndarray[float],
-            mahalanobis_distance: float = 9.0
-        ):
-        """
-        Return landmark id with Mahalanobis distance.
-
-        Args:
-            yi (np.ndarray[float]) : 
-            x_estimation (np.ndarray[float]) : system state estimation at instant k.
-            P_estimation (np.ndarray[float]) : system state estimation covariance at instant k.
-            R_estimation (np.ndarray[float]) : measure noise covariance matrix at instant k.
-            mahalanobis_distance (float) : mahalanobis threshold distance. Default value is 9.0.
-        """
-        dist_min = []
-
-        for i in range(Utils.count_landmarks(x_estimation)):
-            innovation, S, _ = EKF_SLAM.calc_innovation(
-                i,
-                yi,
-                x_estimation,
-                P_estimation,
-                R_estimation,
-            )
-            dist_min.append(innovation.T @ np.linalg.inv(S) @ innovation)
-
-        dist_min.append(mahalanobis_distance)
-
-        return dist_min.index(min(dist_min))
-
-
-    def extended_jacobians(
-            x_estimation: np.ndarray[float], y_estimation: np.ndarray[float]
-        ) -> list[np.ndarray[float], np.ndarray[float]]:
-        """
-        Return exteded covariances jacobians matrices.
-
-        Note: Jr is the state extended jacobian and Jy is the command extended jacobian.
-
-        Args:
-            x_estimation (np.ndarray[float]) : system state estimation at instant k.
-            y_estimation (np.ndarray): observed landmark estimation at instant k.
-        """
-        _, _, theta = x_estimation[0, 0], x_estimation[1, 0], x_estimation[2, 0]
-        v, w = y_estimation[0], y_estimation[1]
-
-
-        Jr = np.array([
-            [1.0, 0.0, -v * math.sin(theta + w)],
-            [0.0, 1.0, +v * math.cos(theta + w)]
-        ])
-
-        Jy = np.array([
-            [math.cos(theta + w), -v * math.sin(theta + w)],
-            [math.sin(theta + w), +v * math.cos(theta + w)]
-        ])
-
-        return Jr, Jy
-
-
     def H(
             distance: float,
             relative_position: np.ndarray[float],
@@ -230,7 +167,6 @@ class EKF_SLAM:
             R_estimation: np.ndarray[float],
             dt: float,
             landmarks_known: bool,
-            undelayed_method: bool,
             landmarks_true_id: list,
         ):
         """
@@ -277,22 +213,36 @@ class EKF_SLAM:
 
 
             # Extend map if required
-            if min_id == number_landmarks:
+            if min_id == landmark_count:
                 print("New LM")
 
-                # Extend state and covariance matrix
-                x_estimation = np.vstack((x_estimation, Utils.get_landmark_position_absolute(x_estimation, y[iy, :])))
+                # Extend state matrix
+                x_estimation = np.vstack((
+                    x_estimation, Utils.get_landmark_position_absolute(x_estimation, y[iy, :])
+                ))
 
-                Jr, Jy = EKF_SLAM.jacob_augment(x_estimation[0:3], y[iy, :])
-                bottomPart = np.hstack((Jr @ P_estimation[0:3, 0:3], Jr @ P_estimation[0:3, 3:]))
+                # Extend covariance matrix
+                Jr, Jy = EKF_SLAM.extended_jacobians(x_estimation[0:3], y[iy, :])
+                bottomPart = np.hstack((
+                    Jr @ P_estimation[0:3, 0:3], Jr @ P_estimation[0:3, 3:]
+                ))
                 rightPart = bottomPart.T
-                P_estimation = np.vstack((np.hstack((P_estimation, rightPart)),
-                                np.hstack((bottomPart,
-                                Jr @ P_estimation[0:3, 0:3] @ Jr.T + Jy @ R_estimation @ Jy.T))))
+
+                P_estimation = np.vstack((
+                    np.hstack((P_estimation, rightPart)),
+                    np.hstack((bottomPart,
+                    Jr @ P_estimation[0:3, 0:3] @ Jr.T + Jy @ R_estimation @ Jy.T))
+                ))
 
             else:
                 # Perform Kalman update
-                innovation, S, H = EKF_SLAM.calc_innovation(x_estimation, P_estimation, y[iy, 0:2], min_id, R_estimation)
+                innovation, S, H = EKF_SLAM.calc_innovation(
+                    min_id,
+                    y[iy, 0:2],
+                    x_estimation,
+                    P_estimation,
+                    R_estimation,
+                )
                 K = (P_estimation @ H.T) @ np.linalg.inv(S)
 
                 x_estimation = x_estimation + (K @ innovation)
@@ -303,6 +253,69 @@ class EKF_SLAM:
         x_estimation[2] = Utils.convert_angle(x_estimation[2])
 
         return x_estimation, P_estimation
+
+
+    def extended_jacobians(
+            x_estimation: np.ndarray[float], y_estimation: np.ndarray[float]
+        ) -> list[np.ndarray[float], np.ndarray[float]]:
+        """
+        Return exteded covariances jacobians matrices.
+
+        Note: Jr is the state extended jacobian and Jy is the command extended jacobian.
+
+        Args:
+            x_estimation (np.ndarray[float]) : system state estimation at instant k.
+            y_estimation (np.ndarray): observed landmark estimation at instant k.
+        """
+        _, _, theta = x_estimation[0, 0], x_estimation[1, 0], x_estimation[2, 0]
+        v, w = y_estimation[0], y_estimation[1]
+
+
+        Jr = np.array([
+            [1.0, 0.0, -v * math.sin(theta + w)],
+            [0.0, 1.0, +v * math.cos(theta + w)]
+        ])
+
+        Jy = np.array([
+            [math.cos(theta + w), -v * math.sin(theta + w)],
+            [math.sin(theta + w), +v * math.cos(theta + w)]
+        ])
+
+        return Jr, Jy
+
+
+    def search_landmark_id(
+            yi: np.ndarray[float],
+            x_estimation: np.ndarray[float],
+            P_estimation: np.ndarray[float],
+            R_estimation: np.ndarray[float],
+            mahalanobis_distance: float = 9.0
+        ):
+        """
+        Return landmark id with Mahalanobis distance.
+
+        Args:
+            yi (np.ndarray[float]) : 
+            x_estimation (np.ndarray[float]) : system state estimation at instant k.
+            P_estimation (np.ndarray[float]) : system state estimation covariance at instant k.
+            R_estimation (np.ndarray[float]) : measure noise covariance matrix at instant k.
+            mahalanobis_distance (float) : mahalanobis threshold distance. Default value is 9.0.
+        """
+        dist_min = []
+
+        for i in range(Utils.count_landmarks(x_estimation)):
+            innovation, S, _ = EKF_SLAM.calc_innovation(
+                i,
+                yi,
+                x_estimation,
+                P_estimation,
+                R_estimation,
+            )
+            dist_min.append(innovation.T @ np.linalg.inv(S) @ innovation)
+
+        dist_min.append(mahalanobis_distance)
+
+        return dist_min.index(min(dist_min))
 
 
 
@@ -798,7 +811,6 @@ class Simulation:
 def execution(
         landmarks: np.ndarray[float],
         landmarks_known: bool = True,
-        undelayed_method: bool = True,
         v: float = 1.0,
         w: float = 0.1,
         dt: float = 0.1,
@@ -855,6 +867,7 @@ def execution(
         R_true,
     )
 
+    landmarks_vote = np.zeros(4)
 
     # Simulation execution
     for k in range(1, simulation.n_steps):
@@ -870,7 +883,6 @@ def execution(
             R_estimation,
             simulation.dt,
             landmarks_known,
-            undelayed_method,
             simulation.landmarks_true_id,
         )
 
@@ -903,7 +915,8 @@ def execution(
 # KNOWN_DATA_ASSOCIATION = 0  # Whether we use the true landmarks id or not
 
 def main():
-    # Utils.generate_landmarks((0, 0), 0, 10, 10)
+    # Utils.generate_landmarks((0, 15), 13, 17, 30)
+    # return
 
     default = {
         'v': 1.0,
@@ -931,14 +944,15 @@ def main():
         'v': 1.5,
         'w': 0.1,
         'landmarks': np.array([
-            [+16.3, +31.7], [+05.6, +13.8], [-01.5, +37.2], [+16.0, +02.9], [-09.4, +24.2],
-            [-06.1, +25.2], [-08.0, +17.5], [+06.9, +04.1], [+12.8, +27.5], [-10.1, +12.2], 
-            [-09.9, +25.2], [-21.2, +22.2], [+08.9, +24.5], [+11.0, +01.7], [+03.1, +08.3], 
-            [-11.4, +30.3], [+01.8, +28.2], [+02.0, +03.3], [-14.0, +05.5], [+05.8, +21.8], 
-            [+04.2, +09.4], [+01.8, +34.6], [+03.2, +19.2], [-12.4, +07.2], [-06.2, +11.9], 
-            [+13.9, +20.6], [-18.4, +03.3], [+00.7, +37.9], [-10.6, +31.6], [+20.1, +13.1],
+            [+11.6, +26.9], [+12.9, +12.3], [-01.1, +31.4], [+12.8, +05.4], [-10.5, +25.2],
+            [-07.4, +27.3], [-13.1, +19.1], [+07.8, +02.7], [+11.1, +25.9], [-13.6, +11.2],
+            [-10.4, +25.6], [-15.6, +20.3], [+10.0, +25.6], [+09.8, +03.1], [+05.8, +02.8],
+            [-09.5, +27.7], [+01.9, +29.5], [+02.4, +00.8], [-12.7, +06.4], [+09.0, +25.5],
+            [+08.1, +04.3], [+01.4, +30.9], [+07.9, +25.4], [-12.6, +07.0], [-12.0, +09.0],
+            [+13.9, +20.6], [-13.8, +06.2], [+00.5, +31.6], [-08.6, +28.4], [+16.0, +13.5],
         ])
-    }
+
+}
 
     # long loop and a sparse map
     scenario_2 = {
@@ -959,19 +973,17 @@ def main():
     }
 
     # return
-    for scenario in [scenario_3]:
-        for known in [False]:
-            for Q_constant in [6]:
-                execution(
-                    landmarks=scenario['landmarks'],
-                    landmarks_known=known,
-                    undelayed_method=True,
-                    v=scenario['v'],
-                    w=scenario['w'],
-                    Q_constant=Q_constant,
-                    save=False,
-                    show=True
-                )
+    for scenario in [scenario_1]:
+        for R_constant in [1, 2, 4]:
+            execution(
+                landmarks=scenario['landmarks'],
+                v=scenario['v'],
+                w=scenario['w'],
+                landmarks_known=False,
+                R_constant=R_constant,
+                save=True,
+                show=False
+            )
 
 
 
