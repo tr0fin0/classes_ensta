@@ -1,0 +1,164 @@
+\documentclass[../CSC_5RO06_TA.tex]{subfiles}
+
+
+\begin{document}
+\section*{ALGORITHMES DE PRODUIT MATRICIEL}
+
+\subsection{Algorithme 1 : Multiplication naïve}
+
+L'algorithme de multiplication matricielle naïve, ou basique, est la méthode la plus simple pour effectuer cette opération. Il est basé sur la définition mathématique classique de la multiplication matricielle. C’est simple à mettre en œuvre, même si ce n’est pas le plus efficace pour les grandes matrices en raison de sa complexité en $O(n^3)$.
+
+\begin{algorithm}
+\caption{\textbf{Multiplication naïve}}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Matrices $A$ and $B$ of size $n \times n$
+    \For{$0 \leq i < n$} \Comment{\textcolor{gray}{\textit{▷ loop on first dimension}}}
+        \For{$0 \leq j < p$} \Comment{\textcolor{gray}{\textit{▷ loop on last dimension}}}
+            \State $C_{i,j} \gets 0$
+            \For{$0 \leq k < m$} \Comment{\textcolor{gray}{\textit{▷ loop on common dimension}}}
+                \State $C_{i,j} \gets C_{i,j} + A_{i,k} \cdot B_{k,j}$
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $C$
+\end{algorithmic}
+\end{algorithm}
+
+Description de l'algorithme naïve : pour $A_{(n,m)}$ et $B_{(m,p)}$, l'algorithme multiplie chaque ligne de la matrice $A$ avec chaque colonne de la matrice $B$, stockant les résultats dans une nouvelle matrice $C_{(n,p)}$.
+
+\subsection{Algorithme 2 : Multiplication naïve réordonnée}
+
+Dans les systèmes où la hiérarchie de mémoire (cache, RAM, etc.) joue un rôle critique, l'accès séquentiel aux données peut rendre une variante plus efficace qu'une autre. La réorganisation des boucles peut améliorer la localité spatiale des accès à la mémoire et réduire le nombre d'échecs de cache.\\
+
+La complexité de l'algorithme naïve à boucles réordonnées reste la même que celle de l'algorithme naïve standard : $O(n^3)$.
+
+\begin{algorithm}
+\caption{\textbf{Multiplication naïve réordonnée}}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Matrices $A$ and $B$ of size $n \times n$
+    \For{$0 \leq k < m$} \Comment{\textcolor{gray}{\textit{▷ loop on common dimension}}}
+        \For{$0 \leq i < n$} \Comment{\textcolor{gray}{\textit{▷ loop on first dimension}}}
+            \For{$0 \leq j < p$} \Comment{\textcolor{gray}{\textit{▷ loop on last dimension}}}
+                \State $C_{i,j} \gets C_{i,j} + A_{i,k} \cdot B_{k,j}$
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $C$
+\end{algorithmic}
+\end{algorithm}
+
+Description de l'algorithme naïve réordonnée: une variante de l'algorithme naïve dans lequel l'ordre des boucles parcourant les dimensions des matrices est modifié. Le but de cette réorganisation est d'améliorer les performances de l'algorithme en fonction de la manière dont la mémoire est accessible sur certaines architectures.
+
+A partir de maintenant, nous l'appellerons naïve R.
+
+\subsection{Algorithme 3 : Multiplication par blocs}
+
+La multiplication de blocs est une technique utilisée pour diviser les matrices en sous-tableaux, ou blocs plus petits, afin de mieux tirer parti de la hiérarchie de mémoire, telle que le cache, et d'optimiser l'accès aux données. Cette technique est particulièrement utile lorsqu'on travaille avec de grands tableaux, car elle évite les accès répétés à une mémoire lente, en conservant les données nécessaires à chaque bloc dans le cache.
+
+\begin{algorithm}
+\caption{\textbf{Multiplication par blocs}}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Matrices $A$ and $B$ of size $n \times n$ and Block Size $s$
+    \For{$0 \leq ii < n$ \textbf{step} $s$}
+    % \Comment{\textcolor{gray}{\textit{▷ loop on first block of dimension}}}
+        \For{$0 \leq jj < n$ \textbf{step} $s$}
+        % \Comment{\textcolor{gray}{\textit{▷ loop on second block of dimension}}}
+            \For{$0 \leq kk < n$ \textbf{step} $s$}
+            % \Comment{\textcolor{gray}{\textit{▷ loop on common block dimension}}}
+                \For{$ii \leq i < \min(ii + s, n)$}
+                % \Comment{\textcolor{gray}{\textit{▷ loop within block $ii$}}}
+                    \For{$jj \leq j < \min(jj + s, n)$} 
+                    % \Comment{\textcolor{gray}{\textit{▷ loop within block $jj$}}}
+                        \For{$kk \leq k < \min(kk + s, n)$}
+                        % \Comment{\textcolor{gray}{\textit{▷ loop within block $kk$}}}
+                            \State $C(i,j) \gets C(i,j) + A(i,k) \cdot B(k,j)$
+                        \EndFor
+                    \EndFor
+                \EndFor
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $C$
+\end{algorithmic}
+\end{algorithm}
+
+Description de l'algorithme par blocs: les matrices $A$, $B$ et $C$ sont divisées en blocs de taille spécifiée, et une multiplication interblocs des matrices est effectuée. Cette approche améliore les performances en minimisant les échecs de cache et s'avère particulièrement efficace sur les architectures matérielles avec des niveaux de mémoire hiérarchiques, telles que les CPU et FPGA modernes.\\
+
+Lorsque la taille des blocs est choisie de manière appropriée, en fonction de la taille des tableaux ($n$) et de l'architecture de la mémoire, la complexité de l'algorithme reste $O(n^3)$.
+
+
+\subsection{Algorithme 4 : Multiplication par blocs réordonnées}
+
+La multiplication de blocs réorganisée suit la même idée que la multiplication de blocs régulière, en divisant les matrices en sous-matrices (blocs) pour optimiser l'accès à la mémoire et tirer parti de la hiérarchie du cache. Cependant, dans cet algorithme, l'ordre des boucles est modifié pour maximiser la localité temporelle et spatiale, ce qui peut encore améliorer les performances sur les architectures disposant de niveaux hiérarchiques de mémoire (telles que les CPU et FPGA modernes).\\
+
+Comme pour la multiplication de blocs standard, la complexité de l'algorithme reste $O(n^3)$.
+
+\begin{algorithm}
+\caption{\textbf{Reordered Block Matrix Multiplication}}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Matrices $A$ and $B$ of size $n \times n$ and Block Size $s$
+    \For{$0 \leq ii < n$ \textbf{step} $s$}
+    % \Comment{\textcolor{gray}{\textit{▷ loop over the first block ($ii$)}}}
+        \For{$0 \leq kk < n$ \textbf{step} $s$}
+        % \Comment{\textcolor{gray}{\textit{▷ loop over the common block ($kk$)}}}
+            \For{$0 \leq jj < n$ \textbf{step} $s$}
+            % \Comment{\textcolor{gray}{\textit{▷ loop over the second block ($jj$)}}}
+                \For{$ii \leq i < \min(ii + s, n)$}
+                % \Comment{\textcolor{gray}{\textit{▷ loop within block $ii$}}}
+                    \For{$kk \leq k < \min(kk + s, n)$}
+                    % \Comment{\textcolor{gray}{\textit{▷ loop within block $kk$}}}
+                        \For{$jj \leq j < \min(jj + s, n)$}
+                        % \Comment{\textcolor{gray}{\textit{▷ loop within block $jj$}}}
+                            \State $C(i,j) \gets C(i,j) + A(i,k) \cdot B(k,j)$
+                            % \Comment{\textcolor{gray}{\textit{▷ multiply and accumulate}}}
+                        \EndFor
+                    \EndFor
+                \EndFor
+            \EndFor
+        \EndFor
+    \EndFor
+    \State \Return $C$
+    % \Comment{\textcolor{gray}{\textit{▷ return the resulting matrix}}}
+\end{algorithmic}
+\end{algorithm}
+
+Description de l'algorithme blocs réordonnée: est une variante de l'algorithme de multiplication par blocs dans laquelle l'ordre des itérations sur les blocs matriciels est modifié. L'approche se concentre sur la réorganisation des itérations pour maximiser la réutilisation des données mises en cache, améliorant ainsi l'efficacité. La réorganisation des itérations est spécifiquement conçue pour traiter en premier les blocs proches de la mémoire, afin que les données des blocs déjà mis en cache puissent être réutilisées plus efficacement, minimisant ainsi les accès à la mémoire principale.
+
+A partir de maintenant, nous l'appellerons blocs R.
+
+\subsection{Algorithme 5 : Strassen}
+
+L'algorithme de Strassen est une méthode efficace de multiplication matricielle qui réduit la complexité temporelle de $O(n^3)$ à environ $O(n^{2,81})$. Plutôt que d'utiliser la multiplication matricielle traditionnelle, qui nécessite 8 multiplications de sous-matrices pour des matrices de taille $2 \times 2$, Strassen réduit ce nombre à 7 en utilisant des combinaisons astucieuses d'addition et de soustraction de sous-matrices.\\
+
+\begin{algorithm}
+\caption{\textbf{Strassen's Matrix Multiplication Algorithm}}
+\begin{algorithmic}[1]
+    \State \textbf{Input:} Matrices $A$ and $B$ of size $n \times n$
+    \If{$n = 1$}
+        \State \Return $C = A \times B$
+    \Else
+        \State Partition $A$ into 4 submatrices $A_{11}$, $A_{12}$, $A_{21}$, $A_{22}$
+        \State Partition $B$ into 4 submatrices $B_{11}$, $B_{12}$, $B_{21}$, $B_{22}$
+        
+        \State $M_1 \gets (A_{11} + A_{22}) \times (B_{11} + B_{22})$
+        \State $M_2 \gets (A_{21} + A_{22}) \times B_{11}$
+        \State $M_3 \gets A_{11} \times (B_{12} - B_{22})$
+        \State $M_4 \gets A_{22} \times (B_{21} - B_{11})$
+        \State $M_5 \gets (A_{11} + A_{12}) \times B_{22}$
+        \State $M_6 \gets (A_{21} - A_{11}) \times (B_{11} + B_{12})$
+        \State $M_7 \gets (A_{12} - A_{22}) \times (B_{21} + B_{22})$
+
+        \State $C_{11} \gets M_1 + M_4 - M_5 + M_7$
+        \State $C_{12} \gets M_3 + M_5$
+        \State $C_{21} \gets M_2 + M_4$
+        \State $C_{22} \gets M_1 - M_2 + M_3 + M_6$
+
+        \State Combine $C_{11}$, $C_{12}$, $C_{21}$, $C_{22}$ into matrix $C$
+    \EndIf
+    \State \Return $C$
+\end{algorithmic}
+\end{algorithm}
+
+Tout d'abord, les matrices $A$ et $B$ sont divisées en blocs plus petits, les produits intermédiaires sont calculés à partir de ces blocs, puis les résultats sont recombinés pour obtenir le produit final. Cette approche diminue le coût de calcul au prix d'une augmentation du nombre d'additions et de soustractions, mais reste plus efficace pour les grandes matrices en raison du nombre réduit de multiplications.
+
+\end{document}
