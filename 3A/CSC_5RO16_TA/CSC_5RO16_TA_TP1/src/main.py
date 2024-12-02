@@ -10,6 +10,7 @@ import cv2
 import numpy as np
 import time
 import math
+import os
 from matplotlib import pyplot as plt
 
 
@@ -22,7 +23,7 @@ class pathfind():
     Path finding in a occupancy grid map using AStar algorithms
     """
     def __init__(self, map_file, robot_radius, start, goal):
-        self.map_file = map_file
+        self.map_file = os.path.abspath(os.path.join(os.getcwd(), 'images', map_file))
         self.robot_radius = robot_radius
         self.start = start
         self.goal = goal
@@ -55,7 +56,7 @@ class pathfind():
         Inflate the obstacle size to take the robot radius into account
         """
         old_map = self.map.copy()
-        
+
         neighbors = np.arange(-self.robot_radius,self.robot_radius+1)
         for i in range(self.columns):
             for j in range(self.rows):
@@ -65,7 +66,7 @@ class pathfind():
                             if(u!=0 and v!=0):
                                 if (((i+u)>=0)&((i+u)<self.columns)&((j+v)>=0)&((j+v)<self.rows)):
                                     self.result_img[i+u,j+v,1]=128
-                                    self.map[i+u,j+v]=256
+                                    self.map[i+u,j+v]=0
 
 
     def get_neighbors(self,current):
@@ -109,7 +110,7 @@ class pathfind():
 
         for current in self.path:
             cv2.circle(self.result_img, (current[1],current[0]), 0, (255,0,0),0)
-     
+
         return self.result_img
 
     def get_path_length(self):
@@ -128,22 +129,22 @@ class pathfind():
         """
         frontier = {}
         frontier[self.start] = heuristic_weight * self.heuristic(self.goal, self.start)
-        
+
         self.came_from = {}
         cost_so_far = {}
         closed = {}
         self.came_from[self.start] = None
         cost_so_far[self.start] = 0
         iter = 0
-        
+
         while frontier:
             iter += 1
 
             current = min(frontier, key=frontier.get)
-            
+
             # draw frontier for results
             self.result_img[current[0],current[1],1] = 255
-            
+
             if current == self.goal:
                 break
 
@@ -162,11 +163,13 @@ class pathfind():
                     self.result_img[next[0],next[1],1] = 0
             closed[current] = 1
             frontier.pop(current)
-            
+
+        # plt.imshow(cv2.distanceTransform(self.map, cv2.DIST_L2, 3))
+        # plt.show()
             if show_animation and iter % 100 ==0:
                 plt.imshow(self.result_img)
                 plt.pause(0.001)
-                
+
         # Compute path
         current = self.goal
         self.path = [current]
