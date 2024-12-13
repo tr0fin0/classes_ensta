@@ -1,0 +1,35 @@
+# Table of the Modified Denavit-Hartenberg (MDH) parameters defining the spatial arrangement of the robot structure
+
+# MDH parameters filled lines per lines in the following format:
+#
+# -----------------------------------------------------
+# | 1   | alpha_1     | d_1    | theta_1      | r_1    |
+# -----------------------------------------------------
+# | ... |     ...     |   ...  |    ...       |  ...   |
+# -----------------------------------------------------
+# | i   | alpha_i     | d_i    | theta_i      | r_i    |
+# -----------------------------------------------------
+# | i+1 | alpha_(i+1) | d_(i+1)| theta_(i+1)  | r_(i+1)|
+# -----------------------------------------------------
+# | ... |     ...     |   ...  |    ...       |  ...   |
+# -----------------------------------------------------
+# | n   | alpha_n     |  d_n   | theta_n      | r_n    |
+# -----------------------------------------------------
+
+# Example of any possible first two lines of the MDH table:
+# 1 pi/2 0.5 -pi/8 1.5
+# 2 pi 0 -pi/9 0.5
+
+
+
+
+# Question 2
+# Fill in the lines of the table and suppress all the symbols # below:
+
+# 1   ?   ?   ?   ?
+# 2   ?   ?   ?   ?
+# 3   ?   ?   ?   ?
+# 4   ?   ?   ?   ?
+# 5   ?   ?   ?   ?
+# 6   ?   ?   ?   ?
+
