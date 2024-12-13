@@ -64,7 +64,10 @@ class Plotting:
             )
 
         plt.plot(self.xI[0], self.xI[1], "bs", linewidth=3)
-        plt.plot(self.xG[0], self.xG[1], "gs", linewidth=3)
+        plt.plot(self.xG[0], self.xG[1], "ms", linewidth=3)
+
+        self.ax.set_xlim((0, 50))
+        self.ax.set_ylim((0, 30))
 
         plt.title(name)
         plt.axis("equal")
