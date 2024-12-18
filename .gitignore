@@ -5,6 +5,7 @@
 .venv
 *.png
 *.jpg
+*-checkpoints.ipynb
 
 # MATLAB
 *.slx
