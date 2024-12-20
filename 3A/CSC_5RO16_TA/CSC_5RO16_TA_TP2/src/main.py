@@ -3,16 +3,17 @@ CSC_5RO16_TA_TP2, RRT 2D.
 
 @author: Guilherm TROFINO
 
-Based on code by: David Filliat and Huiming Zhou.
+Based on code by: Huiming Zhou and David Filliat.
 """
 
 from datetime import datetime
 
 import csv
+import matplotlib.pyplot as plt
 import os
-import sys
+import pandas as pd
 import time
-import numpy as np
+
 import plotting, utils
 import env
 import obrrt
