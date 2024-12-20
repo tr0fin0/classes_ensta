@@ -2,12 +2,13 @@
 RRT_2D
 @author: huiming zhou
 
-Modified by David Filliat
+Modified by David Filliat and Guilherme TROFINO
 """
 
 
 class Env:
     def __init__(self):
+        self.name = "env"
         self.x_range = (0, 50)
         self.y_range = (0, 30)
         self.obs_boundary = self.obs_boundary()
@@ -48,6 +49,7 @@ class Env:
 
 class Env2:
     def __init__(self):
+        self.name = "env2"
         self.x_range = (0, 50)
         self.y_range = (0, 30)
         self.obs_boundary = self.obs_boundary()
