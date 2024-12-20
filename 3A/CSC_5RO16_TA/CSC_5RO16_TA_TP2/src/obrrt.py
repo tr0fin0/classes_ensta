@@ -55,7 +55,7 @@ class ObRrt:
     def planning(self):
         iter_goal = None
         for i in range(self.iter_max):
-            node_rand = self.generate_random_node(self.goal_sample_rate)
+            node_rand = self.generate_random_node()
             node_near = self.nearest_neighbor(self.vertex, node_rand)
             node_new = self.new_state(node_near, node_rand)
 
@@ -73,11 +73,20 @@ class ObRrt:
         else:
             return self.extract_path(node_goal), iter_goal
 
-    def generate_random_node(self, goal_sample_rate):
-        if np.random.random() < goal_sample_rate:
+    def generate_random_node(self):
+        if np.random.random() < self.goal_sample_rate:
             return self.s_goal
-        
-        
+
+        if np.random.random() < self.corner_sample_rate:
+            for _ in range(100):
+                obstacule = self.env.obs_rectangle[np.random.randint(len(self.env.obs_rectangle))]
+                x, y, w, h = obstacule
+                corner_x = x + np.random.random() * w
+                corner_y = y + np.random.random() * h
+                node = Node((corner_x, corner_y))
+
+                if self.utils.is_inside_obs(node):
+                    return node
 
         delta = self.utils.delta
 
