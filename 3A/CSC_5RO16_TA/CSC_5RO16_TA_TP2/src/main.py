@@ -223,14 +223,160 @@ def compute_rrt_star(
     plotting.plt.close()
 
 
+def algorithm_performance(
+        step: float,
+        goal_sample_rate: float,
+        corner_sample_rate: float,
+        bar_width: float = 100,
+        save: bool = True,
+        show: bool = False
+    ) -> None:
+    """
+    Plot algorithm performance, displaying:
+        - path length as bars;
+        - execution duration as lines;
+        - iterations as text;
 
-def question_1(show: bool = False):
-    environment = env.Env()
+    Args:
+        step (float) : RRT step size.
+        goal_sample_rate (float) : RRT goal sample rate.
+        bar_width (float, optional): width of the bars. Defaults is 100.
+        save (bool, optional): save the plot? Defaults is True.
+        show (bool, optional): show the plot? Defaults is False.
+    """
+    df = pd.read_csv(PATH_DATABASE_FILE)
+    df_filtered = (
+        df.query(f"step == {step} & goal_sample_rate == {goal_sample_rate} & corner_sample_rate == {corner_sample_rate}")
+        .groupby(["method", "max_iterations"])
+        .agg(
+            path_length=("path_length", "mean"),
+            duration_execution=("duration_execution", "mean"),
+            iterations=("iterations", "mean"),
+            repetitions=("path_length", "size"),
+            repetitions_success=("path_length", lambda x: (x != 0).sum())
+        )
+        .reset_index()
+    )
 
-    for max_iteration in [375, 750, 1500, 2250, 3000]:
-        for _ in range(10):
-            compute_rrt(environment, max_iterations=max_iteration, show_animation=show)
-            compute_rrt_star(environment, max_iterations=max_iteration, show_animation=show)
+    df_environment = (
+        df.query(f"step == {step} & goal_sample_rate == {goal_sample_rate} & corner_sample_rate == {corner_sample_rate}")
+        .groupby(["method", "max_iterations"])["environment"]
+        .first()
+        .reset_index()
+    )
+
+    df_filtered = pd.merge(df_filtered, df_environment, on=["method", "max_iterations"], how='left')
+
+
+    max_iterations = df_filtered["max_iterations"].unique()
+    methods = df_filtered["method"].unique()
+
+    fig, ax = plt.subplots(figsize=(16, 8), dpi=100)
+    ax_right = ax.twinx()
+
+
+    for i, method in enumerate(methods):
+        positions = max_iterations + i * bar_width
+        method_data = df_filtered.query(f"method == '{method}'")
+
+        bars = ax.bar(
+            positions,
+            method_data["path_length"],
+            width=bar_width,
+            alpha=0.75,
+            edgecolor='black',
+            label=method,
+        )
+
+        ax_right.plot(
+            positions,
+            method_data["duration_execution"],
+            linewidth=2,
+            marker='o',
+            markersize=6,
+            markerfacecolor='black',
+            label=method,
+        )
+
+
+        for j, bar in enumerate(bars):
+            pos_x = bar.get_x() + bar.get_width() / 2
+            height = bar.get_height()
+            duration = method_data["duration_execution"].values[j]
+            iterations = method_data["iterations"].values[j]
+            repetitions_success = method_data["repetitions_success"].values[j]
+
+            ax.text(
+                pos_x,
+                height + 1,
+                f"{height:.2f}",
+                ha='center',
+                va='bottom',
+                fontsize = 10,
+            )
+            ax.text(
+                pos_x,
+                90,
+                f"{iterations:.1f}",
+                ha='center',
+                va='bottom',
+                fontsize = 8,
+                fontstyle = 'oblique',
+            )
+            ax.text(
+                pos_x,
+                90,
+                f"{repetitions_success:02d}",
+                ha='center',
+                va='top',
+                fontsize = 8,
+                fontstyle = 'oblique',
+            )
+            ax_right.text(
+                pos_x,
+                duration + 1,
+                f"{duration:.2f}",
+                ha='center',
+                va='bottom',
+                fontsize = 10,
+            )
+
+    ax.axhline(
+        y=51.89,
+        color="red",
+        linestyle="--",
+        linewidth=2,
+        label="minimum path length"
+    )
+
+    repetitions = df_filtered["repetitions"].iloc[0]
+    environment = df_filtered["environment"].iloc[0]
+    title = f'average-algorithm-performance_{environment}_{step}_{goal_sample_rate}_{corner_sample_rate}_{repetitions}'
+    plt.suptitle(title)
+
+    ax_right.set_ylabel('Average Execution Duration [s]')
+    ax_right.set_ylim(0, 400)
+    ax_right.set_yticks(range(0, 401, 40))
+    ax_right.set_yticklabels([str(i) for i in range(0, 401, 40)])
+
+    ax.set_xticks(max_iterations + bar_width / 2)
+    ax.set_xticklabels(max_iterations)
+    ax.set_xlabel('Maximum Iterations', fontsize=12)
+
+    ax.set_ylabel('Average Path Length')
+    ax.set_ylim(0, 100)
+    ax.set_yticks(range(0, 101, 10))
+    ax.set_yticklabels([str(i) for i in range(0, 101, 10)])
+
+    plt.grid(True, axis='y', linestyle='--', alpha=0.75)
+    plt.legend(loc='upper right')
+    plt.tight_layout()
+
+    if save:
+        plt.savefig(f'{PATH_IMAGES_FOLDER}/{title}.png', dpi=300, bbox_inches='tight')
+
+    if show:
+        plt.show()
 
 
 def main():
