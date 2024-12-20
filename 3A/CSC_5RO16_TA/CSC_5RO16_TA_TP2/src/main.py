@@ -418,8 +418,38 @@ def simulation(
 
 
 def main():
-    
-    question_1()
+    create_database(
+        [
+            'duration_execution',
+            'method',
+            'step',
+            'goal_sample_rate',
+            'max_iterations',
+            'iterations',
+            'path_length'
+        ]
+    )
+
+
+    # question 1
+    simulation(repetitions=10)
+
+    for step in [1, 2, 4, 8, 16]:
+        algorithm_performance(step=step, goal_sample_rate=0.1, corner_sample_rate=0.0)
+
+
+    # question 2
+    simulation(
+        repetitions=1,
+        environment=env.Env2(),
+        steps=[2],
+        max_iterations=[1500],
+        run_obrrt=True,
+        run_rrt=False,
+        run_rrt_star=False,
+        show=True
+    )
+
 
 
 if __name__ == '__main__':
