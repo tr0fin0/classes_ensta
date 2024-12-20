@@ -178,7 +178,7 @@ def compute_rrt_star(
         environment: env,
         start: tuple[float] = (2, 2),
         goal: tuple[float] = (49, 24),
-        step: int = 2,
+        step: float = 2,
         goal_sample_rate: float = 0.10,
         max_iterations: int = 1500,
         show_animation: bool = False,
@@ -195,11 +195,25 @@ def compute_rrt_star(
         max_iterations (int) : iterations limit. Default value is '1500'.
         show_animation (bool) : show execution animation? Default value is 'False'.
     """
+    start_time = time.time()
 
     rrt_star_object = rrt_star.RrtStar(environment, start, goal, step, goal_sample_rate, 20, max_iterations)
     path, nb_iter = rrt_star_object.planning()
 
-    print(f'RRT*, {step:4d}, {goal_sample_rate:1.4f}, {max_iterations:4d}, {nb_iter:4d}, {rrt.get_path_length(path) if path else 00.0000:4.4f}')
+    end_time = time.time()
+
+    add_data([
+        end_time - start_time,
+        'RRT*',
+        environment.name,
+        step,
+        goal_sample_rate,
+        0.0,
+        max_iterations,
+        nb_iter,
+        rrt.get_path_length(path) if path else 00.0000
+    ])
+
     if show_animation:
         rrt_star_object.plotting.animation(rrt_star_object.vertex, path if path else [], "RRT*", True)
 
