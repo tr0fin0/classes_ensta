@@ -6,9 +6,12 @@ CSC_5RO16_TA_TP2, RRT 2D.
 Based on code by: David Filliat and Huiming Zhou.
 """
 
+from datetime import datetime
+
+import csv
 import os
 import sys
-import math
+import time
 import numpy as np
 import plotting, utils
 import env
@@ -16,6 +19,59 @@ import rrt
 import rrt_star
 
 
+
+FILE_DATA: str = "data.csv"
+
+FOLDER_IMAGES: str = "images"
+FOLDER_DATABASE: str = "database"
+
+PATH_FILE: str = os.path.dirname(os.path.abspath(__file__))
+PATH_IMAGES_FOLDER: str = os.path.join(PATH_FILE, FOLDER_IMAGES)
+PATH_DATABASE_FILE: str = os.path.join(PATH_FILE, FOLDER_DATABASE, FILE_DATA)
+
+
+
+def create_database(
+        headers: list,
+        has_datetime: bool = True,
+        database_path: str = PATH_DATABASE_FILE
+    ) -> None:
+    """
+    Creates database as CSV file.
+
+    Args:
+        headers (list) : CSV header values.
+        has_datetime (bool) : include datetime? Default value is 'True'.
+        database_path (str) : path to database file. Default value is 'PATH_DATABASE_FILE'.
+    """
+    if not os.path.exists(database_path):
+        with open(database_path, mode='w') as file:
+            writer = csv.writer(file)
+            writer.writerow(['datetime'] + headers if has_datetime else headers)
+
+
+def add_data(
+        data: list,
+        has_datetime: bool = True,
+        database_path: str = PATH_DATABASE_FILE
+    ) -> None:
+    """
+    Add data to database.
+
+    Args:
+        data (list) : list of values to be added to database.
+        has_datetime (bool) : include datetime? Default value is 'True'.
+        database_path (str) : path to database file. Default value is 'PATH_DATABASE_FILE'.
+    """
+    try:
+        with open(database_path, 'a') as file:
+            current_time = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
+            writer = csv.writer(file)
+            writer.writerow([current_time] + data if has_datetime else data)
+
+    except Exception as e:
+        raise Exception("Error saving data: {}".format(str(e)))
 
 def compute_rrt(
         environment: env,
