@@ -379,6 +379,44 @@ def algorithm_performance(
         plt.show()
 
 
+
+def simulation(
+        repetitions: int,
+        environment = env.Env(),
+        steps: list = [1, 2, 4, 8, 16],
+        max_iterations: list = [375, 750, 1500, 2250, 3000],
+        run_obrrt: bool = True,
+        run_rrt: bool = True,
+        run_rrt_star: bool = True,
+        show: bool = False
+    ):
+    for step in steps:
+        for max_iteration in max_iterations:
+            for _ in range(repetitions):
+                if run_obrrt:
+                    compute_obrrt(
+                        environment,
+                        step=step,
+                        max_iterations=max_iteration,
+                        show_animation=show
+                    )
+                if run_rrt:
+                    compute_rrt(
+                        environment,
+                        step=step,
+                        max_iterations=max_iteration,
+                        show_animation=show
+                    )
+                if run_rrt_star:
+                    compute_rrt_star(
+                        environment,
+                        step=step,
+                        max_iterations=max_iteration,
+                        show_animation=show
+                    )
+
+
+
 def main():
     
     question_1()
