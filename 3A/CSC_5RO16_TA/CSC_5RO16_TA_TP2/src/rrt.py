@@ -12,8 +12,6 @@ import numpy as np
 import plotting, utils
 import env
 
-# parameters
-showAnimation = True
 
 class Node:
     def __init__(self, n):
@@ -23,16 +21,17 @@ class Node:
 
 
 class Rrt:
-    def __init__(self, environment, s_start, s_goal, step_len, goal_sample_rate, iter_max):
+    def __init__(self, environment, s_start, s_goal, step_len, goal_sample_rate, iter_max, showAnimation):
         self.s_start = Node(s_start)
         self.s_goal = Node(s_goal)
         self.step_len = step_len
         self.goal_sample_rate = goal_sample_rate
         self.iter_max = iter_max
         self.vertex = [self.s_start]
+        self.showAnimation = showAnimation
 
         self.env = environment
-        if showAnimation:
+        if self.showAnimation:
             self.plotting = plotting.Plotting(self.env, s_start, s_goal)
         self.utils = utils.Utils(self.env)
 
