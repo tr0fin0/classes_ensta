@@ -4,4 +4,49 @@
 \section{Question 1}
 % Test the two algorithms RRT and RRT* on this problem by varying the maximum number of iterations. What can you see on the average lengths of the paths ? On the computation times ? Remember to disable the display and to make several experiments to have signiﬁcant results as these algorithms are stochastic.
 % https://github.com/zhm-real/PathPlanning
+\noindent Tout d'abbord, il est important de noter que les algorithmes \textcolor{graph_blue}{RRT} et \textcolor{graph_orange}{RRT*} sont des méthodes stochastiques. Cela implique que pour obtenir des résultats significatifs et fiables, plusieurs expérimentations doivent être réalisées. Ces répétitions permettent de lisser les variations inhérentes à la nature aléatoire de ces algorithmes. L'environment 1 est présenté ci-dessous pour chaque algorithme :
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.495\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/rrt_env_2_0.1_0.0_1500.png}
+        \caption{algorithme \textcolor{graph_blue}{RRT}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.495\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/rrt_star_env_2_0.1_0.0_1500.png}
+        \caption{algorithme \textcolor{graph_orange}{RRT*}}
+        \label{}
+    \end{subfigure}
+    \caption{Environment 1}
+    \label{}
+\end{figure}
+\noindent Les résultats obtenus après plusieurs expériences sont synthétisés ci-dessous :
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=1.00\linewidth]{../src/images/average-algorithm-performance_env_2_0.1_0.0_10.png}
+	\caption{Performance Moyenne des Algorithmes avec \texttt{step}=2}
+	\label{}
+\end{figure}
+\noindent L'image précédente illustre les résultats obtenus pour les algorithmes \textcolor{graph_blue}{RRT} et \textcolor{graph_orange}{RRT*} exécutes sur l'environmment 1 avec \texttt{step}=2, \texttt{goal\_sample\_rate}=0.1, \texttt{corner\_sample\_rate}=0.0 et \texttt{repetions}=10.\\
+\begin{remark}
+    Dans ce projet, chaque image aura sur son titre les informations sur l'exécution : \texttt{average-algorithm-performance\_i\_j\_k\_l\_m} :
+    \begin{enumerate}[noitemsep]
+        \item \texttt{i : environnement} : environnement utilisé;
+        \item \texttt{j : step} : pas utilisé;
+        \item \texttt{k : goal\_sample\_rate} : goal sample rate utilisé;
+        \item \texttt{l : corner\_sample\_rate} : corner sample rate utilisé;
+        \item \texttt{m : repetions} : repetions realisées.
+    \end{enumerate}
+\end{remark}
+\noindent La ligne rouge représente le \textbf{chemin optimal théorique} entre le point de départ et le point d'arrivée, calculé en ignorant les obstacles. Cette ligne sert de référence pour évaluer la qualité des solutions générées par les algorithmes.\\
+
+\noindent Même si les résultats pour \texttt{max\_iterations}=375 sont en dessous de cette ligne, ce n'est pas surprenant car, parmi les 10 expériences, seulement 6 chemins ont été trouvés par \textcolor{graph_blue}{RRT} et 3 par \textcolor{graph_orange}{RRT*}.\\
+
+\noindent Les chifres autour de la ligne de 90 mètres représentent respectivement la quantité moyenne d'itérations effectuées, au dessus, et la quantité de chemins trouvés, en dessous.
+\begin{remark}
+    Les barres illustrent la longeur moyenne des chemins trouvés en mètres avec l'échelle à gauche et les lignes montrent le temps moyen de calcul en secondes avec l'échelle à droite.
+\end{remark}
+\noindent Au fur et à mesure que le nombre maximale d'itéractions augmente les algorithmes trouvent de chemins plus courts en générale et le temps de calcul augmente. Il faut noter que l'algorithme \textcolor{graph_orange}{RRT*} trouve souvent des chemin plus courts au coût d'un temps de calcul plus significatif.
 \end{document}
