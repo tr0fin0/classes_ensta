@@ -528,35 +528,44 @@ def simulation(
         environment = env.Env(),
         steps: list = [1, 2, 4, 8, 16],
         max_iterations: list = [375, 750, 1500, 2250, 3000],
-        run_obrrt: bool = True,
+        goal_sample_rate: float = 0.1,
+        corner_sample_rates: list = [0.0],
+        run_obrrt: bool = False,
         run_rrt: bool = True,
         run_rrt_star: bool = True,
-        show: bool = False
+        show_animation: bool = False
     ):
     for step in steps:
         for max_iteration in max_iterations:
-            for _ in range(repetitions):
-                if run_obrrt:
-                    compute_obrrt(
-                        environment,
-                        step=step,
-                        max_iterations=max_iteration,
-                        show_animation=show
-                    )
-                if run_rrt:
-                    compute_rrt(
-                        environment,
-                        step=step,
-                        max_iterations=max_iteration,
-                        show_animation=show
-                    )
-                if run_rrt_star:
-                    compute_rrt_star(
-                        environment,
-                        step=step,
-                        max_iterations=max_iteration,
-                        show_animation=show
-                    )
+            for corner_sample_rate in corner_sample_rates:
+                for _ in range(repetitions):
+                    if run_obrrt:
+                        compute_obrrt(
+                            environment,
+                            step=step,
+                            max_iterations=max_iteration,
+                            goal_sample_rate=goal_sample_rate,
+                            corner_sample_rate=corner_sample_rate,
+                            show_animation=show_animation
+                        )
+                    if run_rrt:
+                        compute_rrt(
+                            environment,
+                            step=step,
+                            max_iterations=max_iteration,
+                            goal_sample_rate=goal_sample_rate,
+                            corner_sample_rate=corner_sample_rate,
+                            show_animation=show_animation
+                        )
+                    if run_rrt_star:
+                        compute_rrt_star(
+                            environment,
+                            step=step,
+                            max_iterations=max_iteration,
+                            goal_sample_rate=goal_sample_rate,
+                            corner_sample_rate=corner_sample_rate,
+                            show_animation=show_animation
+                        )
 
 
 
@@ -568,6 +577,7 @@ def main():
             'environment',
             'step',
             'goal_sample_rate',
+            'corner_sample_rate',
             'max_iterations',
             'iterations',
             'path_length'
@@ -593,7 +603,7 @@ def main():
         run_obrrt=True,
         run_rrt=False,
         run_rrt_star=False,
-        show=True
+        show_animation=True
     )
 
     obrrt_performance(
