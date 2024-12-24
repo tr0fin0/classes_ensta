@@ -5,6 +5,8 @@ function UniclycleToPoseBenchmark
 t=0:pi/10:2*pi;
 Starts=[cos(t);sin(t);2*t];
 xGoal = [0;0;0];
+XStore = NaN*zeros(3,10000);
+XErrStore = NaN*zeros(3,10000);
 
 Perf=[];
 
@@ -13,19 +15,28 @@ for i=1:size(Starts,2)
     xTrue=Starts(:,i);
     k=1;
     while max(abs(dist(xTrue,xGoal)))>.005 && k<10000
-        
+
         % Compute Control
         u=UnicycleToPoseControl(xTrue,xGoal);
-        
+
         % Simulate Vehicle motion
         xTrue = SimulateUnicycle(xTrue,u);
-        
+
         k=k+1;
+        max(abs(dist(xTrue,xGoal)))
+
+        XErrStore(:,k) = dist(xTrue,xGoal);
+        XStore(:,k) = xTrue;
+
+        if(mod(k-2,100)==0)
+            DoUnicycleGraphics(xTrue,XStore,XErrStore);
+            drawnow;
+        end;
     end;
-    
+
     % Store performances
     Perf=[Perf k];
-    
+
 end;
 % Display mean performances
 disp(['Mean goal reaching time : ', num2str(mean(Perf))]);
