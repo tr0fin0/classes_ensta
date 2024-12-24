@@ -198,29 +198,3 @@ def get_path_length(path):
     for i,k in zip(path[0::], path[1::]):
         length += np.linalg.norm(np.array(i) - np.array(k)) #math.dist(i,k)
     return length
-
-
-def main():
-    x_start = (2, 2)  # Starting node
-    x_goal = (49, 24)  # Goal node
-    environment = env.Env()
-
-    rrt_star = RrtStar(environment, x_start, x_goal, 2, 0.10, 20, 1500)
-    path, nb_iter = rrt_star.planning()
-
-    if path:
-        print('Found path in ' + str(nb_iter) + ' iterations, length : ' + str(get_path_length(path)))
-        if showAnimation:
-            rrt_star.plotting.animation(rrt_star.vertex, path, "RRT*", True)
-            plotting.plt.savefig('rrt_star.png')
-            plotting.plt.show()
-    else:
-        print("No Path Found in " + str(nb_iter) + " iterations!")
-        if showAnimation:
-            rrt_star.plotting.animation(rrt_star.vertex, [], "RRT*", True)
-            plotting.plt.savefig('rrt_star.png')
-            plotting.plt.show()
-
-
-if __name__ == '__main__':
-    main()
