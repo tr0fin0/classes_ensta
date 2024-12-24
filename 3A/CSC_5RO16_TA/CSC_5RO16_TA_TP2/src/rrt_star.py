@@ -11,8 +11,6 @@ import numpy as np
 import plotting, utils, queue
 import env
 
-# parameters
-showAnimation = True
 
 class Node:
     def __init__(self, n):
@@ -23,7 +21,7 @@ class Node:
 
 class RrtStar:
     def __init__(self, env, x_start, x_goal, step_len,
-                 goal_sample_rate, search_radius, iter_max):
+                 goal_sample_rate, search_radius, iter_max, showAnimation):
         self.s_start = Node(x_start)
         self.s_goal = Node(x_goal)
         self.step_len = step_len
@@ -32,9 +30,10 @@ class RrtStar:
         self.iter_max = iter_max
         self.vertex = [self.s_start]
         self.path = []
+        self.showAnimation = showAnimation
 
         self.env = env
-        if showAnimation:
+        if self.showAnimation:
             self.plotting = plotting.Plotting(self.env, x_start, x_goal)
         self.utils = utils.Utils(self.env)
 
@@ -55,12 +54,12 @@ class RrtStar:
             if index != (len(self.vertex) - 1) and iter_goal == None:
                 iter_goal = k
 
-            if showAnimation and k % 50 == 0:
+            if self.showAnimation and k % 50 == 0:
                 if index != (len(self.vertex) - 1):
                     self.path = self.extract_path(self.vertex[index])
                 else:
                     self.path = []
-                self.plotting.animation(self.vertex, self.path, "rrt*, N = " + str(k),False)
+                self.plotting.animation(self.vertex, self.path, "RRT*, N = " + str(k),False)
 
             if node_new and not self.utils.is_collision(node_near, node_new):
                 neighbor_index = self.find_near_neighbor(node_new)
