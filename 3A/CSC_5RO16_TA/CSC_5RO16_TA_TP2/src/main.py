@@ -83,9 +83,10 @@ def compute_obrrt(
         start: tuple[float] = (2, 2),
         goal: tuple[float] = (49, 24),
         step: float = 2,
-        goal_sample_rate: float = 0.00,
+        goal_sample_rate: float = 0.10,
         corner_sample_rate: float = 0.10,
         max_iterations: int = 1500,
+        save_data: bool = True,
         show_animation: bool = False,
     ) -> None:
     """
@@ -102,20 +103,23 @@ def compute_obrrt(
     """
     start_time = time.time()
 
-    rrt_object = obrrt.ObRrt(environment, start, goal, step, goal_sample_rate, corner_sample_rate, max_iterations)
-    path, nb_iter = rrt_object.planning()
+    obrrt_object = obrrt.ObRrt(environment, start, goal, step, goal_sample_rate, corner_sample_rate, max_iterations, show_animation)
+    path, nb_iter = obrrt_object.planning()
 
     end_time = time.time()
 
-    add_data([
-        end_time - start_time,
-        'OBRRT',
-        step,
-        goal_sample_rate,
-        max_iterations,
-        nb_iter,
-        rrt.get_path_length(path) if path else 00.0000
-    ])
+    if save_data:
+        add_data([
+            end_time - start_time,
+            'OBRRT',
+            environment.name,
+            step,
+            goal_sample_rate,
+            corner_sample_rate,
+            max_iterations,
+            nb_iter,
+            obrrt.get_path_length(path) if path else 00.0000
+        ])
 
     if show_animation:
         rrt_object.plotting.animation(rrt_object.vertex, path if path else [], "OBRRT", True)
@@ -132,7 +136,9 @@ def compute_rrt(
         goal: tuple[float] = (49, 24),
         step: float = 2,
         goal_sample_rate: float = 0.10,
+        corner_sample_rate: float = 0.10,
         max_iterations: int = 1500,
+        save_data: bool = True,
         show_animation: bool = False,
     ) -> None:
     """
@@ -149,22 +155,23 @@ def compute_rrt(
     """
     start_time = time.time()
 
-    rrt_object = rrt.Rrt(environment, start, goal, step, goal_sample_rate, max_iterations)
+    rrt_object = rrt.Rrt(environment, start, goal, step, goal_sample_rate, max_iterations, show_animation)
     path, nb_iter = rrt_object.planning()
 
     end_time = time.time()
 
-    add_data([
-        end_time - start_time,
-        'RRT',
-        environment.name,
-        step,
-        goal_sample_rate,
-        0.0,
-        max_iterations,
-        nb_iter,
-        rrt.get_path_length(path) if path else 00.0000
-    ])
+    if save_data:
+        add_data([
+            end_time - start_time,
+            'RRT',
+            environment.name,
+            step,
+            goal_sample_rate,
+            corner_sample_rate,
+            max_iterations,
+            nb_iter,
+            rrt.get_path_length(path) if path else 00.0000
+        ])
 
     if show_animation:
         rrt_object.plotting.animation(rrt_object.vertex, path if path else [], "RRT", True)
@@ -180,8 +187,10 @@ def compute_rrt_star(
         start: tuple[float] = (2, 2),
         goal: tuple[float] = (49, 24),
         step: float = 2,
+        corner_sample_rate: float = 0.10,
         goal_sample_rate: float = 0.10,
         max_iterations: int = 1500,
+        save_data: bool = True,
         show_animation: bool = False,
     ) -> None:
     """
@@ -198,22 +207,23 @@ def compute_rrt_star(
     """
     start_time = time.time()
 
-    rrt_star_object = rrt_star.RrtStar(environment, start, goal, step, goal_sample_rate, 20, max_iterations)
+    rrt_star_object = rrt_star.RrtStar(environment, start, goal, step, goal_sample_rate, 20, max_iterations, show_animation)
     path, nb_iter = rrt_star_object.planning()
 
     end_time = time.time()
 
-    add_data([
-        end_time - start_time,
-        'RRT*',
-        environment.name,
-        step,
-        goal_sample_rate,
-        0.0,
-        max_iterations,
-        nb_iter,
-        rrt.get_path_length(path) if path else 00.0000
-    ])
+    if save_data:
+        add_data([
+            end_time - start_time,
+            'RRT*',
+            environment.name,
+            step,
+            goal_sample_rate,
+            corner_sample_rate,
+            max_iterations,
+            nb_iter,
+            rrt.get_path_length(path) if path else 00.0000
+        ])
 
     if show_animation:
         rrt_star_object.plotting.animation(rrt_star_object.vertex, path if path else [], "RRT*", True)
@@ -533,6 +543,7 @@ def simulation(
         run_obrrt: bool = False,
         run_rrt: bool = True,
         run_rrt_star: bool = True,
+        save_data: bool = True,
         show_animation: bool = False
     ):
     for step in steps:
@@ -546,6 +557,7 @@ def simulation(
                             max_iterations=max_iteration,
                             goal_sample_rate=goal_sample_rate,
                             corner_sample_rate=corner_sample_rate,
+                            save_data=save_data,
                             show_animation=show_animation
                         )
                     if run_rrt:
@@ -555,6 +567,7 @@ def simulation(
                             max_iterations=max_iteration,
                             goal_sample_rate=goal_sample_rate,
                             corner_sample_rate=corner_sample_rate,
+                            save_data=save_data,
                             show_animation=show_animation
                         )
                     if run_rrt_star:
@@ -564,6 +577,7 @@ def simulation(
                             max_iterations=max_iteration,
                             goal_sample_rate=goal_sample_rate,
                             corner_sample_rate=corner_sample_rate,
+                            save_data=save_data,
                             show_animation=show_animation
                         )
 
@@ -603,6 +617,7 @@ def main():
         run_obrrt=True,
         run_rrt=False,
         run_rrt_star=False,
+        save_data=False,
         show_animation=True
     )
 
