@@ -74,18 +74,19 @@ class ObRrt:
             return self.extract_path(node_goal), iter_goal
 
     def generate_random_node(self):
-        if np.random.random() < self.goal_sample_rate:
+        if np.random.random() < self.goal_sample_rate and self.corner_sample_rate < 1 - self.goal_sample_rate:
             return self.s_goal
 
         if np.random.random() < self.corner_sample_rate:
-            for _ in range(100):
-                obstacule = self.env.obs_rectangle[np.random.randint(len(self.env.obs_rectangle))]
-                x, y, w, h = obstacule
-                corner_x = x + np.random.random() * w
-                corner_y = y + np.random.random() * h
-                node = Node((corner_x, corner_y))
+            for _ in range(1000):
+                x, y, w, h = self.env.obs_rectangle[np.random.randint(len(self.env.obs_rectangle))]
 
-                if self.utils.is_inside_obs(node):
+                node = Node((
+                    np.random.uniform(x - 0.25 * w, x + 1.25 * w),
+                    np.random.uniform(y - 0.25 * h, y + 1.25 * h)
+                ))
+
+                if not self.utils.is_inside_obs(node):
                     return node
 
         delta = self.utils.delta
