@@ -225,6 +225,7 @@ def compute_rrt_star(
 
 
 def algorithm_performance(
+        environment: str,
         step: float,
         goal_sample_rate: float,
         corner_sample_rate: float,
@@ -247,7 +248,7 @@ def algorithm_performance(
     """
     df = pd.read_csv(PATH_DATABASE_FILE)
     df_filtered = (
-        df.query(f"step == {step} & goal_sample_rate == {goal_sample_rate} & corner_sample_rate == {corner_sample_rate}")
+        df.query(f"environment == '{environment}' & step == {step} & goal_sample_rate == {goal_sample_rate} & corner_sample_rate == {corner_sample_rate}")
         .groupby(["method", "max_iterations"])
         .agg(
             path_length=("path_length", "mean"),
@@ -258,15 +259,6 @@ def algorithm_performance(
         )
         .reset_index()
     )
-
-    df_environment = (
-        df.query(f"step == {step} & goal_sample_rate == {goal_sample_rate} & corner_sample_rate == {corner_sample_rate}")
-        .groupby(["method", "max_iterations"])["environment"]
-        .first()
-        .reset_index()
-    )
-
-    df_filtered = pd.merge(df_filtered, df_environment, on=["method", "max_iterations"], how='left')
 
 
     max_iterations = df_filtered["max_iterations"].unique()
@@ -351,7 +343,6 @@ def algorithm_performance(
     )
 
     repetitions = df_filtered["repetitions"].iloc[0]
-    environment = df_filtered["environment"].iloc[0]
     title = f'average-algorithm-performance_{environment}_{step}_{goal_sample_rate}_{corner_sample_rate}_{repetitions}'
     plt.suptitle(title)
 
@@ -364,7 +355,7 @@ def algorithm_performance(
     ax.set_xticklabels(max_iterations)
     ax.set_xlabel('Maximum Iterations', fontsize=12)
 
-    ax.set_ylabel('Average Path Length')
+    ax.set_ylabel('Average Path Length [m]')
     ax.set_ylim(0, 100)
     ax.set_yticks(range(0, 101, 10))
     ax.set_yticklabels([str(i) for i in range(0, 101, 10)])
@@ -574,6 +565,7 @@ def main():
         [
             'duration_execution',
             'method',
+            'environment',
             'step',
             'goal_sample_rate',
             'max_iterations',
@@ -587,7 +579,9 @@ def main():
     simulation(repetitions=10)
 
     for step in [1, 2, 4, 8, 16]:
-        algorithm_performance(step=step, goal_sample_rate=0.1, corner_sample_rate=0.0)
+        algorithm_performance(
+            environment='env', step=step, goal_sample_rate=0.1, corner_sample_rate=0.0
+        )
 
 
     # question 2
