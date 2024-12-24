@@ -122,9 +122,12 @@ def compute_obrrt(
         ])
 
     if show_animation:
-        rrt_object.plotting.animation(rrt_object.vertex, path if path else [], "OBRRT", True)
+        obrrt_object.plotting.animation(obrrt_object.vertex, path if path else [], "OBRRT", True)
 
-        plotting.plt.savefig('rrt.png')
+        plotting.plt.xlim([0, 50])
+        plotting.plt.ylim([0, 30])
+        plotting.plt.tight_layout()
+        plotting.plt.savefig(f'{PATH_IMAGES_FOLDER}/map_obrrt_{environment.name}_{step}_{goal_sample_rate}_{corner_sample_rate}_{max_iterations}.png')
         plotting.plt.show()
 
     plotting.plt.close()
@@ -176,7 +179,10 @@ def compute_rrt(
     if show_animation:
         rrt_object.plotting.animation(rrt_object.vertex, path if path else [], "RRT", True)
 
-        plotting.plt.savefig('rrt.png')
+        plotting.plt.xlim([0, 50])
+        plotting.plt.ylim([0, 30])
+        plotting.plt.tight_layout()
+        plotting.plt.savefig(f'{PATH_IMAGES_FOLDER}/map_rrt_{environment.name}_{step}_{goal_sample_rate}_{corner_sample_rate}_{max_iterations}.png')
         plotting.plt.show()
 
     plotting.plt.close()
@@ -228,7 +234,10 @@ def compute_rrt_star(
     if show_animation:
         rrt_star_object.plotting.animation(rrt_star_object.vertex, path if path else [], "RRT*", True)
 
-        plotting.plt.savefig('rrt_star.png')
+        plotting.plt.xlim([0, 50])
+        plotting.plt.ylim([0, 30])
+        plotting.plt.tight_layout()
+        plotting.plt.savefig(f'{PATH_IMAGES_FOLDER}/map_rrt_star_{environment.name}_{step}_{goal_sample_rate}_{corner_sample_rate}_{max_iterations}.png')
         plotting.plt.show()
 
     plotting.plt.close()
