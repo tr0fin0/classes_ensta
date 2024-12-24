@@ -1,0 +1,77 @@
+\documentclass[../CSC_5RO16_TA_TP2.tex]{subfiles}
+
+\begin{document}
+\section{Question 4}
+% To improve this, modify the rrt.py ﬁle to implement a simple variant of the OBRRT [3] algorithm. In this algorithm, the idea is to sample points taking into account the obstacles in order to increase the chances that the tree passes through difﬁcult areas.
+% Implement a very simple version in which you will sample a part of the points randomly in the obstacle free area around the corners of the obstacles. To do this, you must modify the function generate_random_node(self, goal_sample_rate). You will need to use the following variables and functions :
+% — self.env.obs_rectangle : a list of tuples (x, y, w, h) describing the obstacles : x, y are the coordinates of the bottom left corners of the obstacles, w, h are the width and height of the obstacle
+% — self.utils.is_inside_obs(node) : a function that checks if a node is in the obstacle free area
+% — np.random.randint(n), np.random.random() and np.random.randn() : functions giving a random integer, random value between 0 and 1 with uniform probability and a random value following a unit gaussian.
+% Show the performance variation as a function of the percentage of points sampled using this strategy (from 0% to 100%).
+\noindent Afin de proposer une alternative au problème présenté dans la question précédente, nous avons implémenté une version simplifiée de l'algorithme \textcolor{graph_green}{OBRRT}. L'idée consiste à générer des points en tenant compte des obstacles pour augmenter les chances que l'arbre traverse des zones difficiles. Pour cela, la fonction \texttt{generate\_random\_node()} du fichier \texttt{obrrt.py} a été implémentée comme suit :
+
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[language=python]
+def generate_random_node(self):
+    if np.random.random() < self.goal_sample_rate and self.corner_sample_rate < 1 - self.goal_sample_rate:
+        return self.s_goal
+
+    if np.random.random() < self.corner_sample_rate:
+        for _ in range(1000):
+            x, y, w, h = self.env.obs_rectangle[np.random.randint(len(self.env.obs_rectangle))]
+
+            node = Node((
+                np.random.uniform(x - 0.25 * w, x + 1.25 * w),
+                np.random.uniform(y - 0.25 * h, y + 1.25 * h)
+            ))
+
+            if not self.utils.is_inside_obs(node):
+                return node
+
+    delta = self.utils.delta
+
+    return Node((
+        np.random.uniform(self.x_range[0] + delta, self.x_range[1] - delta),
+        np.random.uniform(self.y_range[0] + delta, self.y_range[1] - delta)
+    ))
+	\end{lstlisting}
+\end{scriptsize}
+\noindent Les résultats de cette implementation, comparés aux autres méthodes, sont présentés ci-dessous pour 50 exécutions de l'algorithme avec un nombre maximum de 1500 itérations :
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=\linewidth]{../src/images/average-obrrt-performance_env2_2_0.1_1500_50.png}
+	\caption{Performance Moyenne des Algorithmes \textcolor{graph_green}{OBRRT}, \textcolor{graph_blue}{RRT} et \textcolor{graph_orange}{RRT*}}
+	\label{}
+\end{figure}
+\noindent On remarque que avec \texttt{corner\_sample\_rate} = 0 \% il n'y a pas de différence entre les algorithmes. Cependant, avec \texttt{corner\_sample\_rate} = 100 \% l'algorithme \textcolor{graph_green}{OBRRT} ne parvient pas à trouver de chemin, car il ne peut pas relier les points d'interêt situés trop loin des obstacles et l'origine.\\
+
+\noindent Ceci dit il est possible de voir que pour des valeurs intermédiaires de \texttt{corner\_sample\_rate} l'algorithme \textcolor{graph_green}{OBRRT} a une performance supérieure aux autres algorithmes.\\
+
+\noindent Des exemples de chemins trouvés par les différents algorithmes sont montrés ci-dessous :
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.33\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/obrrt_env2_2_0.1_0.0_1500.png}
+        \caption{algorithme \textcolor{graph_green}{OBRRT}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.33\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/rrt_env2_2_0.1_0.0_1500.png}
+        \caption{algorithme \textcolor{graph_blue}{RRT}}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.33\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/rrt_star_env2_2_0.1_0.0_1500.png}
+        \caption{algorithme \textcolor{graph_orange}{RRT*}}
+        \label{}
+    \end{subfigure}
+    \caption{Environment 2, exemple de chemin}
+    \label{}
+\end{figure}
+\noindent On a observe que l'algorithme \textcolor{graph_green}{OBRRT} a trouvé, en plus du chemin menant à l'objectif, des chemins autour des obstacles avec un concentration assez importante.\\
+
+\noindent Par ailleurs, l'algorithme \textcolor{graph_orange}{RRT*} a rencontré davantage de difficulté pour trouver un chemin dans cet environment. En raison de son besoin d'un plus grand nombre d'itéractions pour surmonter les obstaces, il n'a pas pu explorer efficacement l'environment au-delà de ces obstacles. Cela s'explique par la nature même de l'algorithme, qui est plus sensible à la densité des points dans l'espace de recherche.
+\end{document}

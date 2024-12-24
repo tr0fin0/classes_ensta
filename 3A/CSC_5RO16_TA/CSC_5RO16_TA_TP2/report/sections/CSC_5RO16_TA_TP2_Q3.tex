@@ -1,0 +1,26 @@
+\documentclass[../CSC_5RO16_TA_TP2.tex]{subfiles}
+
+\begin{document}
+\section{Question 3}
+% Explain why it is difﬁcult to grow the tree rapidly in this environment (in particular think about what happens when the tree tries to grow towards a random point from the nearest node).
+\noindent Lorsque les algorithmes tentent d'étendre leur arbre vers un point aléatoire à partir du nœud le plus proche, ils rencontrent des difficultés dues à la densité des obstacles. Dans un environnement où les obstacles sont nombreux et rapprochés, la probabilité de trouver un chemin libre de collision entre le nœud le plus proche et le point aléatoire est faible.\\
+
+\noindent Par conséquent, les algorithmes ont tendance à se concentrer dans des zones où les obstacles sont moins denses, ce qui ralentit la croissance de l'arbre. De plus, lorsque aucun chemin libre de collision entre le nœud le plus proche et le point aléatoire, l'arbre risque de stagner. Ainsi, la croissance rapide de l'arbre devient difficile dans des environnements densément peuplés d'obstacles.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/rrt_star_env_2_0.1_0.0_1500.png}
+        \caption{environment 1}
+        \label{}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../src/images/rrt_star_env2_2_0.1_0.0_1500.png}
+        \caption{environment 2}
+        \label{}
+    \end{subfigure}
+    \caption{Comparison des Environments}
+    \label{}
+\end{figure}
+\end{document}
