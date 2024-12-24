@@ -380,6 +380,157 @@ def algorithm_performance(
         plt.show()
 
 
+def obrrt_performance(
+        environment: str,
+        step: float,
+        goal_sample_rate: float,
+        max_iterations: float,
+        bar_width: float = 300,
+        save: bool = True,
+        show: bool = False
+    ) -> None:
+    """
+    Plot algorithm performance, displaying:
+        - path length as bars;
+        - execution duration as lines;
+        - iterations as text;
+
+    Args:
+        step (float) : RRT step size.
+        goal_sample_rate (float) : RRT goal sample rate.
+        bar_width (float, optional): width of the bars. Defaults is 100.
+        save (bool, optional): save the plot? Defaults is True.
+        show (bool, optional): show the plot? Defaults is False.
+    """
+    df = pd.read_csv(PATH_DATABASE_FILE)
+    df_filtered = (
+        df.query(f"environment == '{environment}' & step == {step} & goal_sample_rate == {goal_sample_rate} & max_iterations == {max_iterations}")
+        .groupby(["method", "corner_sample_rate"])
+        .agg(
+            path_length=("path_length", "mean"),
+            duration_execution=("duration_execution", "mean"),
+            iterations=("iterations", "mean"),
+            repetitions=("path_length", "size"),
+            repetitions_success=("path_length", lambda x: (x != 0).sum())
+        )
+        .reset_index()
+    )
+
+
+    corner_sample_rates = df_filtered["corner_sample_rate"].unique()
+    methods = df_filtered["method"].unique()
+
+    fig, ax = plt.subplots(figsize=(16, 8), dpi=100)
+    ax_right = ax.twinx()
+
+    colors = [plt.cm.tab10(2), plt.cm.tab10(0), plt.cm.tab10(1)]
+
+    for i, method in enumerate(methods):
+        positions = corner_sample_rates * 10000 + i * bar_width
+        method_data = df_filtered.query(f"method == '{method}'")
+
+        bars = ax.bar(
+            positions,
+            method_data["path_length"],
+            width=bar_width,
+            alpha=0.75,
+            edgecolor='black',
+            color=colors[i],
+            label=method,
+        )
+
+        ax_right.plot(
+            positions,
+            method_data["duration_execution"],
+            linewidth=2,
+            color=colors[i],
+            marker='o',
+            markersize=6,
+            markerfacecolor='black',
+            markeredgecolor=colors[i],
+            label=method,
+        )
+
+
+        for j, bar in enumerate(bars):
+            pos_x = bar.get_x() + bar.get_width() / 2
+            height = bar.get_height()
+            duration = method_data["duration_execution"].values[j]
+            iterations = method_data["iterations"].values[j]
+            repetitions_success = method_data["repetitions_success"].values[j]
+
+            ax.text(
+                pos_x,
+                height + 1,
+                f"{height:.2f}",
+                ha='center',
+                va='bottom',
+                fontsize = 10,
+            )
+            ax.text(
+                pos_x,
+                90,
+                f"{iterations:.0f}",
+                ha='center',
+                va='bottom',
+                fontsize = 8,
+                fontstyle = 'oblique',
+            )
+            ax.text(
+                pos_x,
+                90,
+                f"{repetitions_success:02d}",
+                ha='center',
+                va='top',
+                fontsize = 8,
+                fontstyle = 'oblique',
+            )
+            ax_right.text(
+                pos_x,
+                duration,
+                f"{duration:.2f}",
+                ha='center',
+                va='bottom',
+                fontsize = 10,
+            )
+
+
+    ax.axhline(
+        y=51.89,
+        color="red",
+        linestyle="--",
+        linewidth=2,
+        label="minimum path length"
+    )
+
+    repetitions = df_filtered["repetitions"].iloc[0]
+    title = f'average-obrrt-performance_{environment}_{step}_{goal_sample_rate}_{max_iterations}_{repetitions}'
+    plt.suptitle(title)
+
+    ax_right.set_ylabel('Average Execution Duration [s]')
+    ax_right.set_ylim(-6, +4)
+    ax_right.set_yticks(range(-6,5,1))
+    ax_right.set_yticklabels([f'{i:2d}' for i in range(-6, 5, 1)])
+
+    ax.set_xticks(corner_sample_rates * 10000 + bar_width)
+    ax.set_xticklabels(f'{i*100:.0f} %' for i in corner_sample_rates)
+    ax.set_xlabel('Corner Sample Rate', fontsize=12)
+
+    ax.set_ylabel('Average Path Length [m]')
+    ax.set_ylim(0, 100)
+    ax.set_yticks(range(0, 101, 10))
+    ax.set_yticklabels([str(i) for i in range(0, 101, 10)])
+
+    plt.grid(True, axis='y', linestyle='--', alpha=0.75)
+    plt.legend(loc='upper right')
+    plt.tight_layout()
+
+    if save:
+        plt.savefig(f'{PATH_IMAGES_FOLDER}/{title}.png', dpi=300, bbox_inches='tight')
+
+    if show:
+        plt.show()
+
 
 def simulation(
         repetitions: int,
@@ -450,6 +601,11 @@ def main():
         run_rrt_star=False,
         show=True
     )
+
+    obrrt_performance(
+        environment='env2', step=2, max_iterations=1500, goal_sample_rate=0.1
+    )
+
 
 
 
