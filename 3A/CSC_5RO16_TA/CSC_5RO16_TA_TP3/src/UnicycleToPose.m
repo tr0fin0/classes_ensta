@@ -12,14 +12,14 @@ XErrStore = NaN*zeros(3,10000);
 k=1;
 
 % loop until goal reached or max time
-while max(abs(dist(xTrue,xGoal)))>.06 && k<10000
-    
+while max(abs(dist(xTrue,xGoal)))>.005 && k<10000
+
     % Compute Control
     u=UnicycleToPoseControl(xTrue,xGoal);
-    
+
     % Simulate Vehicle motion
     [xTrue,u] = SimulateUnicycle(xTrue,u);
-    
+
     k=k+1;
     %store results:
     XErrStore(:,k) = dist(xTrue,xGoal);
