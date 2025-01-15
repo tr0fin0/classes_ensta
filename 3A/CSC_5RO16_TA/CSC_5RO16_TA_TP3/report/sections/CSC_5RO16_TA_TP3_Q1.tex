@@ -1,0 +1,38 @@
+\documentclass[../CSC_5RO16_TA_TP3.tex]{subfiles}
+
+\begin{document}
+\section{Question 1 - Unicycle, Contrôle Proportionnel Position}
+% Vous devez implémenter cette méthode dans la fonction UnicycleToPoseControl. Pensez à utiliser la fonction atan2 (voir doc matlab) pour calculer l’arctangente. Utilisez également la fonction fournie AngleWrap pour ramener les angles systématiquement entre −π et π. Vous pouvez tester votre méthode à partir d’une position aléatoire à l’aide de la fonction UniclycleToPose. Réglez les gains du contrôleur et le paramètre αmax pour atteindre rapidement le but en limitant les oscillations. Lorsque votre méthode est efﬁcace, utilisez UniclycleToPoseBenchmark qui évalue le temps mis par un robot pour atteindre un but depuis plusieurs positions de départ (vous devriez avoir un score proche de 2000).
+
+\subsection{Description}
+\noindent Pour cette question, un contrôleur \textbf{proportionnel} a été implémenté pour un unicycle: pour la position et l'orientation. Ce contrôleur suit les équations présentées ci-dessous:
+\begin{enumerate}
+    \item \textbf{Position}:
+    \begin{equation}
+        \upsilon = 
+        \begin{cases}
+            K_{\rho} \times \underbrace{\sqrt[2]{(x_{G} - x)^2 + (y_{G} - y)^2}}_{\rho}, & \text{if}\quad | \alpha | \le \alpha_{\text{max}}\\
+            0, & \text{if}\quad | \alpha | > \alpha_{\text{max}}\\
+        \end{cases}
+    \end{equation}
+    \item \textbf{Orientation}:
+    \begin{equation}
+        \omega =
+        \begin{cases}
+            K_{\alpha} \times \underbrace{\left(\arctan\left(\frac{y_{G} - y}{x_{G} - x}\right) - \theta\right)}_{\alpha}, & \text{if}\quad \rho > 0.05\\
+            K_{\beta} \times \underbrace{\left(\theta_{G} - \theta\right)}_{\beta}, & \text{if}\quad \rho \le 0.05\\
+        \end{cases}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Algorithme}
+\noindent Ensuite, l'algorithme suivant a été implémenté pour intégrer ces contrôleurs:
+\begin{scriptsize}\mycode
+    \lstinputlisting[language=Octave, caption=UnicycleToPoseControl.m]{../src/UnicycleToPoseControl.m}
+\end{scriptsize}
+
+\subsection{Résultats}
+\noindent Après une série d'essais statistiques, les meilleures performances observées étaient de \textbf{1936.1429}, obtenues avec les paramètres suivants: \texttt{alpha\_maximum = 0.7854}, \texttt{K\_rho = 15}, \texttt{K\_alpha = 5} et \texttt{K\_beta = 25}.\\
+
+\noindent Ces valeurs optimisées ont permis d’atteindre un compromis efficace entre précision et rapidité du contrôle.
+\end{document}
