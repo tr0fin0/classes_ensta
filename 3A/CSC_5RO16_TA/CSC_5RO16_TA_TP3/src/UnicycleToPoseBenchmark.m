@@ -1,42 +1,45 @@
-function UniclycleToPoseBenchmark
-% Benchmark Unicycle Control Behavior from a set of position
+function [ mean_performance ] = UniclycleToPoseBenchmark( alpha_maximum, K_rho, K_alpha, K_beta )
+    % Benchmark Unicycle Control Behavior from a set of position
 
-% Create set of starting position and the goal
-t=0:pi/10:2*pi;
-Starts=[cos(t);sin(t);2*t];
-xGoal = [0;0;0];
-XStore = NaN*zeros(3,10000);
-XErrStore = NaN*zeros(3,10000);
+    % Create set of starting position and the goal
+    t=0:pi/10:2*pi;
+    Starts=[cos(t);sin(t);2*t];
+    xGoal = [0;0;0];
+    XStore = NaN*zeros(3,10000);
+    XErrStore = NaN*zeros(3,10000);
 
-Perf=[];
+    plot_graph = 0;
 
-% loop from starting positions
-for i=1:size(Starts,2)
-    xTrue=Starts(:,i);
-    k=1;
-    while max(abs(dist(xTrue,xGoal)))>.005 && k<10000
+    Perf=[];
 
-        % Compute Control
-        u=UnicycleToPoseControl(xTrue,xGoal);
+    % loop from starting positions
+    for i=1:size(Starts,2)
+        xTrue=Starts(:,i);
+        k=1;
+        while max(abs(dist(xTrue,xGoal)))>.005 && k<10000
 
-        % Simulate Vehicle motion
-        xTrue = SimulateUnicycle(xTrue,u);
+            % Compute Control
+            [ u ] = UnicycleToPoseControl(xTrue, xGoal, alpha_maximum, K_rho, K_alpha, K_beta);
 
-        k=k+1;
-        max(abs(dist(xTrue,xGoal)))
+            % Simulate Vehicle motion
+            xTrue = SimulateUnicycle(xTrue,u);
 
-        XErrStore(:,k) = dist(xTrue,xGoal);
-        XStore(:,k) = xTrue;
+            k=k+1;
+            max(abs(dist(xTrue,xGoal)));
 
-        if(mod(k-2,100)==0)
-            DoUnicycleGraphics(xTrue,XStore,XErrStore);
-            drawnow;
+            XErrStore(:,k) = dist(xTrue,xGoal);
+            XStore(:,k) = xTrue;
+
+            if(mod(k-2,100)==0 && plot_graph == 1)
+                DoUnicycleGraphics(xTrue,XStore,XErrStore);
+                drawnow;
+            end;
         end;
+        Perf=[Perf k];
     end;
 
-    % Store performances
-    Perf=[Perf k];
-
+    mean_performance = mean(Perf);
 end;
 % Display mean performances
-disp(['Mean goal reaching time : ', num2str(mean(Perf))]);
+disp([num2str(alpha_maximum), ',', num2str(K_rho), ',', num2str(K_alpha), ',', num2str(K_beta), ',', num2str(mean(Perf))]);
+
