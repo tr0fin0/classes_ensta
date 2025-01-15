@@ -1,0 +1,37 @@
+\documentclass[../CSC_5RO16_TA_TP3.tex]{subfiles}
+
+\begin{document}
+\section{Question 4 - Bicyclette, Contrôle Proportionnel Chemin}
+% Vous devez implémenter cette méthode dans la fonction BicycleToPathControl. Vous pouvez la tester à l’aide de la fonction BiclycleToPath. Réglez les gains du contrôleur pour optimiser le suivi de la trajectoire. La valeur d’erreur afﬁchée est la moyenne des distances entre le robot et le point le plus proche de la trajectoire. Réglez votre contrôleur pour minimiser cette distance. Vous pouvez obtenir un score inférieur à 400.
+
+\subsection{Description}
+\noindent Pour cette question, un contrôleur \textbf{proportionnel} a été implémenté pour un bicycle: pour la position. Ces contrôleur suit les équations présentées ci-dessous:
+\begin{enumerate}
+    \item \textbf{Position}:
+    \begin{equation}
+        \upsilon = K_{\rho} \times \underbrace{\sqrt[2]{(x_{G} - x)^2 + (y_{G} - y)^2}}_{\rho}
+    \end{equation}
+    \item \textbf{Orientation}:
+    \begin{equation}
+        \phi = K_{\alpha} \times \underbrace{\left(\arctan\left(\frac{y_{G} - y}{x_{G} - x}\right) - \theta\right)}_{\alpha}
+    \end{equation}
+\end{enumerate}
+
+\subsection{Algorithme}
+\noindent Ensuite, l'algorithme suivant a été implémenté pour intégrer ces contrôleurs:
+\begin{scriptsize}\mycode
+    \lstinputlisting[language=Octave, caption=BicycleToPathControl.m]{../src/BicycleToPathControl.m}
+\end{scriptsize}
+
+\subsection{Résultats}
+\noindent Après une série d'essais statistiques, les meilleures performances observées étaient de \textbf{398.9695}, obtenues avec les paramètres suivants: \texttt{rho\_threshold = 0.3}, \texttt{K\_rho = 6} et \texttt{K\_alpha = 6}. Le chemin est montré ci-dessous:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{images/graph.png}
+	\caption{Chemin Finale}
+	\label{}
+\end{figure}
+
+\noindent Ces valeurs optimisées ont permis d'atteindre un compromis efficace entre récision et rapidité du contrôle.
+\end{document}
