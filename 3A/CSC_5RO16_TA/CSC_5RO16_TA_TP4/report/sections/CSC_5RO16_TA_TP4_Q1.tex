@@ -2,5 +2,139 @@
 
 \begin{document}
 \section{Question 1}
+% Dans cet exercice :
+% — Remplissez le ﬁchier BicycleToPathControl2.m avec l’approche déﬁnie
+% — essayez avec un horizon de 5 points et comparez avec le control du TP précédent
+% — essayez plusieurs horizon : 1, 5, 20, 100, 1000 (calcul un peu long)
+
+\subsection{Algorithme}
+\noindent Suite à la description donnée dans le Travaux Pratique et aux informations présentées pendant le cours, l'algorithme suivant a été implémenté pour contrôler de façon anticipative un vélo suivant une trajectoire :\\
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+    language={Octave},
+    caption={Algorithme \texttt{BicycleToPathControl2.m}},
+    ]{../../src/BicycleToPathControl2.m}
+\end{scriptsize}
+
+\newpage\subsection{Analyse}
+
+\subsubsection{Méthode Réactive vs Méthode Anticipative}
+\noindent Ci-dessous sont présentés le chemin obtenu par la méthode réactive proposée lors du dernier Travaux Pratique et le chemin obtenu par la méthode anticipative proposée dans ce Travaux Pratique.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph.png}
+        \caption{Méthode Réactive}
+        \label{fig:methode_reative_grand}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph_5.png}
+        \caption{Méthode Anticipative avec \texttt{window\_size = 5}}
+        \label{fig:methode_anticipative_5_grand}
+    \end{subfigure}
+    \caption{Comparaison entre Méthodes Réactives et Anticipative}
+    \label{fig:methode_comparaison}
+\end{figure}
+\noindent Il est remarquable que la méthode réactive est mieux adaptée à la trajectoire proposée, étant donné que le chemin suivi par la bicyclette et la trajectoire cible sont assez proches, avec une erreur réduite de moitié par rapport à celle de la méthode anticipative.\\
+
+\noindent Ce phénomène est attendu, car la méthode réactive cherche constamment à rester autour de la trajectoire en utilisant des points intermédiaires pour s'ajuster. En revanche, la méthode anticipative utilise des points plus éloignés du chemin pour calculer ses commandes, ce qui peut augmenter l'erreur.
+
+\begin{remark}
+    Dans ce cas particulier, la méthode réactive est plus performante. Cependant, il convient de noter que la méthode anticipative peut être plus efficace pour éviter des obstacles inattendus.
+\end{remark}
+
+\subsubsection{Variation \texttt{window\_size}}
+\noindent Afin d'évaluer la performance de la méthode anticipative, différents \texttt{window\_size} ont été testés. Les résultats de ces essais sont présentés ci-dessous :
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph_1.png}
+        \caption{graph \texttt{w = 1}}
+        \label{fig:methode_anticipative_1}
+    \end{subfigure}\hfill
+	\begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph_5.png}
+        \caption{graph \texttt{w = 5}}
+        \label{fig:methode_anticipative_5}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph_20.png}
+        \caption{graph \texttt{w = 20}}
+        \label{fig:methode_anticipative_20}
+    \end{subfigure}\hfill
+	\begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph_100.png}
+        \caption{graph \texttt{w = 100}}
+        \label{fig:methode_anticipative_100}
+    \end{subfigure}\hfill
+	\begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/graph_1000.png}
+        \caption{graph \texttt{w = 1000}}
+        \label{fig:methode_anticipative_1000}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/error_1.png}
+        \caption{error \texttt{w = 1}}
+        \label{fig:methode_anticipative_error_1}
+    \end{subfigure}\hfill
+	\begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/error_5.png}
+        \caption{error \texttt{w = 5}}
+        \label{fig:methode_anticipative_error_5}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/error_20.png}
+        \caption{error \texttt{w = 20}}
+        \label{fig:methode_anticipative_error_20}
+    \end{subfigure}\hfill
+	\begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/error_100.png}
+        \caption{error \texttt{w = 100}}
+        \label{fig:methode_anticipative_error_100}
+    \end{subfigure}\hfill
+	\begin{subfigure}[b]{0.19\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/error_1000.png}
+        \caption{error \texttt{w = 1000}}
+        \label{fig:methode_anticipative_error_1000}
+    \end{subfigure}
+    \caption{Méthode Anticipative Comparaison par \texttt{window\_size}}
+    \label{fig:methode_anticipative}
+\end{figure}
+\begin{remark}
+    Ici \texttt{window\_size} était considéré comme \texttt{w}.
+\end{remark}
+\noindent Les erreurs et les temps d'exécution sont présentés dans le tableau suivant :
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{rrr}
+        \texttt{window\_size} & \texttt{error} & \texttt{time}\\
+        \hline\hline
+        1 & 867.6238 & 18.3457\\
+        5 & 865.9341 & 19.3566\\
+        20 & 1014.9327 & 23.2893\\
+        100 & 2405.0702 & 36.6221\\
+        1000 & 1410.1080 & 449.2239\\
+        \hline
+    \end{tabular}
+    \caption{Résultats d'exécution des Algorithmes}
+    \label{tab:methode_anticipative}
+\end{table}
+
+\noindent  Il est notable que, pour des valeurs relativement petites de \texttt{window\_size}, la méthode maintient une performance assez stable, avec des erreurs et des temps d'exécution proches. Cependant, à mesure que la taille de \texttt{window\_size} augmente, les résultats se dégradent progressivement, jusqu'à atteindre un point où la trajectoire n'est plus suivie du tout
 
 \end{document}
