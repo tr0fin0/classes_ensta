@@ -1,0 +1,89 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 5}
+% 
+
+\subsection{Algorithme}
+
+\subsubsection{\texttt{move}}
+\noindent Voici un exemple d'opérateur pour un domaine PDDL permettant à l'agent de se déplacer d'un nœud from vers un nœud to si un arc existe entre ces deux nœuds :
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={Algorithme \texttt{move.pddl}},
+        language={bash}
+    ]
+    (:action move
+        :parameters (?from ?to)
+        :precondition (and (agent-at ?from) (arc ?from ?to))
+        :effect (and 
+            (not (agent-at ?from))
+            (agent-at ?to)
+        )
+    )
+    \end{lstlisting}
+\end{scriptsize}
+
+\subsubsection{\texttt{domain-graphs}}
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={Algorithme \texttt{domain-graphs.pddl}},
+        language={bash}
+    ]
+    (define (domain GRAPH)
+        (:requirements :strips)
+        (:predicates 
+            (agent-at ?node)
+            (arc ?from ?to)
+        )
+        (:action move
+            :parameters (?from ?to)
+            :precondition (and (agent-at ?from) (arc ?from ?to))
+            :effect (and 
+                (not (agent-at ?from))
+                (agent-at ?to)
+            )
+        )
+  )
+    \end{lstlisting}
+\end{scriptsize}
+
+\subsubsection{\texttt{blocksaips05}}
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={Algorithme \texttt{blocksaips05.pddl}},
+        language={bash}
+    ]
+    (define (problem SMALL-GRAPH)
+        (:domain GRAPH)
+        (:objects A B C D E)
+        (:init 
+            (agent-at A)
+
+            (arc A B)
+            (arc B C)
+            (arc C D)
+            (arc D E)
+        )
+        (:goal (agent-at E))
+    )
+    \end{lstlisting}
+\end{scriptsize}
+
+\subsection{Analyse}
+\subsubsection{Avantages}
+Simplicité : La modélisation sous forme d'actions PDDL est intuitive pour les graphes orientés.
+Optimalité : Avec un bon planificateur, le chemin calculé est souvent minimal en termes de longueur.
+
+\subsubsection{incovénients}
+Échelle : Pour des graphes de grande taille, cette méthode devient inefficace car les planificateurs doivent explorer un espace d'état potentiellement exponentiel.
+Dépendance au planificateur : L'efficacité dépend fortement de l'algorithme sous-jacent (heuristiques, recherche en largeur/profondeur, etc.).
+Pas de gestion de coût : Si les arcs ont des poids, cette méthode nécessite des adaptations pour inclure une minimisation des coûts.
+Conclusion
+
+La méthode est efficace pour des petits graphes avec des objectifs simples, mais elle est peu adaptée aux grands graphes ou aux problèmes avec des coûts d'arcs. Dans ces cas, des algorithmes spécialisés comme Dijkstra ou A* sont plus performants.
+
+\end{document}

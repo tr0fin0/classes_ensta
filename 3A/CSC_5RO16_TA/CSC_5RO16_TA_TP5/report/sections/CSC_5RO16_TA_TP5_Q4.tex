@@ -1,0 +1,176 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 4}
+% 
+
+\subsection{Algorithme}
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={Algorithme \texttt{blocksaips03.pddl}},
+        language={bash}
+    ]
+    (define (problem BLOCKS-MULTI-TOWERS)
+        (:domain BLOCKS)
+        (:objects A B C D E F G H I J)
+        (:init 
+            ;; Tour 1
+            (on C G) (on G E) (on E I) (on I J) (on J A) (on A B) (ontable B)
+            ;; Tour 2
+            (on F D) (on D H) (ontable H)
+            ;; Propriétés initiales
+            (clear C) (clear F) (handempty)
+        )
+        (:goal 
+            (and 
+                (on C B) (on B D) (on D F)
+                (on F I) (on I A) (on A E)
+                (on E H) (on H G) (on G J)
+            )
+        )
+    )
+    \end{lstlisting}
+\end{scriptsize}
+
+\subsection{Analyse}
+
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={Lancement \texttt{cpt.exe} pour \texttt{blocksaips03.pddl}},
+        language={bash}
+    ]
+    .\cpt.exe -o .\domain-blocksaips.pddl -f .\blocksaips03.pddl
+    \end{lstlisting}
+\end{scriptsize}
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={R\'esultat \texttt{cpt.exe} pour \texttt{blocksaips03.pddl}},
+        language={bash}
+    ]
+    domain file : .\domain-blocksaips.pddl
+    problem file : .\blocksaips03.pddl
+    
+    Parsing domain.................... done : 0.00
+    Parsing problem................... done : 0.00
+    domain : blocks
+    problem : blocks-multi-towers
+    Instantiating operators........... done : 0.00
+    Creating initial structures....... done : 0.00
+    Computing bound................... done : 0.00
+    Computing e-deleters.............. done : 0.00
+    Finalizing e-deleters............. done : 0.00
+    Refreshing structures............. done : 0.00
+    Computing distances............... done : 0.00
+    Finalizing structures............. done : 0.00
+    Variables creation................ done : 0.00
+    Bad supporters.................... done : 0.00
+    Distance boosting................. done : 0.00
+    Initial propagations.............. done : 0.00
+    
+    Problem : 202 actions, 121 fluents, 499 causals
+              13 init facts, 9 goals
+    
+    Bound : 26  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 27  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 28  ---  Nodes : 29  ---  Backtracks : 29  ---  Iteration time : 0.01
+    Bound : 29  ---  Nodes : 36  ---  Backtracks : 36  ---  Iteration time : 0.01
+    Bound : 30  ---  Nodes : 782  ---  Backtracks : 782  ---  Iteration time : 0.24
+    Bound : 31  ---  Nodes : 787  ---  Backtracks : 787  ---  Iteration time : 0.23
+    Bound : 32  ---  Nodes : 166  ---  Backtracks : 129  ---  Iteration time : 0.04
+    
+    0: (unstack c g) [1]
+    1: (put-down c) [1]
+    2: (unstack g e) [1]
+    3: (put-down g) [1]
+    4: (unstack e i) [1]
+    5: (put-down e) [1]
+    6: (unstack i j) [1]
+    7: (put-down i) [1]
+    8: (unstack j a) [1]
+    9: (put-down j) [1]
+    10: (pick-up g) [1]
+    11: (stack g j) [1]
+    12: (unstack f d) [1]
+    13: (put-down f) [1]
+    14: (unstack d h) [1]
+    15: (put-down d) [1]
+    16: (pick-up h) [1]
+    17: (stack h g) [1]
+    18: (pick-up e) [1]
+    19: (stack e h) [1]
+    20: (unstack a b) [1]
+    21: (stack a e) [1]
+    22: (pick-up i) [1]
+    23: (stack i a) [1]
+    24: (pick-up f) [1]
+    25: (stack f i) [1]
+    26: (pick-up d) [1]
+    27: (stack d f) [1]
+    28: (pick-up b) [1]
+    29: (stack b d) [1]
+    30: (pick-up c) [1]
+    31: (stack c b) [1]
+    
+    Makespan : 32
+    Length : 32
+    Nodes : 1800
+    Backtracks : 1763
+    Support choices : 510
+    Conflict choices : 1290
+    Mutex choices : 0
+    Start time choices : 0
+    World size : 300K
+    Nodes/sec : 3333.33
+    Search time : 0.54
+    Total time : 0.56
+    \end{lstlisting}
+\end{scriptsize}
+
+\subsubsection{Longueur}
+\begin{resolution}
+    La longueur du plan-solution est de 32 actions, correspondant à une séquence minimale permettant d'atteindre l'objectif
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Length : 32
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Temps d'Exécution}
+\begin{resolution}
+    Le plan-solution a été trouvé en 0,54 seconde de temps de recherche, avec un temps total d'exécution y compris le parsing et les calculs initiaux de 0,56 seconde.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Search time : 0.54
+    Total time : 0.56
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Itérations}
+\begin{resolution}
+    Le planificateur a effectué 7 itérations pour trouver la solution. Cela indique qu'aucune exploration ou backtracking n'a été nécessaire.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Bound : 26  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 27  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 28  ---  Nodes : 29  ---  Backtracks : 29  ---  Iteration time : 0.01
+    Bound : 29  ---  Nodes : 36  ---  Backtracks : 36  ---  Iteration time : 0.01
+    Bound : 30  ---  Nodes : 782  ---  Backtracks : 782  ---  Iteration time : 0.24
+    Bound : 31  ---  Nodes : 787  ---  Backtracks : 787  ---  Iteration time : 0.23
+    Bound : 32  ---  Nodes : 166  ---  Backtracks : 129  ---  Iteration time : 0.04
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+\end{document}

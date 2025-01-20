@@ -1,0 +1,113 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 6}
+% 
+
+
+(:init 
+    (singe-a A)       ;; Le singe est en A
+    (caisse-a B)      ;; La caisse est en B
+    (bananes-a C)     ;; Les bananes sont en C
+    (hauteur-singe Bas) ;; Le singe est à hauteur Bas
+    (vide)            ;; Le singe n’a rien en main
+)
+
+(:goal 
+    (and 
+        (singe-a C)         ;; Le singe est en C
+        (caisse-a C)        ;; La caisse est en C
+        (hauteur-singe Haut) ;; Le singe est monté sur la caisse
+        (attrape bananes)   ;; Le singe a attrapé les bananes
+    )
+)
+
+
+(:action aller
+  :parameters (?from ?to)
+  :precondition (singe-a ?from)
+  :effect (and 
+            (not (singe-a ?from))
+            (singe-a ?to)
+          )
+)
+
+(:action pousser
+  :parameters (?objet ?from ?to)
+  :precondition (and 
+                  (singe-a ?from) 
+                  (caisse-a ?from)
+                )
+  :effect (and 
+            (not (caisse-a ?from))
+            (caisse-a ?to)
+            (not (singe-a ?from))
+            (singe-a ?to)
+          )
+)
+
+
+(:action monter
+  :parameters (?objet ?lieu)
+  :precondition (and 
+                  (singe-a ?lieu) 
+                  (caisse-a ?lieu) 
+                  (hauteur-singe Bas)
+                )
+  :effect (and 
+            (not (hauteur-singe Bas))
+            (hauteur-singe Haut)
+          )
+)
+
+
+(:action descendre
+  :parameters (?objet ?lieu)
+  :precondition (and 
+                  (singe-a ?lieu) 
+                  (caisse-a ?lieu) 
+                  (hauteur-singe Haut)
+                )
+  :effect (and 
+            (not (hauteur-singe Haut))
+            (hauteur-singe Bas)
+          )
+)
+
+
+(:action attraper
+  :parameters (?objet ?lieu)
+  :precondition (and 
+                  (singe-a ?lieu) 
+                  (bananes-a ?lieu) 
+                  (hauteur-singe Haut) 
+                  (vide)
+                )
+  :effect (and 
+            (not (vide))
+            (attrape ?objet)
+          )
+)
+
+
+(:action lacher
+  :parameters (?objet ?lieu)
+  :precondition (and 
+                  (attrape ?objet) 
+                  (singe-a ?lieu)
+                )
+  :effect (and 
+            (not (attrape ?objet))
+            (vide)
+          )
+)
+
+
+Si l'objet à pousser est trop lourd, l'opérateur "pousser" n'aurait pas d'effet, car la précondition n'est pas satisfaite.
+
+Type de problème identifié : Qualification
+Ceci est un exemple du problème de la qualification. En effet, les préconditions du modèle ne spécifient pas toutes les conditions nécessaires pour que l'opérateur réussisse (comme le poids de l'objet ou la force du singe). Ajouter de telles conditions rendrait le modèle très complexe, et certaines limitations doivent être implicitement comprises par l'utilisateur du modèle.
+
+
+
+\end{document}

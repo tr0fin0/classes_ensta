@@ -1,0 +1,120 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 7}
+% 
+
+(define (problem hanoi-3disques)
+  (:domain hanoi)
+  (:objects
+    disk1 disk2 disk3 - disk ;; Les disques de plus petit (disk1) au plus grand (disk3)
+    peg1 peg2 peg3 - peg      ;; Les trois pics : départ, intermédiaire, arrivée
+  )
+  (:init
+    (on disk1 disk2)          ;; disk1 sur disk2
+    (on disk2 disk3)          ;; disk2 sur disk3
+    (on disk3 peg1)           ;; disk3 sur le pic1 (base)
+    (clear disk1)             ;; disk1 est libre
+    (clear peg2)              ;; pic2 vide
+    (clear peg3)              ;; pic3 vide
+    (hand-empty)              ;; La pince est libre
+    (smaller disk1 disk2)     ;; Les relations d'ordre entre disques
+    (smaller disk2 disk3)
+  )
+  (:goal
+    (and 
+      (on disk1 disk2)        ;; Recréer la tour sur peg3
+      (on disk2 disk3)
+      (on disk3 peg3)
+    )
+  )
+)
+
+
+(:action prendre
+  :parameters (?disk ?peg)
+  :precondition (and (on ?disk ?peg) (clear ?disk) (hand-empty))
+  :effect (and 
+            (holding ?disk)
+            (clear ?peg)
+            (not (on ?disk ?peg))
+            (not (hand-empty))
+          )
+)
+
+
+(:action poser-sur-pic-vide
+  :parameters (?disk ?peg)
+  :precondition (and (holding ?disk) (clear ?peg))
+  :effect (and 
+            (on ?disk ?peg)
+            (hand-empty)
+            (clear ?disk)
+            (not (holding ?disk))
+          )
+)
+
+
+(:action poser-sur-disque
+  :parameters (?disk1 ?disk2)
+  :precondition (and (holding ?disk1) (clear ?disk2) (smaller ?disk1 ?disk2))
+  :effect (and 
+            (on ?disk1 ?disk2)
+            (hand-empty)
+            (clear ?disk1)
+            (not (holding ?disk1))
+          )
+)
+
+(:action prendre-sur-disque
+  :parameters (?disk1 ?disk2)
+  :precondition (and (on ?disk1 ?disk2) (clear ?disk1) (hand-empty))
+  :effect (and 
+            (holding ?disk1)
+            (clear ?disk2)
+            (not (on ?disk1 ?disk2))
+            (not (hand-empty))
+          )
+)
+
+
+PROCEDURE Hanoi(NDisques, PicDepart, PicIntermediaire, PicArrivee)
+  SI NDisques différent de 0 ALORS
+    Hanoi(NDisques – 1, PicDepart, PicArrivee, PicIntermediaire)
+    Afficher("Déplacer le disque numéro " + NDisques + " de " + PicDepart + " à " + PicArrivee)
+    Hanoi(NDisques – 1, PicIntermediaire, PicDepart, PicArrivee)
+  FINSI
+FINPROCEDURE
+
+
+Complexité algorithmique
+Nombre de mouvements : 
+% 2
+% 𝑁
+% −
+% 1
+% 2 
+% N
+%  −1, où 
+% 𝑁
+% N est le nombre de disques.
+% Complexité : 
+% 𝑂
+% (
+% 2
+% 𝑁
+% )
+% O(2 
+% N
+%  ).
+Correspondance avec CPT
+Les résultats de CPT pour 1 à 4 disques sont cohérents avec cette fonction. Cependant, pour 5 disques ou plus, CPT peut nécessiter plus de temps à cause de la taille exponentielle de l’espace d’état.
+
+Différence entre fonction récursive et CPT
+Fonction récursive : Exploite une structure mathématique spécifique au problème et génère directement la solution optimale.
+Planificateur CPT : Explore un espace d’états plus général en appliquant des opérateurs et peut nécessiter plus d’itérations pour identifier la solution optimale.
+Conclusion
+CPT est généraliste, mais moins efficace pour des problèmes hautement structurés comme les tours de Hanoi.
+La fonction récursive est beaucoup plus efficace ici grâce à une résolution ciblée et préconçue, mais elle manque de flexibilité pour d’autres types de problèmes.
+
+\end{document}

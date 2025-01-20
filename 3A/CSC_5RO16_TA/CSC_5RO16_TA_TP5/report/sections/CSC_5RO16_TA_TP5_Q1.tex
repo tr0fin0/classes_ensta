@@ -1,0 +1,51 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 1}
+% 
+
+
+\subsection{Opérateurs}
+\noindent Ces opérateurs décrivent toutes les manipulations possibles dans un monde de cubes tout en respectant les contraintes physiques (e.g. un bloc doit être clair pour être manipulé).
+
+\subsubsection{\texttt{pick-up}}
+\begin{resolution}
+    Permet de saisir un bloc \texttt{?x} qui est clair, sur la table, et lorsque la main du robot est vide. Après cette action, le bloc est tenu par le robot, n'est plus sur la table, et n'est plus clair.
+\end{resolution}
+
+\subsubsection{\texttt{put-down}}
+\begin{resolution}
+    Permet de déposer un bloc \texttt{?x} tenu par le robot sur la table. Après cette action, le bloc est sur la table, devient clair, et la main du robot redevient vide.
+\end{resolution}
+
+\subsubsection{\texttt{stack}}
+\begin{resolution}
+    Permet de placer un bloc \texttt{?x} tenu par le robot sur un autre bloc \texttt{?y} qui est clair. Après cette action, \texttt{?x} est sur \texttt{?y}, \texttt{?y} n'est plus clair, et la main du robot est vide.
+\end{resolution}
+
+\subsubsection{\texttt{unstack}}
+\begin{resolution}
+    Permet de retirer un bloc \texttt{?x} situé sur un bloc \texttt{?y}, si \texttt{?x} est clair et que la main du robot est vide. Après cette action, le bloc \texttt{?x} est tenu, \texttt{?y} devient clair, et \texttt{?x} n'est plus sur \texttt{?y}.
+\end{resolution}
+
+\subsection{\texttt{put-down} vs \texttt{stack}}
+\noindent L'opérateur put-down permet de déposer un bloc sur la table, sans interagir avec d'autres blocs. L'opérateur stack permet de placer un bloc sur un autre bloc, impliquant une interaction directe entre les blocs, le bloc cible doit être clair.\\
+
+\noindent Ces deux cas représentent des actions fondamentalement différentes dans le monde des blocs. En dissociant ces opérateurs, on distingue les contraintes liées à chaque cas :
+\begin{enumerate}[noitemsep]
+    \item put-down n'impose pas de vérifier la clarté d'un autre bloc, car la table est toujours disponible.
+    \item stack nécessite que le bloc cible soit clair, ajoutant une contrainte supplémentaire.
+\end{enumerate}
+\noindent Cette distinction garantit une représentation précise des contraintes physiques et évite des ambiguïtés dans les plans générés.
+
+\subsection{\texttt{holding}}
+\noindent Le fluent \texttt{(holding ?x)} indique que le robot tient actuellement le bloc \texttt{?x}. Il est essentiel pour modéliser l'état de la main du robot et garantir la cohérence des actions.
+\begin{example}
+    Une action comme put-down ou stack ne peut être réalisée que si le robot tient déjà un bloc. Cela évite qu'un bloc soit placé sans qu'il ait été préalablement saisi.
+\end{example}
+\noindent Si \texttt{(holding ?x)} n'existait pas, il faudrait redéfinir les opérateurs pour inclure des préconditions ou effets complexes afin de suivre indirectement l'état de la main du robot.
+\begin{example}
+    Ajouter une variable implicite ou un état global décrivant le contenu de la main. Multiplier les conditions liées aux transitions entre l'état vide et occupé de la main.
+\end{example}
+\noindent En somme, l'absence de \texttt{(holding ?x)} rendrait la représentation moins intuitive et les opérateurs plus difficiles à interpréter.
+\end{document}
