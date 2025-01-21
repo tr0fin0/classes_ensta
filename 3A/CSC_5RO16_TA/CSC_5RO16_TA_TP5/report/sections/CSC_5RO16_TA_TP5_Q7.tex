@@ -4,117 +4,108 @@
 \section{Question 7}
 % 
 
-(define (problem hanoi-3disques)
-  (:domain hanoi)
-  (:objects
-    disk1 disk2 disk3 - disk ;; Les disques de plus petit (disk1) au plus grand (disk3)
-    peg1 peg2 peg3 - peg      ;; Les trois pics : départ, intermédiaire, arrivée
-  )
-  (:init
-    (on disk1 disk2)          ;; disk1 sur disk2
-    (on disk2 disk3)          ;; disk2 sur disk3
-    (on disk3 peg1)           ;; disk3 sur le pic1 (base)
-    (clear disk1)             ;; disk1 est libre
-    (clear peg2)              ;; pic2 vide
-    (clear peg3)              ;; pic3 vide
-    (hand-empty)              ;; La pince est libre
-    (smaller disk1 disk2)     ;; Les relations d'ordre entre disques
-    (smaller disk2 disk3)
-  )
-  (:goal
-    (and 
-      (on disk1 disk2)        ;; Recréer la tour sur peg3
-      (on disk2 disk3)
-      (on disk3 peg3)
-    )
-  )
-)
+\subsection{Algorithme}
+
+\subsubsection{domain-hanoi}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{domain-hanoi.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_domain-hanoi.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-1}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-1.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-1.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-2}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-2.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-2.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-3}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-3.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-3.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-4}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-4.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-4.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-5}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-5.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-5.pddl}
+\end{scriptsize}
 
 
-(:action prendre
-  :parameters (?disk ?peg)
-  :precondition (and (on ?disk ?peg) (clear ?disk) (hand-empty))
-  :effect (and 
-            (holding ?disk)
-            (clear ?peg)
-            (not (on ?disk ?peg))
-            (not (hand-empty))
-          )
-)
+\subsection{Analyse}
+\noindent Ci-dessous les résultats de chaque problème sont présentées:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccrr}
+        algorithme & longueur & total time & itérations\\
+        \hline\hline
+        \texttt{problem-hanoi-1} & 2 & 0.01 & 1\\
+        \texttt{problem-hanoi-2} & 4 & 0.01 & 1\\
+        \texttt{problem-hanoi-3} & 8 & 0.02 & 3\\
+        \texttt{problem-hanoi-4} & 16 & 0.93 & 9\\
+        \texttt{problem-hanoi-5} & - & - & -\\
+        \hline
+    \end{tabular}
+    \caption{Résultats Exécution Tour de Hanoi}
+    \label{}
+\end{table}
+\begin{remark}
+    Ici l'aspect exponentiel du problème se fait présent car après quelques itérations le temps d'exécution croit exponentiellement ce qui rend impossible de trouver une réponse dans un temps raisonnable:\\
 
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            caption={R\'esultat \texttt{cpt.exe} pour \texttt{problem-hanoi-5.pddl}},
+            language={bash}
+        ]
+    Bound : 10  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 11  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 12  ---  Nodes : 17  ---  Backtracks : 17  ---  Iteration time : 0.00
+    Bound : 13  ---  Nodes : 17  ---  Backtracks : 17  ---  Iteration time : 0.00
+    Bound : 14  ---  Nodes : 217  ---  Backtracks : 217  ---  Iteration time : 0.02
+    Bound : 15  ---  Nodes : 217  ---  Backtracks : 217  ---  Iteration time : 0.02
+    Bound : 16  ---  Nodes : 3151  ---  Backtracks : 3151  ---  Iteration time : 0.27
+    Bound : 17  ---  Nodes : 3156  ---  Backtracks : 3156  ---  Iteration time : 0.27
+    Bound : 18  ---  Nodes : 48516  ---  Backtracks : 48516  ---  Iteration time : 4.44
+    Bound : 19  ---  Nodes : 47390  ---  Backtracks : 47390  ---  Iteration time : 4.51
+    Bound : 20  ---  Nodes : 779730  ---  Backtracks : 779730  ---  Iteration time : 83.69
+    Bound : 21  ---  Nodes : 780813  ---  Backtracks : 780813  ---  Iteration time : 72.38
+    Bound : 22  ---  Nodes : 13522955  ---  Backtracks : 13522955  ---  Iteration time : 1610.64
+    Bound : 23  ---
+        \end{lstlisting}
+    \end{scriptsize}
+\end{remark}
 
-(:action poser-sur-pic-vide
-  :parameters (?disk ?peg)
-  :precondition (and (holding ?disk) (clear ?peg))
-  :effect (and 
-            (on ?disk ?peg)
-            (hand-empty)
-            (clear ?disk)
-            (not (holding ?disk))
-          )
-)
+\subsubsection{Pseudo Code}
+\noindent Cet algorithme proposé une solution du problème des tours de Hanoi en utilisant une approche récursive avec une número de mouvements de $2^{N} - 1$ où $N$ est le nombre de disques.\\
 
+\begin{remark}
+    La complexité de cet algorithme est de $\O (2^N)$.
+\end{remark}
 
-(:action poser-sur-disque
-  :parameters (?disk1 ?disk2)
-  :precondition (and (holding ?disk1) (clear ?disk2) (smaller ?disk1 ?disk2))
-  :effect (and 
-            (on ?disk1 ?disk2)
-            (hand-empty)
-            (clear ?disk1)
-            (not (holding ?disk1))
-          )
-)
+\noindent Ce résultat peut-être observé sur l'exercice précedent car c'est une solution algorithme du problème des tours de Hanoi et le résultat proposé avant suit cet approache.\\
 
-(:action prendre-sur-disque
-  :parameters (?disk1 ?disk2)
-  :precondition (and (on ?disk1 ?disk2) (clear ?disk1) (hand-empty))
-  :effect (and 
-            (holding ?disk1)
-            (clear ?disk2)
-            (not (on ?disk1 ?disk2))
-            (not (hand-empty))
-          )
-)
-
-
-PROCEDURE Hanoi(NDisques, PicDepart, PicIntermediaire, PicArrivee)
-  SI NDisques différent de 0 ALORS
-    Hanoi(NDisques – 1, PicDepart, PicArrivee, PicIntermediaire)
-    Afficher("Déplacer le disque numéro " + NDisques + " de " + PicDepart + " à " + PicArrivee)
-    Hanoi(NDisques – 1, PicIntermediaire, PicDepart, PicArrivee)
-  FINSI
-FINPROCEDURE
-
-
-Complexité algorithmique
-Nombre de mouvements : 
-% 2
-% 𝑁
-% −
-% 1
-% 2 
-% N
-%  −1, où 
-% 𝑁
-% N est le nombre de disques.
-% Complexité : 
-% 𝑂
-% (
-% 2
-% 𝑁
-% )
-% O(2 
-% N
-%  ).
-Correspondance avec CPT
-Les résultats de CPT pour 1 à 4 disques sont cohérents avec cette fonction. Cependant, pour 5 disques ou plus, CPT peut nécessiter plus de temps à cause de la taille exponentielle de l’espace d’état.
-
-Différence entre fonction récursive et CPT
-Fonction récursive : Exploite une structure mathématique spécifique au problème et génère directement la solution optimale.
-Planificateur CPT : Explore un espace d’états plus général en appliquant des opérateurs et peut nécessiter plus d’itérations pour identifier la solution optimale.
-Conclusion
-CPT est généraliste, mais moins efficace pour des problèmes hautement structurés comme les tours de Hanoi.
-La fonction récursive est beaucoup plus efficace ici grâce à une résolution ciblée et préconçue, mais elle manque de flexibilité pour d’autres types de problèmes.
-
+\noindent La proposition recursive exploite une structure mathématique spécifique au problème et génère directement la solution optimale. Par contre, la proposition CPT, explore un espace d'états plus général en appliquant des opérateurs et peut nécessiter plus d'itérations pour identifier la solution optimale.
 \end{document}
