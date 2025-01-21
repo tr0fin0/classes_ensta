@@ -1,0 +1,111 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 7}
+% 
+
+\subsection{Algorithme}
+
+\subsubsection{domain-hanoi}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{domain-hanoi.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_domain-hanoi.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-1}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-1.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-1.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-2}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-2.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-2.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-3}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-3.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-3.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-4}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-4.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-4.pddl}
+\end{scriptsize}
+
+\subsubsection{problem-hanoi-5}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-hanoi-5.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-hanoi-5.pddl}
+\end{scriptsize}
+
+
+\subsection{Analyse}
+\noindent Ci-dessous les résultats de chaque problème sont présentées:
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccrr}
+        algorithme & longueur & total time & itérations\\
+        \hline\hline
+        \texttt{problem-hanoi-1} & 2 & 0.01 & 1\\
+        \texttt{problem-hanoi-2} & 4 & 0.01 & 1\\
+        \texttt{problem-hanoi-3} & 8 & 0.02 & 3\\
+        \texttt{problem-hanoi-4} & 16 & 0.93 & 9\\
+        \texttt{problem-hanoi-5} & - & - & -\\
+        \hline
+    \end{tabular}
+    \caption{Résultats Exécution Tour de Hanoi}
+    \label{}
+\end{table}
+\begin{remark}
+    Ici l'aspect exponentiel du problème se fait présent car après quelques itérations le temps d'exécution croit exponentiellement ce qui rend impossible de trouver une réponse dans un temps raisonnable:\\
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            caption={R\'esultat \texttt{cpt.exe} pour \texttt{problem-hanoi-5.pddl}},
+            language={bash}
+        ]
+    Bound : 10  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 11  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    Bound : 12  ---  Nodes : 17  ---  Backtracks : 17  ---  Iteration time : 0.00
+    Bound : 13  ---  Nodes : 17  ---  Backtracks : 17  ---  Iteration time : 0.00
+    Bound : 14  ---  Nodes : 217  ---  Backtracks : 217  ---  Iteration time : 0.02
+    Bound : 15  ---  Nodes : 217  ---  Backtracks : 217  ---  Iteration time : 0.02
+    Bound : 16  ---  Nodes : 3151  ---  Backtracks : 3151  ---  Iteration time : 0.27
+    Bound : 17  ---  Nodes : 3156  ---  Backtracks : 3156  ---  Iteration time : 0.27
+    Bound : 18  ---  Nodes : 48516  ---  Backtracks : 48516  ---  Iteration time : 4.44
+    Bound : 19  ---  Nodes : 47390  ---  Backtracks : 47390  ---  Iteration time : 4.51
+    Bound : 20  ---  Nodes : 779730  ---  Backtracks : 779730  ---  Iteration time : 83.69
+    Bound : 21  ---  Nodes : 780813  ---  Backtracks : 780813  ---  Iteration time : 72.38
+    Bound : 22  ---  Nodes : 13522955  ---  Backtracks : 13522955  ---  Iteration time : 1610.64
+    Bound : 23  ---
+        \end{lstlisting}
+    \end{scriptsize}
+\end{remark}
+
+\subsubsection{Pseudo Code}
+\noindent Cet algorithme proposé une solution du problème des tours de Hanoi en utilisant une approche récursive avec une número de mouvements de $2^{N} - 1$ où $N$ est le nombre de disques.\\
+
+\begin{remark}
+    La complexité de cet algorithme est de $\O (2^N)$.
+\end{remark}
+
+\noindent Ce résultat peut-être observé sur l'exercice précedent car c'est une solution algorithme du problème des tours de Hanoi et le résultat proposé avant suit cet approache.\\
+
+\noindent La proposition recursive exploite une structure mathématique spécifique au problème et génère directement la solution optimale. Par contre, la proposition CPT, explore un espace d'états plus général en appliquant des opérateurs et peut nécessiter plus d'itérations pour identifier la solution optimale.
+\end{document}
