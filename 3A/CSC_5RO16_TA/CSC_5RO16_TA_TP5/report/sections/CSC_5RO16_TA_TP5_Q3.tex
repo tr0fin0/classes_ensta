@@ -7,22 +7,15 @@
 \subsection{Algorithme}
 
 \begin{scriptsize}\mycode
-    \begin{lstlisting}[
-        caption={Algorithme \texttt{blocksaips02.pddl}},
-        language={bash}
-    ]
-    (define (problem BLOCKS-4-1)
-        (:domain BLOCKS)
-        (:objects A B C D)
-        (:init (on B C) (on C A) (on A D) (ontable D)
-            (clear B) (handempty))
-        (:goal (and (on D C) (on C A) (on A B)))
-    )
-  
-    \end{lstlisting}
+    \lstinputlisting[
+    language={bash},
+    caption={Algorithme \texttt{blocksaips02.pddl}},
+    ]{../../src/CSC_5RO16_TA_TP5_src_blocksaips02.pddl}
 \end{scriptsize}
 
 \subsection{Analyse}
+
+\noindent L'algorithme a été lancé avec la commande suivante sur Windows PowerShell:
 
 \begin{scriptsize}\mycode
 	\begin{lstlisting}[
@@ -32,6 +25,8 @@
     .\cpt.exe -o .\domain-blocksaips.pddl -f .\blocksaips02.pddl
     \end{lstlisting}
 \end{scriptsize}
+
+\noindent Qui a retourné comme résultat le suivant:
 
 \begin{scriptsize}\mycode
     \begin{lstlisting}[
