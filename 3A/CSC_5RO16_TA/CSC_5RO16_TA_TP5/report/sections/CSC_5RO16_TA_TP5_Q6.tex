@@ -4,110 +4,135 @@
 \section{Question 6}
 % 
 
+\subsection{Algorithme}
 
-(:init 
-    (singe-a A)       ;; Le singe est en A
-    (caisse-a B)      ;; La caisse est en B
-    (bananes-a C)     ;; Les bananes sont en C
-    (hauteur-singe Bas) ;; Le singe est à hauteur Bas
-    (vide)            ;; Le singe n’a rien en main
-)
+\subsubsection{domain-monkey}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{domain-monkey.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_domain-monkey.pddl}
+\end{scriptsize}
 
-(:goal 
-    (and 
-        (singe-a C)         ;; Le singe est en C
-        (caisse-a C)        ;; La caisse est en C
-        (hauteur-singe Haut) ;; Le singe est monté sur la caisse
-        (attrape bananes)   ;; Le singe a attrapé les bananes
-    )
-)
+\subsubsection{problem-monkey}
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{problem-monkey.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-monkey.pddl}
+\end{scriptsize}
 
+\subsection{Analyse}
 
-(:action aller
-  :parameters (?from ?to)
-  :precondition (singe-a ?from)
-  :effect (and 
-            (not (singe-a ?from))
-            (singe-a ?to)
-          )
-)
+\noindent L'algorithme a été lancé avec la commande suivante sur Windows PowerShell:
 
-(:action pousser
-  :parameters (?objet ?from ?to)
-  :precondition (and 
-                  (singe-a ?from) 
-                  (caisse-a ?from)
-                )
-  :effect (and 
-            (not (caisse-a ?from))
-            (caisse-a ?to)
-            (not (singe-a ?from))
-            (singe-a ?to)
-          )
-)
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={Lancement \texttt{cpt.exe} pour \texttt{problem-monkey.pddl}},
+        language={bash}
+    ]
+    .\cpt.exe -o .\domain-monkey.pddl -f .\problem-monkey.pddl
+    \end{lstlisting}
+\end{scriptsize}
 
+\noindent Qui a retourné comme résultat le suivant:
 
-(:action monter
-  :parameters (?objet ?lieu)
-  :precondition (and 
-                  (singe-a ?lieu) 
-                  (caisse-a ?lieu) 
-                  (hauteur-singe Bas)
-                )
-  :effect (and 
-            (not (hauteur-singe Bas))
-            (hauteur-singe Haut)
-          )
-)
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={R\'esultat \texttt{cpt.exe} pour \texttt{problem-monkey.pddl}},
+        language={bash}
+    ]
+    domain file : .\CSC_5RO16_TA_TP5_src_domain-monkey.pddl
+    problem file : .\CSC_5RO16_TA_TP5_src_problem-monkey.pddl
+    
+    Parsing domain.................... done : 0.00
+    Parsing problem................... done : 0.00
+    domain : monkey
+    problem : monkey-banana
+    Instantiating operators........... done : 0.00
+    Creating initial structures....... done : 0.00
+    Computing bound................... done : 0.00
+    Computing e-deleters.............. done : 0.00
+    Finalizing e-deleters............. done : 0.00
+    Refreshing structures............. done : 0.00
+    Computing distances............... done : 0.00
+    Finalizing structures............. done : 0.00
+    Variables creation................ done : 0.00
+    Bad supporters.................... done : 0.00
+    Distance boosting................. done : 0.00
+    Initial propagations.............. done : 0.00
+    
+    Problem : 102 actions, 18 fluents, 275 causals
+              4 init facts, 3 goals
+    
+    Bound : 4  ---  Nodes : 1  ---  Backtracks : 0  ---  Iteration time : 0.00
+    
+    0: (aller a b) [1]
+    1: (pousser a b c) [1]
+    2: (monter c) [1]
+    3: (attraper bananes c) [1]
+    
+    Makespan : 4
+    Length : 4
+    Nodes : 1
+    Backtracks : 0
+    Support choices : 1
+    Conflict choices : 0
+    Mutex choices : 0
+    Start time choices : 0
+    World size : 100K
+    Nodes/sec : 1000.00
+    Search time : 0.00
+    Total time : 0.02
+    \end{lstlisting}
+\end{scriptsize}
 
+\subsubsection{Longueur}
+\begin{resolution}
+    La longueur du plan-solution est de 4 actions, correspondant à une séquence minimale permettant d'atteindre l'objectif
 
-(:action descendre
-  :parameters (?objet ?lieu)
-  :precondition (and 
-                  (singe-a ?lieu) 
-                  (caisse-a ?lieu) 
-                  (hauteur-singe Haut)
-                )
-  :effect (and 
-            (not (hauteur-singe Haut))
-            (hauteur-singe Bas)
-          )
-)
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Length : 4
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
 
+\subsubsection{Temps d'Exécution}
+\begin{resolution}
+    Le plan-solution a été trouvé en 0,00 seconde de temps de recherche, avec un temps total d'exécution y compris le parsing et les calculs initiaux de 0,02 seconde.
 
-(:action attraper
-  :parameters (?objet ?lieu)
-  :precondition (and 
-                  (singe-a ?lieu) 
-                  (bananes-a ?lieu) 
-                  (hauteur-singe Haut) 
-                  (vide)
-                )
-  :effect (and 
-            (not (vide))
-            (attrape ?objet)
-          )
-)
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Search time : 0.00
+    Total time : 0.02
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
 
+\subsubsection{Itérations}
+\begin{resolution}
+    Le planificateur a effectué 1 itérations pour trouver la solution. Cela indique qu'aucune exploration ou backtracking n'a été nécessaire.
 
-(:action lacher
-  :parameters (?objet ?lieu)
-  :precondition (and 
-                  (attrape ?objet) 
-                  (singe-a ?lieu)
-                )
-  :effect (and 
-            (not (attrape ?objet))
-            (vide)
-          )
-)
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Bound : 4  ---  Nodes : 1  ---  Backtracks : 0  ---  Iteration time : 0.00
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
 
+\subsubsection{Ramification}
+\noindent En effet, les préconditions du modèle ne spécifient pas toutes les conditions nécessaires pour que l'opérateur réussisse (comme le poids de l'objet ou la force du singe).\\
 
-Si l'objet à pousser est trop lourd, l'opérateur "pousser" n'aurait pas d'effet, car la précondition n'est pas satisfaite.
+\noindent Ajouter de telles conditions rendrait le modèle très complexe, et certaines limitations doivent être implicitement comprises par l'utilisateur du modèle.
 
-Type de problème identifié : Qualification
-Ceci est un exemple du problème de la qualification. En effet, les préconditions du modèle ne spécifient pas toutes les conditions nécessaires pour que l'opérateur réussisse (comme le poids de l'objet ou la force du singe). Ajouter de telles conditions rendrait le modèle très complexe, et certaines limitations doivent être implicitement comprises par l'utilisateur du modèle.
-
-
-
+\begin{example}
+    Si l'objet à pousser est trop lourd, l'opérateur "pousser" n'aurait pas d'effet, car la précondition n'est pas satisfaite.
+\end{example}
 \end{document}
