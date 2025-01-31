@@ -1,0 +1,155 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 2}
+% 
+\noindent L'algorithme a été lancé avec la commande suivante sur Windows PowerShell:
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={Lancement \texttt{cpt.exe} pour \texttt{blocksaips01.pddl}},
+        language={bash}
+    ]
+    .\cpt.exe -o .\domain-blocksaips.pddl -f .\blocksaips01.pddl
+    \end{lstlisting}
+\end{scriptsize}
+
+\noindent Qui a retourné comme résultat le suivant:
+
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={R\'esultat \texttt{cpt.exe} pour \texttt{blocksaips01.pddl}},
+        language={bash}
+    ]
+    domain file : .\domain-blocksaips.pddl
+    problem file : .\blocksaips01.pddl
+    
+    Parsing domain.................... done : 0.00
+    Parsing problem................... done : 0.00
+    domain : blocks
+    problem : blocks-4-0
+    Instantiating operators........... done : 0.00
+    Creating initial structures....... done : 0.00
+    Computing bound................... done : 0.00
+    Computing e-deleters.............. done : 0.00
+    Finalizing e-deleters............. done : 0.00
+    Refreshing structures............. done : 0.00
+    Computing distances............... done : 0.00
+    Finalizing structures............. done : 0.00
+    Variables creation................ done : 0.00
+    Bad supporters.................... done : 0.00
+    Distance boosting................. done : 0.00
+    Initial propagations.............. done : 0.00
+    
+    Problem : 34 actions, 25 fluents, 79 causals
+              9 init facts, 3 goals
+    
+    Bound : 6  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    
+    0: (pick-up b) [1]
+    1: (stack b a) [1]
+    2: (pick-up c) [1]
+    3: (stack c b) [1]
+    4: (pick-up d) [1]
+    5: (stack d c) [1]
+    
+    Makespan : 6
+    Length : 6
+    Nodes : 0
+    Backtracks : 0
+    Support choices : 0
+    Conflict choices : 0
+    Mutex choices : 0
+    Start time choices : 0
+    World size : 100K
+    Nodes/sec : 0.00
+    Search time : 0.00
+    Total time : 0.02
+	\end{lstlisting}
+\end{scriptsize}
+
+\subsection{Plan-Solution}
+\subsubsection{Longueur}
+\begin{resolution}
+    La longueur du plan-solution est de 6 actions, correspondant à une séquence minimale permettant d'atteindre l'objectif
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Length : 6
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Temps d'Exécution}
+\begin{resolution}
+    Le plan-solution a été trouvé en 0,00 seconde de temps de recherche, avec un temps total d'exécution y compris le parsing et les calculs initiaux de 0,02 seconde.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Search time : 0.00
+    Total time : 0.02
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Itérations}
+\begin{resolution}
+    Le planificateur a effectué 1 itérations pour trouver la solution. Cela indique qu'aucune exploration ou backtracking n'a été nécessaire.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Bound : 6  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Durée d'Action}
+\begin{resolution}
+    Dans ce cas, chaque action est considérée comme prenant 1 unité de temps, ce qui est arbitraire et dépend de la manière dont le domaine est modélisé.\\
+
+    Le \texttt{Makespan} total est donc de 6 unités de temps, correspondant aux 6 actions du plan.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Bound : 6  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    
+    0: (pick-up b) [1]
+    1: (stack b a) [1]
+    2: (pick-up c) [1]
+    3: (stack c b) [1]
+    4: (pick-up d) [1]
+    5: (stack d c) [1]
+    
+    Makespan : 6
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsection{Longueur Solution}
+\begin{resolution}
+    Des plans plus longs pourraient exister si des actions supplémentaires ou inutiles étaient insérées.
+\end{resolution}
+\begin{example}
+    Ramener un bloc sur la table avant de le replacer sur une autre position :
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    (pick-up b) (put-down b) (pick-up b) (stack b a)
+        \end{lstlisting}
+    \end{scriptsize}
+
+    Changer l'ordre des blocs temporairement avant de revenir à l'ordre final.
+\end{example}
+\noindent Ces plans ne sont pas proposés car le planificateur optimise pour trouver une solution minimale en termes de longueur ou de \texttt{Makespan}. Cela est dû à l'utilisation d'heuristiques qui privilégient les solutions les plus efficaces en respectant les contraintes du domaine. Fournir des plans plus longs irait à l'encontre de cette logique d'optimalité.\\
+
+\noindent Le planificateur génère un plan optimal en minimisant la longueur et le temps. Les plans plus longs, bien que possibles, ne sont pas proposés car ils n'ajoutent aucune valeur à la résolution du problème et ne respectent pas les objectifs d'efficacité.
+\end{document}

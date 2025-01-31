@@ -1,0 +1,135 @@
+\documentclass[../CSC_5RO16_TA_TP4.tex]{subfiles}
+
+\begin{document}
+\section{Question 2}
+% Dans cet exercice, nous allons écrire une fonction qui vériﬁe si un point est dans la zone de stabilité d’un contrôleur, d’après la méthode vue en cours. Dans le ﬁchier verify_stability.m qui vous est donné, remplissez les trous (les TODO) suivant la méthode du cours.
+\subsection{Théorie}
+
+\subsubsection{Système Description}
+\noindent Dans ce cas, le système considéré est décrit par les équations suivantes :
+\begin{equation}\label{eq:system_equations}
+    \boxed{
+        \begin{aligned}
+            \dot{x}_{1} &= x_{2} + \nu (\mu + 1(1 - \mu)\,x_{1})\\
+            \dot{x}_{2} &= x_{1} + \nu (\mu - 4(1 - \mu)\,x_{2})
+        \end{aligned}
+    }
+\end{equation}
+\noindent Ce système peut être représenté sous forme matricielle, comme illustré ci-dessous :
+\begin{equation}
+    \dot{\mathbf{x}}(k) = f(\mathbf{x}(k),\;\mathbf{u}(k))
+    \qquad\text{avec:}\quad
+    \mathbf{x}(0) = \mathbf{x}_{0},
+    \quad
+    \mathbf{x}(k) = \begin{bmatrix}
+        x_{1}\\
+        \vdots\\
+        x_{n}\\
+    \end{bmatrix}
+    \quad\text{et}\quad
+    \mathbf{u}(k) = \begin{bmatrix}
+        u_{1}\\
+        \vdots\\
+        u_{m}\\
+    \end{bmatrix}
+\end{equation}
+\noindent Où:
+\begin{enumerate}[noitemsep]
+    \item $\mathbf{x}(k)$ est le vecteur d'états du système;
+    \item $\mathbf{u}(k)$ est le vecteur des commandes du système;
+\end{enumerate}
+\begin{remark}
+    Étant donné que le temps est discret, $k$ représente les itérations de l'algorithme au fil du temps.
+\end{remark}
+
+\subsubsection{Zone de Stabilité, Non Linéaire}
+\noindent À partir des équations du système, il est nécessaire d’obtenir les \textbf{matrices Jacobiennes} pour linéariser le problème. Ces matrices permettront ensuite de vérifier la stabilité du système en utilisant les \textbf{équations de Lyapunov}, conformément aux principes abordés en classe et dans l'article de Chen \& Allgower (1998), de la manière suivante :
+\begin{multicols}{2}
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{A} &=
+            \begin{bmatrix}
+                \frac{\partial \dot{x}_{1}}{\partial x_{1}} & \cdots & \frac{\partial \dot{x}_{1}}{\partial x_{n}}\\
+                \vdots & \ddots & \vdots\\
+                \frac{\partial \dot{x}_{n}}{\partial x_{1}} & \cdots & \frac{\partial \dot{x}_{n}}{\partial x_{n}}\\
+            \end{bmatrix}
+            \quad\text{avec}\;
+            A_{ij} =
+            \begin{bmatrix}
+                \frac{\partial \dot{x}_{i}}{\partial x_{j}}
+            \end{bmatrix}\\
+            \Aboxed{
+                \mathbf{A} &= 
+                {
+                    \begin{bmatrix}
+                        \nu (1 -\mu) & 1\\
+                        1 & -4 \nu (1 -\mu)\\
+                    \end{bmatrix}
+                }
+            }
+        \end{aligned}
+    \end{equation}
+    \break
+    \begin{equation}
+        \begin{aligned}
+            \mathbf{B} &=
+            \begin{bmatrix}
+                \frac{\partial \dot{x}_{1}}{\partial u_{1}} & \cdots & \frac{\partial \dot{x}_{1}}{\partial u_{m}}\\
+                \vdots & \ddots & \vdots\\
+                \frac{\partial \dot{x}_{n}}{\partial u_{1}} & \cdots & \frac{\partial \dot{x}_{n}}{\partial u_{m}}\\
+            \end{bmatrix}
+            \quad\text{avec}\;
+            B_{ij} =
+            \begin{bmatrix}
+                \frac{\partial \dot{x}_{i}}{\partial u_{j}}
+            \end{bmatrix}\\
+            \Aboxed{
+                \mathbf{B} &=
+                \begin{bmatrix}
+                    \mu + 1(1 -\mu)\,x_{1_{0}}\\
+                    \mu - 4(1 -\mu)\,x_{2_{0}}\\
+                \end{bmatrix}
+            }
+        \end{aligned}
+    \end{equation}
+\end{multicols}
+\noindent Par la suite, il est indispensable le calculer un retour d'état linéaire \textbf{localement} stabilisant noté $\mathbf{K}$ qui résout l'équation $\mathbf{u} = \mathbf{K}\;\mathbf{x}$. Pour obtenir ce retour d'état, les \textbf{Équations de Riccati} doivent être résolues à l'aide de la fonction \texttt{[x, l, g] = care(A, B, Q, R)} dans Octave.\\
+
+\noindent Ensuite, il est nécessaire de calculer la constante positive $\alpha$, qui doit être inférieure à l'opposé de la valeur propre maximale de la matrice $\mathbf{A}_{k} = \mathbf{A} + \mathbf{B}\times\mathbf{K}$. Une fois $\alpha$ déterminée, l'équation de Lyapunov suivante doit être résolue:
+\begin{equation}
+    \left(\mathbf{A}_{k} + \alpha\mathbf{I}\right)^\top \mathbf{P} +
+    \mathbf{P}\left(\mathbf{A}_{k} + \alpha\mathbf{I}\right) =
+    -\left(\mathbf{Q} + \mathbf{K}^\top\mathbf{R}\mathbf{K}\right)
+\end{equation}
+
+\noindent Finalement, les points stabilisants sont ceux qui correspondent aux conditions suivantes :
+\begin{equation}
+    \boxed{
+        \mathbf{x}^\top \mathbf{P} \mathbf{x} \le \beta
+    }
+\end{equation}
+\noindent Où $\beta$ est obtenu par la fonction \texttt{qp()} du Octave.
+
+
+\subsection{Algorithme}
+\noindent Après l’explication théorique donnée précédemment, l’algorithme suivant a été implémenté :
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+    language={Octave},
+    caption={Algorithme \texttt{verify\_stability.m}},
+    ]{../../src/verify_stability.m}
+\end{scriptsize}
+
+\newpage\subsection{Analyse}
+
+\subsubsection{Zone de Stabilité}
+\noindent Suite à l’exécution de l’algorithme, la zone de stabilité suivante a été obtenue :
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{../images/stability.png}
+	\caption{Zone de Stabilité du Méthode Prédictive}
+	\label{fig:methode_predictive_stability}
+\end{figure}
+\noindent Tous les points situés à l’intérieur de l’ellipse représentent des configurations où la commande du système est stable.
+\end{document}

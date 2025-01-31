@@ -1,0 +1,126 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 3}
+% 
+
+\subsection{Algorithme}
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+    language={bash},
+    caption={Algorithme \texttt{blocksaips02.pddl}},
+    ]{../../src/CSC_5RO16_TA_TP5_src_blocksaips02.pddl}
+\end{scriptsize}
+
+\subsection{Analyse}
+
+\noindent L'algorithme a été lancé avec la commande suivante sur Windows PowerShell:
+
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={Lancement \texttt{cpt.exe} pour \texttt{blocksaips02.pddl}},
+        language={bash}
+    ]
+    .\cpt.exe -o .\domain-blocksaips.pddl -f .\blocksaips02.pddl
+    \end{lstlisting}
+\end{scriptsize}
+
+\noindent Qui a retourné comme résultat le suivant:
+
+\begin{scriptsize}\mycode
+    \begin{lstlisting}[
+        caption={R\'esultat \texttt{cpt.exe} pour \texttt{blocksaips02.pddl}},
+        language={bash}
+    ]
+    domain file : .\domain-blocksaips.pddl
+    problem file : .\blocksaips02.pddl
+    
+    Parsing domain.................... done : 0.00
+    Parsing problem................... done : 0.00
+    domain : blocks
+    problem : blocks-4-1
+    Instantiating operators........... done : 0.00
+    Creating initial structures....... done : 0.00
+    Computing bound................... done : 0.00
+    Computing e-deleters.............. done : 0.00
+    Finalizing e-deleters............. done : 0.00
+    Refreshing structures............. done : 0.00
+    Computing distances............... done : 0.00
+    Finalizing structures............. done : 0.00
+    Variables creation................ done : 0.00
+    Bad supporters.................... done : 0.00
+    Distance boosting................. done : 0.00
+    Initial propagations.............. done : 0.00
+    
+    Problem : 34 actions, 25 fluents, 79 causals
+              6 init facts, 3 goals
+    
+    Bound : 10  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    
+    0: (unstack b c) [1]
+    1: (put-down b) [1]
+    2: (unstack c a) [1]
+    3: (put-down c) [1]
+    4: (unstack a d) [1]
+    5: (stack a b) [1]
+    6: (pick-up c) [1]
+    7: (stack c a) [1]
+    8: (pick-up d) [1]
+    9: (stack d c) [1]
+    
+    Makespan : 10
+    Length : 10
+    Nodes : 0
+    Backtracks : 0
+    Support choices : 0
+    Conflict choices : 0
+    Mutex choices : 0
+    Start time choices : 0
+    World size : 100K
+    Nodes/sec : 0.00
+    Search time : 0.00
+    Total time : 0.02
+    \end{lstlisting}
+\end{scriptsize}
+
+\subsubsection{Longueur}
+\begin{resolution}
+    La longueur du plan-solution est de 10 actions, correspondant à une séquence minimale permettant d'atteindre l'objectif
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Length : 10
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Temps d'Exécution}
+\begin{resolution}
+    Le plan-solution a été trouvé en 0,00 seconde de temps de recherche, avec un temps total d'exécution y compris le parsing et les calculs initiaux de 0,02 seconde.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Search time : 0.00
+    Total time : 0.02
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+
+\subsubsection{Itérations}
+\begin{resolution}
+    Le planificateur a effectué 1 itérations pour trouver la solution. Cela indique qu'aucune exploration ou backtracking n'a été nécessaire.
+
+    \begin{scriptsize}\mycode
+        \begin{lstlisting}[
+            language={bash}
+        ]
+    Bound : 10  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+        \end{lstlisting}
+    \end{scriptsize}
+\end{resolution}
+\end{document}

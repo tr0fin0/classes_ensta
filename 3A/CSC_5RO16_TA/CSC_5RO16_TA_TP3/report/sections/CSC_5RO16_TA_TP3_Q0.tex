@@ -1,0 +1,61 @@
+\documentclass[../CSC_5RO16_TA_TP3.tex]{subfiles}
+
+\begin{document}
+\section{Méthodologie}
+\noindent Dans ce Travaux Pratique, la composante proportionnelle du contrôle PID sera étudiée en détails, appliquée aux modèles de robots unicycle et bicyclette. Afin de détérminer les constantes nécessaires pour chaque algorithme, des essais statistiques ont été réalisés afin d'identifier des valeurs appropriées pour ces constantes.
+
+
+\subsection{Exploration}
+\noindent Dans un premier temps, les scripts fournis ont été modifiés afin de pourvoir être utilisés en boucle, permettant ainsi de tester plusieurs combinaisons de variables.
+
+\subsubsection{Algorithme \texttt{Control}}
+\noindent L'algorithme de contrôle a également été ajusté pour accepter toutes les constantes nécessaires à son fonctionnement, comme illustré ci-dessous:
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=Octave,
+        caption=\texttt{UnicycleToPoseControl.m} algorithme,
+        firstline=1,
+        lastline=1
+    ]{../src/UnicycleToPoseControl.m}
+\end{scriptsize}
+\begin{remark}
+    Aucune autre changement n'a été apporté au code.
+\end{remark}
+
+\subsubsection{Algorithme \texttt{Benchmark}}
+\noindent L'algorithme de benchmark a été modifié pour recevoir toutes les constantes nécessaires au fonctionnement de l'algorithme de contrôle et retournait les performances mesurées des exécutions, comme illustré ci-dessous:
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=Octave,
+        caption=\texttt{UnicycleToPoseBenchmark.m} algorithme,
+        firstline=1,
+        lastline=1
+    ]{../src/UnicycleToPoseBenchmark.m}
+\end{scriptsize}
+\begin{remark}
+    Aucune autre changement n'a été apporté au code.
+\end{remark}
+
+\subsubsection{Algorithme \texttt{Explore}}
+\noindent Après ces modifications, un nouveau fichier a été créé pour exécuter plusieurs essais avec l'algorithme, comme montré ci-dessous:
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        language=Octave,
+        caption=\texttt{UnicycleExplore.m} algorithme
+    ]{../src/UnicycleExplore.m}
+\end{scriptsize}
+Les résultats de chaque exécution ont été affichés dans le terminal au format CSV afin de faciliter leur analyse.
+
+
+\subsection{Analyse}
+\noindent Une fois l'exécution terminée, les résultats ont été sauvegardés au format CSCV et analysés. Si un résultat satisfaisant était trouvé, il était retenu comme solution. Sinon, de nouvelles itérations étaient réalisées pour tenter d'identifier des valeurs appropriées.\\
+
+\noindent Les intervalles d'analyse ont commencé de manière restreinte, puis ont été élargis progressivement.
+
+\begin{remark}
+    Les fonctions de l'unicycle sont présentées ici comme exemple, mais le processus appliqué est identique pour les autres modèles.
+\end{remark}
+\end{document}

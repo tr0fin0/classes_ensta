@@ -1,0 +1,119 @@
+\documentclass[../CSC_5RO16_TA_TP4.tex]{subfiles}
+
+\begin{document}
+\section{Question 3}
+% Vous devez :
+% — essayer dans un premier temps la commande stabilisante calculée en question 2
+% — remplissez les trous (TODO) pour calculer la commande prédictive simpliﬁée comme vue en cours (nous prendrons un horizon de 4)
+% — testez la commande prédictive
+
+
+\subsection{Théorie}
+\noindent Le Modèle de Contrôle Predictive, ou \textbf{MPC} (Model Predictive Control) en anglais, est une méthode permettant de calculer les commandes optimales d'un système en résolvant un problème d'optimisation convexe.
+
+\subsubsection{Action Prédictive}
+\noindent Le MPC est applicable aux systèmes non linéaires à l'application d'une linéarisation, décrite comme suit:
+\begin{equation}\label{eq:predictive_action}
+    \begin{aligned}
+        \dot{\mathbf{x}}(t) &= f(\mathbf{x}(t),\;\mathbf{u}(t))\qquad\text{avec}\quad\mathbf{x}(0) = \mathbf{x}_{0}\\
+        \dot{\mathbf{x}}_{r}(t) &= f(\mathbf{x}_{r}(t),\;\mathbf{u}_{r}(t))
+    \end{aligned}
+\end{equation}
+\noindent Dans cette approche, $\mathbf{x}_{r}$ et $\mathbf{u}_{r}$ représentent respectivement la trajectoire de la référence et la commande référence à suivre. L'équation du système est linéarisée à l'aide de développement en série de Taylor à l'ordre 1, évaluée en $(\mathbf{x}_{r},\;\mathbf{u}_{r})$ :
+\begin{equation}
+    \dot{\mathbf{x}} =
+    f(\mathbf{x}_{r},\;\mathbf{u}_{r}) +
+    (\mathbf{x} - \mathbf{x}_{r})\frac{\partial f(\mathbf{x},\;\mathbf{u})}{\partial\mathbf{x}}\Bigg|_{(\mathbf{x}_{r},\;\mathbf{u}_{r})} +
+    (\mathbf{u} - \mathbf{u}_{r})\frac{\partial f(\mathbf{x},\;\mathbf{u})}{\partial\mathbf{u}}\Bigg|_{(\mathbf{x}_{r},\;\mathbf{u}_{r})}
+\end{equation}
+\begin{remark}
+    Ici, $\mathbf{x}$ correspond à $\mathbf{x}(t)$, mais pour simplifier la notation, la dépendance temporelle explicite n'est pas indiquée.
+\end{remark}
+\noindent Après l'expansion de Taylor, les équations suivantes sont adoptées pour résoudre le problème de contrôle :
+\begin{equation}
+    \begin{aligned}
+        \dot{\widetilde{\mathbf{x}}} &= \mathbf{f}_{\mathbf{x},\;\mathbf{r}} + \mathbf{f}_{\mathbf{u},\;\mathbf{r}}\widetilde{\mathbf{u}}
+        \qquad\text{avec}\qquad
+        \begin{cases}
+            \widetilde{\mathbf{x}} = \mathbf{x} - \mathbf{x}_{r}\\
+            \widetilde{\mathbf{u}} = \mathbf{u} - \mathbf{u}_{r}
+        \end{cases}\\
+        \Aboxed{
+            \dot{\widetilde{\mathbf{x}}}(t) &= \mathbf{A}_{\mathbf{r}} + \mathbf{B}_{\mathbf{r}}\widetilde{\mathbf{u}}(t)
+        }
+    \end{aligned}
+\end{equation}
+\noindent Ensuite, une discrétisation est effectuée. En appliquant le schéma d'Euler, les équations discrètes suivantes sont obtenues:
+\begin{equation}
+    \begin{aligned}
+        \mathbf{\widetilde{x}}(k+1) &= \mathbf{\widetilde{x}}(k) + (\mathbf{A}_{\mathbf{r}}\mathbf{\widetilde{x}}(k) + \mathbf{B}_{\mathbf{r}}\widetilde{\mathbf{u}}(k))\delta t\\
+        \mathbf{\widetilde{x}}(k+1) &= \mathbf{A}(k)\mathbf{\widetilde{x}}(k) + \mathbf{B}(k)\mathbf{\widetilde{u}}(k)
+        \qquad\text{avec}\qquad
+        \begin{cases}
+            \mathbf{A}(k) = \mathbf{A}_{r}\delta t + \mathbf{I}\\
+            \mathbf{B}(k) = \mathbf{B}_{r}\delta t
+        \end{cases}
+    \end{aligned}
+\end{equation}
+\noindent Pour utiliser un seul système linéaire dans la fonction d'optimisation \texttt{qp()} (Quadratic Programming) d'Octave, le système est vectorisé:
+\begin{equation}
+    \mathbf{X}(k) = \underbrace{
+        \begin{bmatrix}
+            \mathbf{A}(k)^{1}\\
+            \mathbf{A}(k)^{2}\\
+            \vdots\\
+            \mathbf{A}(k)^{N}\\
+        \end{bmatrix}
+    }_{\hat{\mathbf{A}}} \widetilde{\mathbf{x}}(k) + 
+    \underbrace{
+        \begin{bmatrix}
+            \mathbf{B}(k) & 0 & \cdots & 0\\
+            \mathbf{A}(k)^{1}\mathbf{B}(k) & \mathbf{B}(k) & \cdots & \vdots\\
+            \vdots & \vdots & \ddots & \vdots\\
+            \mathbf{A}(k)^{N-1}\mathbf{B}(k) & \mathbf{A}(k)^{N-2}\mathbf{B}(k) & \cdots & \mathbf{B}(k)\\
+        \end{bmatrix}
+    }_{\hat{\mathbf{B}}} \mathbf{U}(k\;:\;k+N)
+\end{equation}
+\noindent Finalement, la commande recherchée est celle qui minimise l’erreur de trajectoire. Une approche par moindres carrés est adoptée pour déterminer cette commande optimale :
+\begin{equation}
+    \mathbf{U}(k\;:\;k+N) = -\hat{\mathbf{B}}^{\sharp}\;\hat{\mathbf{A}}\;\widetilde{\mathbf{x}}(k)
+\end{equation}
+\begin{remark}
+    Ici $\hat{\mathbf{B}}^{\sharp}$ représente la pseudo-inverse de $\hat{\mathbf{B}}$.
+\end{remark}
+
+\subsection{Algorithme}
+\noindent Après l'explication théorique donnée précédemment, l'algorithme suivant a été implémenté :
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+    language={Octave},
+    caption={Algorithme \texttt{simulateMPC.m}},
+    ]{../../src/simulateMPC.m}
+\end{scriptsize}
+
+\newpage\subsection{Analyse}
+
+\subsubsection{Commande Anticipative vs Commande Prédictive}
+\noindent Ci-dessous, il est possible de comparer les différentes méthodes de contrôle appliquées au même système :
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/MPC_K.png}
+        \caption{Méthode Anticipative}
+        \label{fig:methode_predictive_MPC}
+    \end{subfigure}\hfill
+    \begin{subfigure}[b]{0.475\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{../images/MPC.png}
+        \caption{Méthode Prédictive}
+        \label{fig:methode_predictive_pseudo_inverse}
+    \end{subfigure}
+    \caption{Méthode Prédictive Commande Comparaison}
+    \label{fig:methode_predictive_comparaison}
+\end{figure}
+\noindent Il est notable que la méthode anticipative offre une convergence relativement fluide et douce. En revanche, la méthode prédictive présente un comportement moins stable, bien que le résultat final soit équivalent dans les deux cas.\\
+
+\noindent L’instabilité observée dans la méthode prédictive est attribuée à l’utilisation de la pseudo-inverse, une technique moins précise par nature que les solveurs quadratiques employés dans la méthode anticipative.
+\end{document}
