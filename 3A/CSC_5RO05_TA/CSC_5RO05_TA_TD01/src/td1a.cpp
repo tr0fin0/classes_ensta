@@ -1,20 +1,22 @@
-#include "lib.h"
+#include "timespec.h"
 #include <stdio.h>
 
 
 
-void debug(const char* label, timespec ts) {
+void debug(const char* label, timespec ts)
+{
     printf("%s:\t%ld s, %ld ns\n", label, ts.tv_sec, ts.tv_nsec);
 }
 
 
-int main(void){
-
+int main(void)
+{
     timespec now = timespec_now();
     debug("timespec_now()", now);
     printf("\n\n");
 
 
+    // Conversion
     double reference = 1234.567;
     timespec ts_reference = timespec_from_ms(reference);
     printf("Reference [ms]: ref = %.3f\n", timespec_to_ms(ts_reference));
@@ -60,7 +62,6 @@ int main(void){
     timespec delay = timespec_from_ms(1500);
     timespec_wait(delay);
     printf("Done waiting!\n");
-
 
     return 0;
 }
