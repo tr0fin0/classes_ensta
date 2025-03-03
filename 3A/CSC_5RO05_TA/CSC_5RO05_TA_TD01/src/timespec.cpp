@@ -1,7 +1,6 @@
-#include "lib.h"
+#include "timespec.h"
 
 // conversion
-// ? declare function as void or return converted value?
 timespec timespec_normalize(timespec& time_ts){
     if (time_ts.tv_nsec >= 1000000000L) {
         time_ts.tv_sec += time_ts.tv_nsec / 1000000000L;
@@ -14,7 +13,6 @@ timespec timespec_normalize(timespec& time_ts){
 
     return time_ts;
 }
-// ? why declaring as cpp give no errors and declaring as c give a lot of errors?
 double timespec_to_ms(const timespec& time_ts){
     return time_ts.tv_sec * 1000.0 + time_ts.tv_nsec / 1000000.0;
 }
