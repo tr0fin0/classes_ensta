@@ -1,36 +1,13 @@
-#include "Timer.h"
+#include "CountDown.h"
 #include <stdio.h>
 
-class CountDown : public Timer
+int main()
 {
-private:
-    int count;
-
-public:
-    CountDown(int n) : count(n) {}
-
-    void callback() override
-    {
-        if (count >= 0)
-        {
-            printf("counter: %d\n", count);
-        }
-        else
-        {
-            stop();
-        }
-    }
-};
-
-int main() {
     CountDown cd(10);
     timespec duration = {1, 0};
     cd.start(duration, true);
 
-    while (true)
-    {
-        sleep(1);
-    }
+    while (cd.count >= 0);
 
     return 0;
 }
