@@ -35,12 +35,8 @@ int main(void)
     itimerspec its;
 
     // usually first and following iterations will be the same
-    // first interation
-    its.it_value.tv_sec  = 0;
-    its.it_value.tv_nsec = 500000000;
-    // following iterations
-    its.it_interval.tv_sec  = 0;
-    its.it_interval.tv_nsec = 500000000;
+    its.it_value = timespec{0, 500000000};
+    its.it_interval = timespec{0, 500000000};
 
     timer_settime(tid, 0, &its, nullptr);
 
