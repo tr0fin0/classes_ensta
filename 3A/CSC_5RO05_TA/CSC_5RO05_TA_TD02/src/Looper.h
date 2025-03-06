@@ -1,17 +1,11 @@
 #ifndef LOOPER_H
 #define LOOPER_H
 
-#include "Timer.h"
-
-class Looper : public Timer
+class Looper
 {
 private:
     volatile bool doStop;
     volatile double iLoop;
-    double nLoops;
-
-protected:
-    void callback() override;
 
 public:
     Looper();
