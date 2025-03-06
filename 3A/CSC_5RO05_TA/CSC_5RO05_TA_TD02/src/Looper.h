@@ -3,20 +3,21 @@
 
 #include "Timer.h"
 
-class Looper : public Timer {
+class Looper : public Timer
+{
 private:
-    volatile bool doStop;   // Ensures the loop stops correctly
-    volatile double iLoop;  // Prevents compiler optimizations removing updates
-    double nLoops;          // Stores loop limit
+    volatile bool doStop;
+    volatile double iLoop;
+    double nLoops;
 
 protected:
-    void callback() override;  // Timer callback function
+    void callback() override;
 
 public:
     Looper();
     double runLoop(double nLoops);
     void stopLoop();
-    double getSample() const;  // Const method (does not modify state)
+    double getSample() const;
 };
 
 #endif // LOOPER_H
