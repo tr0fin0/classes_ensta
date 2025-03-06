@@ -2,33 +2,38 @@
 
 Looper::Looper() : doStop(false), iLoop(0), nLoops(0) {}
 
-void Looper::callback() {
-    if (iLoop < nLoops && !doStop) {
-        iLoop += 1.0;  // Increment loop counter
-    } else {
-        stop();  // Stop the timer when done
+void Looper::callback()
+{
+    if (iLoop < nLoops && !doStop)
+    {
+        iLoop += 1.0;
+    }
+    else
+    {
+        stop();
     }
 }
 
-double Looper::runLoop(double loops) {
+double Looper::runLoop(double loops)
+{
     iLoop = 0;
     doStop = false;
     nLoops = loops;
 
-    start_ms(1, true);  // Start the timer with a 1 ms period
+    start_ms(1, true);
 
-    while (iLoop < nLoops && !doStop) {
-        // Busy wait (not ideal, but avoids threading)
-    }
+    while (iLoop < nLoops && !doStop) {}
 
-    stop();  // Ensure timer stops after completion
+    stop();
     return iLoop;
 }
 
-void Looper::stopLoop() {
-    doStop = true;  // Ensures loop stops
+void Looper::stopLoop()
+{
+    doStop = true;
 }
 
-double Looper::getSample() const {
+double Looper::getSample() const
+{
     return iLoop;
 }
