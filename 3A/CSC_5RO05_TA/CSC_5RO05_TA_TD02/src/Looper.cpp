@@ -1,30 +1,17 @@
 #include "Looper.h"
 
-Looper::Looper() : doStop(false), iLoop(0), nLoops(0) {}
+Looper::Looper() : doStop(false), iLoop(0) {}
 
-void Looper::callback()
-{
-    if (iLoop < nLoops && !doStop)
-    {
-        iLoop += 1.0;
-    }
-    else
-    {
-        stop();
-    }
-}
-
-double Looper::runLoop(double loops)
+double Looper::runLoop(double nLoops)
 {
     iLoop = 0;
     doStop = false;
-    nLoops = loops;
 
-    start_ms(1, true);
+    while (iLoop < nLoops && !doStop)
+    {
+        iLoop++;
+    }
 
-    while (iLoop < nLoops && !doStop) {}
-
-    stop();
     return iLoop;
 }
 
