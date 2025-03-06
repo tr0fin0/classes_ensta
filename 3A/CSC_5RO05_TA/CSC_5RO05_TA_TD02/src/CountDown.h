@@ -5,7 +5,6 @@
 
 class CountDown : public Timer
 {
-// ? should be private
 public:
     int count;
 
