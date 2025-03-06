@@ -7,7 +7,7 @@ int main()
     timespec duration = {1, 0};
     cd.start(duration, true);
 
-    while (cd.count >= 0);
+    while (cd.count > 0);
 
     return 0;
 }
