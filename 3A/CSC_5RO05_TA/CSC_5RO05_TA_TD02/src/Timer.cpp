@@ -2,8 +2,8 @@
 
 Timer::Timer()
 {
-    this->tid = 0;
-    this->isRunning = false;
+    tid = 0;
+    isRunning = false;
 
     struct sigaction sa;
     sa.sa_flags = SA_SIGINFO;
@@ -16,12 +16,12 @@ Timer::Timer()
     sev.sigev_signo = SIGRTMIN;
     sev.sigev_value.sival_ptr = this;
 
-    timer_create(CLOCK_REALTIME, &sev, &this->tid);
+    timer_create(CLOCK_REALTIME, &sev, &tid);
 };
 
 Timer::~Timer()
 {
-    if (this->isRunning)
+    if (isRunning)
     {
         stop();
     }
@@ -29,7 +29,7 @@ Timer::~Timer()
 
 void::Timer::start(timespec duration, bool isPeriodic)
 {
-    if (this->isRunning)
+    if (isRunning)
     {
         stop();
     }
@@ -38,9 +38,9 @@ void::Timer::start(timespec duration, bool isPeriodic)
     its.it_value = duration;
     its.it_interval = isPeriodic ? duration : timespec{0, 0};
 
-    timer_settime(this->tid, 0, &its, NULL);
+    timer_settime(tid, 0, &its, NULL);
 
-    this->isRunning = true;
+    isRunning = true;
 };
 
 void::Timer::start_ms(double duration_ms, bool isPeriodic)
@@ -52,11 +52,11 @@ void::Timer::start_ms(double duration_ms, bool isPeriodic)
 
 void::Timer::stop()
 {
-    if (this->isRunning)
+    if (isRunning)
     {
-        timer_delete(this->tid);
+        timer_delete(tid);
 
-        this->isRunning = false;
+        isRunning = false;
     }
 };
 
