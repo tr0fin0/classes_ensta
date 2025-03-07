@@ -1,0 +1,42 @@
+CFLAGS=-Wall -Wextra
+SRC_TD3A1=td3a1.cpp
+SRC_TD3A2=td3a2.cpp
+SRC_TD3A3=td3a3.cpp
+CC=g++
+CC_RB=arm-linux-gnueabihf-g++
+OUTPUT_TD3A1=td3a1
+OUTPUT_TD3A2=td3a2
+OUTPUT_TD3A3=td3a3
+OUTPUT_TD3A1_RB=td3a1_rb
+OUTPUT_TD3A2_RB=td3a2_rb
+OUTPUT_TD3A3_RB=td3a3_rb
+
+all:
+	$(CC) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1)
+	$(CC) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2)
+	$(CC) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3_RB)
+
+td3a1:
+	$(CC) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1)
+
+td3a2:
+	$(CC) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2)
+
+td3a3:
+	$(CC) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3)
+
+raspberry:
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3_RB)
+
+clean:
+	rm -f $(OUTPUT_TD3A1)
+	rm -f $(OUTPUT_TD3A2)
+	rm -f $(OUTPUT_TD3A3)
+	rm -f $(OUTPUT_TD3A1_RB)
+	rm -f $(OUTPUT_TD3A2_RB)
+	rm -f $(OUTPUT_TD3A3_RB)
