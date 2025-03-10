@@ -1,0 +1,33 @@
+# The paper is about reinforcement learning or bandits or otherwise obviously connected to the material of the course
+Yes.
+
+# The paper contains minimal content (as specified as the minimum requirements; i.e., sufficient for you to actually write a review of)
+Yes.
+
+# The paper provides a link to code that you can use and/or understand within a few minutes using your knowledge from the course
+No. No working link is available in the paper. Maybe code is stored in a private GitHub repository which is not visible.
+
+# The paper appears original (all material borrowed from elsewhere is unambiguously acknowledged, including references). Should usually be Yes here, unless clear evidence of plagiarism - but contact a teacher if you have doubts.
+Yes.
+
+---
+
+### [INTRO]
+
+This report investigates reinforcement learning techniques applied to Quoridor, a strategic board game. The authors study algorithms like Minimax, Deep Q-Networks (DQN), and Monte Carlo Tree Search (MCTS) across different board sizes and player configurations. Their key contribution is a **path obstruction heuristic** for MCTS, which evaluates moves based on how effectively they increase the opponent's path length to the goal. This heuristic significantly improves the strategic behavior, making it more aligned with human-like decision-making. The modified MCTS algorithm places walls more strategically, creating longer detours for opponents while maintaining progress toward the goal.
+
+### [MAIN COMMENTS]
+
+1. **Dynamic Heuristic Weighting**: The authors use a static coefficient (5) to weight the importance of path obstruction relative to simulation counts. Exploring **dynamic weighting** based on the game phase (opening, middle, endgame) could improve performance. For example, the agent prioritize exploration in the opening phase and shift to maximizing path obstruction in the middle game. This could be implemented using a rule-based system or a learned model.
+
+### [CLARITY/PRESENTATION]
+
+1. **Notation**: The article could benefit from an illustration of the game to help readers better understand the environment and agent actions, especially in wall placement, which was not evident.
+
+2. **Clarity**: The sections "Path Obstruction Heuristic for MCTS" in Section III. Methodology and "Path Obstruction Heuristic Evaluation" in Section IV. Experiments and Results are somewhat convoluted and could benefit from clearer explanations. Simplifying the language and providing more detailed examples or illustrations would help improve understanding.
+
+### [CONCLUDE]
+
+Overall, this report presents a well-thought-out application of reinforcement learning to Quoridor, with a clear focus on enhancing MCTS through domain-specific heuristics. The path obstruction heuristic is a notable contribution, and the results demonstrate significant improvements in the agent's strategic play.
+
+It was not mentioned by the authors but the following article could be of interest: https://mlanctot.info/files/papers/cig14-immcts.pdf.
