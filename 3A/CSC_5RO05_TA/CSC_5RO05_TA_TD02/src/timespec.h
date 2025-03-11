@@ -1,3 +1,6 @@
+#ifndef TIMESPEC_H
+#define TIMESPEC_H
+
 #include <time.h>
 #include <thread>
 
@@ -23,3 +26,5 @@ bool operator== (const timespec& time1_ts, const timespec& time2_ts);
 bool operator!= (const timespec& time1_ts, const timespec& time2_ts);
 bool operator< (const timespec& time1_ts, const timespec& time2_ts);
 bool operator> (const timespec& time1_ts, const timespec& time2_ts);
+
+#endif // TIMESPEC_H
