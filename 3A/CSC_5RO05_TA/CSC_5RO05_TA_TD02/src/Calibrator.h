@@ -10,10 +10,11 @@ private:
     double a;
     double b;
     std::vector<double> samples;
+protected:
+    void callback() override;
 
 public:
     Calibrator(double samplingPeriod_ms, unsigned nSamples);
-    void callback() override;
     double nLoops(double duration_ms);
 };
 
