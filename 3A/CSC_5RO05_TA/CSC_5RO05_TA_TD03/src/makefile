@@ -21,12 +21,15 @@ all:
 
 td3a1:
 	$(CC) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
 
 td3a2:
 	$(CC) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2_RB)
 
 td3a3:
 	$(CC) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3_RB)
 
 raspberry:
 	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
