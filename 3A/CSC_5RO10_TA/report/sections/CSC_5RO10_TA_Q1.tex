@@ -1,0 +1,61 @@
+\documentclass[../CSC_5RO10_TA.tex]{subfiles}
+
+\begin{document}
+\section{Thématique}
+\noindent L'article "Towards the Verification of Safety-critical Autonomous Systems in Dynamic Environments" s'inscrit dans le domaine de la vérification formelle des systèmes autonomes critiques, un champ de recherche en pleine expansion. Avec l'essor des véhicules autonomes, des drones et des robots industriels, la nécessité de garantir leur sécurité dans des environnements dynamiques et incertains est devenue une préoccupation majeure. Ces systèmes doivent fonctionner de manière fiable dans des situations complexes et imprévisibles, où une erreur peut avoir des conséquences catastrophiques, comme des accidents ou des pertes matérielles.\\
+
+\noindent Le thème de la vérification formelle des systèmes autonomes mérite un traitement scientifique approfondi car les méthodes traditionnelles de validation, telles que les tests unitaires ou l'apprentissage machine, ne suffisent pas à garantir la sûreté dans toutes les configurations possibles. En effet, ces approches reposent souvent sur des scénarios limités et ne peuvent pas explorer exhaustivement l'ensemble des états possibles du système, surtout dans des environnements dynamiques où les conditions changent constamment. La vérification formelle, en revanche, permet de prouver mathématiquement que le système respecte certaines propriétés de sûreté, ce qui est essentiel pour des applications critiques.
+
+\subsection{Problématique}
+\noindent Le problème central traité par l'article est la vérification rigoureuse des systèmes autonomes critiques évoluant dans des environnements dynamiques et incertains. Ces systèmes doivent respecter des propriétés de sûreté, comme éviter les collisions, garantir la stabilité et réagir correctement aux imprévus, sans pour autant explorer exhaustivement toutes les configurations possibles, ce qui serait impossible en termes de calcul.\\
+
+\noindent L'enjeu est de taille : il s'agit de concilier la complexité des environnements dynamiques avec la nécessité de garantir la sûreté des systèmes. Les méthodes traditionnelles de vérification, bien que rigoureuses, sont souvent limitées par l'explosion combinatoire des états possibles, rendant l'analyse exhaustive impraticable. L'article propose donc des solutions pour réduire cette complexité tout en maintenant un haut niveau de garantie de sûreté.
+
+\subsection{État de l'Art}
+\noindent L'article s'appuie sur plusieurs approches existantes en vérification formelle, notamment :
+\begin{enumerate}[rightmargin=\leftmargin]
+    \item \textbf{Logique temporelle (CTL et LTL)} : Ces formalismes permettent d'exprimer et de vérifier des propriétés de sûreté temporelles, comme "le système ne doit jamais entrer dans un état dangereux".
+    \item \textbf{Model checking} : Cette technique examine l'ensemble des états accessibles du système pour vérifier si les propriétés de sûreté sont respectées. Cependant, elle est souvent limitée par l'explosion combinatoire des états dans les environnements complexes.
+    \item \textbf{Abstraction et décomposition} : Ces méthodes visent à réduire la complexité de l'analyse en simplifiant le modèle du système ou en le décomposant en sous-systèmes plus simples.
+\end{enumerate}
+\noindent En complément de ces approches classiques, des travaux récents explorent des alternatives prometteuses, comme :
+\begin{enumerate}[rightmargin=\leftmargin]
+    \item \textbf{L'apprentissage par renforcement avec contraintes} : Cette méthode combine l'exploration de l'environnement par le système avec des contraintes de sûreté pour garantir que les actions prises respectent les propriétés critiques.
+    \item \textbf{Les approches hybrides} : Elles mélangent vérification formelle et simulation statistique pour allier rigueur mathématique et efficacité pratique.
+\end{enumerate}
+Ces avancées montrent que le domaine évolue rapidement, mais il reste des défis à relever, notamment en termes de scalabilité et de généralisation des méthodes proposées.
+
+\section{Résultats}
+\noindent L'article propose plusieurs contributions pour améliorer la vérification des systèmes autonomes critiques dans des environnements dynamiques :
+\begin{enumerate}[rightmargin=\leftmargin]
+    \item \textbf{Approche modulaire} : Le système est décomposé en composants critiques, chacun vérifié individuellement. Cette modularité facilite la réutilisation des composants et permet une analyse plus ciblée.
+    \item \textbf{Intégration d'heuristiques} : Des heuristiques sont utilisées pour prioriser les scénarios à analyser, réduisant ainsi le temps de vérification sans compromettre la sûreté.
+    \item \textbf{Analyse de performances} : Les expériences menées montrent une réduction significative du temps de vérification, tout en maintenant un haut niveau de garantie de sûreté.
+\end{enumerate}
+\noindent Ces résultats sont illustrés par des simulations et des expériences pratiques, démontrant l'efficacité de la méthode proposée. L'article explique de manière pédagogique comment ces techniques permettent de concilier précision et efficacité, ce qui est crucial pour des applications réelles.
+
+\subsection{Critique}
+\noindent L'article apporte une avancée notable dans le domaine de la vérification formelle des systèmes autonomes critiques. Cependant, certaines limitations méritent d'être soulignées :
+\begin{enumerate}[rightmargin=\leftmargin]
+    \item \textbf{Hypothèses simplificatrices} : L'article repose sur des hypothèses simplificatrices concernant l'environnement dynamique, ce qui peut limiter la généralisation des résultats à des situations réelles plus complexes.
+    \item \textbf{Dépendance aux heuristiques} : Bien que les heuristiques permettent de réduire le temps de vérification, elles peuvent introduire des biais et limiter la capacité de la méthode à garantir la sûreté dans tous les cas possibles.
+    \item \textbf{Explosion combinatoire} : Malgré les améliorations proposées, l'explosion combinatoire reste un défi majeur dans certains cas complexes, ce qui peut rendre la méthode difficile à appliquer à grande échelle.
+\end{enumerate}
+\noindent En dépit de ces limitations, l'article ouvre des perspectives intéressantes, notamment en combinant vérification formelle et techniques d'intelligence artificielle pour améliorer l'efficacité et la scalabilité des méthodes proposées.
+
+\section{Analyse SWOT}
+\noindent Voici une analyse SWOT des propositions de l'article :
+\SWOT{7cm}{
+    Réduction du temps de vérification.\\Approche modulaire, facilitant la réutilisation et l'optimisation.\\Apport scientifique significatif pour les systèmes autonomes.
+}{
+    Hypothèses simplificatrices sur l'environnement dynamique.\\Dépendance aux heuristiques, qui peuvent limiter la généralisation.
+}{
+    Intégration avec des techniques d'IA pour améliorer l'efficacité.\\Application aux véhicules autonomes, robots et systèmes critiques en aérospatiale.
+}{
+    Explosion combinatoire toujours possible dans certains cas complexes.\\Déploiement industriel nécessitant une validation supplémentaire.
+}
+
+\section{Conclusion}
+\noindent L'article représente une avancée importante dans le domaine de la vérification formelle des systèmes autonomes critiques. Il propose une approche équilibrée entre précision et efficacité, bien qu'il reste des défis à relever pour une adoption industrielle plus large. Personnellement, je trouve que l'intégration de techniques d'IA et d'apprentissage par renforcement avec contraintes est une piste prometteuse pour améliorer encore les méthodes proposées. Cependant, il serait intéressant de voir des travaux futurs explorer des environnements encore plus complexes et réalistes, afin de tester la robustesse de ces méthodes dans des conditions extrêmes.
+
+\end{document}
