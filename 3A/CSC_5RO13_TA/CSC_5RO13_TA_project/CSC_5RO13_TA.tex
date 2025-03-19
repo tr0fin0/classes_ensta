@@ -1,0 +1,176 @@
+\documentclass[aspectratio=1610]{beamer}
+\usetheme[progressbar position=frametitle]{gotham}
+
+\usepackage{ragged2e}
+\apptocmd{\frame}{}{\justifying}{}
+\addtobeamertemplate{block begin}{}{\justifying}
+
+
+
+\date{\today}
+\title{Distilling the Knowledge in a Neural Network}
+\subtitle{Geoffrey Hinton, Oriol Vinyals and Jeff Dean}
+\author{Guilherme NUNES TROFINO}
+\institute{ENSTA Paris}
+
+
+\setbeamertemplate{footline}[frame number]
+\setbeamercolor{block body}{bg=gray!15, fg=black}
+\gothamset{sectiontocframe default=off}
+\gothamset{subsectiontocframe default=off}
+\titlegraphic{
+    \vfill
+    \hspace{7.35cm}
+    \includegraphics[width=1cm]{images/800px-Logo_ENSTA_Paris.png}
+    \vfill
+}
+
+
+
+
+\begin{document}
+    \maketitle
+
+
+    \section*{Introduction}
+
+    \begin{frame}{Introduction}
+        \onslide<1->In "Distilling the Knowledge in a Neural Network" Hilton et al. introduces a technique called \textbf{Knowledge Distillation}.
+
+        \begin{alertblock}{Knowledge Distillation}<2->
+            Aims to \textbf{transfer} knowledge from a large complex model, or an ensemble of models, into a more efficient smaller model that is easier to deploy.
+        \end{alertblock}
+
+        \onslide<3->The key idea is to use probabilistic outputs produced by the large model to train the smaller model rather than relying solely on the ground truth from the training data.
+    \end{frame}
+
+    \subsection*{Knowledge Distillation}
+    \begin{frame}{Introduction, Knowledge Distillation}
+        \onslide<1->Main features of the proposed approach are:
+
+        \begin{block}{Soft Targets}<2->
+            \textbf{Probabilistic} outputs produced by a large model, containing more information than hard labels as they capture the relative probabilities of incorrect classes.
+        \end{block}
+
+        \begin{block}{Temperature Scaling}<3->
+            Raise \texttt{softmax} temperature in the large model to produce soften probabilities, which are then used to train the smaller model.
+        \end{block}
+
+        \onslide<4->This way a small model is trained to match the soft targets:
+        \begin{equation}
+            \boxed{
+                q_i = \frac{\exp(z_i / T)}{\sum_j \exp(z_j / T)}
+            }
+            \qquad
+            \text{with $T$ being temperature}
+        \end{equation}
+    \end{frame}
+
+
+    \section*{Experiments and Results}
+
+    \subsection*{MNIST}
+    \begin{frame}{Experiments and Results, MNIST}
+        \onslide<1->The effectiveness of \textbf{Knowledge Distillation} was demonstrated on the \href{https://www.tensorflow.org/datasets/catalog/mnist?hl=pt-br}{MNIST dataset} using a single Neural Network (NN) model with 2 hidden layers of 1200 rectified linear hidden units on 60.000 training cases as the large model.
+
+        \begin{block}{Results}<2->
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{lc}
+                    \hline\hline
+                    model & errors*\\
+                    \hline
+                    baseline & 67\\
+                    \onslide<3->distilled (without regularization) & 146\\
+                    \onslide<4->\textbf{distilled (with regularization)} & \textbf{74}\\
+                    \hline\hline
+                \end{tabular}
+                \label{tab:mnist}
+            \end{table}
+        \end{block}
+
+        \begin{alertblock}{Insights}<5->
+            The small model could even classify \textbf{unseen} digits based on the large's generalization.
+        \end{alertblock}
+    \end{frame}
+
+    \subsection*{Speech Recognition}
+    \begin{frame}{Experiments and Results, Speech Recognition}
+        \onslide<1->The distillation strategy was also evaluated with an ensemble of 10 Deep Neural Network (DNN) acoustic models used in Automatic Speech Recognition (ASR) trained on about 2000 hours of spoken English data.
+
+        \begin{block}{Reults}<2->
+            \begin{table}[H]
+                \centering
+                \begin{tabular}{lcc}
+                    \hline\hline
+                    model & Frame Accuracy & Word Error Rate\\
+                    \hline
+                    baseline & 58.9\% & 10.9\%\\
+                    \onslide<3->ensemble of DNN & 61.1\% & 10.7\%\\
+                    \onslide<4->\textbf{distilled} & \textbf{60.8\%} & \textbf{10.7\%}\\
+                    \hline\hline
+                \end{tabular}
+                \label{tab:speech}
+            \end{table}
+        \end{block}
+
+        \begin{alertblock}{Insights}<5->
+            Distilled model captured \textbf{80\%} of the ensemble's improvement, being easier to deploy.
+        \end{alertblock}
+    \end{frame}
+
+
+    \section*{Extensions}
+
+    \subsection*{Specialist Models}
+    \begin{frame}{Extensions, Specialist Models}
+        \onslide<1->Large datasets (e.g., JFT with 100M images, 15,000 classes) make full ensemble training computationally infeasible. Instead, train specialist models focused on \textbf{confusable subsets} of classes, initialized from a generalist model.
+
+        \begin{block}{Results}<2->
+            Training 61 specialist models on clusters of 300 classes each resulted in a \textbf{4.4\% improvement} in test accuracy. These specialists were trained independently and efficiently in parallel, with larger accuracy gains observed.
+        \end{block}
+
+        \begin{alertblock}{Insights}<3->
+            Specialist models, while effective, are prone to overfitting as they are trained on biased subsets of classes. Incorporating soft targets from the generalist model \textbf{mitigates this risk} by acting as regularizers, ensuring the specialists retain generalization capabilities.
+        \end{alertblock}
+    \end{frame}
+
+    \subsection*{Soft Targets}
+    \begin{frame}{Extensions, Soft Targets}
+        \onslide<1->Training deep models on \textbf{limited data} often leads to severe overfitting. Instead of using only hard labels, \textbf{soft targets} from a pre-trained model help retain generalization.
+
+        \begin{block}{Results}<2->
+            Training an acoustic model with only 3\% of the speech dataset demonstrated the effectiveness of soft targets in mitigating overfitting. While hard targets resulted in 44.5\% test accuracy due to severe overfitting, soft targets achieved \textbf{57.0\%} test accuracy.
+        \end{block}
+
+        \begin{alertblock}{Insights}<3->
+            Soft targets encode valuable class relationships, enhancing generalization and acting as natural regularizers. They enable models trained on limited data to mimic the behavior of models trained on full datasets, effectively \textbf{mitigating overfitting}.
+        \end{alertblock}
+    \end{frame}
+
+
+    \section*{Conclusion}
+    \subsection*{Takeaways}
+    \begin{frame}{Conclusion, Takeaways}
+        \begin{alertblock}{Model Compression}<1->
+            Distillation enables \textbf{compressing large models or ensembles} into smaller, more efficient models, reducing significantly deployment costs while retaining performance.
+        \end{alertblock}
+
+        \begin{alertblock}{Soft Targets}<2->
+            Soft targets \textbf{capture rich class relationships} beyond hard labels. They allow small models to mimic the generalization ability of larger models, improving test accuracy.
+        \end{alertblock}
+
+        \begin{alertblock}{Regularization}<3->
+            Training \textbf{specialist models} on confusable classes improves accuracy in large-scale datasets. Soft targets also act as \textbf{natural regularizers}, preventing overfitting.
+        \end{alertblock}
+    \end{frame}
+
+    \subsection*{Q\&A}
+    \begin{frame}{Conclusion, Q\&A}
+        \centering
+        \Huge{Merci!}
+    \end{frame}
+
+    \maketitle
+
+\end{document}
