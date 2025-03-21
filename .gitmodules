@@ -31,3 +31,6 @@
 [submodule "3A/CSC_52081_EP/CSC_52081_EP_project"]
 	path = 3A/CSC_52081_EP/CSC_52081_EP_project
 	url = https://github.com/tr0fin0/ensta_CSC_52081_EP_project.git
+[submodule "3A/CSC_5RO01_TA/CSC_5RO01_TA_project"]
+	path = 3A/CSC_5RO01_TA/CSC_5RO01_TA_project
+	url = https://github.com/tr0fin0/ensta_CSC_5RO01_TA_project.git
