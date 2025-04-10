@@ -1,0 +1,57 @@
+CFLAGS=-Wall -Wextra
+SRC_TD3A1=td3a1.cpp
+SRC_TD3A2=td3a2.cpp
+SRC_TD3A3=td3a3.cpp
+SRC_TD3B=td3b.cpp Mutex.cpp TimeoutException.cpp timespec.cpp
+CC=g++
+CC_RB=arm-linux-gnueabihf-g++
+OUTPUT_TD3A1=td3a1
+OUTPUT_TD3A2=td3a2
+OUTPUT_TD3A3=td3a3
+OUTPUT_TD3B=td3b
+OUTPUT_TD3A1_RB=td3a1_rb
+OUTPUT_TD3A2_RB=td3a2_rb
+OUTPUT_TD3A3_RB=td3a3_rb
+OUTPUT_TD3B_RB=td3b_rb
+
+all:
+	$(CC) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1)
+	$(CC) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2)
+	$(CC) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3)
+	$(CC) $(CFLAGS) $(SRC_TD3B) -o $(OUTPUT_TD3B)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3B) -o $(OUTPUT_TD3B_RB)
+
+td3a1:
+	$(CC) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
+
+td3a2:
+	$(CC) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2_RB)
+
+td3a3:
+	$(CC) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3_RB)
+
+td3b:
+	$(CC) $(CFLAGS) $(SRC_TD3B) -o $(OUTPUT_TD3B)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3B) -o $(OUTPUT_TD3B_RB)
+
+raspberry:
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A1) -o $(OUTPUT_TD3A1_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A2) -o $(OUTPUT_TD3A2_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3A3) -o $(OUTPUT_TD3A3_RB)
+	$(CC_RB) $(CFLAGS) $(SRC_TD3B) -o $(OUTPUT_TD3B_RB)
+
+clean:
+	rm -f $(OUTPUT_TD3A1)
+	rm -f $(OUTPUT_TD3A2)
+	rm -f $(OUTPUT_TD3A3)
+	rm -f $(OUTPUT_TD3B)
+	rm -f $(OUTPUT_TD3A1_RB)
+	rm -f $(OUTPUT_TD3A2_RB)
+	rm -f $(OUTPUT_TD3A3_RB)
+	rm -f $(OUTPUT_TD3B_RB)

@@ -28,3 +28,18 @@
 [submodule "3A/CSC_5RO11_TA"]
 	path = 3A/CSC_5RO11_TA
 	url = https://github.com/tr0fin0/ensta_CSC_5RO11_TA.git
+[submodule "3A/CSC_52081_EP/CSC_52081_EP_project"]
+	path = 3A/CSC_52081_EP/CSC_52081_EP_project
+	url = https://github.com/tr0fin0/ensta_CSC_52081_EP_project.git
+[submodule "3A/CSC_5RO08_TA/CSC_5RO08_TA_project"]
+	path = 3A/CSC_5RO08_TA/CSC_5RO08_TA_project
+	url = https://github.com/tr0fin0/ensta_CSC_5RO08_TA_project.git
+[submodule "3A/CSC_5RO01_TA/CSC_5RO01_TA_project"]
+	path = 3A/CSC_5RO01_TA/CSC_5RO01_TA_project
+	url = https://github.com/tr0fin0/ensta_CSC_5RO01_TA_project.git
+[submodule "3A/CSC_5RO14_TA/ensta_CSC_5RO14_TA"]
+	path = 3A/CSC_5RO14_TA/CSC_5RO14_TA_project/
+	url = https://github.com/tr0fin0/ensta_CSC_5RO14_TA.git
+[submodule "3A/CSC_5RO05_TA/CSC_5RO05_TA_project"]
+	path = 3A/CSC_5RO05_TA/CSC_5RO05_TA_project
+	url = https://gitlab.com/guitrofino/ensta_csc_5ro05_ta.git

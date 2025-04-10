@@ -1,0 +1,101 @@
+\documentclass[../CSC_5RO16_TA_TP5.tex]{subfiles}
+
+\begin{document}
+\section{Question 5}
+% 
+
+\subsection{Algorithme}
+
+\subsubsection{\texttt{domain-graph}}
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+        caption={Algorithme \texttt{domain-graph.pddl}},
+        language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_domain-graph.pddl}
+\end{scriptsize}
+
+\subsubsection{\texttt{problem-graph}}
+
+\begin{scriptsize}\mycode
+    \lstinputlisting[
+    caption={Algorithme \texttt{problem-graph.pddl}},
+    language={bash},
+    ]{../../src/CSC_5RO16_TA_TP5_src_problem-graph.pddl}
+\end{scriptsize}
+
+\subsection{Analyse}
+\noindent L'algorithme a été lancé avec la commande suivante sur Windows PowerShell:
+
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={Lancement \texttt{cpt.exe} pour \texttt{problem-graph.pddl}},
+        language={bash}
+    ]
+    .\cpt.exe -o .\domain-graph.pddl -f .\problem-graph.pddl
+    \end{lstlisting}
+\end{scriptsize}
+
+\noindent Qui a retourné comme résultat le suivant:
+
+\begin{scriptsize}\mycode
+	\begin{lstlisting}[
+        caption={R\'esultat \texttt{cpt.exe} pour \texttt{problem-graph.pddl}},
+        language={}
+    ]
+    domain file : .\CSC_5RO16_TA_TP5_src_domain-graph.pddl
+    problem file : .\CSC_5RO16_TA_TP5_src_problem-graph.pddl
+    
+    Parsing domain.................... done : 0.00
+    Parsing problem................... done : 0.00
+    domain : graph
+    problem : small-graph
+    Instantiating operators........... done : 0.00
+    Creating initial structures....... done : 0.00
+    Computing bound................... done : 0.00
+    Computing e-deleters.............. done : 0.00
+    Finalizing e-deleters............. done : 0.00
+    Refreshing structures............. done : 0.00
+    Computing distances............... done : 0.00
+    Finalizing structures............. done : 0.00
+    Variables creation................ done : 0.00
+    Bad supporters.................... done : 0.00
+    Distance boosting................. done : 0.00
+    Initial propagations.............. done : 0.00
+    
+    Problem : 6 actions, 5 fluents, 5 causals
+              1 init facts, 1 goals
+    
+    Bound : 4  ---  Nodes : 0  ---  Backtracks : 0  ---  Iteration time : 0.00
+    
+    0: (move a b) [1]
+    1: (move b c) [1]
+    2: (move c d) [1]
+    3: (move d e) [1]
+    
+    Makespan : 4
+    Length : 4
+    Nodes : 0
+    Backtracks : 0
+    Support choices : 0
+    Conflict choices : 0
+    Mutex choices : 0
+    Start time choices : 0
+    World size : 100K
+    Nodes/sec : 0.00
+    Search time : 0.00
+    Total time : 0.02
+    \end{lstlisting}
+\end{scriptsize}
+
+
+\noindent La modélisation sous forme d'actions PDDL est intuitive pour les graphes orientés avec un chemin calculé souvent minimal en termes de longueur.\\
+
+\noindent Par contre,pour des graphes de grande taille, cette méthode devient inefficace car les planificateurs doivent explorer un espace d'état potentiellement exponentiel.
+
+\begin{remark}
+    Si les arcs ont des poids, cette méthode nécessite des adaptations pour inclure une minimisation des coûts.
+\end{remark}
+
+\noindent La méthode est efficace pour des petits graphes avec des objectifs simples, mais elle est peu adaptée aux grands graphes ou aux problèmes avec des coûts d'arcs. Dans ces cas, des algorithmes spécialisés comme Dijkstra ou A* sont plus performants.
+\end{document}

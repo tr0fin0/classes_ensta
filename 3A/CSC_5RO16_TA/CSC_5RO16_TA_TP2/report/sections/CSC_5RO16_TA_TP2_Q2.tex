@@ -1,0 +1,27 @@
+\documentclass[../CSC_5RO16_TA_TP2.tex]{subfiles}
+
+\begin{document}
+\section{Question 2}
+% Change the step_len parameter (default value is 2 in the provided code). What are the consequences of small values and large values on the two algorithms ?
+\noindent Afin d'étudier l'influence des différents paramètres sur les performances des algorithmes, \texttt{step} a été fixé à 1 et 16 pour l'environnement 1. Les résultats sont présentés ci-dessous:
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=1.00\linewidth]{../src/images/average-algorithm-performance_env_1_0.1_0.0_10.png}
+	\caption{Performance Moyennes des Algorithmes avec \texttt{step}=1}
+	\label{}
+\end{figure}
+\begin{figure}[H]
+    \centering
+	\includegraphics[width=1.00\linewidth]{../src/images/average-algorithm-performance_env_16_0.1_0.0_10.png}
+	\caption{Performance Moyennes des Algorithmes avec \texttt{step}=16}
+	\label{}
+\end{figure}
+\noindent Lorsque le \texttt{step} est fixé à 1, les algorithmes \textcolor{graph_blue}{RRT} et \textcolor{graph_orange}{RRT*} recontrent davantage de difficultés pour trouver un chemin. En moyenne, seulement 1 chemin a été trouvé parmi les 10 expériences réalisés pour chaque algorithme lorsque \texttt{max\_iterations}=375. Ce n'est qu'à partir de \texttt{max\_iterations}=2250 que les algorithmes trouvent systématiquement des chemins.
+\begin{remark}
+    Des valeurs de \texttt{step} plus grands, comme 16, permettent aux algorithmes d'explorer une zone plus vaste avec le même nombre d'itérations. Cela augmente significativement les chances de trouver un chemin.
+\end{remark}
+\noindent Comme décrit dans la Question 1, le comportement de l'algorithme \textcolor{graph_orange}{RRT*} se distingue également ici par de chemins plus courts en moyenne, mais au prix d'un temps de calcul plus élevé. Cette fois, cependant, l'augmentation de la valeur de \texttt{step} a un impact plus significatif sur le temps de calcul de l'algorithme \textcolor{graph_orange}{RRT*} que sur celui de l'algorithme \textcolor{graph_blue}{RRT}.
+\begin{remark}
+    Des valeurs \texttt{step} plus grands, comme 16, permettent aux algorithmes d'explorer une zone plus vaste. Cela entraîne une augmentation du recalcul des chemins pour le \textcolor{graph_orange}{RRT*}, ce qui augmente le temps de calcul de manière significative.
+\end{remark}
+\end{document}
